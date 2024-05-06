@@ -1,0 +1,3 @@
+[submodule "42_MyLibC"]
+	path = 42_MyLibC
+	url = git@github.com:iluvshiwoon/42_MyLibC.git
