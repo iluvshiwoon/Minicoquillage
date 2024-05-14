@@ -8,7 +8,7 @@
 ## IN NO SPECIFIC ORDER
 * Implement redirection [Pipex Guide](https://reactive.so/post/42-a-comprehensive-guide-to-pipex)
 * Implement Globing algo : [algo](https://www.gmarik.info/blog/2020/understanding-glob-matching/)
-* Implement History Doublya linked list
+* Implement History Doubly linked list
 * Implement Redirections
 * Implement Here-Doc
 
