@@ -12,3 +12,7 @@
 * Implement Redirections
 * Implement Here-Doc
 
+## OPTIONAL
+* Add path to prompt
+* handle ';'
+
