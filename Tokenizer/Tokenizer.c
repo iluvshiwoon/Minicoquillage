@@ -135,18 +135,45 @@ t_double_link_list ** create_tokens_lists(char ** multiline)
     return (free_all(multiline, NULL, tokens),tokens_lists);
 }
 
+char * last_ocur (char * string , char c)
+{
+    size_t i;
+    size_t last;
+
+    i = 0;
+    last = 0;
+    while(string[i])
+    {
+        if (string[i] == c)
+            last = i;
+        i++;
+    }
+    if (!last)
+        return NULL;
+    return (string + last);
+}
+
 t_double_link_list ** tokenizer(void)
 {
     char * line;
     char ** multiline;
+    char prompt[200] = {};
+    char * P;
 
     // line = "echo 'hello' ; echo 'world' ; ff ; bot diff; aaargh";
-    //
-    line = readline("Minicoquillage$ ");
+    if(!getcwd(prompt, 200))
+        return (NULL);
+    P = last_ocur(prompt, '/');
+    P = ft_strjoin("\033[1;34m", P+1);
+    P = ft_strjoin(P, "\033[0m");
+    P = ft_strjoin(P, (char *) { " via 🐚 \033[1;34m(Minicoquillage)\n🦪 → \033[0m" });
+    // line = readline(" via 🐚 (Minicoquillage) ");
+    line = readline(P);
     if (line && *line)
         add_history(line);
 
     multiline = ft_mysplit(line, "\n;");
+    free(P);
     return (create_tokens_lists(multiline));
 }
 
