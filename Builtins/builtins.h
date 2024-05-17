@@ -9,7 +9,8 @@
 
 void	ft_cd(char *new_path, char **env);
 int		ft_pwd(void);
-void	ft_env(char **env);
+char	**ft_env(char **env);
+void	put_env(char **env);
 
 
 

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/bsunda/Documents/projet_1/Minicoquillage",
-      "program": "/home/bsunda/Documents/projet_1/Minicoquillage/build/Debug/outDebug",
+      "cwd": "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins",
+      "program": "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

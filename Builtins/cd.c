@@ -1,6 +1,5 @@
 #include "./builtins.h"
 
-
 char	*get_var_env(char *var, char **env)
 {
 	if (!env || !*env)
@@ -15,31 +14,40 @@ char	*get_var_env(char *var, char **env)
 	return (NULL);
 }
 
-void	value_old(char *oldpath, char **env)
+char	*put_var_env(char *var, char **env, char *value)
 {
-	char *name = ft_strdup("PWD=");
-	char *new = ft_strjoin((const char*)name, (const char*)oldpath);
-	ft_printf("%s\n", new);
-	char *envir = get_working_dir(env, "OLDPWD=");
-	envir = ft_strdup(new);
+
+	if (!env || !*env)
+		return (NULL);
+	while (env || *env)
+	{
+		if (ft_strnstr(*env, var, ft_strlen(var) + 1))
+		{
+			*env = ft_strdup(value);
+			return (*env);
+		}
+		else
+			++env;
+	}
+	return (NULL);
 }
-void	value_new(char *newpath, char **env)
+
+
+
+char	*value_new(char *path, char **env)
 {
 	char *name = ft_strdup("PWD=");
-	char *new = ft_strjoin((const char*)name, (const char*)newpath);
-	ft_printf("%s\n", new);
-	char *envir = get_working_dir("PWD=", env);
-	envir = ft_strdup(new);
+	char *new = ft_strjoin((const char*)name, (const char*)path);
+	return (new);
 }
 
 int	change_dir(char *oldpwd, char *newpath, char **env)
 {
-	char	**cpy_env;
+	char	*var;
 
-	cpy_env = (env);
-	if(chdir(newpath))
+	if (chdir(newpath))
 		return (1);
-	ft_printf("%s\n", getenv("PWD"));
+	var = put_var_env("PWD=", env, value_new(newpath, env));
 	return (0);
 }
 
@@ -50,11 +58,12 @@ void	ft_cd(char *newpath, char **env)
 
 }
 
-int	main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **environment)
 {
-	// change path;
-	char *path = "/home/bsunda/Documents/projet_1/Minicoquillage";
-
-	value_new(path, env);
+	char **env = ft_env(environment);
+	// put_env(envir);
+	char *path = "/home/";
+	ft_cd(path, env);
+	put_env(env);
 	return (0);
 }
