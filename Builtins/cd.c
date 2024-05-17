@@ -52,7 +52,7 @@ void	ft_cd(char *newpath, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	// change login;
+	// change path;
 	char *path = "/home/bsunda/Documents/projet_1/Minicoquillage";
 
 	value_new(path, env);
