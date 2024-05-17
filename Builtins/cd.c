@@ -32,8 +32,6 @@ char	*put_var_env(char *var, char **env, char *value)
 	return (NULL);
 }
 
-
-
 char	*value_new(char *path, char **env)
 {
 	char *name = ft_strdup("PWD=");
@@ -61,7 +59,6 @@ void	ft_cd(char *newpath, char **env)
 int	main(int ac, char **av, char **environment)
 {
 	char **env = ft_env(environment);
-	// put_env(envir);
 	char *path = "/home/";
 	ft_cd(path, env);
 	put_env(env);
