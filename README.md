@@ -16,3 +16,7 @@
 * Add path to prompt
 * handle ';'
 
+## UTIL
+* Add garbade collector
+* Open project gestion tool in github
+
