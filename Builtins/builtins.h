@@ -7,6 +7,10 @@
 # include <stdlib.h>
 # include "../42_MyLibC/mylibc.h"
 
+
+//proof of concept not finish
+//check out for each ft_
+
 void	ft_cd(char *new_path, char **env);
 int		ft_pwd(void);
 char	**ft_env(char **env);

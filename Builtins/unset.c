@@ -47,14 +47,3 @@ void	ft_unset(char **env, char *variable)
 		remove_var(env, variable);
 }
 
-
-int	main(int ac, char **av, char **environment)
-{
-	char **env = ft_env(environment);
-
-	ft_export(env, "titi=toto");
-	ft_printf("%d\n", get_env(env, "titi"));
-	ft_unset(env, "titi");
-	put_env(env);
-	return (0);
-}
