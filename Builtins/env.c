@@ -12,6 +12,26 @@ static size_t	len_tab(char **env)
 }
 
 
+int	get_env(char **env, char *var)
+{
+	int		i;
+	int		len;
+	char	*tmp;
+
+	len = 0;
+	i = 0;
+	len = ft_strlen(var);
+	while (env[i])
+	{
+		tmp = ft_substr(env[i], 0, len);
+		if (!ft_strncmp(tmp, var, len))
+			if(env[i][len] == '=')
+				return (1);
+		i++;
+	}
+	return (0);
+}
+
 void	put_env(char **env)
 {
 	size_t	i;

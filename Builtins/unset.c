@@ -14,9 +14,9 @@ char	*get_var_env(char *var, char **env)
 	return (NULL);
 }
 
-int is_present(char **env, char *variable)
+int	is_present(char **env, char *variable)
 {
-	if(getenv(variable))
+	if (get_env(env, variable))
 		return (1);
 	return (0);
 }
@@ -27,17 +27,18 @@ void	remove_var(char **env, char *variable)
 	int j;
 
 	i = 0;
-	char	*to_remove = get_var_env(variable, env);
-	while (env[i] != to_remove)
+	char *to_remove = get_var_env(variable, env);
+	ft_printf("%s\n", to_remove);
+	while (ft_strncmp(env[i], to_remove, ft_strlen(to_remove)))
 		i++;
 	j = i + 1;
 	while (env[j])
 	{
-		env[i] == env[j];
+		env[i] = env[j];
 		i++;
 		j++;
 	}
-	env[i] == NULL;
+	env[i] = NULL;
 }
 
 void	ft_unset(char **env, char *variable)
@@ -51,6 +52,9 @@ int	main(int ac, char **av, char **environment)
 {
 	char **env = ft_env(environment);
 
-	unset(env, "toto");
-
+	ft_export(env, "titi=toto");
+	ft_printf("%d\n", get_env(env, "titi"));
+	ft_unset(env, "titi");
+	put_env(env);
+	return (0);
 }
