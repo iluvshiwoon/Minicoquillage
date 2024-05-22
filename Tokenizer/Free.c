@@ -16,7 +16,7 @@ void dl_free_list(t_double_link_list * tokens_list)
     free(tokens_list);
 }
 
-static void free_all(char ** multiline, t_double_link_list ** tokens_list, char *** tokens)
+void free_all(char ** multiline, t_double_link_list ** tokens_list, char *** tokens)
 {
     size_t i;
 
