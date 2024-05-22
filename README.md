@@ -15,6 +15,6 @@
 * Bultins
 
 ## OPTIONAL
-* Add path to prompt
-* handle ';'
+* Add path to prompt [DONE]
+* handle ';' [DONE]
 
