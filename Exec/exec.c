@@ -26,7 +26,7 @@ int main(void)
 		exit(0);
 	}
 	if (!id)
-		pipex(cmd, );
+		pipex(cmd, fd_pipe, 5);
 	else
 		wait(NULL);
 
