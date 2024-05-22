@@ -7,9 +7,8 @@
 5. Error Management
 
 ## IN NO SPECIFIC ORDER
-* Implement redirection [Pipex Guide](https://reactive.so/post/42-a-comprehensive-guide-to-pipex)
+* Implement Pipe [Pipex Guide](https://reactive.so/post/42-a-comprehensive-guide-to-pipex)
 * Implement Globing algo : [algo](https://www.gmarik.info/blog/2020/understanding-glob-matching/)
-* Implement History Doubly linked list
 * Implement Redirections
 * Implement Here-Doc
 * Search Path function
