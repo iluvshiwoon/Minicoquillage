@@ -1,3 +1,5 @@
+#include "../Minicoquillage.h"
+
 char * build_prompt() 
 {
     char buffer[200] = {};
