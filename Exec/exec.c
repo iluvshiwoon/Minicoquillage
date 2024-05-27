@@ -2,7 +2,10 @@
 
 void pipex()
 {
+	while()
+	{
 
+	}
 }
 
 
@@ -10,24 +13,26 @@ int main(void)
 {
 	char *cmd_1 = "cat";
 	char *cmd_2 = "cat";
-	char *cmd_3 = "cat";
-	char *cmd_4 = "ls -la";
+	char *cmd_3 = "ls -la";
+	char *cmd_4 = "grep texte";
 	int infile = open("texte.txt", O_RDONLY);
-	char *cmd[5] = {cmd_1, cmd_2, cmd_3, cmd_4, NULL};
+	char *cmds[5] = {cmd_1, cmd_2, cmd_3, cmd_4, NULL};
+	t_format init;
 	pid_t	id;
-	int fd_pipe[2];
+	int fd[2];
+	pipe(fd);
 
+	init.cmd_path = cmds;
+	init.fd_in = fd[0];
+	init.fd_out = fd[1];
 	id = fork();
-	close(fd_pipe[0]);
-	close(fd_pipe[1]);
 	if (id == -1)
 	{
 		perror("fork failed");
 		exit(0);
 	}
 	if (!id)
-		pipex(cmd, fd_pipe, 5);
+		pipex(init);
 	else
 		wait(NULL);
-
 }

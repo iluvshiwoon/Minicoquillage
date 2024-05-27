@@ -57,6 +57,12 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
-    "builtins.h": "c"
+    "builtins.h": "c",
+    "exec.h": "c",
+    "stdio.h": "c",
+    "stdlib.h": "c",
+    "types.h": "c",
+    "wait.h": "c",
+    "unistd.h": "c"
   }
 }

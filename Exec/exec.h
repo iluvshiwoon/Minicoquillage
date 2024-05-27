@@ -16,10 +16,9 @@ typedef struct s_format
 	int		fd_in;
 	int		fd_out;
 	char	*cmd_path;
-	char	**cmd_args;
 	int		here_doc;
-	int		is_valid_infile;
-	int		cmd_count;
+
+
 }			t_format;
 
 #endif

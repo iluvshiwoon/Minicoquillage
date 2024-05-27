@@ -8,7 +8,7 @@ static int free_all(char ** multiline)
 		free(multiline[i++]);
 	free(multiline);
 	return (0);
-} 
+}
 
 t_double_link_list ** tokenizer(void)
 {
@@ -20,10 +20,10 @@ t_double_link_list ** tokenizer(void)
 	t_double_link_list ** cmd_list;
 	t_double_link_node * node;
 
-	// line = readline("Minicoquillage$ ");
-	line = "echo 'hello' ; echo 'world'";
-	// if (line && *line)
-	//     add_history(line);
+	line = readline("Minicoquillage$ ");
+	// line = "echo 'hello' ; echo 'world'";
+	if (line && *line)
+	    add_history(line);
 	multiline = ft_mysplit(line, "\n;");
 	i = 0;
 	while (multiline[i])
@@ -77,8 +77,12 @@ t_double_link_list ** tokenizer(void)
 }
 int main (void)
 {
+	t_double_link_list **tokens;
 	while (1)
-		tokenizer();
+	{
+		tokens = tokenizer();
+		
+	}
 	return (0);
 }
 
