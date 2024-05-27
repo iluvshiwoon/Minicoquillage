@@ -5,7 +5,7 @@
 typedef enum e_token_type {
     COMMAND, // relative or absolute if needed
     ARG,
-    ARG_LITTERAL,
+    // ARG_LITTERAL,
     PIPE,
     REDIRECTION,
     HERE_DOC,
@@ -51,5 +51,11 @@ char * last_ocur (char * string , char c);
 
 // Utils.c
 void print_tokens_list(t_double_link_list ** tokens_lists);
+void print_list(t_double_link_list * tokens_lists);
+
+// try 
+char * expand(char * line, size_t index, size_t j);
+size_t expand_double_quote(char * line, size_t i, size_t j, t_double_link_list * list);
+t_double_link_list * create_tokens(char * line);
 
 #endif

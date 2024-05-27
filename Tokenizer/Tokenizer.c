@@ -2,18 +2,37 @@
 
 int check_syntax(char * line)
 {
-    static size_t single_quote;
-    static size_t double_quote;
+    // static size_t single_quote;
+    // static size_t double_quote;
+    static int open_double;
+    static int open_single;
 
     while(*line)
     {
         if (*line == '\'')
-            single_quote++;
+        {
+            if (open_single)
+                open_single = 0;
+            else if(!open_double)
+                open_single = 1;
+            // single_quote++;
+        }
         else if (*line == '\"')
-            double_quote++;
+        {
+            if (open_double)
+                open_double = 0;
+            else if(!open_single)
+                open_double = 1;
+            // double_quote++;
+        }
         line++;
     }
-    return (single_quote % 2 == 0 && double_quote % 2 == 0);
+    // if (single_quote == 10000)
+    //     single_quote = 0;
+    // if (double_quote == 10000)
+    //     double_quote = 0;
+    // return (single_quote % 2 == 0 && double_quote % 2 == 0);
+    return (!(open_double || open_single));
 }
 
 char * concat_input(t_double_link_list * list)
@@ -94,9 +113,13 @@ t_double_link_list ** tokenizer(void)
     // line = "echo 'hello' ; echo 'world' ; ff ; bot diff; aaargh";
     
     line = get_line();
-    multiline = ft_mysplit(line, "\n;");
+    t_double_link_list * list = create_tokens(line);
+    print_list(list);
+    dl_free_list(list);
+    // multiline = ft_mysplit(line, "\n;");
     free(line);
-    return (create_tokens_lists(multiline));
+    // return (create_tokens_lists(multiline));
+    return NULL;
 }
 
 int main (void)
