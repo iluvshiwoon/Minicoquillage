@@ -2,8 +2,6 @@
 
 int check_syntax(char * line)
 {
-    // static size_t single_quote;
-    // static size_t double_quote;
     static int open_double;
     static int open_single;
 
@@ -15,7 +13,6 @@ int check_syntax(char * line)
                 open_single = 0;
             else if(!open_double)
                 open_single = 1;
-            // single_quote++;
         }
         else if (*line == '\"')
         {
@@ -23,15 +20,9 @@ int check_syntax(char * line)
                 open_double = 0;
             else if(!open_single)
                 open_double = 1;
-            // double_quote++;
         }
         line++;
     }
-    // if (single_quote == 10000)
-    //     single_quote = 0;
-    // if (double_quote == 10000)
-    //     double_quote = 0;
-    // return (single_quote % 2 == 0 && double_quote % 2 == 0);
     return (!(open_double || open_single));
 }
 
@@ -125,13 +116,6 @@ t_double_link_list ** tokenizer(void)
 int main (void)
 {
     t_double_link_list ** tokens_lists;
-
-    // size_t i = 2;
-    // while (i--)
-    // {
-    //     tokens_lists = tokenizer();
-    //     free_all(NULL,tokens_lists,NULL);
-    // }
 
     while (1)
     {

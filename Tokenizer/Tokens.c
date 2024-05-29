@@ -1,10 +1,5 @@
 #include "../Minicoquillage.h"
 
-int ft_isspace(int c) {
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\v' ||
-            c == '\f' || c == '\r');
-}
-
 size_t skip_space(char * line, size_t index)
 {
     if (!line[index])

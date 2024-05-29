@@ -37,13 +37,3 @@ void free_all(char ** multiline, t_double_link_list ** tokens_list, char *** tok
         free(tokens);
     }
 }
-
-void free_previous_tokens(size_t i, char *** tokens)
-{
-    size_t j;
-
-    j = 0;
-    while (j < i)
-        free_split(tokens[i++]);
-    free(tokens);
-}
