@@ -1,9 +1,9 @@
 #include "./exec.h"
-
+#include <unistd.h>
 
 int	pss_ok(char *path)
 {
-	if (access(path, F_OK | X_OK) != -1)
+	if (access((const char*)path, F_OK | X_OK) != -1)
 		return (1);
 	else
 		return (0);
@@ -19,16 +19,16 @@ char	*pss_permission(char **envs_path, char *cmd)
 	c = ft_split(cmd, ' ');
 	i = 1;
 	cmd_path = ft_strdup("");
-	while (envs_path[i] && !pss_ok(cmd_path))
+	while (!pss_ok(cmd_path) && envs_path[i])
 	{
 		full_path = ft_strjoin(envs_path[i], "/");
 		cmd_path = ft_strjoin(full_path, c[0]);
-		pss_ok(cmd_path);
 		free(full_path);
 		i++;
 	}
+	if(!pss_ok(cmd_path))
+		return (NULL);
 	ft_free_tab(c, ft_strlen2(c));
-	ft_printf("%s\n", cmd_path);
 	return (cmd_path);
 }
 
@@ -60,7 +60,7 @@ void	exec_(char *cmd, char **envs_path, char **arg_s, char *cmd_path)
 	if (execve(cmd_path, arg_s, NULL) == -1)
 	{
 		perror("Error: command not found\n");
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 }
 
@@ -79,7 +79,7 @@ void	execution(char *cmd_, char **envs_path)
 		if (execve(cmd_path, arg_s, NULL) == -1)
 		{
 			perror("Error: command not found\n");
-			exit(EXIT_FAILURE);
+			exit(127);
 		}
 	}
 	else

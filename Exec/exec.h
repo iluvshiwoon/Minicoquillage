@@ -15,10 +15,18 @@ typedef struct s_format
 {
 	int		fd_in;
 	int		fd_out;
-	char	*cmd_path;
+	char	**full_cmd;
 	int		here_doc;
-
-
 }			t_format;
 
+char	*path_of_cmd(char **env, char *cmd);
+char	**ft_cmd(char **to_exec, int i, char **tokens);
+
+int		ft_strlen2(char **tab);
+void	*ft_free_tab(char **s, size_t i);
+char	**ft_env(char **env);
+
+char	*pss_permission(char **envs_path, char *cmd);
+char	*get_path(char **env);
+int		pss_ok(char *path);
 #endif

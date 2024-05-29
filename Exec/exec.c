@@ -1,38 +1,76 @@
 #include "exec.h"
+#include <stdio.h>
 
-void pipex()
+char	**content(void)
 {
-	while()
-	{
+	//exemple chaine contenu dans la structure s_token
+	char **cmds = (char **)malloc(sizeof(char *) * 11);
+	cmds[0] = (char *)malloc(sizeof(char *) * 3);
+	cmds[0] = "cat";
+	cmds[1] = (char *)malloc(sizeof(char *) * 2);
+	cmds[1] = "-e";
+	cmds[2] = (char *)malloc(sizeof(char *) * 5);
+	cmds[2] = "cmd.c";
+	cmds[3] = (char *)malloc(sizeof(char *) * 1);
+	cmds[3] = "|";
+	cmds[4] = (char *)malloc(sizeof(char *) * 4);
+	cmds[4] = "grep";
+	cmds[5] = (char *)malloc(sizeof(char *) * 5);
+	cmds[5] = "texte";
+	cmds[6] = (char *)malloc(sizeof(char *) * 1);
+	cmds[6] = "<";
+	cmds[7] = (char *)malloc(sizeof(char *) * 6);
+	cmds[7] = "infile";
+	cmds[8] = (char *)malloc(sizeof(char *) * 1);
+	cmds[8] = ">";
+	cmds[9] = (char *)malloc(sizeof(char *) * 7);
+	cmds[9] = "outfile";
+	cmds[10] = NULL;
+	return (cmds);
 
+}
+
+void	setting()
+{
+
+}
+
+
+
+
+int	main(int ac, char **av, char **envp)
+{
+	char	**cmds;
+	int		i;
+	char	**env;
+	char	**to_exec;
+	char	*absolute_path;
+
+	env = ft_env(envp);  //erreur de copy
+	cmds = content();
+
+	i = 0;
+	char *path_from_env = get_path(env);
+	char **my_paths = ft_split((const char *)path_from_env, ':');
+
+	//check is absolute path for cmd or only cmd to execve
+	absolute_path = path_of_cmd(my_paths, cmds[0]);
+	printf("%s\n", absolute_path);
+
+	to_exec = ft_cmd(to_exec, i, cmds);
+	if (!to_exec)
+		return (-1);
+	while (to_exec[i])
+	{
+		printf("%d : %s\n", i, to_exec[i]);
+		i++;
+	}
+	if (execve(absolute_path, to_exec, NULL) == -1)
+	{
+		perror("Error: command not found\n");
+		exit(127);
 	}
 }
 
 
-int main(void)
-{
-	char *cmd_1 = "cat";
-	char *cmd_2 = "cat";
-	char *cmd_3 = "ls -la";
-	char *cmd_4 = "grep texte";
-	int infile = open("texte.txt", O_RDONLY);
-	char *cmds[5] = {cmd_1, cmd_2, cmd_3, cmd_4, NULL};
-	t_format init;
-	pid_t	id;
-	int fd[2];
-	pipe(fd);
 
-	init.cmd_path = cmds;
-	init.fd_in = fd[0];
-	init.fd_out = fd[1];
-	id = fork();
-	if (id == -1)
-	{
-		perror("fork failed");
-		exit(0);
-	}
-	if (!id)
-		pipex(init);
-	else
-		wait(NULL);
-}
