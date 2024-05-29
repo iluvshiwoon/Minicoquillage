@@ -30,46 +30,58 @@ char	**content(void)
 
 }
 
-void	setting()
+//to free
+char	*abs_to_rel_cmd(char *token)
 {
+	char	**abs_cmd;
+	char	*rel_cmd;
+	size_t	len;
 
+	abs_cmd = ft_split(token, '/');
+	len = (size_t) ft_strlen2(abs_cmd);
+	if (len >= 2)
+	{
+		rel_cmd = ft_strdup(abs_cmd[len - 1]);
+		ft_free_tab(abs_cmd, len);
+		return (rel_cmd);
+	}
+	else
+	{
+		rel_cmd = ft_strdup(abs_cmd[0]);
+		ft_free_tab(abs_cmd, len);
+		return (rel_cmd);
+	}
 }
-
-
-
 
 int	main(int ac, char **av, char **envp)
 {
 	char	**cmds;
-	int		i;
+	int		i, j;
 	char	**env;
-	char	**to_exec;
 	char	*absolute_path;
+	char	**to_exec;
 
-	env = ft_env(envp);  //erreur de copy
-	cmds = content();
+	env = ft_env(envp);  //a faire en amont + erreur de copy au debut
+	cmds = content();  //get token from structure s_token
 
 	i = 0;
+	j = 0;
 	char *path_from_env = get_path(env);
 	char **my_paths = ft_split((const char *)path_from_env, ':');
 
-	//check is absolute path for cmd or only cmd to execve
+	//TODO:check if convert absolute path to cmd or only cmd to execve
 	absolute_path = path_of_cmd(my_paths, cmds[0]);
-	printf("%s\n", absolute_path);
+	to_exec = ft_cmd(to_exec, i, &j, cmds);
 
-	to_exec = ft_cmd(to_exec, i, cmds);
 	if (!to_exec)
 		return (-1);
-	while (to_exec[i])
-	{
-		printf("%d : %s\n", i, to_exec[i]);
-		i++;
-	}
+
 	if (execve(absolute_path, to_exec, NULL) == -1)
 	{
 		perror("Error: command not found\n");
 		exit(127);
 	}
+
 }
 
 

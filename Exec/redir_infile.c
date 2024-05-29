@@ -12,7 +12,7 @@ int is_infile(char *infile)
 *operator is the current token
 *file is the next token
 */
-int	redirect(char *operator, char *file)
+int	redirect(int *tube, char *operator, char *file)
 {
 	int fd;
 	if (is_infile(operator))

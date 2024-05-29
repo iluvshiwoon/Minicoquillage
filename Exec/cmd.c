@@ -39,13 +39,11 @@ void	insert_full_cmd(char **f_cmd, char **tokens, int i, int size_cmd)
 	f_cmd[k] = NULL;
 }
 
-char	**ft_cmd(char **to_exec, int i, char **tokens)
+char	**ft_cmd(char **to_exec, int i, int *j, char **tokens)
 {
-	int		j;
 	int		size_cmd;
 
 	size_cmd = 0;
-	j = i;
 	while (among_cmd(tokens[i][0]))
 	{
 		size_cmd++;
@@ -54,6 +52,7 @@ char	**ft_cmd(char **to_exec, int i, char **tokens)
 	to_exec = (char **)malloc((1 + sizeof(char)) * size_cmd);
 	if (!to_exec)
 		return (NULL);
-	insert_full_cmd(to_exec, tokens, j, size_cmd);
+	insert_full_cmd(to_exec, tokens, *j, size_cmd);
+	*j = i;
 	return (to_exec);
 }
