@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:45:59 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/29 16:19:49 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 14:04:49 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,21 @@ void	dl_free_list(t_double_link_list *tokens_list)
 	free(tokens_list);
 }
 
-void	free_all(char **multiline, t_double_link_list **tokens_list,
-		char ***tokens)
+void	dl_free_token_list(t_double_link_list *tokens_list)
 {
-	size_t	i;
+	t_double_link_node	*node;
+	t_double_link_node	*node_temp;
+    t_token * token;
 
-	i = 0;
-	if (multiline)
-		free_split(multiline);
-	if (tokens_list)
+	node = tokens_list->first_node;
+	while (node)
 	{
-		while (tokens_list[i])
-			dl_free_list(tokens_list[i++]);
-		free(tokens_list);
+        token = node->data;
+        free(token->value);
+		free(node->data);
+		node_temp = node;
+		node = node->next;
+		free(node_temp);
 	}
-	if (tokens)
-	{
-		i = 0;
-		while (tokens[i])
-			free(tokens[i++]);
-		free(tokens);
-	}
+	free(tokens_list);
 }

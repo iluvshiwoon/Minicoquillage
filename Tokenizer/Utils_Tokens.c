@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:39:04 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/29 17:43:00 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:59:20 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,24 +65,30 @@ char	*expand_single(size_t j, char *token)
 	return (temp);
 }
 
-int	expand_single_quote(size_t *j, char **token, char **temp,
+int	expand_single_quote(size_t *j, char **value, char **temp,
 		t_double_link_node **node)
 {
-	*temp = expand_single(*j, *token);
-	free(*token);
-	(*node)->data = *temp;
-	*token = (*node)->data;
+    t_token * token;
+
+    token = (*node)->data;
+	*temp = expand_single(*j, *value);
+	free(*value);
+	token->value = *temp;
+	*value = *temp;
 	(*j) -= 2;
 	return (0);
 }
 
-int	expand_double_quote(size_t *j, char **token, char **temp,
+int	expand_double_quote(size_t *j, char **value, char **temp,
 		t_double_link_node **node)
 {
-	*temp = expand_double(*j, *token);
-	free(*token);
-	(*node)->data = *temp;
-	*token = (*node)->data;
+    t_token * token;
+
+    token = (*node)->data;
+	*temp = expand_double(*j, *value);
+	free(*value);
+	token->value = *temp;
+	*value = *temp;
 	(*j) -= 2;
 	return (0);
 }

@@ -6,21 +6,23 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/29 17:46:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 14:08:42 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
 
-void	add_token(size_t i, size_t j, char *line, t_double_link_list *list)
+void	add_token(size_t i, size_t j, char *line, t_control_dll *control)
 {
-	t_double_link_node	*node;
 	char				*temp;
 
-	node = malloc(sizeof(*node));
+	control->node = malloc(sizeof(*control->node));
+    control->token = malloc(sizeof(*control->token));
+    control->token->type = COMMAND;
 	temp = malloc(sizeof(char) * (j - i + 1));
 	ft_strlcpy(temp, line + i, j - i + 1);
-	node->data = temp;
-	list->pf_insert_end(list, node);
+	control->token->value = temp;
+    control->node->data = control->token;
+	control->list->pf_insert_end(control->list, control->node);
 }
 
 int	check_quote(char c, t_open_quote *open)
@@ -46,7 +48,7 @@ size_t	init_create_tokens(t_open_quote *open, t_control_dll *control,
 	open->single_quote = 0;
 	control->list = malloc(sizeof(*control->list));
 	if (!(control->list))
-		return (dl_free_list(control->list), free(line), exit(EXIT_SUCCESS),
+		return (dl_free_token_list(control->list), free(line), exit(EXIT_SUCCESS),
 			*j);
 	*j = skip_space(line, *j);
 	init_list(control->list);
@@ -57,7 +59,7 @@ t_double_link_list	*expand_nodes(size_t i, size_t j, t_control_dll *control,
 		char *line)
 {
 	if (i != j)
-		add_token(i, j, line, control->list);
+		add_token(i, j, line, control);
 	control->node = control->list->first_node;
 	while (control->node)
 	{

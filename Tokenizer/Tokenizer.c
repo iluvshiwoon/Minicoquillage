@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/29 17:55:19 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 14:04:53 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ t_double_link_list	**tokenizer(void)
 	line = get_line();
 	list = create_tokens(line);
 	print_list(list);
-	dl_free_list(list);
+	dl_free_token_list(list);
 	free(line);
 	return (NULL);
 }
@@ -114,7 +114,6 @@ int	main(void)
 	while (i)
 	{
 		tokens_lists = tokenizer();
-		free_all(NULL, tokens_lists, NULL);
 		i--;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/29 17:54:57 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 14:03:04 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,17 @@ typedef enum e_token_type
 	CLOSE_PARENTHESIS,
 }						t_token_type;
 
+typedef struct s_token
+{
+	int					type;
+	char				*value;
+}						t_token;
+
 typedef struct s_control_dll
 {
 	t_double_link_list	*list;
 	t_double_link_node	*node;
+    t_token * token;
 }						t_control_dll;
 
 typedef struct s_open_quote
@@ -45,12 +52,6 @@ typedef struct s_string
 	char				*dst;
 	char				*temp;
 }						t_string;
-
-typedef struct s_token
-{
-	int					type;
-	char				*value;
-}						t_token;
 
 // Tokenizer.c
 t_double_link_list		**tokenizer(void);
@@ -67,6 +68,7 @@ char					*wrapper_strjoin_concat(char *s1, char *s2,
 void					dl_free_list(t_double_link_list *tokens_list);
 void					free_all(char **multiline,
 							t_double_link_list **tokens_list, char ***tokens);
+void	dl_free_token_list(t_double_link_list *tokens_list);
 
 // Prompt.c
 char					*build_prompt(void);
@@ -92,7 +94,7 @@ int						expand_double_quote(size_t *j, char **token,
 
 // Utils_Tokens1.c
 void					add_token(size_t i, size_t j, char *line,
-							t_double_link_list *list);
+							t_control_dll *control);
 int						check_quote(char c, t_open_quote *open);
 size_t					init_create_tokens(t_open_quote *open,
 							t_control_dll *control, char *line, size_t *j);
