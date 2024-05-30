@@ -18,4 +18,4 @@
 * Add path to prompt [DONE]
 * handle ';' [DONE]
 * Debugger
-* handle '\'
+* handle '\\'
