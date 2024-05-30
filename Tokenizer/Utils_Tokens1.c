@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 14:08:42 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:36:55 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -58,7 +58,7 @@ size_t	init_create_tokens(t_open_quote *open, t_control_dll *control,
 t_double_link_list	*expand_nodes(size_t i, size_t j, t_control_dll *control,
 		char *line)
 {
-	if (i != j)
+	if (i != j && j <= ft_strlen(line))
 		add_token(i, j, line, control);
 	control->node = control->list->first_node;
 	while (control->node)

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 14:04:53 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:49:54 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,45 @@ char	*get_line(void)
 	return (free(prompt), final);
 }
 
+void populate_tokens(t_double_link_list * list)
+{
+    t_double_link_node * node;
+    t_token * token;
+    t_token * previous_token;
+    size_t len_token;
+
+    node = list->first_node->next;
+    while (node)
+    {
+        token = node->data;
+        previous_token = node->previous->data;
+        len_token = ft_strlen(token->value);
+        if(ft_strnstr(token->value, "-", len_token) && (previous_token->type == COMMAND || previous_token->type == OPTION))
+            token->type = OPTION;
+        else if(ft_strnstr(token->value, "--", len_token) && (previous_token->type == COMMAND || previous_token->type == OPTION))
+            token->type = OPTION;
+        else if(len_token == 1 && token->value[0] == '|')
+            token->type = PIPE;
+        else if(len_token == 1 && token->value[0] == '(')
+            token->type = OPEN_PARENTHESIS;
+        else if(len_token == 1 && token->value[0] == ')')
+            token->type = CLOSE_PARENTHESIS;
+        else if(len_token == 1 && (token->value[0] == '<' || token->value[0] == '>'))
+            token->type = REDIRECTION;
+        else if(ft_strnstr(">>", token->value, 2))
+            token->type = REDIRECTION;
+        else if(ft_strnstr("<<" ,token->value, 2))
+            token->type = HERE_DOC;
+        else if (ft_strnstr("&&", token->value, 2))
+            token->type = AND;
+        else if (ft_strnstr("||", token->value, 2))
+            token->type = OR;
+        else if(previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == REDIRECTION || previous_token->type == HERE_DOC)
+            token->type = ARG;
+        node = node->next;
+    }
+}
+
 t_double_link_list	**tokenizer(void)
 {
 	char				**multiline;
@@ -98,7 +137,10 @@ t_double_link_list	**tokenizer(void)
 	t_double_link_list	*list;
 
 	line = get_line();
+    if (!line || !*line)
+        return (NULL);
 	list = create_tokens(line);
+    populate_tokens(list);
 	print_list(list);
 	dl_free_token_list(list);
 	free(line);
@@ -110,11 +152,11 @@ int	main(void)
 	t_double_link_list	**tokens_lists;
 	int					i;
 
-	i = 3;
-	while (i)
+	// i = 3;
+	while (1)
 	{
 		tokens_lists = tokenizer();
-		i--;
+		// i--;
 	}
 	return (0);
 }

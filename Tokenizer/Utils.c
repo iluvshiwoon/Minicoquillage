@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 14:40:35 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:03:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@ int	ft_isspace(int c)
 {
 	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
 		|| c == '\r');
+}
+
+int ft_sep(int c)
+{
+    return (c == '&' || c == '|' || c == '>' || c == '<');
 }
 
 void build_type(char ** type)
@@ -42,7 +47,7 @@ void	print_list(t_double_link_list *tokens_lists)
     build_type(type);
 	i = 0;
 	node = tokens_lists->first_node;
-    printf("\033[47;30m TOKENS \033[0m\n");
+    printf("\n\033[47;30m TOKENS \033[0m\n");
 	while (node)
 	{
         token = node->data;

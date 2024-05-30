@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 13:59:19 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:42:31 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -39,6 +39,22 @@ void	expand_tokens(t_double_link_node *node)
 	}
 }
 
+int is_sep(char * line, size_t * i, size_t * j, t_control_dll * control)
+{
+    if (ft_sep(line[*j]))
+    {
+        if (!ft_isspace(line[*j - 1]))
+        {
+            add_token(*i, *j, line, control);
+            *i = *j;
+        }
+        while (ft_sep(line[*j]))
+            (*j)++;
+        return (1);
+    }
+    return (0);
+}
+
 t_double_link_list	*create_tokens(char *line)
 {
 	t_control_dll	control;
@@ -49,12 +65,15 @@ t_double_link_list	*create_tokens(char *line)
 	i = init_create_tokens(&open, &control, line, &j);
 	while (line[j])
 	{
-		if (!check_quote(line[j], &open) && (ft_isspace(line[j])
+		if (!check_quote(line[j], &open) && ((ft_isspace(line[j]) || is_sep(line, &i, &j, &control))
 				&& !open.single_quote && !open.double_quote))
 		{
 			add_token(i, j, line, &control);
 			j = skip_space(line, j);
-			i = j + 1;
+            if (ft_isspace(line[j]))
+			    i = j + 1;
+            else 
+                i = j;
 		}
 		++j;
 	}
