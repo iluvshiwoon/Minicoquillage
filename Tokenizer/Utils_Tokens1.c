@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 17:36:55 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:51:33 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -51,6 +51,8 @@ size_t	init_create_tokens(t_open_quote *open, t_control_dll *control,
 		return (dl_free_token_list(control->list), free(line), exit(EXIT_SUCCESS),
 			*j);
 	*j = skip_space(line, *j);
+    if (ft_isspace(line[*j]))
+        *j += 1;
 	init_list(control->list);
 	return (*j);
 }

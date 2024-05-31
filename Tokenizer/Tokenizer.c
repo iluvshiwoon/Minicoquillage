@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 17:49:54 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/31 17:05:13 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ int	check_syntax(char *line)
 				open_double = 1;
 		}
 		line++;
-	}
-	return (!(open_double || open_single));
+	} return (!(open_double || open_single));
 }
 
 char	*concat_input(t_double_link_list *list)
@@ -120,6 +119,8 @@ void populate_tokens(t_double_link_list * list)
             token->type = REDIRECTION;
         else if(ft_strnstr("<<" ,token->value, 2))
             token->type = HERE_DOC;
+        else if(ft_strnstr(";" ,token->value, 1))
+            token->type = CMD_SEP;
         else if (ft_strnstr("&&", token->value, 2))
             token->type = AND;
         else if (ft_strnstr("||", token->value, 2))
@@ -134,16 +135,18 @@ t_double_link_list	**tokenizer(void)
 {
 	char				**multiline;
 	char				*line;
-	t_double_link_list	*list;
+    t_control_dll control;
 
 	line = get_line();
     if (!line || !*line)
-        return (NULL);
-	list = create_tokens(line);
-    populate_tokens(list);
-	print_list(list);
-	dl_free_token_list(list);
+        return (free(line),NULL);
+	control.list = create_tokens(line);
 	free(line);
+    populate_tokens(control.list);
+    if (check_error_tokens(&control))
+        return (NULL);
+	print_list(control.list);
+	dl_free_token_list(control.list);
 	return (NULL);
 }
 

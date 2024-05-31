@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 17:03:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/31 14:55:45 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef enum e_token_type
 	OR,
 	OPEN_PARENTHESIS,
 	CLOSE_PARENTHESIS,
+    CMD_SEP,
 }						t_token_type;
 
 typedef struct s_token
@@ -83,6 +84,9 @@ size_t					count_node(t_double_link_list *list);
 // Tokens.c
 t_double_link_list		*create_tokens(char *line);
 void					expand_tokens(t_double_link_node *node);
+
+// Error.c
+int check_error_tokens(t_control_dll * control);
 
 // Utils_Tokens.c
 size_t					skip_space(char *line, size_t index);

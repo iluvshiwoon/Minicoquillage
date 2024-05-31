@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 17:42:31 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:44:33 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -43,7 +43,7 @@ int is_sep(char * line, size_t * i, size_t * j, t_control_dll * control)
 {
     if (ft_sep(line[*j]))
     {
-        if (!ft_isspace(line[*j - 1]))
+        if (*j && !ft_isspace(line[*j - 1]))
         {
             add_token(*i, *j, line, control);
             *i = *j;

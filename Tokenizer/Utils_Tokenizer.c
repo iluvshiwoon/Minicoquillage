@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:14:57 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/29 17:54:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:23:10 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ char	*init_line(t_control_dll *control, char *prompt)
 {
 	char	*line;
 
-	line = readline(prompt);
+ //    printf("%s",prompt);
+	// line = readline("");
+    line = readline(prompt);
 	if (!line)
 		return (free(control->list), free(control->node), free(prompt),
 			free(line), exit(EXIT_FAILURE), NULL);

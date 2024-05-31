@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 17:03:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/05/31 14:56:44 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_isspace(int c)
 
 int ft_sep(int c)
 {
-    return (c == '&' || c == '|' || c == '>' || c == '<');
+    return (c == '&' || c == '|' || c == '>' || c == '<' || c == ';');
 }
 
 void build_type(char ** type)
@@ -35,6 +35,7 @@ void build_type(char ** type)
     type[OR] = "OR";
     type[OPEN_PARENTHESIS] = "OPEN PARENTHESIS";
     type[CLOSE_PARENTHESIS] = "CLOSE PARENTHESIS";
+    type[CMD_SEP] = "COMMAND SEPARATOR";
 }
 
 void	print_list(t_double_link_list *tokens_lists)
@@ -42,7 +43,7 @@ void	print_list(t_double_link_list *tokens_lists)
 	size_t				i;
 	t_double_link_node	*node;
     t_token * token;
-    char *type[10];
+    char *type[11];
 
     build_type(type);
 	i = 0;
