@@ -19,7 +19,7 @@ int among_cmd(char c)
 			return (0);
 		i++;
 	}
-	return (1);
+	return (-1);
 }
 
 void	insert_full_cmd(char **f_cmd, char **tokens, int i, int size_cmd)
@@ -46,7 +46,7 @@ char	**ft_cmd(char **to_exec, int *i, char **tokens)
 
 	j = *i;
 	size_cmd = 0;
-	while (among_cmd(tokens[j][0]))
+	while (among_cmd(tokens[j][0]) == -1)
 	{
 		size_cmd++;
 		j++;
@@ -58,3 +58,11 @@ char	**ft_cmd(char **to_exec, int *i, char **tokens)
 	*i = j;
 	return (to_exec);
 }
+
+// cusor_read(cmd, env , position)
+// {
+// 	if (!path_of_cmd(env, cmd))
+// 	{
+// 		if(cmd)
+// 	}
+// }

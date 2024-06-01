@@ -35,7 +35,6 @@ void	tube_out(t_format format, int position)
 	}
 	else
 	{
-		printf("ici");
 		close(format.tube[0]);
 		out = open(outfile_name(format.cmds, position), O_CREAT | O_WRONLY);
 		dup2(out, STDOUT_FILENO);

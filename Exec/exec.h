@@ -17,8 +17,9 @@ typedef struct s_format
 	int		fd_out;
 	int		here_doc;
 	int		tube[2];
-	char	**absolute_path;
-	char	**cmds;
+	char	**env;
+	char	**path;
+	char	**cmds;  // change to ast
 }			t_format;
 
 char	*infile_name(char **cmds, int position);

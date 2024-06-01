@@ -27,19 +27,21 @@ void	tube_in(t_format format, int position)
 {
 	char	*specials = "|<>&()";
 	int		in;
+	int i = position;
 
-	if (!infile_name(format.cmds, position))
+	while (format.cmds[i][0] != '|' && format.cmds[i])
 	{
-		close(format.tube[0]);
-		dup2(format.tube[1], STDIN_FILENO);
-		close(format.tube[1]);
+		if (infile_name(format.cmds, i))
+		{
+			close(format.tube[0]);
+			in = open(infile_name(format.cmds, position), O_RDONLY);
+			dup2(in, STDIN_FILENO);
+			close(in);
+			return ;
+		}
 	}
-	else
-	{
-		printf("ici");
-		close(format.tube[0]);
-		in = open(infile_name(format.cmds, position), O_RDONLY);
-		dup2(in, STDIN_FILENO);
-		close(in);
-	}
+	close(format.tube[0]);
+	dup2(format.tube[1], STDIN_FILENO);
+	close(format.tube[1]);
+
 }

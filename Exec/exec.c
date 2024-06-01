@@ -57,25 +57,24 @@ char	*abs_to_rel_cmd(char *token)
 	}
 }
 
-void	process(char **env , t_format format, char **my_paths, int *i)
+void	process(t_format format, int *i)
 {
 	char	*absolute_path;
 	char	**to_exec;
 	pid_t	pid;
 
-	//TODO:check if convert absolute path to cmd or only cmd to execve
-	absolute_path = path_of_cmd(my_paths, format.cmds[*i]);
-	to_exec = ft_cmd(to_exec, i, format.cmds);
-	if (!to_exec)
-		return ;
 	pid = fork();
 	if (pid == -1)
 		exit(EXIT_FAILURE);
-		close(format.tube[0]);
-		close(format.tube[1]);
+	tube_in(format, *i);
+	absolute_path = path_of_cmd(format.path, format.cmds[*i]);
+	to_exec = ft_cmd(to_exec, i, format.cmds);
+	if (!to_exec)
+		return ;
+	close(format.tube[0]);
+	close(format.tube[1]);
 	if (pid == 0)
 	{
-		tube_in(format, *i);
 		if (execve(absolute_path, to_exec, NULL) == -1)
 		{
 			perror("Error: command not found\n");
@@ -85,7 +84,6 @@ void	process(char **env , t_format format, char **my_paths, int *i)
 	else
 	{
 		wait(NULL);
-		printf("%d\n", *i);
 		tube_out(format, *i);
 	}
 }
@@ -95,21 +93,21 @@ int	main(int ac, char **av, char **envp)
 	char		**env_cpy;
 	int			i;
 	t_format	format;
+	pid_t		pid;
 
-
-	env_cpy = ft_env(envp);  //a faire en amont + erreur de copy au debut
+	format.env = ft_env(envp);  //a faire en amont + erreur de copy au debut
 	format.cmds = content();  //get token from structure s_token
-
-	char *path_from_env = get_path(env_cpy);
-	char **my_paths = ft_split((const char *)path_from_env, ':');
+	format.path = ft_split((const char *)get_path(format.env), ':');
 	i = 0;
-	pipe(format.tube);
-	// while (format.cmds[i])
-	// {
-	// 	if()
-		process(env_cpy, format, my_paths, &i);
-	// }
-
+	if (pipe(format.tube) == -1)
+		exit(EXIT_FAILURE);
+	format.fd_in = dup(STDIN_FILENO);
+	format.fd_out = dup(STDOUT_FILENO);
+	pid = fork();
+	if (pid == -1)
+		exit(EXIT_FAILURE);
+	if (pid == 0)
+			process(format, &i);
 	return (0);
 }
 
