@@ -1,6 +1,6 @@
 #include "exec.h"
 
-int is_infile(char *infile)
+int	is_infile(char *infile)
 {
 	if (!ft_strncmp(infile, "<", 1))
 		return (1);
@@ -25,10 +25,10 @@ char	*infile_name(char **cmds, int position)
 
 void	tube_in(t_format format, int position)
 {
-	char	*specials = "|<>&()";
 	int		in;
-	int i = position;
+	int		i;
 
+	i = position;
 	while (format.cmds[i][0] != '|' && format.cmds[i])
 	{
 		if (infile_name(format.cmds, i))
@@ -43,5 +43,4 @@ void	tube_in(t_format format, int position)
 	close(format.tube[0]);
 	dup2(format.tube[1], STDIN_FILENO);
 	close(format.tube[1]);
-
 }
