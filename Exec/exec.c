@@ -9,8 +9,8 @@ char	**content(void)
 	cmds[0] = "cat";
 	cmds[1] = (char *)malloc(sizeof(char *) * 2);
 	cmds[1] = "-e";
-	cmds[2] = (char *)malloc(sizeof(char *) * 6);
-	cmds[2] = "infile";
+	cmds[2] = (char *)malloc(sizeof(char *) * 2);
+	cmds[2] = "-n";
 	cmds[3] = (char *)malloc(sizeof(char *) * 1);
 	cmds[3] = "|";
 	cmds[4] = (char *)malloc(sizeof(char *) * 4);
@@ -67,8 +67,11 @@ void	process(char **env , t_format format, char **my_paths, int *i)
 	pid = fork();
 	if (pid == -1)
 		exit(EXIT_FAILURE);
+	close(format.tube[0]);
+	close(format.tube[1]);
 	if (pid == 0)
 	{
+		tube_in(format, *i);
 		if (execve(absolute_path, to_exec, NULL) == -1)
 		{
 			perror("Error: command not found\n");

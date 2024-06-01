@@ -22,6 +22,7 @@ typedef struct s_format
 }			t_format;
 
 char	*infile_name(char **cmds, int position);
+void	tube_in(t_format format, int position);
 char	*outfile_name(char **cmds, int position);
 
 char	*path_of_cmd(char **env, char *cmd);
