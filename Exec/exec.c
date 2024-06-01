@@ -12,20 +12,24 @@ char	**content(void)
 	cmds[2] = (char *)malloc(sizeof(char *) * 2);
 	cmds[2] = "-n";
 	cmds[3] = (char *)malloc(sizeof(char *) * 1);
-	cmds[3] = "|";
-	cmds[4] = (char *)malloc(sizeof(char *) * 4);
-	cmds[4] = "grep";
-	cmds[5] = (char *)malloc(sizeof(char *) * 5);
-	cmds[5] = "texte";
-	cmds[6] = (char *)malloc(sizeof(char *) * 1);
-	cmds[6] = "<";
-	cmds[7] = (char *)malloc(sizeof(char *) * 6);
-	cmds[7] = "infile";
+	cmds[3] = "<";
+	cmds[4] = (char *)malloc(sizeof(char *) * 6);
+	cmds[4] = "infile";
+	cmds[5] = (char *)malloc(sizeof(char *) * 1);
+	cmds[5] = "|";
+	cmds[6] = (char *)malloc(sizeof(char *) * 4);
+	cmds[6] = "grep";
+	cmds[7] = (char *)malloc(sizeof(char *) * 5);
+	cmds[7] = "texte";
 	cmds[8] = (char *)malloc(sizeof(char *) * 1);
-	cmds[8] = ">";
-	cmds[9] = (char *)malloc(sizeof(char *) * 7);
-	cmds[9] = "outfile";
-	cmds[10] = NULL;
+	cmds[8] = "<";
+	cmds[9] = (char *)malloc(sizeof(char *) * 6);
+	cmds[9] = "infile";
+	cmds[10] = (char *)malloc(sizeof(char *) * 1);
+	cmds[10] = ">";
+	cmds[11] = (char *)malloc(sizeof(char *) * 7);
+	cmds[11] = "outfile";
+	cmds[12] = NULL;
 	return (cmds);
 
 }
@@ -67,8 +71,8 @@ void	process(char **env , t_format format, char **my_paths, int *i)
 	pid = fork();
 	if (pid == -1)
 		exit(EXIT_FAILURE);
-	close(format.tube[0]);
-	close(format.tube[1]);
+		close(format.tube[0]);
+		close(format.tube[1]);
 	if (pid == 0)
 	{
 		tube_in(format, *i);
@@ -82,6 +86,7 @@ void	process(char **env , t_format format, char **my_paths, int *i)
 	{
 		wait(NULL);
 		printf("%d\n", *i);
+		tube_out(format, *i);
 	}
 }
 
@@ -99,7 +104,11 @@ int	main(int ac, char **av, char **envp)
 	char **my_paths = ft_split((const char *)path_from_env, ':');
 	i = 0;
 	pipe(format.tube);
-	process(env_cpy, format, my_paths, &i);
+	// while (format.cmds[i])
+	// {
+	// 	if()
+		process(env_cpy, format, my_paths, &i);
+	// }
 
 	return (0);
 }
