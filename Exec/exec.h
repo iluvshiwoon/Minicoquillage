@@ -15,16 +15,17 @@ typedef struct s_format
 {
 	int		fd_in;
 	int		fd_out;
-	char	**absolute_path;
-	char	*cmd_to_exec;
 	int		here_doc;
+	int		tube[2];
+	char	**absolute_path;
+	char	**cmds;
 }			t_format;
 
-int	redirect(int *tube, char *operator, char *file);
-
+char	*infile_name(char **cmds, int position);
+char	*outfile_name(char **cmds, int position);
 
 char	*path_of_cmd(char **env, char *cmd);
-char	**ft_cmd(char **to_exec, int i, int *j, char **tokens);
+char	**ft_cmd(char **to_exec, int *i, char **tokens);
 
 int		ft_strlen2(char **tab);
 void	*ft_free_tab(char **s, size_t i);

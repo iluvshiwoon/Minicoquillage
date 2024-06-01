@@ -1,4 +1,0 @@
-int is_redirection()
-{
-
-}

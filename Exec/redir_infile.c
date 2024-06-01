@@ -2,24 +2,28 @@
 
 int is_infile(char *infile)
 {
-	if (!ft_strcmp(infile, "<"))
+	if (!ft_strncmp(infile, "<", 1))
 		return (1);
 	return (0);
 }
 
 
-/*
-*operator is the current token
-*file is the next token
-*/
-int	redirect(int *tube, char *operator, char *file)
+char	*infile_name(char **cmds, int position)
 {
-	int fd;
-	if (is_infile(operator))
+	int	i;
+
+	i = position;
+	while (cmds[i][0] != '|')
 	{
-		fd = open(file, O_RDONLY);
-		if (fd == -1)
-			exit(20);
-		dup2(fd, STDIN_FILENO);
+		if (is_infile(cmds[i]))
+			return (cmds[i + 1]);
+		i++;
 	}
+
+	return (NULL);
+}
+
+char	tube_redirect(char **cmds, int position)
+{
+	
 }
