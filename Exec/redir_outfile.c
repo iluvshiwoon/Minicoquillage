@@ -13,12 +13,8 @@ char	*outfile_name(char **cmds, int position)
 	int	i;
 
 	i = position;
-	while (cmds[i][0] != '|')
-	{
-		if (is_outfile(cmds[i]))
-			return (cmds[i + 1]);
-		i++;
-	}
+	if (is_outfile(cmds[i]))
+		return (cmds[i + 1]);
 	return (NULL);
 }
 
@@ -38,6 +34,7 @@ void	tube_out(t_format format, int position)
 			close(out);
 			return ;
 		}
+		i++;
 	}
 	close(format.tube[1]);
 	dup2(format.tube[0], STDOUT_FILENO);

@@ -9,18 +9,18 @@ char	**content(void)
 	cmds[0] = "cat";
 	cmds[1] = (char *)malloc(sizeof(char *) * 2);
 	cmds[1] = "-e";
-	cmds[2] = (char *)malloc(sizeof(char *) * 6);
-	cmds[2] = "infile";
+	cmds[2] = (char *)malloc(sizeof(char *) * 2);
+	cmds[2] = "-n";
 	cmds[3] = (char *)malloc(sizeof(char *) * 1);
-	cmds[3] = ">";
-	cmds[4] = (char *)malloc(sizeof(char *) * 7);
-	cmds[4] = "outfile";
+	cmds[3] = "<";
+	cmds[4] = (char *)malloc(sizeof(char *) * 6);
+	cmds[4] = "infile";
 	cmds[5] = (char *)malloc(sizeof(char *) * 1);
 	cmds[5] = "|";
 	cmds[6] = (char *)malloc(sizeof(char *) * 4);
 	cmds[6] = "grep";
 	cmds[7] = (char *)malloc(sizeof(char *) * 5);
-	cmds[7] = "texte";
+	cmds[7] = "bon";
 	cmds[8] = (char *)malloc(sizeof(char *) * 1);
 	cmds[8] = "<";
 	cmds[9] = (char *)malloc(sizeof(char *) * 6);
@@ -29,7 +29,11 @@ char	**content(void)
 	cmds[10] = ">";
 	cmds[11] = (char *)malloc(sizeof(char *) * 7);
 	cmds[11] = "outfile";
-	cmds[12] = NULL;
+	cmds[12] = (char *)malloc(sizeof(char *) * 1);
+	cmds[12] = "|";
+	cmds[13] = (char *)malloc(sizeof(char *) * 2);
+	cmds[13] = "ls";
+	cmds[14] = NULL;
 	return (cmds);
 
 }
@@ -64,7 +68,6 @@ void	process(t_format format, int *i)
 	char	**to_exec;
 	pid_t	pid;
 
-
 	pid = fork();
 	if (pid == -1)
 		exit(EXIT_FAILURE);
@@ -72,23 +75,28 @@ void	process(t_format format, int *i)
 	to_exec = ft_cmd(to_exec, i, format.cmds);
 	if (!to_exec)
 		return ;
-	tube_in(format, *i);
 	tube_out(format, *i);
+	tube_in(format, *i);
 	if (pid == 0)
 	{
-		printf("------>: %d\n",*i);
+		while (format.cmds[*i][0] != '|')
+			*i = *i + 1;
+		printf("Child>: %d\n",*i);
+
+	}
+	else
+	{
+		if (format.cmds[*i][0] == '|')
+			*i = *i + 1;
+		printf("Father : %d %c\n", *i, format.cmds[*i][0]);
+		tube_out(format, *i);
+		tube_in(format, *i);
 		if (execve(absolute_path, to_exec, NULL) == -1)
 		{
 			perror("Error: command not found\n");
 			exit(127);
 		}
-	}
-	else
-	{
 		wait(NULL);
-		while (format.cmds[*i][0] != '|')
-			*i = *i + 1;
-		printf("AAAAAAA: %d %c\n", *i, format.cmds[*i][0]);
 	}
 }
 
@@ -123,7 +131,7 @@ int	main(int ac, char **av, char **envp)
 	else
 	{
 		wait(NULL);
-		printf("OOOOOOK: %d\n",i);
+		printf("grandFather: %d\n",i);
 	}
 
 	return (0);

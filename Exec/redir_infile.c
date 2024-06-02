@@ -13,13 +13,12 @@ char	*infile_name(char **cmds, int position)
 	int	i;
 
 	i = position;
-	while (cmds[i][0] != '|' && cmds[i][0])
+	//while (cmds[i][0] != '|' && cmds[i][0])
 	{
 		if (is_infile(cmds[i]))
 			return (cmds[i + 1]);
-		i++;
+	//	i++;
 	}
-
 	return (NULL);
 }
 
@@ -39,6 +38,7 @@ void	tube_in(t_format format, int position)
 			close(in);
 			return ;
 		}
+		i++;
 	}
 	close(format.tube[0]);
 	dup2(format.tube[1], STDIN_FILENO);
