@@ -5,4 +5,4 @@ bonjour
 
 cc exec.c cmd.c utils.c utils_2.c redir_infile.c redir_outfile.c -L../42_MyLibC -lft
 
-cc *.c -L../42_MyLibC -lft -lreadline
+OK

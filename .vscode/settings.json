@@ -64,6 +64,7 @@
     "types.h": "c",
     "wait.h": "c",
     "unistd.h": "c",
-    "ast": "c"
+    "ast": "c",
+    "tokenizer.h": "c"
   }
 }
