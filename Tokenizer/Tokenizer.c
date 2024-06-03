@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/31 17:05:13 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/03 16:21:17 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,10 @@ void populate_tokens(t_double_link_list * list)
             token->type = CMD_SEP;
         else if (ft_strnstr("&&", token->value, 2))
             token->type = AND;
+        else if (ft_strnstr("&|", token->value, 2))
+            token->type = AND;
+        else if (ft_strnstr("|&", token->value, 2))
+            token->type = AND;
         else if (ft_strnstr("||", token->value, 2))
             token->type = OR;
         else if(previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == REDIRECTION || previous_token->type == HERE_DOC)
@@ -143,9 +147,9 @@ t_double_link_list	**tokenizer(void)
 	control.list = create_tokens(line);
 	free(line);
     populate_tokens(control.list);
+	print_list(control.list);
     if (check_error_tokens(&control))
         return (NULL);
-	print_list(control.list);
 	dl_free_token_list(control.list);
 	return (NULL);
 }

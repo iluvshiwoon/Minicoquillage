@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:39:04 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/30 13:59:20 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/03 15:24:39 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ size_t	skip_space(char *line, size_t index)
 {
 	if (!line[index])
 		return (index);
-	while (ft_isspace(line[index + 1]))
+	while (ft_isspace(line[index]) && ft_isspace(line[index + 1]))
 		++index;
 	return (index);
 }

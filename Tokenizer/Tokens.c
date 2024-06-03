@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/31 16:44:33 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/03 18:21:37 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -41,15 +41,31 @@ void	expand_tokens(t_double_link_node *node)
 
 int is_sep(char * line, size_t * i, size_t * j, t_control_dll * control)
 {
+    size_t k;
+    size_t l;
+
+    if (ft_sep(line[*i]) && !ft_sep(line[*j]))
+        return (1);
     if (ft_sep(line[*j]))
     {
-        if (*j && !ft_isspace(line[*j - 1]))
+        if (*j && !ft_isspace(line[*j - 1]) && !ft_sep(line[*j - 1]))
         {
             add_token(*i, *j, line, control);
             *i = *j;
         }
+        k = 2 + (*j == *i);
         while (ft_sep(line[*j]))
+        {
+            l = (*j == *i);
+            --k;
+            if ((line[*i] != line[*j+l] && ft_sep(line[*j+l])) || !k)
+            {
+                if (*j==*i)
+                    (*j)++;
+                break;
+            }
             (*j)++;
+        }
         return (1);
     }
     return (0);
@@ -75,7 +91,8 @@ t_double_link_list	*create_tokens(char *line)
             else 
                 i = j;
 		}
-		++j;
+        if (line[j])
+		    ++j;
 	}
 	return (expand_nodes(i, j, &control, line));
 }
