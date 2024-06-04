@@ -1,0 +1,101 @@
+#include "exec.h"
+
+typedef struct ASTNode {
+    t_token_type type;
+    char *value; // La valeur associée au nœud (par exemple, le nom de la variable, la valeur de la constante, etc.)
+    struct ASTNode *left; // Pointeur vers le nœud enfant gauche
+    struct ASTNode *right; // Pointeur vers le nœud enfant droit
+} ASTNode;
+
+
+typedef enum e_token_type
+{
+	COMMAND,
+	ARG,
+	PIPE,
+	REDIRECTION,
+	HERE_DOC,
+	OPTION,
+	AND,
+	OR,
+	OPEN_PARENTHESIS,
+	CLOSE_PARENTHESIS,
+    CMD_SEP,
+}						t_token_type;
+
+int	*precedence()
+{
+	char *value = {4, 5, 3, 4, 4, 5, 2, 2, 1, 1};
+	return (value);
+}
+
+typedef struct s_token
+{
+	int					type;
+	char				*value;
+}						t_token;
+
+typedef struct s_control_dll
+{
+	t_double_link_list	*list;
+	t_double_link_node	*node;
+    t_token * token;
+}						t_control_dll;
+
+t_double_link_list *chain_tok()
+{
+	t_token t6 = {4, "outfile"};
+	t_token t5 = {6, ">"};
+	t_token t4 = {3, "infile"};
+	t_token t3 = {1, "grep"};
+	t_token t2 = {11, "&&"};
+	t_token t1 = {0, "pwd"};
+
+	t_double_link_list *start_list;
+	t_double_link_node *start;
+	start->data = (t_token *) &t1;
+	start->previous = NULL;
+	start->next = (t_token *) &t2;
+	t_double_link_node *end = start;
+
+	end = end->next;
+	end->data = (t_token *) &t3;
+	end->previous = (t_token *) &t2;
+	end->next =(t_token *) &t4;
+
+	end = end->next;
+	end->data = (t_token *) &t4;
+	end->previous = (t_token *) &t3;
+	end->next =(t_token *) &t5;
+
+	end = end->next;
+	end->data = (t_token *) &t5;
+	end->previous = (t_token *) &t4;
+	end->next =(t_token *) &t6;
+
+	end = end->next;
+	end->data = (t_token *) &t6;
+	end->previous = (t_token *) &t5;
+	end->next = NULL;
+	t_double_link_list *end_list;
+
+	return (start_list);
+}
+
+t_double_link_node *priority(t_double_link_list ast, t_double_link_list tokens, int *precedence)
+{
+	t_token *token_current;
+	t_token *token_next;
+	int precedence_current;
+	int precedence_next;
+
+	token_current = tokens.first_node->data;
+	token_next = tokens.first_node->next->data;
+	precedence_current = precedence[token_current->type];
+	precedence_next = precedence[token_next->type];
+	if (precedence_current < precedence_next)
+		return precedence_current;
+	else
+		return precedence_next;
+
+}

@@ -11,6 +11,7 @@
 # include <stddef.h>
 # include "../42_MyLibC/mylibc.h"
 
+
 typedef struct s_format
 {
 	int		fd_in;

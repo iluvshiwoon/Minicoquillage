@@ -3,13 +3,13 @@
 
 char	**content(void)
 {
-	//exemple chaine contenu dans la structure s_token
+	// exemple chaine contenu dans la structure s_token
 	char **cmds = (char **)malloc(sizeof(char *) * 11);
-	cmds[0] = (char *)malloc(sizeof(char *) * 3);
+	cmds[0] = (char *)malloc(sizeof(char *) * 4);
 	cmds[0] = "cat";
-	cmds[1] = (char *)malloc(sizeof(char *) * 2);
+	cmds[1] = (char *)malloc(sizeof(char *) * 3);
 	cmds[1] = "-e";
-	cmds[2] = (char *)malloc(sizeof(char *) * 2);
+	cmds[2] = (char *)malloc(sizeof(char *) * 3);
 	cmds[2] = "-n";
 	cmds[3] = (char *)malloc(sizeof(char *) * 1);
 	cmds[3] = "<";
@@ -22,21 +22,34 @@ char	**content(void)
 	cmds[7] = (char *)malloc(sizeof(char *) * 5);
 	cmds[7] = "bon";
 	cmds[8] = (char *)malloc(sizeof(char *) * 1);
-	cmds[8] = "<";
-	cmds[9] = (char *)malloc(sizeof(char *) * 6);
-	cmds[9] = "infile";
+	cmds[8] = ">";
+	cmds[9] = (char *)malloc(sizeof(char *) * 7);
+	cmds[9] = "outfile";
 	cmds[10] = (char *)malloc(sizeof(char *) * 1);
-	cmds[10] = ">";
-	cmds[11] = (char *)malloc(sizeof(char *) * 7);
-	cmds[11] = "outfile";
+	cmds[10] = "<";
+	cmds[11] = (char *)malloc(sizeof(char *) * 6);
+	cmds[11] = "infile";
 	cmds[12] = (char *)malloc(sizeof(char *) * 1);
 	cmds[12] = "|";
 	cmds[13] = (char *)malloc(sizeof(char *) * 2);
 	cmds[13] = "ls";
 	cmds[14] = NULL;
 	return (cmds);
-
 }
+
+// char	**content(void)
+// {
+// 	char **cmds = (char **)malloc(sizeof(char *) * 11);
+// 	cmds[0] = (char *)malloc(sizeof(char *) * 2);
+// 	cmds[0] = "ls";
+// 	cmds[1] = (char *)malloc(sizeof(char *) * 2);
+// 	cmds[1] = "-l";
+// 	cmds[2] = (char *)malloc(sizeof(char *) * 2);
+// 	cmds[2] = "-a";
+
+// 	cmds[3] = NULL;
+// 	return (cmds);
+// }
 
 //to free
 char	*abs_to_rel_cmd(char *token)
@@ -75,28 +88,25 @@ void	process(t_format format, int *i)
 	to_exec = ft_cmd(to_exec, i, format.cmds);
 	if (!to_exec)
 		return ;
-	tube_out(format, *i);
 	tube_in(format, *i);
 	if (pid == 0)
 	{
-		while (format.cmds[*i][0] != '|')
+		while (format.cmds[*i][0] != '|' && format.cmds[*i])
 			*i = *i + 1;
-		printf("Child>: %d\n",*i);
-
+		printf("Child: %d\n",*i);
 	}
 	else
 	{
 		if (format.cmds[*i][0] == '|')
 			*i = *i + 1;
 		printf("Father : %d %c\n", *i, format.cmds[*i][0]);
+		wait(NULL);
 		tube_out(format, *i);
-		tube_in(format, *i);
 		if (execve(absolute_path, to_exec, NULL) == -1)
 		{
 			perror("Error: command not found\n");
 			exit(127);
 		}
-		wait(NULL);
 	}
 }
 
@@ -116,8 +126,7 @@ int	main(int ac, char **av, char **envp)
 	format.fd_in = dup(STDIN_FILENO);
 	format.fd_out = dup(STDOUT_FILENO);
 	pid = fork();
-	close(format.tube[0]);
-	close(format.tube[1]);
+
 	if (pid == -1)
 		exit(EXIT_FAILURE);
 	if (pid == 0)
@@ -126,14 +135,15 @@ int	main(int ac, char **av, char **envp)
 		{
 			process(format, &i);
 			i++;
+			printf("grandFather/2: %d\n",i);
 		}
 	}
 	else
 	{
+
 		wait(NULL);
 		printf("grandFather: %d\n",i);
 	}
-
 	return (0);
 }
 

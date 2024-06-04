@@ -24,11 +24,11 @@ void	tube_out(t_format format, int position)
 	int		i;
 
 	i = position;
+	close(format.tube[1]);
 	while (format.cmds[i][0] != '|' && format.cmds[i])
 	{
 		if (outfile_name(format.cmds, i))
 		{
-			close(format.tube[1]);
 			out = open(outfile_name(format.cmds, position), O_CREAT | O_WRONLY);
 			dup2(out, STDOUT_FILENO);
 			close(out);
@@ -36,10 +36,15 @@ void	tube_out(t_format format, int position)
 		}
 		i++;
 	}
-	close(format.tube[1]);
 	dup2(format.tube[0], STDOUT_FILENO);
 	close(format.tube[0]);
 }
+
+
+
+
+
+
 
 	// if (!outfile_name(format.cmds, position))
 	// {
