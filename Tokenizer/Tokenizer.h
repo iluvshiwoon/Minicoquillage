@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/31 14:55:45 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/04 16:11:19 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,17 @@ typedef enum e_token_type
     CMD_SEP,
 }						t_token_type;
 
+typedef enum e_quote_type
+{
+    NONE,
+    DOUBLE,
+    SINGLE,
+} t_quote_type;
+
 typedef struct s_token
 {
 	int					type;
+    int quote;
 	char				*value;
 }						t_token;
 
@@ -40,6 +48,7 @@ typedef struct s_control_dll
 	t_double_link_list	*list;
 	t_double_link_node	*node;
     t_token * token;
+    int complete;
 }						t_control_dll;
 
 typedef struct s_open_quote
@@ -56,6 +65,7 @@ typedef struct s_string
 
 // Tokenizer.c
 t_double_link_list		**tokenizer(void);
+void populate_tokens(t_control_dll * control);
 
 // Utils_Tokenizer.c
 void					init_control(t_control_dll *control);

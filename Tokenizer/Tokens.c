@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/03 18:21:37 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/04 16:29:04 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -24,6 +24,7 @@ void	expand_tokens(t_double_link_node *node)
 	single_quote_open = 0;
     token = node->data;
 	value = token->value;
+    token->quote = NONE;
 	j = 0;
 	while (value[j])
 	{
@@ -32,9 +33,15 @@ void	expand_tokens(t_double_link_node *node)
 		else if (value[j] == '\'' && !single_quote_open && !double_quote_open)
 			single_quote_open = 1;
 		else if (value[j] == '"' && double_quote_open)
+        {
 			double_quote_open = expand_double_quote(&j, &value, &temp, &node);
+            token->quote = DOUBLE;
+        }
 		else if (value[j] == '\'' && single_quote_open)
+        {
 			single_quote_open = expand_single_quote(&j, &value, &temp, &node);
+            token->quote = SINGLE;
+        }
 		++j;
 	}
 }
@@ -81,8 +88,8 @@ t_double_link_list	*create_tokens(char *line)
 	i = init_create_tokens(&open, &control, line, &j);
 	while (line[j])
 	{
-		if (!check_quote(line[j], &open) && ((ft_isspace(line[j]) || is_sep(line, &i, &j, &control))
-				&& !open.single_quote && !open.double_quote))
+		if (!check_quote(line[j], &open) && (
+				 !open.single_quote && !open.double_quote) && (ft_isspace(line[j]) || is_sep(line, &i, &j, &control)))
 		{
 			add_token(i, j, line, &control);
 			j = skip_space(line, j);
