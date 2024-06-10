@@ -2,6 +2,7 @@
 
 # Set the path to your C program
 PROGRAM=./a.out
+FILE=$1
 
 # Initialize a counter for the number of tests
 TEST_COUNT=0
@@ -48,7 +49,7 @@ do
         # echo "  Input:    '$input'"
         # echo
     fi
-done < test_cases.csv
+done < $FILE
 
 # Print a summary
 echo -e "\033[94m------------\033[0m"
