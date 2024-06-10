@@ -8,8 +8,6 @@ int	position_pattern(const char *str, const char *pattern)
 
 	p = ft_strlen(pattern);
 	i = 0;
-	if (p == 1 && pattern[0] == '*')
-		return (0);
 	while (i <= (ft_strlen(str) - p))
 	{
 		substr = ft_substr(str, i, p);
@@ -25,8 +23,8 @@ int	position_pattern(const char *str, const char *pattern)
 }
 
 /*
- *exemple glob: str*hj
- *exemple str:  -str1strhj
+ *exemple glob: *str*
+ *exemple str:  -str1
  */
 int	glob(char *str, char *glob)
 {
@@ -34,24 +32,18 @@ int	glob(char *str, char *glob)
 	int		sx;
 	int		pp;
 	char	**patterns;
-	int		len_patt;
 
 	i = 0;
 	sx = 0;
 	pp = 0;
-	patterns = ft_split(glob, '*');
-	len_patt = ft_strlen(patterns[0]);
-	if (str[i] != '*' && !ft_strncmp(str, patterns[i], len_patt))
-	{
-		i++;
-		sx = len_patt;
-	}
-	else if (str[i] != '*' && ft_strncmp(str, patterns[i], len_patt))
+	if (ft_strlen(glob) == 1 && glob[0] == '*')
 		return (0);
+	patterns = ft_split(glob, '*');
 	while (patterns[i])
 	{
+		ft_printf("%s\n", patterns[i]);
 		pp = position_pattern((const char *)&str[sx], patterns[i]);
-		if (pp > 0)
+		if (pp >= 0)
 		{
 			sx = pp + ft_strlen(patterns[i]);
 			i++;
@@ -66,6 +58,6 @@ int	glob(char *str, char *glob)
 
 int	main(void)
 {
-	ft_printf("position %d\n", position_pattern("un truc", "tr"));
-	ft_printf("glob %d\n", glob("un truc", "un t*c"));
+	ft_printf("position %d\n", position_pattern("un truc", "un"));
+	ft_printf("glob %d\n", glob("untruc", "*u8*n*c"));
 }
