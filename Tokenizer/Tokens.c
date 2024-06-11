@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/04 16:29:04 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/11 18:46:32 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -88,7 +88,7 @@ t_double_link_list	*create_tokens(char *line)
 	i = init_create_tokens(&open, &control, line, &j);
 	while (line[j])
 	{
-		if (!check_quote(line[j], &open) && (
+        if (!check_quote(line[j], &open) && (
 				 !open.single_quote && !open.double_quote) && (ft_isspace(line[j]) || is_sep(line, &i, &j, &control)))
 		{
 			add_token(i, j, line, &control);
@@ -96,7 +96,10 @@ t_double_link_list	*create_tokens(char *line)
             if (ft_isspace(line[j]))
 			    i = j + 1;
             else 
+            {
                 i = j;
+                check_quote(line[i], &open);
+            }
 		}
         if (line[j])
 		    ++j;

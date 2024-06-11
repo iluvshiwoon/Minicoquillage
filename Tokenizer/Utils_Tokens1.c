@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/31 16:51:33 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/11 18:33:45 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -23,6 +23,14 @@ void	add_token(size_t i, size_t j, char *line, t_control_dll *control)
 	control->token->value = temp;
     control->node->data = control->token;
 	control->list->pf_insert_end(control->list, control->node);
+}
+
+int wrapper_check_quote(char * line, t_open_quote * open, size_t i, size_t j)
+{
+    if (i == j)
+        return (check_quote(line[i], open));
+    else
+        return (check_quote(line[i], open) && check_quote(line[j], open));
 }
 
 int	check_quote(char c, t_open_quote *open)

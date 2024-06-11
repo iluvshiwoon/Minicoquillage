@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/04 16:11:19 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/11 18:32:12 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ int						expand_double_quote(size_t *j, char **token,
 void					add_token(size_t i, size_t j, char *line,
 							t_control_dll *control);
 int						check_quote(char c, t_open_quote *open);
+int wrapper_check_quote(char * line, t_open_quote * open, size_t i, size_t j);
 size_t					init_create_tokens(t_open_quote *open,
 							t_control_dll *control, char *line, size_t *j);
 t_double_link_list		*expand_nodes(size_t i, size_t j,
