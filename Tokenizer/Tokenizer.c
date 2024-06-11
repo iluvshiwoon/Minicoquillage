@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/11 17:57:51 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/11 18:06:46 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,11 @@ char	*get_line(void)
 	while (!check_syntax(temp) || r_value)
     {
         if (r_value == 1)
+        {
+            if (line && *line)
+                    add_history(line);
             return(dl_free_list(control.list),free(prompt),NULL);
+        }
 		temp = update_node(&control, prompt, line);
         line = concat_input(control.list);
         r_value = check_temp_syntax(line);
