@@ -49,7 +49,7 @@ do
         # echo "  Input:    '$input'"
         # echo
     fi
-done < $FILE
+done < "$FILE"
 
 # Print a summary
 echo -e "\033[94m------------\033[0m"
