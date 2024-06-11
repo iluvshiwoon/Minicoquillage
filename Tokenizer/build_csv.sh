@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Set the output file
-OUTPUT_FILE="test.csv"
-INPUT_FILE="command.txt"
+OUTPUT_FILE="$2"
+INPUT_FILE="$1"
 
-> $OUTPUT_FILE
+: > "$OUTPUT_FILE"
 # Read the list of commands from a file (one command per line)
 while IFS= read -r line; do
   # Run the command and capture the output
@@ -12,7 +12,7 @@ while IFS= read -r line; do
 
   # Store the command and output in the CSV file
   echo "$line,$output" >> "$OUTPUT_FILE"
-done < $INPUT_FILE
+done < "$INPUT_FILE"
 
 # Replace every occurrence of "bash" with "Minicoquillage" in the output file
 sed -i 's/,.*:/,Minicoquillage:/g' "$OUTPUT_FILE"
