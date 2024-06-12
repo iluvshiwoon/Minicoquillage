@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/07 16:58:17 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/11 18:06:46 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,30 +89,36 @@ char	*get_line(void)
 	char			*prompt;
 	char			*line;
 	t_control_dll	control;
-	char			*final;
+	char			*temp;
     int r_value;
 
 	init_control(&control);
 	prompt = get_prompt(&control);
 	line = init_line(&control, prompt);
+    temp = line;
     r_value = check_temp_syntax(line);
-	while (!check_syntax(line) || r_value)
+	while (!check_syntax(temp) || r_value)
     {
         if (r_value == 1)
+        {
+            if (line && *line)
+                    add_history(line);
             return(dl_free_list(control.list),free(prompt),NULL);
-		line = update_node(&control, prompt, line);
+        }
+		temp = update_node(&control, prompt, line);
+        line = concat_input(control.list);
         r_value = check_temp_syntax(line);
     }
-	final = concat_input(control.list);
-	if (final && *final)
-		add_history(final);
+	line = concat_input(control.list);
+	if (line && *line)
+		add_history(line);
 	if (!control.list->first_node->next)
-		final = ft_strdup(final);
-	if (!final)
+		line = ft_strdup(line);
+	if (!line)
 		return (dl_free_list(control.list), free(prompt), free(line),
 			exit(EXIT_FAILURE), NULL);
 	dl_free_list(control.list);
-	return (free(prompt), final);
+	return (free(prompt), line);
 }
 
 void populate_first_token(t_control_dll * control)

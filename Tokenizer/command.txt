@@ -34,3 +34,17 @@ cat >> <<
 cat >> > >> << >>
 cat <<
 echo hola <<<<< bonjour
+< && > <
+> | > || > && echo
+echo >
+echo <
+> || cat
+> | cat
+( > )
+< && || >
+echo " " "
+echo || -e echo
+echo &&& echo
+echo||echo -n -e -i -j
+echo | '' | echo
+

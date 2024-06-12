@@ -1,0 +1,29 @@
+echo | && "||"
+echo && "||"
+"echo" "arg && " &&"  echo
+echo | "|| &&"
+e"ch"o | echo || "&"& ls
+ech"o | echo" || "&&"
+"echo "||" echo"
+echo && echo
+echo echo |"| echo"
+"  "echo
+"|" | "|" && ""cat
+"echo"l " ||" | echo
+"echo"l |"| |" echo
+echo&&"&echo"
+echo&&"45 & echo"
+ech"o |" "|" echo""
+echo a b
+; echo
+echo | ";  echo"
+echo | ;  echo
+"&&" |"|"
+"&"&&"|"&echo
+"&&"a|&
+"&&&|"&"
+"|"|ls|"|"
+"|"&& "" && ls
+ls |""| ""
+echo le"|ls" ls""
+
