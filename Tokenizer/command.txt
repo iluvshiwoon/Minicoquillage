@@ -34,3 +34,6 @@ cat >> <<
 cat >> > >> << >>
 cat <<
 echo hola <<<<< bonjour
+echo |; echo
+echo >; echo
+echo &&; echo
