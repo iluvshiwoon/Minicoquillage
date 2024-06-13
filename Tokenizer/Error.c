@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:54:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/11 17:41:10 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/13 18:08:11 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ int check_error_tokens(t_control_dll * control)
         else if ((previous_token->type == OR || previous_token->type == AND) && (control->token->type == AND || control->token->type == OR))
             return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
         else if ((previous_token->type == OR || previous_token->type == AND) && control->token->type == PIPE)
+            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
+        else if ((previous_token->type != OPTION && previous_token->type != ARG) && control->token->type == CMD_SEP)
+            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
+        else if ((previous_token->type == CMD_SEP) && (control->token->type != COMMAND && control->token->type != REDIRECTION && control->token->type != HERE_DOC))
             return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
         else if (previous_token->type == COMMAND || control->token->type == COMMAND)
             cmd = 1;

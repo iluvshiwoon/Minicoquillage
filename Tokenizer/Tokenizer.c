@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/11 18:06:46 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/13 17:54:04 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,21 +138,40 @@ void populate_first_token(t_control_dll * control)
         control->token->type = CLOSE_PARENTHESIS;
     else if(len_token == 1 && (control->token->value[0] == '<' || control->token->value[0] == '>'))
         control->token->type = REDIRECTION;
-    else if(ft_strnstr(">>", control->token->value, 2))
+    else if(!ft_strncmp(control->token->value, ">>", len_token))
         control->token->type = REDIRECTION;
-    else if(ft_strnstr("<<" ,control->token->value, 2))
+    else if(!ft_strncmp(control->token->value, "<<", len_token))
         control->token->type = HERE_DOC;
-    else if(ft_strnstr(";" ,control->token->value, 1))
+    else if(!ft_strncmp(control->token->value, ";", len_token))
         control->token->type = CMD_SEP;
-    else if (ft_strnstr("&&", control->token->value, 2))
+    else if (!ft_strncmp(control->token->value, "&&", len_token))
         control->token->type = AND;
-    else if (ft_strnstr("&|", control->token->value, 2))
-        control->token->type = AND;
-    else if (ft_strnstr("|&", control->token->value, 2))
-        control->token->type = AND;
-    else if (ft_strnstr("||", control->token->value, 2))
+    else if (!ft_strncmp(control->token->value, "||", len_token))
         control->token->type = OR;
+    else if (!ft_strncmp(control->token->value, "&|", len_token))
+        control->token->type = AND;
+    else if (!ft_strncmp(control->token->value, "|&", len_token))
+        control->token->type = AND;
 }
+
+// int is_option(char * string)
+// {
+//     size_t i;
+//     int option;
+//
+//     i = 0;
+//     option = 1;
+//     while (string[i])
+//     {
+//         if (i > 1 && string[i] == '-')
+//         {
+//             option = 0;
+//             break;
+//         }
+//         ++i;
+//     }
+//     return (option);
+// }
 
 void populate_tokens(t_control_dll * control)
 {
@@ -167,7 +186,7 @@ void populate_tokens(t_control_dll * control)
         control->token = node->data;
         previous_token = node->previous->data;
         len_token = ft_strlen(control->token->value);
-        if(ft_strnstr(control->token->value, "-", len_token) && (previous_token->type == COMMAND || previous_token->type == OPTION))
+        if(ft_strnstr(control->token->value, "-", len_token) && (previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == ARG))
             control->token->type = OPTION;
         else if(ft_strnstr(control->token->value, "--", len_token) && (previous_token->type == COMMAND || previous_token->type == OPTION))
             control->token->type = OPTION;
@@ -179,21 +198,21 @@ void populate_tokens(t_control_dll * control)
             control->token->type = CLOSE_PARENTHESIS;
         else if(control->token->quote == NONE &&len_token == 1 && (control->token->value[0] == '<' || control->token->value[0] == '>'))
             control->token->type = REDIRECTION;
-        else if(control->token->quote == NONE &&ft_strnstr(">>", control->token->value, 2))
+        else if(control->token->quote == NONE && !ft_strncmp(control->token->value, ">>", len_token + (len_token < 2)))
             control->token->type = REDIRECTION;
-        else if(control->token->quote == NONE &&ft_strnstr("<<" ,control->token->value, 2))
+        else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "<<", len_token + (len_token < 2)))
             control->token->type = HERE_DOC;
-        else if(control->token->quote == NONE &&ft_strnstr(";" ,control->token->value, 1))
+        else if(control->token->quote == NONE && !ft_strncmp(control->token->value, ";" , len_token + (len_token < 2)))
             control->token->type = CMD_SEP;
-        else if(control->token->quote == NONE &&ft_strnstr("&&", control->token->value, 2))
+        else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "&&", len_token + (len_token < 2)))
             control->token->type = AND;
-        else if(control->token->quote == NONE &&ft_strnstr("&|", control->token->value, 2))
+        else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "&|", len_token + (len_token < 2)))
             control->token->type = AND;
-        else if(control->token->quote == NONE &&ft_strnstr("|&", control->token->value, 2))
+        else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "|&", len_token + (len_token < 2)))
             control->token->type = AND;
-        else if(control->token->quote == NONE &&ft_strnstr("||", control->token->value, 2))
+        else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "||", len_token + (len_token < 2)))
             control->token->type = OR;
-        else if(previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == REDIRECTION || previous_token->type == HERE_DOC)
+        else if(previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == REDIRECTION || previous_token->type == HERE_DOC || previous_token->type == ARG)
             control->token->type = ARG;
         node = node->next;
     }
