@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/11 18:32:12 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/13 10:38:03 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 # include "../Minicoquillage.h"
+# include "../Builtins/builtins.h"
 
 typedef enum e_token_type
 {
