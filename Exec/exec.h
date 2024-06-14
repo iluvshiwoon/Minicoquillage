@@ -12,7 +12,7 @@
 # include "../42_MyLibC/mylibc.h"
 
 
-
+char	**content(void);
 
 typedef struct s_format
 {
