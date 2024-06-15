@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/11 18:32:12 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/15 16:35:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ char					*last_ocur(char *string, char c);
 
 // Utils.c
 void					print_list(t_double_link_list *tokens_lists);
+void print_csv(t_double_link_list *tokens_lists);
 int						ft_isspace(int c);
 int ft_sep(int c);
 size_t					count_node(t_double_link_list *list);

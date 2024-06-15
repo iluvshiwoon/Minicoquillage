@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/04 13:57:40 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/15 16:36:42 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,24 @@ void	print_list(t_double_link_list *tokens_lists)
         token = node->data;
         printf("    \033[1;4;31mType\033[24m:\033[0m \033[41m%s\033[0m\n", type[token->type]);
 		printf("        \033[1;4;32mValue\033[24m:\033[0m %s$\n", token->value);
+		node = node->next;
+	}
+}
+
+void print_csv(t_double_link_list *tokens_lists)
+{
+    size_t				i;
+	t_double_link_node	*node;
+    t_token * token;
+    char *type[11];
+
+    build_type(type);
+	i = 0;
+	node = tokens_lists->first_node;
+	while (node)
+	{
+        token = node->data;
+        printf("%s: %s / ", type[token->type], token->value);
 		node = node->next;
 	}
 }
