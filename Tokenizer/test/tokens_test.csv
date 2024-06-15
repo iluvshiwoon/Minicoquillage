@@ -1,0 +1,1 @@
+echo hello > test && cat test,"COMMAND: echo / ARGUMENT: hello / REDIRECTION: > / ARGUMENT: test / AND: && / COMMAND: cat / ARGUMENT: test / "
