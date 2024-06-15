@@ -1,0 +1,51 @@
+>>>>>
+>>>>>>>>>>>>>>>
+<<<<<
+> > > >
+>> >> >> >>
+>>>> >> >> >>
+>
+<
+>>
+<<
+|
+| hola
+| | |
+||
+|||||
+|||||||||||||
+>>|><
+&&
+&&&&&
+&&&&&&&&&&&&&&
+echo > <
+echo | |
+>echo>
+<echo<
+>>echo>>
+|echo|
+|echo -n hola
+echo hola ||| cat
+echo hola < < bonjour
+echo hola >>> bonjour
+cat >>
+cat >>>
+cat >> <<
+cat >> > >> << >>
+cat <<
+echo hola <<<<< bonjour
+echo |; echo
+echo >; echo
+echo &&; echo
+echo a ; &&
+echo a ; &&
+echo a ; >
+echo a ; >>
+echo a ; <<
+echo a ; <<
+echo a ;&&
+echo a ;&&
+echo a ;>
+echo a ;>>
+echo a ;<<
+echo a ;<<
