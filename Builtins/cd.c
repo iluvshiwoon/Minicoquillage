@@ -1,19 +1,5 @@
 #include "./builtins.h"
 
-char	*get_var_env(char *var, char **env)
-{
-	if (!env || !*env)
-		return (NULL);
-	while (env || *env)
-	{
-		if (ft_strnstr(*env, var, ft_strlen(var) + 1))
-			return (*env);
-		else
-			++env;
-	}
-	return (NULL);
-}
-
 char	*put_var_env(char *var, char **env, char *value)
 {
 
@@ -56,11 +42,11 @@ void	ft_cd(char *newpath, char **env)
 
 }
 
-int	main(int ac, char **av, char **environment)
-{
-	char **env = ft_env(environment);
-	char *path = "/home/";
-	ft_cd(path, env);
-	put_env(env);
-	return (0);
-}
+// int	main(int ac, char **av, char **environment)
+// {
+// 	char **env = ft_env(environment);
+// 	char *path = "/home/";
+// 	ft_cd(path, env);
+// 	put_env(env);
+// 	return (0);
+// }

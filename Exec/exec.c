@@ -110,42 +110,42 @@ void	process(t_format format, int *i)
 	}
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	char		**env_cpy;
-	int			i;
-	t_format	format;
-	pid_t		pid;
+// int	main(int ac, char **av, char **envp)
+// {
+// 	char		**env_cpy;
+// 	int			i;
+// 	t_format	format;
+// 	pid_t		pid;
 
-	format.env = ft_env(envp);  //a faire en amont + erreur de copy au debut
-	format.cmds = content();  //get token from structure s_token
-	format.path = ft_split((const char *)get_path(format.env), ':');
-	i = 0;
-	if (pipe(format.tube) == -1)
-		exit(EXIT_FAILURE);
-	format.fd_in = dup(STDIN_FILENO);
-	format.fd_out = dup(STDOUT_FILENO);
-	pid = fork();
+// 	format.env = ft_env(envp);  //a faire en amont + erreur de copy au debut
+// 	format.cmds = content();  //get token from structure s_token
+// 	format.path = ft_split((const char *)get_path(format.env), ':');
+// 	i = 0;
+// 	if (pipe(format.tube) == -1)
+// 		exit(EXIT_FAILURE);
+// 	format.fd_in = dup(STDIN_FILENO);
+// 	format.fd_out = dup(STDOUT_FILENO);
+// 	pid = fork();
 
-	if (pid == -1)
-		exit(EXIT_FAILURE);
-	if (pid == 0)
-	{
-		while (i < ft_strlen2(format.cmds))
-		{
-			process(format, &i);
-			i++;
-			printf("grandFather/2: %d\n",i);
-		}
-	}
-	else
-	{
+// 	if (pid == -1)
+// 		exit(EXIT_FAILURE);
+// 	if (pid == 0)
+// 	{
+// 		while (i < ft_strlen2(format.cmds))
+// 		{
+// 			process(format, &i);
+// 			i++;
+// 			printf("grandFather/2: %d\n",i);
+// 		}
+// 	}
+// 	else
+// 	{
 
-		wait(NULL);
-		printf("grandFather: %d\n",i);
-	}
-	return (0);
-}
+// 		wait(NULL);
+// 		printf("grandFather: %d\n",i);
+// 	}
+// 	return (0);
+// }
 
 	// if (!to_exec)
 	// 	return (-1);

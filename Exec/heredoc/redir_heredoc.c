@@ -54,7 +54,7 @@ int heredoc(char *limiter)
 
 int main()
 {
-	int k = heredoc("toto");
+	int k = heredoc("toto to");
 	close (k);
 }
 

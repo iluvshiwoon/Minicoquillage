@@ -10,6 +10,7 @@
 # include <fcntl.h>
 # include <stddef.h>
 # include "../42_MyLibC/mylibc.h"
+# include "../Builtins/builtins.h"
 
 
 char	**content(void);

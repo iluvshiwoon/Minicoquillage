@@ -41,18 +41,18 @@ void	ft_echo(char **msg)
 
 }
 
-int	main(void)
-{
-	char	*test[4];
-	test[0] = "-n";
-	test[1] = "hello";
-	test[2] = "word";
-	test[3] = NULL;
-	int i = is_option(test[0]);
+// int	main(void)
+// {
+// 	char	*test[4];
+// 	test[0] = "-n";
+// 	test[1] = "hello";
+// 	test[2] = "word";
+// 	test[3] = NULL;
+// 	int i = is_option(test[0]);
 
-	ft_printf("%d\n", i);
-	ft_echo(test);
-	ft_echo(test);
+// 	ft_printf("%d\n", i);
+// 	ft_echo(test);
+// 	ft_echo(test);
 
-	return (0);
-}
+// 	return (0);
+// }

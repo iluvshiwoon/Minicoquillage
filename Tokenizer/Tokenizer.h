@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/13 10:38:03 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/06/15 16:35:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 # include "../Minicoquillage.h"
-# include "../Builtins/builtins.h"
 
 typedef enum e_token_type
 {
@@ -88,6 +87,7 @@ char					*last_ocur(char *string, char c);
 
 // Utils.c
 void					print_list(t_double_link_list *tokens_lists);
+void print_csv(t_double_link_list *tokens_lists);
 int						ft_isspace(int c);
 int ft_sep(int c);
 size_t					count_node(t_double_link_list *list);

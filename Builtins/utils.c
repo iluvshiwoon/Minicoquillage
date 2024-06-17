@@ -14,3 +14,6 @@ char	*get_var_env(char *var, char **env)
 	}
 	return (NULL);
 }
+
+
+
