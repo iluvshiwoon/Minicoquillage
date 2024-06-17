@@ -1,4 +1,4 @@
-#include "exec.h"
+#include "./../exec.h"
 
 // int is_infile(char *infile)
 // {
