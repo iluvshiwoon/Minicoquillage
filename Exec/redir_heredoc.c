@@ -94,10 +94,8 @@ void	write_fd(int fd)
 	int		n;
 
 	n = read(fd, &c, 1);
-	printf("%d", n);
 	while (n > 0)
 	{
-		printf("100");
 		write(1, &c, 1);
 		n = read(fd, &c, 1);
 	}
@@ -110,7 +108,6 @@ int heredoc(char *limiter)
 	char c;
 
 	hd = open("heredoc", O_CREAT | O_WRONLY | O_TRUNC);
-	printf("%zd\n", read(hd, &c, 1));
 	if (hd < 0)
 		ft_putstr_fd("ohoh", 1);
 	write(1, "heredoc> ", 9);
@@ -127,8 +124,8 @@ int heredoc(char *limiter)
 		free(buff);
 		buff = get_next_line(0);
 	}
+	hd = open("heredoc", O_RDONLY);
 	write_fd(hd);
-
 	return (hd);
 }
 
