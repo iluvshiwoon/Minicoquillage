@@ -1,1 +1,30 @@
 echo hello > test && cat test
+cat
+ls -"l"
+echo a "&&" echo b
+ls -"a" -b -c
+echo -e word
+ls && 2<1 | grep
+ls && cat 2<1
+ls && cat <1 -e
+cat -e text >1
+<file1 >file2 cat
+cat < file1 > file2
+cat < "hello"
+cat < file1 -e
+cat -e && ls | grep -c mini
+echo "word"|cat -e
+"ls"
+"ls -l"
+cat -e text
+cat "-e" text
+(cat ) -e
+ls -l | (grep "|" > outfile)
+ls  && ()
+grep <in"fi"le w"or"d
+ls |(grep file)
+echo "infile" && (|)
+ls| (cat file) -e
+((ls) | (grep o))
+( (ls) | (grep o) )
+( ((ls)) )

@@ -14,6 +14,9 @@ $(NAME): $(C_FILES) | build
 syntax: all
 	bash $(TEST)/tester_syntax.sh $(TEST)/syntax_error_test.csv $(CURDIR)/$(NAME)
 
+token: all
+	bash $(TEST)/tester_tokens.sh $(TEST)/tokens_test.csv $(CURDIR)/$(NAME)
+
 build:
 	$(MAKE) -C 42_MyLibC
 
