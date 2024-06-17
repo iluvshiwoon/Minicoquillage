@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/15 16:35:14 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/17 16:19:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ t_double_link_list	**debug(char * line)
     control.complete = 1;
     populate_tokens(&control);
     if (check_error_tokens(&control))
-        return (dl_free_token_list(control.list),NULL);
+        return (NULL);
     print_csv(control.list);
 	return (dl_free_token_list(control.list),NULL);
 }
