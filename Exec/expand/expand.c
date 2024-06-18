@@ -130,7 +130,7 @@ size_t count_sup(char **variables)
 	return (len);
 }
 
-char	*to_expand(char *cmd, char **variables, char **env)
+char	*to_expand(char *cmd, char **variables)
 {
 	int		i;
 	char	*msg;
@@ -158,7 +158,7 @@ char	*to_expand(char *cmd, char **variables, char **env)
 	return (msg);
 }
 
-char	*expand(char **env, char *cmd, char **env)
+char	*expand(char **env, char *cmd)
 {
 	char	**v_env;
 	int		i;
