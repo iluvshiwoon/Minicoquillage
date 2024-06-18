@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/11 18:46:32 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/18 15:44:37 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../Minicoquillage.h"
@@ -65,7 +65,7 @@ int is_sep(char * line, size_t * i, size_t * j, t_control_dll * control)
         {
             l = (*j == *i);
             --k;
-            if ((line[*i] != line[*j+l] && ft_sep(line[*j+l])) || !k)
+            if ((line[*i] == '(' || line[*i] == ')' || line[*i] == ';' ) || (line[*i] != line[*j+l] && ft_sep(line[*j+l])) || !k)
             {
                 if (*j==*i)
                     (*j)++;

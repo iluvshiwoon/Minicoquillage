@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/17 16:19:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/18 15:21:32 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,16 @@ int check_temp_syntax(char * line)
     int r_value;
 
     if (!line || !(*line))
-        return (0);
+        return (EXIT_FAILURE);
     control_temp.list = create_tokens(line);
     control_temp.complete = 0;
     populate_tokens(&control_temp);
     r_value = check_error_tokens(&control_temp);
-    if(r_value== 1)
-        return (1);
-    else if (r_value == 2)
-        return (2);
-    return (dl_free_token_list(control_temp.list),0);
+    if(r_value== EXIT_FAILURE)
+        return (EXIT_FAILURE);
+    else if (r_value == CONTINUE)
+        return (CONTINUE);
+    return (dl_free_token_list(control_temp.list),EXIT_SUCCESS);
 }
 
 char	*get_line(void)
@@ -97,9 +97,9 @@ char	*get_line(void)
 	line = init_line(&control, prompt);
     temp = line;
     r_value = check_temp_syntax(line);
-	while (!check_syntax(temp) || r_value)
+	while (!check_syntax(temp) || r_value == EXIT_FAILURE || r_value == CONTINUE)
     {
-        if (r_value == 1)
+        if (r_value == EXIT_FAILURE)
         {
             if (line && *line)
                     add_history(line);
@@ -232,7 +232,7 @@ t_double_link_list	**tokenizer(void)
 	free(line);
     populate_tokens(&control);
 	print_list(control.list);
-    if (check_error_tokens(&control))
+    if (check_error_tokens(&control) == EXIT_FAILURE)
         return (NULL);
 	dl_free_token_list(control.list);
 	return (NULL);

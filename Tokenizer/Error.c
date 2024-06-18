@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:54:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/13 18:08:11 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/18 15:38:27 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,57 +26,63 @@ size_t return_fist_sep(char * value)
     return (0);
 }
 
+void print_error(char * error, t_control_dll * control, t_token * token)
+{
+    if (token)
+        printf(error,token->value);
+    else if (!token) 
+        printf(error,NULL);
+    dl_free_token_list(control->list);
+}
+
+int check_error(t_control_dll * control, t_token * next)
+{
+    char * error = "Minicoquillage: syntax error near unexpected token `%s'\n";
+    char * newline = "Minicoquillage: syntax error near unexpected token `newline'\n";
+    if (!next || !control->token)
+    {
+        if (!next && control->token->type >= PIPE && control->token->type <= OR)
+            return (CONTINUE);
+        else if (!next && control->token->type >= REDIRECTION && control->token->type <= HERE_DOC)
+            return (print_error(newline, control, NULL), EXIT_FAILURE);
+        else if(!control->token && next->type >= CMD_SEP && next->type <= OR)
+            return (print_error(error, control, next),EXIT_FAILURE);
+        return(EXIT_SUCCESS);
+    }
+    if (control->token->type >= COMMAND && control->token->type <= HERE_DOC && next->type == control->token->type)
+        return (print_error(error, control, next),EXIT_FAILURE);
+    else if (control->token->type >= REDIRECTION && control->token->type <= HERE_DOC && next->type >= REDIRECTION && next->type <= HERE_DOC)
+        return (print_error(error, control, next),EXIT_FAILURE);
+    else if (control->token->type == REDIRECTION && next->type != ARG)
+        return (print_error(error, control, next),EXIT_FAILURE);
+    else if (control->token->type >= CMD_SEP && control->token->type <= OR && next->type >= CMD_SEP && next->type <= OR)
+        return (print_error(error, control, next),EXIT_FAILURE);
+    return (EXIT_SUCCESS);
+}
+
 int check_error_tokens(t_control_dll * control)
 {
-    int cmd;
-    control->node = control->list->first_node->next; 
-    t_token * previous_token;
-    previous_token = NULL;
-    // print_list(control->list);
-    cmd = 0;
-    if (control->list->first_node)
-    {
-        control->token=control->list->first_node->data;
-        if (control->token->type == AND || control->token->type == OR)
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if (control->token->type == PIPE)
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-    }
-    while(control->node)
+    t_token * next;
+    int r_value;
+    control->node = control->list->first_node;
+    control->token = NULL;
+    if (check_error(control, control->list->first_node->data) == EXIT_FAILURE)
+        return (EXIT_FAILURE);
+    while (control->node)
     {
         control->token = control->node->data;
-        previous_token = control->node->previous->data;
-        if (previous_token->type == REDIRECTION && previous_token->type == control->token->type)
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if (previous_token->type == REDIRECTION && control->token->type == HERE_DOC)
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if (previous_token->type == HERE_DOC && control->token->type == HERE_DOC)
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if (previous_token->type == HERE_DOC && control->token->type == REDIRECTION)
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if ((previous_token->type == OR || previous_token->type == AND) && (control->token->type == AND || control->token->type == OR))
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if ((previous_token->type == OR || previous_token->type == AND) && control->token->type == PIPE)
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if ((previous_token->type != OPTION && previous_token->type != ARG) && control->token->type == CMD_SEP)
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if ((previous_token->type == CMD_SEP) && (control->token->type != COMMAND && control->token->type != REDIRECTION && control->token->type != HERE_DOC))
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        else if (previous_token->type == COMMAND || control->token->type == COMMAND)
-            cmd = 1;
-        else if (control->token->type == PIPE && (!cmd || previous_token->type == PIPE))
-            return (printf("Minicoquillage: syntax error near unexpected token `%s'\n",control->token->value),dl_free_token_list(control->list),1);
-        // else if ((control->token->type == COMMAND || control->token->type == ARG) && ft_sep(control->token->value[return_fist_sep(control->token->value)]))
-        //     return (printf("Minicoquillage: syntax error near unexpected token '%c'\n",control->token->value[return_fist_sep(control->token->value)]),dl_free_token_list(control->list),1);
-        if (control->node->next == NULL)
-            previous_token = control->node->data;
-        control->node = control->node->next;
+        if (control->node->next)
+            next = control->node->next->data;
+        else 
+            next = NULL;
+        r_value = check_error(control, next);
+        if (r_value == EXIT_FAILURE)
+            return (EXIT_FAILURE);
+        else if (r_value == CONTINUE)
+            return(CONTINUE);
+        control->node=control->node->next;
     }
-    if (!previous_token)
-        previous_token = control->list->first_node->data;
-    if (control->complete && previous_token && (previous_token->type == REDIRECTION || previous_token->type == HERE_DOC))
-        return (printf("Minicoquillage: syntax error near unexpected token `newline'\n"),dl_free_token_list(control->list),1);
-    else if (!control->complete && previous_token && (previous_token->type == AND || previous_token->type == OR))
-        return(dl_free_token_list(control->list),2);
-    return (0);
+    if (check_error(control, next) == CONTINUE)
+        return (CONTINUE);
+    return (EXIT_SUCCESS);
 }

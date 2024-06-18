@@ -6,27 +6,28 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/15 16:35:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/18 15:18:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
+# define CONTINUE 2
 # include "../Minicoquillage.h"
 
 typedef enum e_token_type
 {
-	COMMAND,
+	OPTION = 0,
 	ARG,
-	PIPE,
-	REDIRECTION,
-	HERE_DOC,
-	OPTION,
-	AND,
-	OR,
 	OPEN_PARENTHESIS,
 	CLOSE_PARENTHESIS,
+	COMMAND,
     CMD_SEP,
+	PIPE,
+	AND,
+	OR,
+	REDIRECTION,
+	HERE_DOC,
 }						t_token_type;
 
 typedef enum e_quote_type
