@@ -9,7 +9,7 @@ TEST = ./Tokenizer/test
 all: $(NAME)
 
 $(NAME): $(C_FILES) | build
-	cc $(C_FLAGS) $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
+	cc -g $(C_FLAGS) $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 
 syntax: all
 	bash $(TEST)/tester_syntax.sh $(TEST)/syntax_error_test.csv $(CURDIR)/$(NAME)
