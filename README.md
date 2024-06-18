@@ -8,11 +8,11 @@
 
 ## IN NO SPECIFIC ORDER
 * Implement Pipe [Pipex Guide](https://reactive.so/post/42-a-comprehensive-guide-to-pipex)
-* Implement Globing algo : [algo](https://www.gmarik.info/blog/2020/understanding-glob-matching/)
+* Implement Globing algo : [algo](https://www.gmarik.info/blog/2020/understanding-glob-matching/)    [DONE: check use case]
 * Implement Redirections
-* Implement Here-Doc
-* Search Path function
-* Bultins
+* Implement Here-Doc [DONE: decide output]
+* Search Path function [DONE: may be refacto]
+* Bultins [TO COMPLETE]
 
 ## OPTIONAL
 * Add path to prompt [DONE]
