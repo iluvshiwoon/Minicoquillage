@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/18 15:21:32 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/18 17:01:03 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,21 @@ void populate_first_token(t_control_dll * control)
 //     }
 //     return (option);
 // }
+//
+int is_option(char * str)
+{
+    size_t i;
+    i = 0;
+    while (str[i])
+    {
+        if (i >= 2 && str[i] == '-')
+            return (EXIT_FAILURE);
+        else if (!i && str[i] != '-')
+            return (EXIT_FAILURE);
+        ++i;
+    }
+    return (EXIT_SUCCESS);
+}
 
 void populate_tokens(t_control_dll * control)
 {
@@ -186,9 +201,7 @@ void populate_tokens(t_control_dll * control)
         control->token = node->data;
         previous_token = node->previous->data;
         len_token = ft_strlen(control->token->value);
-        if(ft_strnstr(control->token->value, "-", len_token) && (previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == ARG))
-            control->token->type = OPTION;
-        else if(ft_strnstr(control->token->value, "--", len_token) && (previous_token->type == COMMAND || previous_token->type == OPTION))
+        if ((previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == R_FILE) && is_option(control->token->value) == EXIT_SUCCESS)
             control->token->type = OPTION;
         else if(control->token->quote == NONE &&len_token == 1 && control->token->value[0] == '|')
             control->token->type = PIPE;
@@ -212,8 +225,10 @@ void populate_tokens(t_control_dll * control)
             control->token->type = AND;
         else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "||", len_token + (len_token < 2)))
             control->token->type = OR;
-        else if(previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == REDIRECTION || previous_token->type == HERE_DOC || previous_token->type == ARG)
+        else if(previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == ARG || previous_token->type == R_FILE)
             control->token->type = ARG;
+        else if(previous_token->type == REDIRECTION || previous_token->type == HERE_DOC)
+            control->token->type = R_FILE;
         node = node->next;
     }
 }
@@ -240,13 +255,12 @@ t_double_link_list	**tokenizer(void)
 
 t_double_link_list	**debug(char * line)
 {
-	char				**multiline;
     t_control_dll control;
 
 	control.list = create_tokens(line);
     control.complete = 1;
     populate_tokens(&control);
-    if (check_error_tokens(&control))
+    if (check_error_tokens(&control) == EXIT_FAILURE)
         return (NULL);
     print_csv(control.list);
 	return (dl_free_token_list(control.list),NULL);

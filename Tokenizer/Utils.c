@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/15 16:36:42 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/18 16:51:19 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void build_type(char ** type)
     type[OPEN_PARENTHESIS] = "OPEN PARENTHESIS";
     type[CLOSE_PARENTHESIS] = "CLOSE PARENTHESIS";
     type[CMD_SEP] = "COMMAND SEPARATOR";
+    type[R_FILE] = "FILE";
 }
 
 void	print_list(t_double_link_list *tokens_lists)
@@ -43,7 +44,7 @@ void	print_list(t_double_link_list *tokens_lists)
 	size_t				i;
 	t_double_link_node	*node;
     t_token * token;
-    char *type[11];
+    char *type[12];
 
     build_type(type);
 	i = 0;
@@ -63,7 +64,7 @@ void print_csv(t_double_link_list *tokens_lists)
     size_t				i;
 	t_double_link_node	*node;
     t_token * token;
-    char *type[11];
+    char *type[12];
 
     build_type(type);
 	i = 0;

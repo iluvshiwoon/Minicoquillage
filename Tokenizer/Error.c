@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:54:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/18 15:38:27 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/18 16:46:03 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int check_error(t_control_dll * control, t_token * next)
         return (print_error(error, control, next),EXIT_FAILURE);
     else if (control->token->type >= REDIRECTION && control->token->type <= HERE_DOC && next->type >= REDIRECTION && next->type <= HERE_DOC)
         return (print_error(error, control, next),EXIT_FAILURE);
-    else if (control->token->type == REDIRECTION && next->type != ARG)
+    else if (control->token->type == REDIRECTION && next->type != R_FILE)
         return (print_error(error, control, next),EXIT_FAILURE);
     else if (control->token->type >= CMD_SEP && control->token->type <= OR && next->type >= CMD_SEP && next->type <= OR)
         return (print_error(error, control, next),EXIT_FAILURE);
