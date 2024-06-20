@@ -47,3 +47,7 @@ echo a ;>
 echo a ;>>
 echo a ;<<
 echo a ;<<
+(cat ) -e
+ls  && ()
+echo "infile" && (|)
+ls| (cat file) -e

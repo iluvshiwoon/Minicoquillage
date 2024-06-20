@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/18 16:20:18 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/20 16:26:32 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ typedef enum e_token_type
 	OPTION,
 	ARG,
 	OPEN_PARENTHESIS,
-	CLOSE_PARENTHESIS,
 	COMMAND,
+	CLOSE_PARENTHESIS,
     CMD_SEP,
 	PIPE,
 	AND,

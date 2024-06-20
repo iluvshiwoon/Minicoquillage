@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:54:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/18 16:46:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/20 17:21:50 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int check_error(t_control_dll * control, t_token * next)
             return (print_error(error, control, next),EXIT_FAILURE);
         return(EXIT_SUCCESS);
     }
-    if (control->token->type >= COMMAND && control->token->type <= HERE_DOC && next->type == control->token->type)
+    if (control->token->type >= COMMAND && control->token->type <= HERE_DOC && control->token->type != CLOSE_PARENTHESIS && next->type == control->token->type)
         return (print_error(error, control, next),EXIT_FAILURE);
     else if (control->token->type >= REDIRECTION && control->token->type <= HERE_DOC && next->type >= REDIRECTION && next->type <= HERE_DOC)
         return (print_error(error, control, next),EXIT_FAILURE);
@@ -57,6 +57,29 @@ int check_error(t_control_dll * control, t_token * next)
         return (print_error(error, control, next),EXIT_FAILURE);
     else if (control->token->type >= CMD_SEP && control->token->type <= OR && next->type >= CMD_SEP && next->type <= OR)
         return (print_error(error, control, next),EXIT_FAILURE);
+    else if (control->token->type == OPEN_PARENTHESIS && next->type >= CLOSE_PARENTHESIS && next->type <= OR)
+        return (print_error(error, control, next),EXIT_FAILURE);
+    else if (control->token->type == CLOSE_PARENTHESIS && !(next->type >= CLOSE_PARENTHESIS && next->type <= HERE_DOC))
+        return (print_error(error, control, next),EXIT_FAILURE);
+    return (EXIT_SUCCESS);
+}
+
+int check_parenthesis(t_control_dll * control)
+{
+    int parenthesis;
+    parenthesis = 0;
+    control->node = control->list->first_node;
+    while (control->node && control->complete)
+    {
+        control->token = control->node->data;
+        if (control->token->type == OPEN_PARENTHESIS)
+            ++parenthesis;
+        else if (control->token->type == CLOSE_PARENTHESIS)
+            --parenthesis;
+        control->node=control->node->next;
+    }
+    if (parenthesis < 0)
+        return(print_error("Minicoquillage: syntax error near unexpected token `%s'\n", control, control->token),EXIT_FAILURE);
     return (EXIT_SUCCESS);
 }
 
@@ -84,5 +107,5 @@ int check_error_tokens(t_control_dll * control)
     }
     if (check_error(control, next) == CONTINUE)
         return (CONTINUE);
-    return (EXIT_SUCCESS);
+    return (check_parenthesis(control));
 }

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/18 17:01:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/20 15:28:25 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@ int	check_syntax(char *line)
 {
 	static int	open_double;
 	static int	open_single;
-    
+    static int	open_parenthesis;
+
 	while (*line)
 	{
+        if (*line == '(' && (!open_single && !open_double))
+            ++open_parenthesis;
+        else if (*line == ')'&& (!open_single && !open_double))
+            --open_parenthesis;
 		if (*line == '\'')
 		{
 			if (open_single)
@@ -34,7 +39,14 @@ int	check_syntax(char *line)
 				open_double = 1;
 		}
 		line++;
-	} return (!(open_double || open_single));
+	} 
+    if (open_parenthesis < 0)
+        open_parenthesis = 0;
+    if (open_double || open_single)
+        return (EXIT_FAILURE);
+    else if (open_parenthesis)
+        return (EXIT_FAILURE);
+    return (EXIT_SUCCESS);
 }
 
 char	*concat_input(t_double_link_list *list)
@@ -97,7 +109,7 @@ char	*get_line(void)
 	line = init_line(&control, prompt);
     temp = line;
     r_value = check_temp_syntax(line);
-	while (!check_syntax(temp) || r_value == EXIT_FAILURE || r_value == CONTINUE)
+	while (check_syntax(temp) == EXIT_FAILURE || r_value == EXIT_FAILURE || r_value == CONTINUE)
     {
         if (r_value == EXIT_FAILURE)
         {
@@ -154,25 +166,6 @@ void populate_first_token(t_control_dll * control)
         control->token->type = AND;
 }
 
-// int is_option(char * string)
-// {
-//     size_t i;
-//     int option;
-//
-//     i = 0;
-//     option = 1;
-//     while (string[i])
-//     {
-//         if (i > 1 && string[i] == '-')
-//         {
-//             option = 0;
-//             break;
-//         }
-//         ++i;
-//     }
-//     return (option);
-// }
-//
 int is_option(char * str)
 {
     size_t i;
@@ -193,9 +186,17 @@ void populate_tokens(t_control_dll * control)
     t_double_link_node * node;
     t_token * previous_token;
     size_t len_token;
+    int cmd;
 
     node = control->list->first_node->next;
+    cmd = 0;
     populate_first_token(control);
+    if (node)
+    {
+        previous_token = node->previous->data;
+        if (previous_token->type == COMMAND)
+            cmd = 1;
+    }
     while (node)
     {
         control->token = node->data;
@@ -204,11 +205,20 @@ void populate_tokens(t_control_dll * control)
         if ((previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == R_FILE) && is_option(control->token->value) == EXIT_SUCCESS)
             control->token->type = OPTION;
         else if(control->token->quote == NONE &&len_token == 1 && control->token->value[0] == '|')
+        {
             control->token->type = PIPE;
+            cmd = 0;
+        }
         else if(control->token->quote == NONE &&len_token == 1 && control->token->value[0] == '(')
+        {
             control->token->type = OPEN_PARENTHESIS;
+            cmd = 0;
+        }
         else if(control->token->quote == NONE &&len_token == 1 && control->token->value[0] == ')')
+        {
             control->token->type = CLOSE_PARENTHESIS;
+            cmd = 0;
+        }
         else if(control->token->quote == NONE &&len_token == 1 && (control->token->value[0] == '<' || control->token->value[0] == '>'))
             control->token->type = REDIRECTION;
         else if(control->token->quote == NONE && !ft_strncmp(control->token->value, ">>", len_token + (len_token < 2)))
@@ -216,19 +226,36 @@ void populate_tokens(t_control_dll * control)
         else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "<<", len_token + (len_token < 2)))
             control->token->type = HERE_DOC;
         else if(control->token->quote == NONE && !ft_strncmp(control->token->value, ";" , len_token + (len_token < 2)))
+        {
             control->token->type = CMD_SEP;
+            cmd = 0;
+        }
         else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "&&", len_token + (len_token < 2)))
+        {
             control->token->type = AND;
+            cmd = 0;
+        }
         else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "&|", len_token + (len_token < 2)))
+        {
             control->token->type = AND;
+            cmd = 0;
+        }
         else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "|&", len_token + (len_token < 2)))
+        {
             control->token->type = AND;
+            cmd = 0;
+        }
         else if(control->token->quote == NONE && !ft_strncmp(control->token->value, "||", len_token + (len_token < 2)))
+        {
             control->token->type = OR;
-        else if(previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == ARG || previous_token->type == R_FILE)
+            cmd = 0;
+        }
+        else if(cmd && (previous_token->type == COMMAND || previous_token->type == OPTION || previous_token->type == ARG || previous_token->type == R_FILE))
             control->token->type = ARG;
         else if(previous_token->type == REDIRECTION || previous_token->type == HERE_DOC)
             control->token->type = R_FILE;
+        if (control->token->type == COMMAND)
+            cmd = 1;
         node = node->next;
     }
 }
@@ -246,9 +273,9 @@ t_double_link_list	**tokenizer(void)
     control.complete = 1;
 	free(line);
     populate_tokens(&control);
-	print_list(control.list);
     if (check_error_tokens(&control) == EXIT_FAILURE)
         return (NULL);
+	print_list(control.list);
 	dl_free_token_list(control.list);
 	return (NULL);
 }

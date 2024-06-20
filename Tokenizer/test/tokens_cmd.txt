@@ -18,13 +18,9 @@ echo "word"|cat -e
 "ls -l"
 cat -e text
 cat "-e" text
-(cat ) -e
 ls -l | (grep "|" > outfile)
-ls  && ()
 grep <in"fi"le w"or"d
 ls |(grep file)
-echo "infile" && (|)
-ls| (cat file) -e
 ((ls) | (grep o))
 ( (ls) | (grep o) )
 ( ((ls)) )
