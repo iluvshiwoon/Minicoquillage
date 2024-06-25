@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the path to your C program
-PROGRAM=./a.out
+PROGRAM="$2"
 FILE="$1"
 
 # Initialize a counter for the number of tests

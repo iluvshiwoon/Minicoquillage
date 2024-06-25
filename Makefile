@@ -1,6 +1,6 @@
 C_FILES = $(wildcard ./*/*.c)
 # C_FLAGS = -Wall -Werror -Wextra
-NAME = a.out
+NAME = Minicoquillage
 TEST = ./Tokenizer/test
 
 .PHONY: all clean fclean re syntax token
