@@ -1,4 +1,4 @@
-C_FILES = $(wildcard ./*/*.c)
+C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c)
 # C_FLAGS = -Wall -Werror -Wextra
 NAME = Minicoquillage
 TEST = ./Tokenizer/test

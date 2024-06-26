@@ -6,11 +6,11 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:39:04 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/04 16:29:33 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/26 14:55:42 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Minicoquillage.h"
+#include "../../Minicoquillage.h"
 
 size_t	skip_space(char *line, size_t index)
 {
@@ -68,9 +68,9 @@ char	*expand_single(size_t j, char *token)
 int	expand_single_quote(size_t *j, char **value, char **temp,
 		t_double_link_node **node)
 {
-    t_token * token;
+	t_token	*token;
 
-    token = (*node)->data;
+	token = (*node)->data;
 	*temp = expand_single(*j, *value);
 	free(*value);
 	token->value = *temp;
@@ -82,9 +82,9 @@ int	expand_single_quote(size_t *j, char **value, char **temp,
 int	expand_double_quote(size_t *j, char **value, char **temp,
 		t_double_link_node **node)
 {
-    t_token * token;
+	t_token	*token;
 
-    token = (*node)->data;
+	token = (*node)->data;
 	*temp = expand_double(*j, *value);
 	free(*value);
 	token->value = *temp;

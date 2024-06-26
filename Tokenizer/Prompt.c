@@ -6,11 +6,23 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:46:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/31 16:34:10 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/26 15:07:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
+
+char	*get_prompt(t_control_dll *control)
+{
+	char	*prompt;
+
+	prompt = build_prompt();
+	if (!prompt)
+		return (free(control->list), free(control->node), free(prompt),
+			exit(EXIT_FAILURE), NULL);
+	else
+		return (prompt);
+}
 
 char	*build_prompt(void)
 {

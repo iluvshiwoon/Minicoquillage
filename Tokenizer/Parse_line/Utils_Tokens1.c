@@ -6,31 +6,23 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/11 18:33:45 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/26 15:22:56 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../Minicoquillage.h"
+#include "../../Minicoquillage.h"
 
 void	add_token(size_t i, size_t j, char *line, t_control_dll *control)
 {
-	char				*temp;
+	char	*temp;
 
 	control->node = malloc(sizeof(*control->node));
-    control->token = malloc(sizeof(*control->token));
-    control->token->type = COMMAND;
+	control->token = malloc(sizeof(*control->token));
+	control->token->type = COMMAND;
 	temp = malloc(sizeof(char) * (j - i + 1));
 	ft_strlcpy(temp, line + i, j - i + 1);
 	control->token->value = temp;
-    control->node->data = control->token;
+	control->node->data = control->token;
 	control->list->pf_insert_end(control->list, control->node);
-}
-
-int wrapper_check_quote(char * line, t_open_quote * open, size_t i, size_t j)
-{
-    if (i == j)
-        return (check_quote(line[i], open));
-    else
-        return (check_quote(line[i], open) && check_quote(line[j], open));
 }
 
 int	check_quote(char c, t_open_quote *open)
@@ -56,11 +48,11 @@ size_t	init_create_tokens(t_open_quote *open, t_control_dll *control,
 	open->single_quote = 0;
 	control->list = malloc(sizeof(*control->list));
 	if (!(control->list))
-		return (dl_free_token_list(control->list), free(line), exit(EXIT_SUCCESS),
-			*j);
+		return (dl_free_token_list(control->list), free(line),
+			exit(EXIT_SUCCESS), *j);
 	*j = skip_space(line, *j);
-    if (ft_isspace(line[*j]))
-        *j += 1;
+	if (ft_isspace(line[*j]))
+		*j += 1;
 	init_list(control->list);
 	return (*j);
 }

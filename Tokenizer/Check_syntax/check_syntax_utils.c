@@ -1,16 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Utils_Tokenizer.c                                  :+:      :+:    :+:   */
+/*   check_syntax_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 16:14:57 by kgriset           #+#    #+#             */
-/*   Updated: 2024/05/31 16:23:10 by kgriset          ###   ########.fr       */
+/*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
+/*   Updated: 2024/06/26 15:27:47 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Minicoquillage.h"
+#include "../../Minicoquillage.h"
+
+void	toggle_quote(int *quote, int *quote1)
+{
+	if (*quote)
+		*quote = 0;
+	else if (!(*quote1))
+		*quote = 1;
+}
 
 char	*wrapper_strjoin_concat(char *s1, char *s2, t_double_link_list *list,
 		t_string *string)
@@ -38,25 +46,11 @@ void	init_control(t_control_dll *control)
 	init_list(control->list);
 }
 
-char	*get_prompt(t_control_dll *control)
-{
-	char	*prompt;
-
-	prompt = build_prompt();
-	if (!prompt)
-		return (free(control->list), free(control->node), free(prompt),
-			exit(EXIT_FAILURE), NULL);
-	else
-		return (prompt);
-}
-
 char	*init_line(t_control_dll *control, char *prompt)
 {
 	char	*line;
 
- //    printf("%s",prompt);
-	// line = readline("");
-    line = readline(prompt);
+	line = readline(prompt);
 	if (!line)
 		return (free(control->list), free(control->node), free(prompt),
 			free(line), exit(EXIT_FAILURE), NULL);
@@ -65,17 +59,17 @@ char	*init_line(t_control_dll *control, char *prompt)
 	return (line);
 }
 
-char *update_node(t_control_dll *control, char *prompt, char *line)
+char	*update_node(t_control_dll *control, char *prompt, char *line)
 {
 	control->node = malloc(sizeof(*control->node));
 	if (!control->node)
 		return (dl_free_list(control->list), free(prompt), free(line),
-			exit(EXIT_FAILURE),NULL);
+			exit(EXIT_FAILURE), NULL);
 	line = readline("· ");
 	if (!control->node)
 		return (dl_free_list(control->list), free(prompt), free(line),
-			exit(EXIT_FAILURE),NULL);
+			exit(EXIT_FAILURE), NULL);
 	control->node->data = line;
 	control->list->pf_insert_end(control->list, control->node);
-    return (line);
+	return (line);
 }
