@@ -1,6 +1,6 @@
 # TODO
 ## ROADMAP
-1. Tokenizer : Doubly linked list with substring and enum value for token [TESTING PHASE]
+1. Tokenizer : Doubly linked list with substring and enum value for token [MERGED]
 2. Create Map with precedence value and associativity
 3. Implement precedence climbing on the list : [algo](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing)
 4. Implement Signal
