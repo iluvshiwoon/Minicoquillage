@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 16:15:46 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/27 15:12:19 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,8 @@ void					print_list(t_double_link_list *tokens_lists);
 void					print_csv(t_double_link_list *tokens_lists);
 
 // Tokenizer.c
-t_double_link_list		**tokenizer(void);
-t_double_link_list		**debug(char *line);
+t_double_link_list		*tokenizer(void);
+void					debug(char *line);
 
 // Tokens.c
 void					expand_tokens(t_double_link_node *node);

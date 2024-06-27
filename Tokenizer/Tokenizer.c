@@ -6,13 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 15:15:51 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/27 15:12:12 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
-t_double_link_list	**tokenizer(void)
+t_double_link_list	*tokenizer(void)
 {
 	char			**multiline;
 	char			*line;
@@ -32,7 +32,7 @@ t_double_link_list	**tokenizer(void)
 	return (NULL);
 }
 
-t_double_link_list	**debug(char *line)
+void	debug(char *line)
 {
 	t_control_dll	control;
 
@@ -40,22 +40,22 @@ t_double_link_list	**debug(char *line)
 	control.complete = 1;
 	populate_tokens(&control);
 	if (check_error_tokens(&control) == EXIT_FAILURE)
-		return (NULL);
+		return ;
 	print_csv(control.list);
-	return (dl_free_token_list(control.list), NULL);
+	return (dl_free_token_list(control.list));
 }
 
 int	main(int argc, char **argv)
 {
-	t_double_link_list	**tokens_lists;
-	int					i;
+	t_control_dll	control;
+	int				i;
 
 	if (argc == 2)
 	{
-		tokens_lists = debug(argv[1]);
+		debug(argv[1]);
 		return (0);
 	}
 	while (1)
-		tokens_lists = tokenizer();
+		control.list = tokenizer();
 	return (0);
 }
