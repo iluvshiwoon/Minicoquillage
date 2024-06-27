@@ -1,22 +1,32 @@
-C_FILES = $(wildcard ./*.c)
-C_FLAGS = -Wall -Werror -Wextra
-NAME = minishell
+C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c)
+# C_FLAGS = -Wall -Werror -Wextra
+NAME = Minicoquillage
+TEST = ./Tokenizer/test
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re syntax token
 .DEFAULT: all
 
 all: $(NAME)
 
 $(NAME): $(C_FILES) | build
-	$(CC) -O2 -g $^ -o $(NAME)
+	cc -g $(C_FLAGS) $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
+
+syntax: all
+	bash $(TEST)/tester_syntax.sh $(TEST)/syntax_error_test.csv $(CURDIR)/$(NAME)
+
+token: all
+	bash $(TEST)/tester_tokens.sh $(TEST)/tokens_test.csv $(CURDIR)/$(NAME)
 
 build:
-	mkdir -p build
+	$(MAKE) -C 42_MyLibC
 
 clean:
-	rm -rf build
+	$(MAKE) -C 42_MyLibC clean
 
 fclean: clean
 	-rm -f $(NAME)
+	-rm -f $(CHECKER)
+	$(MAKE) -C 42_MyLibC fclean
+
 
 re: fclean all
