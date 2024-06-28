@@ -12,7 +12,7 @@ typedef struct s_variables
 }	t_variables;
 
 int		nb_dollar_sign(char *cmd);
-t_list	*store_str_to_expand(t_list **pieces, char *full_str);
+t_list	*store_str_to_expand(t_list **pieces, char *full_str, char **env);
 
 
 #endif

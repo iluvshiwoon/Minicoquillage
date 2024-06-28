@@ -28,7 +28,7 @@ int heredoc(char *limiter)
 {
 	char	*buff;
 	int		hd;
-	char c;
+	char	c;
 
 	hd = open("heredoc", O_CREAT | O_WRONLY | O_TRUNC);
 	if (hd < 0)

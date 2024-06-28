@@ -36,12 +36,13 @@ void	store_quote(t_list *pieces, char *str)
 	str = ++end;
 }
 
-void	store_var(t_list *pieces, char *str)
+void	store_var(t_list *pieces, char *str, char **env)
 {
 	t_variables	*content;
 	t_list		*new;
 	char		*substr;
 	char		*end;
+	char		*space;
 
 	end = str;
 	while (*(end + 1) != ' ')
@@ -52,7 +53,7 @@ void	store_var(t_list *pieces, char *str)
 	content->my_str = substr;
 	content->is_quote = 0;
 	content->is_var = 1;
-	content->expand = extansion(substr[1]);
+	content->expand = extansion(substr[1], env);
 	new->content = (t_variables *)content;
 	ft_lstadd_back(pieces, new);
 	str = ++end;
@@ -80,7 +81,7 @@ void	store_char(t_list *pieces, char *str)
 	str = ++end;
 }
 
-void	store_of_str(t_list **pieces, char *str)
+void	store_of_str(t_list **pieces, char *str, char **env)
 {
 	t_list	*tmp;
 	char	*substr;
@@ -94,18 +95,18 @@ void	store_of_str(t_list **pieces, char *str)
 		if (*substr == '\"' || *substr == '\'')
 			store_quote(tmp, substr);
 		else if (*substr == '$')
-			store_var(tmp, substr);
+			store_var(tmp, substr, env);
 		else
 			store_char(tmp, substr);
 	}
 	pieces = &tmp;
 }
 
-t_list	*store_str_to_expand(t_list **pieces, char *full_str)
+t_list	*store_str_to_expand(t_list **pieces, char *full_str, char **env)
 {
 	int	nb_vars;
 
 	nb_vars = nb_dollar_sign(full_str);
-	store_of_str(pieces, full_str);
+	store_of_str(pieces, full_str, env);
 	return (nb_vars);
 }

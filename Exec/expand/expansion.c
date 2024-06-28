@@ -1,31 +1,43 @@
 #include "./expand.h"
 
-void	put_variables(char *msg, int *i, char **variables)
-{
-
-}
-
-void	is_variable()
-{
-
-}
-
-char	*is_var_exist(char *v_env, char **env)
+char	*var_exist(char *var, char **env)
 {
 	char	*pattern;
 	int		i;
 
 	i = 0;
-	pattern = ft_strjoin((const char*)v_env, "=");
+	pattern = ft_strjoin((const char*)(var), "=");
 	while (env[i])
 	{
-		if (ft_strnstr(env[i], pattern, ft_strlen(pattern) - 1))
+		if (ft_strnstr(env[i], pattern, ft_strlen(pattern)))
 			return (env[i]);
 		else
 			i++;
 	}
 	return (NULL);
 }
+
+void	is_variable(char *variable, char **env)
+{
+	int		i;
+	char	*space;
+	char	*tmp;
+
+	i = 0;
+	tmp = variable;
+	while (*tmp == ' ')
+		tmp++;
+	space = ft_substr(variable, 0, (tmp - variable));
+	tmp = var_exist(tmp, env);
+	if (!tmp)
+		return (free(tmp), free(space), variable);
+	else
+		while (*tmp != '=')
+			tmp++;
+	tmp = ft_strjoin(space, ++tmp);
+	return (tmp);
+}
+
 
 // a = "o salut le monde"
 // ech$a:		echo salut le monde

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/15 16:35:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/06/28 14:07:08 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_string
 }						t_string;
 
 // Tokenizer.c
-t_double_link_list		**tokenizer(void);
+t_double_link_list		**tokenizer(t_double_link_list **list);
 void populate_tokens(t_control_dll * control);
 
 // Utils_Tokenizer.c

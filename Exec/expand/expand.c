@@ -6,7 +6,7 @@ char	*expand(char **env, char *str)
 	t_list	*piece_of_str;
 
 	piece_of_str = NULL;
-	store_str_to_expand(&piece_of_str, str);
+	store_str_to_expand(&piece_of_str, str, env);
 	if (!nb_dollar_sign(str))
 		simple_expand(expanded, piece_of_str);
 	else

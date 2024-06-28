@@ -65,6 +65,10 @@
     "wait.h": "c",
     "unistd.h": "c",
     "ast": "c",
-    "tokenizer.h": "c"
+    "tokenizer.h": "c",
+    "pipe.h": "c",
+    "string.h": "c",
+    "type_traits": "c",
+    "stddef.h": "c"
   }
 }

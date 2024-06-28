@@ -15,6 +15,8 @@
 
 char	**content(void);
 
+
+
 typedef struct s_format
 {
 	int		fd_in;
@@ -26,10 +28,7 @@ typedef struct s_format
 	char	**cmds;  // change to ast
 }			t_format;
 
-char	*infile_name(char **cmds, int position);
-void	tube_in(t_format format, int position);
-char	*outfile_name(char **cmds, int position);
-void	tube_out(t_format format, int position);
+char	*ft_sx_path(char *cmd, char **env_var);
 
 char	*path_of_cmd(char **env, char *cmd);
 char	**ft_cmd(char **to_exec, int *i, char **tokens);
@@ -38,6 +37,7 @@ int		ft_strlen2(char **tab);
 void	*ft_free_tab(char **s, size_t i);
 char	**ft_env(char **env);
 
+int		pss_ok(char *path);
 char	*pss_permission(char **envs_path, char *cmd);
 char	*get_path(char **env);
 int		pss_ok(char *path);

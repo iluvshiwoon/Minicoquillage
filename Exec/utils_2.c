@@ -3,7 +3,7 @@
 
 int	pss_ok(char *path)
 {
-	if (access((const char*)path, F_OK | X_OK) != -1)
+	if (access((const char *)path, F_OK | X_OK) != -1)
 		return (1);
 	else
 		return (0);
@@ -26,7 +26,7 @@ char	*pss_permission(char **envs_path, char *cmd)
 		free(full_path);
 		i++;
 	}
-	if(!pss_ok(cmd_path))
+	if (!pss_ok(cmd_path))
 		return (NULL);
 	ft_free_tab(c, ft_strlen2(c));
 	return (cmd_path);

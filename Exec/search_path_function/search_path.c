@@ -63,14 +63,14 @@ char	*ft_sx_path(char *cmd, char **env_var)
 	//  TODO:manage free & garbage collector
 }
 
-int	main(int ac, char **av, char **env)
-{
-	char	*cmd;
-	char	**env_copy;
-	char	*cmd_path;
+// int	main(int ac, char **av, char **env)
+// {
+// 	char	*cmd;
+// 	char	**env_copy;
+// 	char	*cmd_path;
 
-	cmd = "usr/bin/cat";
-	env_copy = ft_env(env);
-	cmd_path = ft_sx_path(cmd, env_copy);
-	ft_printf("%s\n", cmd_path);
-}
+// 	cmd = "usr/bin/cat";
+// 	env_copy = ft_env(env);
+// 	cmd_path = ft_sx_path(cmd, env_copy);
+// 	ft_printf("%s\n", cmd_path);
+// }

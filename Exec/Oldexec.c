@@ -1,5 +1,6 @@
 #include "exec.h"
 #include <stdio.h>
+#include "../Tokenizer/Tokenizer.h"
 
 char	**content(void)
 {
@@ -37,21 +38,7 @@ char	**content(void)
 	return (cmds);
 }
 
-// char	**content(void)
-// {
-// 	char **cmds = (char **)malloc(sizeof(char *) * 11);
-// 	cmds[0] = (char *)malloc(sizeof(char *) * 2);
-// 	cmds[0] = "ls";
-// 	cmds[1] = (char *)malloc(sizeof(char *) * 2);
-// 	cmds[1] = "-l";
-// 	cmds[2] = (char *)malloc(sizeof(char *) * 2);
-// 	cmds[2] = "-a";
 
-// 	cmds[3] = NULL;
-// 	return (cmds);
-// }
-
-//to free
 char	*abs_to_rel_cmd(char *token)
 {
 	char	**abs_cmd;
