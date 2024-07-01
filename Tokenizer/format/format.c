@@ -19,14 +19,14 @@ int	expression(t_token *token)
 
 int exp_size(t_double_link_list **list)
 {
-	t_double_link_list *list_cpy;
+	// t_double_link_list *list;
 	t_double_link_node *node;
 	int i;
 
 	i = 0;
-	list_cpy = *list;
-	node = list_cpy->first_node;
-	while (node != NULL && expression((t_token *)node->data) == 1)
+	// list = *list_o;
+	node = (*list)->first_node;
+	while (node != NULL && node->data != NULL && expression((t_token *)node->data) == 1)
 	{
 		node  = node->next;
 		i++;
@@ -36,19 +36,20 @@ int exp_size(t_double_link_list **list)
 }
 
 
-t_format_cmd	*format_array(t_double_link_list **list, t_format_cmd *tok_list)
+t_format_cmd	*format_array(t_double_link_list **list_o)
 {
+	t_double_link_list *list;
 	t_format_cmd	*cmd;
 	int				size;
 
-	cmd = tok_list;
-	size = exp_size(list);
-	cmd->cmd_name = (t_token *)((*list)->first_node)->data;
-	cmd->infile = store_infile(*list, size);
-	// cmd->outfile = store_outfile(*list, size);
-	cmd->option = store_option(*list, size);
-	if((cmd->option)[0])
-		printf("%s\n", (cmd->option)[0]->value);
-	// cmd->argument = store_argument(list, size);
+	list = *list_o;
+	// cmd = tok_list;
+	cmd = ft_calloc(1, sizeof(t_format_cmd));
+	size = exp_size(&list);
+	cmd->cmd_name = (t_token *)((list)->first_node)->data;
+	cmd->infile = store_infile(&list, size);
+	cmd->outfile = store_outfile(&list, size);
+	cmd->option = store_option(&list, size);
+	cmd->argument = store_argument(&list, size);
 	return (cmd);
 }

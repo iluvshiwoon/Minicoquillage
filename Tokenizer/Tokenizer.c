@@ -6,7 +6,7 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/28 16:25:49 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/07/01 09:48:45 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,8 +267,9 @@ int	main(int argc, char ** argv)
 	while (1)
 	{
 		tokens_lists = tokenizer(tokens_lists);
-		format = format_array(tokens_lists, format);
-		
+		// format = ft_calloc(1, sizeof(t_format_cmd*));
+		format = format_array(tokens_lists);
+
 	}
 	return (0);
 }
