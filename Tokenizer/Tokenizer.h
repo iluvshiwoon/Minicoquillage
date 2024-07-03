@@ -6,7 +6,7 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/28 14:07:08 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/07/03 17:08:14 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,29 @@
 
 typedef enum e_token_type
 {
-	COMMAND,
-	ARG,
-	PIPE,
-	REDIRECTION,
-	HERE_DOC,
+	R_FILE = 0,
 	OPTION,
+	ARG,
+	OPEN_PARENTHESIS,
+	COMMAND,
+	CLOSE_PARENTHESIS,
+	CMD_SEP,
+	PIPE,
 	AND,
 	OR,
-	OPEN_PARENTHESIS,
-	CLOSE_PARENTHESIS,
-    CMD_SEP,
+	REDIRECTION,
+	HERE_DOC,
+	// COMMAND,
+	// ARG,
+	// PIPE,
+	// REDIRECTION,
+	// HERE_DOC,
+	// OPTION,
+	// AND,
+	// OR,
+	// OPEN_PARENTHESIS,
+	// CLOSE_PARENTHESIS,
+    // CMD_SEP,
 }						t_token_type;
 
 typedef enum e_quote_type

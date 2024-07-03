@@ -6,7 +6,7 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/01 09:48:45 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/07/03 17:16:44 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,8 +256,7 @@ t_double_link_list	**debug(char * line)
 int	main(int argc, char ** argv)
 {
 	t_double_link_list	**tokens_lists;
-	t_format_cmd		*format;
-	int					i;
+	t_pipex	*exe;
 
 	if (argc == 2)
 	{
@@ -267,9 +266,7 @@ int	main(int argc, char ** argv)
 	while (1)
 	{
 		tokens_lists = tokenizer(tokens_lists);
-		// format = ft_calloc(1, sizeof(t_format_cmd*));
-		format = format_array(tokens_lists);
-
+		for_exec(&exe, tokens_lists);
 	}
 	return (0);
 }
