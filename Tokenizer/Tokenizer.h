@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/27 15:12:19 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/07/09 16:16:14 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void					print_list(t_double_link_list *tokens_lists);
 void					print_csv(t_double_link_list *tokens_lists);
 
 // Tokenizer.c
-t_double_link_list		*tokenizer(void);
+int		tokenizer(t_control_dll * control);
 void					debug(char *line);
 
 // Tokens.c
@@ -174,4 +174,11 @@ void					init_expand(t_open_quote *open, t_control_dll *control,
 int						handle_quote(t_control_dll *control, t_open_quote *open,
 							size_t j);
 int						ft_isspace(int c);
+
+// Utils_Tokens3.c
+char * expand_var(char * str);
+int	expand(size_t *j, char **value, char **temp,
+		t_double_link_node **node);
+char	*expand_expand(size_t j, char *token);
+
 #endif
