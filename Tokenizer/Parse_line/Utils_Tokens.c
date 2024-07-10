@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:39:04 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/09 17:10:19 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/07/10 16:59:24 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ char	*expand_double(size_t j, char *token)
 	ft_strlcpy(temp3, token, index + 1);
 	ft_strlcpy(temp, token + index + 1, j - index);
     temp2 = temp;
-    temp = expand_var(temp);
-    free(temp2);
+    // temp = expand_var(temp);
+    temp = expand_all(temp);
+    // free(temp2);
 	temp2 = ft_strjoin(temp3, temp);
 	free(temp3);
 	free(temp);

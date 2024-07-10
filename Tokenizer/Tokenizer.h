@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/09 16:16:14 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/07/10 16:46:46 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,5 +180,6 @@ char * expand_var(char * str);
 int	expand(size_t *j, char **value, char **temp,
 		t_double_link_node **node);
 char	*expand_expand(size_t j, char *token);
+char * expand_all(char * str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:06:44 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/09 17:10:43 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/07/10 16:56:49 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,36 @@ char	*expand_expand(size_t j, char *token)
 	temp = ft_strjoin(temp2, token + j);
 	free(temp2);
 	return (temp);
+}
+
+int	expand_expand_all(size_t *j, char **value)
+{
+    size_t len;
+    char * temp;
+
+    len = ft_strlen(*value);
+	temp = expand_expand(*j, *value);
+    while ((*value)[*j] && (*value)[*j] != '"' && (*value)[*j] != '\'' && !ft_sep((*value)[*j]))
+        ++(*j);
+    free(*value);
+    *value = temp;
+	(*j) = *j + ft_strlen(*value) - len - 1;
+
+	return (0);
+}
+
+char * expand_all(char * str)
+{
+    size_t i;
+
+    i = 0;
+    while (str[i])
+    {
+        if (str[i] == '$')
+            expand_expand_all(&i, &str);
+        ++i;
+    }
+    return (str);
 }
 
 char * expand_var(char * str)
