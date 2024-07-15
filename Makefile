@@ -17,6 +17,9 @@ syntax: all
 token: all
 	bash $(TEST)/tester_tokens.sh $(TEST)/tokens_test.csv $(CURDIR)/$(NAME)
 
+leak: all
+	bash $(TEST)/leak.sh $(TEST)/leak_test.csv $(CURDIR)/$(NAME)
+
 build:
 	$(MAKE) -C 42_MyLibC
 

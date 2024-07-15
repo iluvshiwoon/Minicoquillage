@@ -1,0 +1,79 @@
+>>>>>
+>>>>>>>>>>>>>>>
+<<<<<
+> > > >
+>> >> >> >>
+>>>> >> >> >>
+>
+<
+>>
+<<
+|
+| hola
+| | |
+||
+|||||
+|||||||||||||
+>>|><
+&&
+&&&&&
+&&&&&&&&&&&&&&
+echo > <
+echo | |
+>echo>
+<echo<
+>>echo>>
+|echo|
+|echo -n hola
+echo hola ||| cat
+echo hola < < bonjour
+echo hola >>> bonjour
+cat >>
+cat >>>
+cat >> <<
+cat >> > >> << >>
+cat <<
+echo hola <<<<< bonjour
+echo |; echo
+echo >; echo
+echo &&; echo
+echo a ; &&
+echo a ; &&
+echo a ; >
+echo a ; >>
+echo a ; <<
+echo a ; <<
+echo a ;>
+echo a ;>>
+echo a ;<<
+echo a ;<<
+(cat ) -e
+ls  && ()
+echo "infile" && (|)
+ls| (cat file) -e
+echo hello > test && cat test
+cat
+ls -"l"
+echo a "&&" echo b
+ls -"a" -b -c
+echo -e word
+ls && 2<1 | grep
+ls && cat 2<1
+ls && cat <1 -e
+cat -e text >1
+<file1 >file2 cat
+cat < file1 > file2
+cat < "hello"
+cat < file1 -e
+cat -e && ls | grep -c mini
+echo "word"|cat -e
+"ls"
+"ls -l"
+cat -e text
+cat "-e" text
+ls -l | (grep "|" > outfile)
+grep <in"fi"le w"or"d
+ls |(grep file)
+((ls) | (grep o))
+( (ls) | (grep o) )
+( ((ls)) )
