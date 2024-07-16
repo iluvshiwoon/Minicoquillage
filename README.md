@@ -1,6 +1,6 @@
 # TODO
 ## ROADMAP
-1. Tokenizer : Doubly linked list with substring and enum value for token [MERGED]
+1. Tokenizer + Expand: Doubly linked list with substring and enum value for token [MERGED]
 2. Create Map with precedence value and associativity
 3. Implement precedence climbing on the list : [algo](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing)
 4. Implement Signal
@@ -13,6 +13,7 @@
 * Implement Here-Doc [DONE: decide output]
 * Search Path function [DONE: may be refacto]
 * Bultins [TO COMPLETE]
+* Unit Test [TOKENS, SYNTAX, LEAK] (Could add more test to each) (Check LEAK BEHAVIOR)
 
 ## OPTIONAL
 * Add path to prompt [DONE]
