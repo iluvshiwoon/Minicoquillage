@@ -1,5 +1,10 @@
 C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c)
 # C_FLAGS = -Wall -Werror -Wextra
+INTERACTIVE = 0
+DEBUG = 1
+TOKEN = 2
+EXPANSION = 3
+
 NAME = Minicoquillage
 TEST = ./Tokenizer/test
 
@@ -11,13 +16,16 @@ all: $(NAME)
 $(NAME): $(C_FILES) | build
 	cc -g $(C_FLAGS) $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 
-syntax: all
+syntax: $(C_FILES) | build
+	cc -g $(C_FLAGS) -D MODE=DEBUG $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 	bash $(TEST)/tester_syntax.sh $(TEST)/syntax_error_test.csv $(CURDIR)/$(NAME)
 
-token: all
+token: $(C_FILES) | build
+	cc -g $(C_FLAGS) -D MODE=DEBUG $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 	bash $(TEST)/tester_tokens.sh $(TEST)/tokens_test.csv $(CURDIR)/$(NAME)
 
-leak: all
+leak: $(C_FILES) | build
+	cc -g $(C_FLAGS) -D MODE=DEBUG $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 	bash $(TEST)/leak.sh $(TEST)/leak_test.csv $(CURDIR)/$(NAME)
 
 build:

@@ -5,6 +5,17 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+enum e_mode {
+    INTERACTIVE,
+    DEBUG,
+    TOKEN,
+    EXPANSION,
+};
+
+#ifndef MODE
+# define MODE INTERACTIVE
+#endif
 #endif
 
 

@@ -6,14 +6,16 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/10 16:46:46 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:02:04 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 # define CONTINUE 2
+#ifndef MINICOQUILLAGE_H
 # include "../Minicoquillage.h"
+#endif
 
 typedef enum e_token_type
 {
