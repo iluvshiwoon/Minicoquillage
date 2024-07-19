@@ -9,23 +9,10 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stddef.h>
-# include "../../42_MyLibC/mylibc.h"
-# include "../../Builtins/builtins.h"
-# include "../../Tokenizer/Tokenizer.h"
-# include "../exec.h"
+# include "../../Minicoquillage.h"
 
 # define ERR_NOT_FOUND ": command not found:"
 
-typedef struct s_pipex
-{
-	int		infile;
-	int		outfile;
-	int		here_doc;
-	int		tube[2];
-	char	**env;
-	char	**path;
-	char	**cmds[3];
-}			t_pipex;
 
 
 

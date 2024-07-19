@@ -45,7 +45,7 @@ void	ft_cd(char *newpath, char **env)
 // int	main(int ac, char **av, char **environment)
 // {
 // 	char **env = ft_env(environment);
-// 	char *path = "/home/";
+// 	char *path = "";
 // 	ft_cd(path, env);
 // 	put_env(env);
 // 	return (0);

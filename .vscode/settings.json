@@ -69,6 +69,9 @@
     "pipe.h": "c",
     "string.h": "c",
     "type_traits": "c",
-    "stddef.h": "c"
+    "stddef.h": "c",
+    "minicoquillage.h": "c",
+    "format.h": "c",
+    "mylibc.h": "c"
   }
 }
