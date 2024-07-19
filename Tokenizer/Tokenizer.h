@@ -6,7 +6,7 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/03 17:08:14 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/07/19 11:26:04 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef enum e_token_type
 	R_FILE = 0,
 	OPTION,
 	ARG,
+	ARG_REDIR,
 	OPEN_PARENTHESIS,
 	COMMAND,
 	CLOSE_PARENTHESIS,
