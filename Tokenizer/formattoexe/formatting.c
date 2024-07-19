@@ -66,19 +66,42 @@ int	nb_token_for_cmd(t_double_link_node **node)
 // 	return (status);
 // }
 
+void	fill_2(t_status *status, t_double_link_node **node, int i)
+{
+	char	*tab;
+	int		size;
+	t_double_link_node *node2;
 
-t_format *to_fill_(t_status *status, t_double_link_node *node, char **env)
+	node2 = *node;
+	tab = malloc(sizeof(char) * (i + 1));  // faire un ft_calloc
+	while (size > i)
+	{
+		if ((((t_token *)node2->data)->type == COMMAND) ||
+			(((t_token *)node2->data)->type == ARG) ||
+			(((t_token *)node2->data)->type == OPTION))
+		{
+			tab[i] = ((t_token *)node2->data)->value;
+			i++;
+		}
+		node2 = node2->next;
+	}
+	status->cmd->_tab = tab;
+}
+
+t_format *to_fill_(t_status *status, t_double_link_node *node, char **env, int i)
 {
 	status->cmd->_path = ft_sx_path(((t_token *)node->data)->value, env);
-	fill_2()
+	fill_2(status, &node, i);
 }
 
 t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
 {
+	int	i;
 	if (!node)
 		return (NULL);
-	status->envp =
+	status->envp = *env;
 	status->next_process = node;
-	status->cmd = to_fill_(status, node, env);
+	i = nb_token_for_cmd(&node);
+	status->cmd = to_fill_(status, node, env, i);
 	return (status);
 }
