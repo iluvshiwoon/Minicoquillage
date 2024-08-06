@@ -28,15 +28,18 @@ int	nb_token_for_cmd(t_double_link_node **node)
 	nb = 0;
 	f = 0;
 	node_cpy = *node;
-	while (expression((t_token *)node_cpy->data))
+	while (node_cpy && expression((t_token *)node_cpy->data))
 	{
 		nb++;
 
 		node_cpy = node_cpy->next;
-		if (f > 0 && (((t_token *)node_cpy->data )->type == COMMAND))
+		if(node_cpy)
+		{
+		if (f > 0 && (((t_token *)node_cpy->data)->type == COMMAND))
 			return (nb);
-		if (((t_token *)node_cpy->data )->type == COMMAND)
+		if (((t_token *)node_cpy->data)->type == COMMAND)
 			f++;
+		}
 	}
 	return (nb);
 }
@@ -68,23 +71,25 @@ int	nb_token_for_cmd(t_double_link_node **node)
 
 void	fill_2(t_status *status, t_double_link_node **node, int i)
 {
-	char	*tab;
+	char	**tab;
 	int		size;
 	t_double_link_node *node2;
 
 	node2 = *node;
-	tab = malloc(sizeof(char) * (i + 1));  // faire un ft_calloc
+	tab = (char **)malloc(sizeof(char *) * (i + 1));  // faire un ft_calloc
 	while (size > i)
 	{
 		if ((((t_token *)node2->data)->type == COMMAND) ||
-			(((t_token *)node2->data)->type == ARG) ||
+			(((t_token *)node2->data)->type == ARG &&
+			((t_token *)node2->previous->data)->type != REDIRECTION) ||
 			(((t_token *)node2->data)->type == OPTION))
 		{
-			tab[i] = ((t_token *)node2->data)->value;
+			tab[i] = ft_strdup(((t_token *)node2->data)->value);
 			i++;
 		}
 		node2 = node2->next;
 	}
+	tab[i] = NULL;
 	status->cmd->_tab = tab;
 }
 
@@ -92,6 +97,7 @@ t_format *to_fill_(t_status *status, t_double_link_node *node, char **env, int i
 {
 	status->cmd->_path = ft_sx_path(((t_token *)node->data)->value, env);
 	fill_2(status, &node, i);
+	return (status->cmd);
 }
 
 t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
@@ -99,9 +105,10 @@ t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
 	int	i;
 	if (!node)
 		return (NULL);
-	status->envp = *env;
-	status->next_process = node;
 	i = nb_token_for_cmd(&node);
+	status->envp = (char **)malloc(100 * sizeof(char *));
+	status->envp = env;
+	status->next_process = node;
 	status->cmd = to_fill_(status, node, env, i);
 	return (status);
 }

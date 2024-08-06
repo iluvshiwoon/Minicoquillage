@@ -33,7 +33,8 @@ void	execute_with_pipes(t_status *mystatus)
 			if (mystatus->cmd->_haspipe > 0)
 				dup2(mystatus->fdout, 1);
 			close(mystatus->tube[0]);
-			execute_simple_command(mystatus->cmd);
+			execute_simple_command(mystatus);
+			// execute_simple_command(mystatus->cmd);
 			exit(EXIT_SUCCESS);
 		}
 		else
@@ -41,7 +42,7 @@ void	execute_with_pipes(t_status *mystatus)
 			wait(NULL);
 			close(mystatus->tube[1]);
 			mystatus->fdin = mystatus->tube[0];
-			process_next(mystatus);
+			//process_next(mystatus); ce deplacer au next de mystatus
 		}
 	}
 }

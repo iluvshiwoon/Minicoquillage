@@ -6,7 +6,7 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/19 11:29:55 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/07/21 10:34:20 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,7 @@ t_double_link_list	**debug(char * line)
 int	main(int argc, char ** argv, char **env)
 {
 	char				**envc;
+	t_status			*status;
 	t_double_link_list	**tokens_lists;
 
 	envc = ft_env(env);
@@ -267,7 +268,8 @@ int	main(int argc, char ** argv, char **env)
 	while (1)
 	{
 		tokens_lists = tokenizer(tokens_lists);
-		
+		init_status((*tokens_lists)->first_node, status, envc);
+
 	}
 	return (0);
 }
