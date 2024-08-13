@@ -33,12 +33,12 @@ int	nb_token_for_cmd(t_double_link_node **node)
 		nb++;
 
 		node_cpy = node_cpy->next;
-		if(node_cpy)
+		if (node_cpy)
 		{
-		if (f > 0 && (((t_token *)node_cpy->data)->type == COMMAND))
-			return (nb);
-		if (((t_token *)node_cpy->data)->type == COMMAND)
-			f++;
+			if (f > 0 && (((t_token *)node_cpy->data)->type == COMMAND))
+				return (nb);
+			if (((t_token *)node_cpy->data)->type == COMMAND)
+				f++;
 		}
 	}
 	return (nb);
@@ -76,27 +76,45 @@ void	fill_2(t_status *status, t_double_link_node **node, int i)
 	t_double_link_node *node2;
 
 	node2 = *node;
-	tab = (char **)malloc(sizeof(char *) * (i + 1));  // faire un ft_calloc
-	while (size > i)
+	size = 0;
+	tab = (char **)malloc(sizeof(char *) * (i + 1));  // faire un ft_calloc?
+	while (size < i && node2)
 	{
-		if ((((t_token *)node2->data)->type == COMMAND) ||
-			(((t_token *)node2->data)->type == ARG &&
-			((t_token *)node2->previous->data)->type != REDIRECTION) ||
+		if (((t_token *)node2->data)->type == REDIRECTION)
+			node2 = (node2->next);
+		else if ((((t_token *)node2->data)->type == COMMAND) ||
+			(((t_token *)node2->data)->type == ARG) || //modifier arg des redirection de e_token_type
 			(((t_token *)node2->data)->type == OPTION))
 		{
-			tab[i] = ft_strdup(((t_token *)node2->data)->value);
-			i++;
+			tab[size] = ft_strdup(((t_token *)node2->data)->value);
+			size++;
 		}
 		node2 = node2->next;
 	}
-	tab[i] = NULL;
+	tab[size] = NULL;
 	status->cmd->_tab = tab;
+}
+
+void	display_tab_of_cmd(char **tab)
+{
+	char **tabcpy;
+
+	tabcpy = tab;
+	while(*tabcpy)
+	{
+		printf("VALUE: %s\n", *tabcpy);
+		tabcpy++;
+	}
 }
 
 t_format *to_fill_(t_status *status, t_double_link_node *node, char **env, int i)
 {
-	status->cmd->_path = ft_sx_path(((t_token *)node->data)->value, env);
+	char *my_path;
+
+	my_path = ft_sx_path(((t_token *)node->data)->value, env);
+	status->cmd->_path = my_path;
 	fill_2(status, &node, i);
+	display_tab_of_cmd(status->cmd->_tab);
 	return (status->cmd);
 }
 
@@ -106,9 +124,13 @@ t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
 	if (!node)
 		return (NULL);
 	i = nb_token_for_cmd(&node);
+	status->cmd = malloc(sizeof(t_format));
+	status->cmd->_tab = (char **)malloc((i + 1) * sizeof(char *));
 	status->envp = (char **)malloc(100 * sizeof(char *));
 	status->envp = env;
 	status->next_process = node;
-	status->cmd = to_fill_(status, node, env, i);
+	to_fill_(status, node, env, i);
 	return (status);
 }
+
+
