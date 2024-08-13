@@ -16,8 +16,6 @@ int	expression(t_token *token)
 }
 
 
-
-
 int	nb_token_for_cmd(t_double_link_node **node)
 {
 	t_double_link_node	*node_cpy;
@@ -43,31 +41,6 @@ int	nb_token_for_cmd(t_double_link_node **node)
 	}
 	return (nb);
 }
-
-// t_status	*init_status(t_double_link_list *list, t_status *status)
-// {
-// 	if (!list)
-// 		return (NULL);
-// 	status->formatted_cmd = NULL;
-// 	status->next_node_valide = list->first_node;
-// 	return (status);
-// }
-
-// t_status	*fill_status(t_double_link_node *node, t_status *status)
-// {
-// 	int		nb;
-// 	t_token	*data;
-
-// 	if (!node)
-// 		return (NULL);
-// 	data = (t_token *)node->data;
-// 	if (!data)
-// 		return (NULL);
-// 	nb = nb_token_for_cmd(&node);
-// 	status->formatted_cmd = formatting(status);
-// 	status->next_node_valide = to_next_cmd(node);
-// 	return (status);
-// }
 
 void	fill_2(t_status *status, t_double_link_node **node, int i)
 {
@@ -118,6 +91,26 @@ t_format *to_fill_(t_status *status, t_double_link_node *node, char **env, int i
 	return (status->cmd);
 }
 
+t_double_link_node *next_process(t_double_link_node **node, t_double_link_node **new_node)
+{
+	t_double_link_node **next_node;
+
+	if (!node || !(*node))
+		return (NULL);
+	next_node = node;
+	if (((t_token *)(*next_node)->data)->type != COMMAND)
+	{
+		next_process(&((*next_node)->next), &((*next_node)->next));
+	}
+	else
+	{
+		if (*node == *next_node)
+			next_process(&((*next_node)->next), &((*next_node)->next));
+
+	}
+	return (*next_node);
+}
+
 t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
 {
 	int	i;
@@ -128,7 +121,7 @@ t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
 	status->cmd->_tab = (char **)malloc((i + 1) * sizeof(char *));
 	status->envp = (char **)malloc(100 * sizeof(char *));
 	status->envp = env;
-	status->next_process = node;
+	status->next_process = next_process(&node , &node);
 	to_fill_(status, node, env, i);
 	return (status);
 }
