@@ -25,28 +25,28 @@ char	*value_new(char *path, char **env)
 	return (new);
 }
 
-int	change_dir(char *oldpwd, char *newpath, char **env)
+void	change_dir(char *oldpwd, char *newpath, char **env)
 {
 	char	*var;
 
-	if (chdir(newpath))
-		return (1);
+	if (chdir(newpath) != 0)
+		printf("%s\n", "cd error");
 	var = put_var_env("PWD=", env, value_new(newpath, env));
-	return (0);
 }
 
-void	ft_cd(char *newpath, char **env)
-{
-	if (change_dir(getenv("PWD"), newpath, env))
-		ft_putstr_fd(CD_ERR, 2);
+// void	ft_cd(char *newpath, char **env)
+// {
+// 	if (change_dir(getenv("PWD"), newpath, env))
+// 		ft_putstr_fd(CD_ERR, 2);
 
-}
+// }
 
 // int	main(int ac, char **av, char **environment)
 // {
 // 	char **env = ft_env(environment);
-// 	char *path = "";
-// 	ft_cd(path, env);
+// 	char *path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
+// 	change_dir("", path, env);
+// 	// ft_cd(path, env);
 // 	put_env(env);
 // 	return (0);
 // }

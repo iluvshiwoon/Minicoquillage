@@ -72,6 +72,7 @@
     "stddef.h": "c",
     "minicoquillage.h": "c",
     "format.h": "c",
-    "mylibc.h": "c"
+    "mylibc.h": "c",
+    "execution.h": "c"
   }
 }

@@ -10,13 +10,18 @@
 # include <fcntl.h>
 # include <stddef.h>
 # include "../../Minicoquillage.h"
+# include "../../Tokenizer/formattoexe/formatting.h"
 
 # define ERR_NOT_FOUND ": command not found:"
 
+void	execut(t_status *mystatus);
+void	execute_simple_command_2(t_status *mystatus);
+void	execute_with_pipes_2(t_status *mystatus);
+void	exec_multi(t_status *mystatus);
+void	sx_process_next_2(t_status *mystatus);
+void	last_command(t_status *status);
 
 
 
-// char	*check_token_is_cmd(t_token *token, char **env);
-void	error_cmd(char *err, char *cmd);
 #endif
 

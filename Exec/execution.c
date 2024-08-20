@@ -1,10 +1,15 @@
-#include "./exec.h"
+#include "./execution.h"
+
+void	sx_process_next(t_status *mystatus)
+{
+	mystatus->next_process = next_process(&mystatus->next_process);
+	mystatus = init_status(mystatus->next_process, mystatus, mystatus->envp);
+}
 
 void	execute_simple_command(t_status *mystatus)
 {
 	pid_t	pid;
 	int		status;
-
 
 	pid = fork();
 	if (pid == 0)
@@ -33,8 +38,9 @@ void	execute_with_pipes(t_status *mystatus)
 			if (mystatus->cmd->_haspipe > 0)
 				dup2(mystatus->fdout, 1);
 			close(mystatus->tube[0]);
+			close(mystatus->fdout);
+				// if(((t_token *)mystatus->next_process->data)->type == COMMAND)
 			execute_simple_command(mystatus);
-			// execute_simple_command(mystatus->cmd);
 			exit(EXIT_SUCCESS);
 		}
 		else
@@ -42,10 +48,7 @@ void	execute_with_pipes(t_status *mystatus)
 			wait(NULL);
 			close(mystatus->tube[1]);
 			mystatus->fdin = mystatus->tube[0];
-			//process_next(mystatus); ce deplacer au next de mystatus
+			sx_process_next(mystatus); //ce deplacer au next de mystatus
 		}
 	}
 }
-
-// (.) | (.) && .
-// (.) | . | . | . && .

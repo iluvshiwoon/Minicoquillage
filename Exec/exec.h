@@ -1,8 +1,7 @@
 #ifndef EXEC_H
 # define EXEC_H
 
-# include "../Minicoquillage.h"
-// # include "../Tokenizer/format/format.h"
+# include "../Tokenizer/formattoexe/formatting.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -41,6 +40,10 @@ char	**content(void);
 // 	char	**path;
 // 	char	**cmds;
 // }			t_format;
+
+
+
+
 
 char	*ft_sx_path(char *cmd, char **env_var);
 void	content_cmd(t_double_link_list **to_exec, t_double_link_list **list);
