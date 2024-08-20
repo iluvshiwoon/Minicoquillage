@@ -1,0 +1,1 @@
+cc -g3 ../Exec/search_path_function/*.c  *.c ./formattoexe/*.c ../Exec/*.c ../Builtins/*.c -L../42_MyLibC -lft -lreadline

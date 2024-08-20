@@ -6,12 +6,13 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/08/13 13:19:28 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/08/20 11:47:56 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 #include "./../Exec/execution.h"
+#include "./../Exec/pipe/pipex.h"
 
 int	check_syntax(char *line)
 {
@@ -271,8 +272,18 @@ int	main(int argc, char ** argv, char **env)
 	{
 		tokens_lists = tokenizer(tokens_lists);
 		init_status((*tokens_lists)->first_node, status, envc);
-		execute_simple_command(status);
-		// execute_with_pipes(status);
+
+
+		execut(status);
+		// while (status->current_cmd > 1)
+		// {
+		// 	execute_with_pipes_2(status);
+		// 	sx_process_next_2(status);
+		// 	status->current_cmd = status->current_cmd - 1;
+		// }
+		// dup2(status->tube[1], 1);
+		// execute_simple_command_2(status);
+		// // last_command(status);
 	}
 	return (0);
 }
