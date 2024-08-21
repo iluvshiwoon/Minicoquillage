@@ -21,39 +21,15 @@ int	open_file(char *file, int in_or_out)
 	return (fd);
 }
 
-// int	handle_fd(t_status *mystatus)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (mystatus->fdin != -1)
-// 	{
-// 		dup2(mystatus->fdin, 0);
-// 		i = i + 1;
-// 	}
-// 	if (mystatus->fdout != -1)
-// 	{
-// 		dup2(mystatus->fdout, 1);
-// 		i = i + 10;
-// 	}
-// 	return (i);
-// }
-
 int	handle_redirect_read(t_status *mystatus)
 {
 	int	fdin;
 
-	fdin = 1;
+	fdin = 0;
 	if (mystatus->fdin != NULL)
 	{
 		fdin = open_file(mystatus->fdin, 0);
-		printf("RET file = %d\n", fdin);
-		if (fdin == -1)
-			return (fdin);
-	}
-	else
-	{
-		printf("RET tube = %d\n", fdin);
+		printf("fdin file = %d\n", fdin);
 	}
 	return (fdin);
 }
@@ -62,10 +38,9 @@ int	handle_redirect_write(t_status *mystatus)
 {
 	int	fdout;
 
+	fdout = 1;
 	if (mystatus->fdout != NULL)
 		fdout = open_file(mystatus->fdout, 1);
-	else
-		fdout = 0;
 	return (fdout);
 }
 
@@ -73,9 +48,9 @@ void ft_close(t_status *mystatus, int in , int out)
 {
 	close(mystatus->tube[0]);
 	close(mystatus->tube[1]);
-	if (in > 1)
+	if (in > STDERR_FILENO)
 		close(in);
-	if (out > 1)
+	if (out > STDERR_FILENO)
 		close(out);
 }
 
@@ -86,6 +61,37 @@ void	execute_simple_command_2(t_status *mystatus)
 	{
 		printf("execve simple command failed %d (%s)\n", errno, strerror(errno));
 		exit(EXIT_FAILURE);
+	}
+}
+
+
+void	execute_first_pipes_2(t_status *mystatus)
+{
+	pid_t	pid;
+	int		status;
+	int		fdin;
+	int		fdout;
+
+	fdin = handle_redirect_read(mystatus);
+	fdout = handle_redirect_write(mystatus);
+	mystatus->cmd->mypid = fork();
+	pid = mystatus->cmd->mypid;
+	if (pid == -1)
+		exit(1);
+	if (pid == 0)
+	{
+		close (mystatus->tube[0]);
+		dup2(mystatus->tube[1], 1);
+		if (fdin > 2)
+			dup2(fdin, 0);
+		if (fdout > 2)
+			dup2(fdout, 1);
+		execute_simple_command_2(mystatus);
+		close(mystatus->tube[1]);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
 	}
 }
 
@@ -109,18 +115,14 @@ void	execute_with_pipes_2(t_status *mystatus)
 			dup2(fdin, 1);
 		else
 			dup2(mystatus->tube[1], 1);
-		execute_simple_command_2(mystatus);
-		// ft_close(mystatus);
-		// close(mystatus->tube[1]);
 		ft_close(mystatus, fdin, fdout);
+		execute_simple_command_2(mystatus);
+		close(mystatus->tube[1]);
 		exit(EXIT_SUCCESS);
 	}
 	else
 	{
-		close(mystatus->tube[1]);
-		printf("115\n");
 		waitpid(pid, &status, 0);
-		printf("117\n");
 	}
 }
 
@@ -131,19 +133,21 @@ void	last_command(t_status *mystatus)
 	int		fdin;
 	int		fdout;
 
+	fdin = handle_redirect_read(mystatus);
+	fdout = handle_redirect_write(mystatus);
 	mystatus->cmd->mypid = fork();
 	pid = mystatus->cmd->mypid;
 	if (pid == -1)
 		exit(1);
 	if (pid == 0)
 	{
-		// close(mystatus->tube[0]);
-		dup2(mystatus->tube[0], 0);
+		close(mystatus->tube[1]);
+		if (fdin > 2)
+			dup2(fdin, 0);
 		execute_simple_command_2(mystatus);
 	}
-	// wait(NULL);
-	printf("%d/n", pid);
-	waitpid(pid, &status, 0);
+	else
+		waitpid(pid, &status, 0);
 }
 
 void execut(t_status *mystatus)
@@ -159,7 +163,6 @@ void execut(t_status *mystatus)
 	}
 	last_command(mystatus);
 	// ft_close(mystatus);
-
 }
 
 
