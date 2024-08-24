@@ -3,8 +3,8 @@
 
 void	sx_process_next_2(t_status *mystatus)
 {
-	mystatus->next_process = next_process(&mystatus->next_process);
 	mystatus = init_status(mystatus->next_process, mystatus, mystatus->envp);
+	printf("process %s \n", ((t_token *)mystatus->next_process->data)->value);
 }
 
 int	open_file(char *file, int in_or_out)
@@ -80,18 +80,22 @@ void	execute_first_pipes_2(t_status *mystatus)
 		exit(1);
 	if (pid == 0)
 	{
+		printf("83\n");
 		close (mystatus->tube[0]);
-		dup2(mystatus->tube[1], 1);
 		if (fdin > 2)
 			dup2(fdin, 0);
 		if (fdout > 2)
 			dup2(fdout, 1);
 		execute_simple_command_2(mystatus);
-		close(mystatus->tube[1]);
+		dup2(mystatus->tube[1], 1);
+		printf("91\n");
 	}
 	else
 	{
+		printf("95\n");
 		waitpid(pid, &status, 0);
+		close(mystatus->tube[0]);
+		printf("98\n");
 	}
 }
 
@@ -141,13 +145,21 @@ void	last_command(t_status *mystatus)
 		exit(1);
 	if (pid == 0)
 	{
-		close(mystatus->tube[1]);
+		printf("148\n");
+		// dup2(mystatus->tube[1], STDOUT_FILENO);
+		if (fdout > 2)
+			dup2(fdout, 0);
 		if (fdin > 2)
-			dup2(fdin, 0);
+			dup2(fdin, 1);
+		close(mystatus->tube[0]);
+		close(mystatus->tube[1]);
 		execute_simple_command_2(mystatus);
 	}
-	else
-		waitpid(pid, &status, 0);
+
+	waitpid(pid, &status, 0);
+	close(mystatus->tube[0]);
+	close(mystatus->tube[1]);
+	printf("157\n");
 }
 
 void execut(t_status *mystatus)
@@ -156,15 +168,16 @@ void execut(t_status *mystatus)
 		exit(1);
 	while (mystatus->current_cmd > 1)
 	{
-		//if built_in or bin_cmd
-		execute_with_pipes_2(mystatus);
+		if (mystatus->current_cmd == mystatus->nb_cmd)
+			execute_first_pipes_2(mystatus);
+		else
+			execute_with_pipes_2(mystatus);
 		mystatus->current_cmd = mystatus->current_cmd - 1;
 		sx_process_next_2(mystatus);
+		printf("commande a exec: %s\n", mystatus->cmd->_tab[0]);
 	}
 	last_command(mystatus);
-	// ft_close(mystatus);
 }
-
 
 /*
 ########################################################################

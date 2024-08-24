@@ -115,22 +115,23 @@ t_format *to_fill_(t_status *status, t_double_link_node *node, char **env, int i
 
 t_double_link_node	*next_process(t_double_link_node **node)
 {
-	t_double_link_node **next_node;
+	t_double_link_node *next_node;
 
 	if (!node || !(*node))
 		return (NULL);
-	next_node = node;
-	if (!(*next_node)->next)
+	next_node = *node;
+	if (!(next_node)->next || !(next_node))
 		return (NULL);
-	while ((t_token *)(*next_node)->data)
+	// while ((t_token *)(*next_node)->data)
+	while ((t_token *)((next_node->next))->data)
 	{
-		*next_node = (*next_node)->next;
-		if (!(*next_node))
+		next_node = (next_node)->next;
+		if (!(next_node) )
 			break ;
-		if (((t_token *)(*next_node)->data)->type == COMMAND)
+		if (((t_token *)(next_node)->data)->type == COMMAND)
 		{
-			printf("NN : %s\n", ((t_token *)(*next_node)->data)->value);
-			return (*next_node);
+			printf("NC : %s\n", ((t_token *)(next_node)->data)->value);
+			return (next_node);
 		}
 	}
 	return (NULL);
@@ -138,7 +139,6 @@ t_double_link_node	*next_process(t_double_link_node **node)
 
 int	nb_of_cmd(t_status *status, t_double_link_node *node)
 {
-	t_double_link_node	*nodecpy;
 	int					i;
 
 	if (!node)
@@ -147,12 +147,12 @@ int	nb_of_cmd(t_status *status, t_double_link_node *node)
 		i = 1;
 	else
 		i = 0;
-	nodecpy = node;
 	while (status->next_process)
 	{
 			i++;
 			status->next_process = next_process(&status->next_process);
 	}
+	status->next_process = NULL;
 	return (i);
 }
 
@@ -170,15 +170,13 @@ t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
 	status->fdout = NULL;
 	status->fdin = NULL;
 	to_fill_(status, node, env, i);
+	status->nb_cmd = nb_of_cmd(status, node);
+	status->current_cmd = status->nb_cmd;
 	status->next_process = next_process(&node);
 	if (!status->next_process)
 		status->cmd->_haspipe = 0;
 	else
 		status->cmd->_haspipe = 1;
-	status->nb_cmd = nb_of_cmd(status, node);
-	status->current_cmd = status->nb_cmd;
-	if (status->next_process)
-		printf("NEXT: %s\n", ((t_token *)(status->next_process->data))->value);
 	return (status);
 }
 
