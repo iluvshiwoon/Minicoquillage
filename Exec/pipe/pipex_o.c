@@ -4,7 +4,6 @@
 void	sx_process_next_2(t_status *mystatus)
 {
 	mystatus = init_status(mystatus->next_process, mystatus, mystatus->envp);
-	printf("process %s \n", ((t_token *)mystatus->next_process->data)->value);
 }
 
 int	open_file(char *file, int in_or_out)
@@ -81,21 +80,21 @@ void	execute_first_pipes_2(t_status *mystatus)
 	if (pid == 0)
 	{
 		printf("83\n");
-		close (mystatus->tube[0]);
-		if (fdin > 2)
-			dup2(fdin, 0);
+		close(mystatus->tube[1]);
 		if (fdout > 2)
 			dup2(fdout, 1);
+		else
+			dup2(mystatus->tube[0], 0);
+		if (fdin > 2)
+			dup2(fdin, 0);
 		execute_simple_command_2(mystatus);
-		dup2(mystatus->tube[1], 1);
-		printf("91\n");
 	}
 	else
 	{
-		printf("95\n");
 		waitpid(pid, &status, 0);
-		close(mystatus->tube[0]);
-		printf("98\n");
+		close(0);
+		dup(mystatus->tube[0]);
+		printf("97\n");
 	}
 }
 
@@ -119,7 +118,6 @@ void	execute_with_pipes_2(t_status *mystatus)
 			dup2(fdin, 1);
 		else
 			dup2(mystatus->tube[1], 1);
-		ft_close(mystatus, fdin, fdout);
 		execute_simple_command_2(mystatus);
 		close(mystatus->tube[1]);
 		exit(EXIT_SUCCESS);
@@ -146,38 +144,46 @@ void	last_command(t_status *mystatus)
 	if (pid == 0)
 	{
 		printf("148\n");
-		// dup2(mystatus->tube[1], STDOUT_FILENO);
 		if (fdout > 2)
-			dup2(fdout, 0);
+			dup2(fdout, 1);
+		else
+			dup2(mystatus->tube[1], 1);
 		if (fdin > 2)
-			dup2(fdin, 1);
-		close(mystatus->tube[0]);
+			dup2(fdin, 0);
 		close(mystatus->tube[1]);
 		execute_simple_command_2(mystatus);
 	}
-
-	waitpid(pid, &status, 0);
-	close(mystatus->tube[0]);
+	wait(NULL);
 	close(mystatus->tube[1]);
-	printf("157\n");
+	dup2(mystatus->tube[0], 0);
+	ft_close(mystatus, fdin, fdout);
 }
+
+
 
 void execut(t_status *mystatus)
 {
+	int nb;
+
+	nb = mystatus->nb_cmd;
 	if (pipe(mystatus->tube) == -1)
 		exit(1);
-	while (mystatus->current_cmd > 1)
+		printf("CURRENT :%d\n", mystatus->current_cmd);
+	while (mystatus->current_cmd )
 	{
-		if (mystatus->current_cmd == mystatus->nb_cmd)
+		if (mystatus->current_cmd == nb)
 			execute_first_pipes_2(mystatus);
-		else
+		else if (mystatus->current_cmd != 1)
 			execute_with_pipes_2(mystatus);
+		else
+			last_command(mystatus);
 		mystatus->current_cmd = mystatus->current_cmd - 1;
 		sx_process_next_2(mystatus);
-		printf("commande a exec: %s\n", mystatus->cmd->_tab[0]);
+		printf("Commande a exec: %s\n", mystatus->cmd->_tab[0]);
 	}
-	last_command(mystatus);
+	// last_command(mystatus);
 }
+
 
 /*
 ########################################################################
