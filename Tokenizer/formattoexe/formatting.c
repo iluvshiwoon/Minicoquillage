@@ -153,7 +153,6 @@ int	nb_of_cmd(t_status *status, t_double_link_node *node)
 			status->next_process = next_process(&status->next_process);
 	}
 	status->next_process = next_process(&node);
-	// printf("NOMBRE TOTAL DE COMMANDE: %d\n", i);
 	return (i);
 }
 

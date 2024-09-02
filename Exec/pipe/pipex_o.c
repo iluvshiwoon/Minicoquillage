@@ -78,7 +78,6 @@ void	execute_first_pipes_2(t_status *mystatus)
 		exit(1);
 	if (pid == 0)
 	{
-		printf("line 82\n");
 		close(mystatus->tube[0]);
 		if (fdout > 2)
 			dup2(fdout, 1);
@@ -88,7 +87,6 @@ void	execute_first_pipes_2(t_status *mystatus)
 			dup2(fdin, 0);
 		ft_close(mystatus, fdin, fdout);
 		execute_simple_command_2(mystatus);
-		exit(EXIT_SUCCESS);
 	}
 	else
 	{
@@ -140,8 +138,8 @@ void	last_command(t_status *mystatus)
 		exit(1);
 	if (pid == 0)
 	{
-		close(0);
-		dup(mystatus->tube[0]);
+		// close(0);
+		// dup(mystatus->tube[0]);
 		close(mystatus->tube[1]);
 		if (fdout > 2)
 			dup2(fdout, 1);
@@ -154,7 +152,7 @@ void	last_command(t_status *mystatus)
 	}
 	else
 	{
-		close(mystatus->tube[1]);
+		// close(mystatus->tube[1]);
 		waitpid(pid, &status, 0);
 	}
 }
@@ -195,35 +193,31 @@ void	last_command(t_status *mystatus)
 
 
 
-void execut(t_status *mystatus)
+void	execut(t_status *mystatus)
 {
-	int		nb;
 	int		status;
 	pid_t	pid;
 
-	nb = mystatus->nb_cmd;
-	if (pipe(mystatus->tube) == -1)
-		exit(1);
-	while (mystatus->current_cmd > 0)
-	{
-		printf("CURRENT :%d\n", mystatus->nb_cmd);
-		pid = fork();
-		if (pid == -1)
-			exit(1);
-		if (pid == 0)
+	if (mystatus->current_cmd == 1)
+		last_command(mystatus);
+	else
+		while (mystatus->current_cmd > 1)
 		{
-			if (mystatus->current_cmd > 1)
-				execute_first_pipes_2(mystatus);
+			if (pipe(mystatus->tube) == -1)
+				exit(1);
+			pid = fork();
+			if (pid == -1)
+				exit(1);
+			if (pid == 0)
+					execute_first_pipes_2(mystatus);
 			else
+			{
+				close(mystatus->tube[1]);
+				waitpid(pid, &status, 0);
+			}
+			mystatus->current_cmd = mystatus->current_cmd - 1;
+			sx_process_next_2(mystatus);
+			if (mystatus->current_cmd == 1)
 				last_command(mystatus);
 		}
-		else
-		{
-			close(mystatus->tube[1]);
-			waitpid(pid, &status, 0);
-		}
-		mystatus->current_cmd = mystatus->current_cmd - 1;
-		sx_process_next_2(mystatus);
-		printf("Commande a exec: %s\n", mystatus->cmd->_tab[0]);
-	}
 }
