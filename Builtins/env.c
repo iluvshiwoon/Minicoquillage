@@ -8,7 +8,7 @@ int	ft_separator(char *variable)
 
 	varc = variable;
 	i = 0;
-	while (*variable != '=')
+	while (*varc != '=')
 	{
 		i++;
 		varc++;
@@ -16,39 +16,86 @@ int	ft_separator(char *variable)
 	return (i);
 }
 
-int fill_envc(char **env, t_mylist	*envc)
+t_mylist	*fill_content(char *str, int sep)
 {
-	int			i;
-	int			separator;
+	t_mylist	*node;
+
+	node = malloc(sizeof(t_mylist));
+	if (!node)
+		return (NULL);
+	node->next = NULL;
+	node->var = ft_substr(str, 0, sep);
+	node->val = ft_substr(str, sep, ft_strlen(str) - sep);
+	return (node);
+}
+
+t_mylist	**fill_envc(char **env, t_mylist **content)
+{
+	t_mylist	*node_var;
+	t_mylist	*node_first;
 	char		**var;
-	t_mylist	*cursor_var;
+	int			separator;
+	int			i;
 
 	i = 0;
 	var = env;
-	cursor_var = envc;
+	if (i == 0)
+	{
+		separator = ft_separator(var[i]);
+		node_first = fill_content(var[i], separator);
+		*content = node_first;
+		i++;
+	}
 	while (var[i])
 	{
 		separator = ft_separator(var[i]);
-		has_content(cursor_var, separator);
+		node_var = fill_content(var[i], separator);
+		node_first->next = node_var;
+		node_first = node_first->next;
 		i++;
 	}
-	return i;
+	return (content);
 }
 
 t_mylist	*ft_env(char **env)
 {
-	t_mylist	*envc;
+	t_mylist	**envc;
+	t_mylist	*content;
 
-	envc = malloc(sizeof(t_mylist));
-	if (!envc)
-		return (NULL);
-	fill_envc(env, envc);
+	envc = malloc(sizeof(t_mylist *));
+	envc = fill_envc(env, envc);
+	return (*envc);
 }
 
-int main(int ac, char **av, char **env)
+void	put_envc(t_mylist *env)
 {
-	(void) ac;
-	(void) av;
+	t_mylist	*cursor;
+
+	cursor = env;
+	while (cursor)
+	{
+		ft_putstr_fd(cursor->var, 1);
+		ft_putstr_fd("=", 1);
+		ft_putstr_fd(cursor->val, 1);
+		ft_putstr_fd("\n", 1);
+		cursor = cursor->next;
+	}
+}
+
+int	main(int ac, char **av, char **env)
+{
+	t_mylist	*envc;
+
+	(void )		ac;
+	(void )		av;
+	envc = ft_env(env);
+	put_envc(envc);
+	ft_unset(envc, "coco");
+	ft_unset(envc, "toto");
+	puts("\n");
+	puts("\n");
+	put_envc(envc);
+	return (0);
 }
 
 
