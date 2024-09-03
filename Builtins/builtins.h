@@ -23,6 +23,11 @@ void	put_env(char **env);
 char	*get_var_env(char *var, char **env);
 int		get_env(char **env, char *var);
 
-
+typedef struct s_mylist
+{
+	void		*var;
+	void		*val;
+	struct s_mylist	*next;
+}	t_mylist;
 
 #endif
