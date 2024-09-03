@@ -89,6 +89,7 @@ int	main(int ac, char **av, char **env)
 	(void )		ac;
 	(void )		av;
 	envc = ft_env(env);
+	ft_export(envc, " GOGO=GOOGLE  rara=raaaaaa 1koko=kok");
 	put_envc(envc);
 	ft_unset(envc, "coco");
 	ft_unset(envc, "toto");
