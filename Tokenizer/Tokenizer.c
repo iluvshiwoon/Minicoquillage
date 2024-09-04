@@ -6,7 +6,7 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/08/26 16:17:32 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/09/04 13:53:16 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ t_double_link_list	**debug(char * line)
 
 int	main(int argc, char ** argv, char **env)
 {
-	char				**envc;
+	t_mylist			*envc;
 	t_status			*status;
 	t_double_link_list	**tokens_lists;
 	status = malloc(sizeof(t_status));

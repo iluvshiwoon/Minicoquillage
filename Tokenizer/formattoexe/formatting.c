@@ -1,5 +1,71 @@
 #include "formatting.h"
 
+size_t	count_var(t_mylist *env)
+{
+	size_t	len;
+
+	len = 0;
+	while (env)
+	{
+		len++;
+		env = env->next;
+	}
+	return (len);
+}
+
+void	env_to_tab_2(t_mylist *env, char **envtab, size_t nb_var)
+{
+	size_t		i;
+	size_t		a;
+	size_t		b;
+	t_mylist	*envc;
+
+	envc = env;
+	i = 0;
+	while (envtab[i])
+	{
+		a = ft_strlen(env->var);
+		ft_strlcat(envtab[i], "=", a + 2);
+		envc = env->next;
+		i++;
+	}
+	envc = env;
+	i = 0;
+	while (envtab[i])
+	{
+		a = ft_strlen(env->var);
+		b = ft_strlen(env->val);
+		ft_strlcat(envtab[i], "=", a + b + 1);
+		envc = env->next;
+		i++;
+	}
+}
+
+char	**env_to_tab(t_mylist *env)
+{
+	t_mylist	*envc;
+	char		**envtab;
+	size_t		nb_var;
+	int			i;
+
+	i = -1;
+	envc = env;
+	nb_var = count_var(env);
+	envtab = malloc(nb_var * sizeof(char *));
+	if (!envtab)
+		return (NULL);
+	while (envtab[++i])
+		envtab[i] = ft_strdup("");
+	while (envc)
+	{
+		envtab[i] = ft_strdup(envc->var);
+		envc = envc->next;
+	}
+	envtab[i] = NULL;
+	env_to_tab_2(env, envtab, nb_var);
+	return (envtab);
+}
+
 int	expression(t_token *token)
 {
 	t_token_type limit_expressio[] = {OR, AND, OPEN_PARENTHESIS, CLOSE_PARENTHESIS, PIPE};
@@ -68,7 +134,7 @@ void	fill_2(t_status *status, t_double_link_node **node, int i)
 
 	node2 = *node;
 	size = 0;
-	tab = (char **)malloc(sizeof(char *) * (i + 1));  // faire un ft_calloc?
+	tab = (char **)malloc(sizeof(char *) * (i + 1));
 	while (size < i && node2)
 	{
 		if (((t_token *)node2->data)->type == REDIRECTION)
@@ -101,7 +167,7 @@ void	display_tab_of_cmd(char **tab)
 	}
 }
 
-t_format *to_fill_(t_status *status, t_double_link_node *node, char **env, int i)
+t_format *to_fill_(t_status *status, t_double_link_node *node, t_mylist *env, int i)
 {
 	char *my_path;
 
@@ -109,7 +175,7 @@ t_format *to_fill_(t_status *status, t_double_link_node *node, char **env, int i
 	status->cmd->_path = my_path;
 	fill_2(status, &node, i);
 	//display_tab_of_cmd(status->cmd->_tab);
-	status->cmd->_haspipe = -1;
+	// status->cmd->_haspipe = -1;
 	return (status->cmd);
 }
 
@@ -156,7 +222,7 @@ int	nb_of_cmd(t_status *status, t_double_link_node *node)
 	return (i);
 }
 
-t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
+t_status	*init_status(t_double_link_node *node, t_status *status, t_mylist *env)
 {
 	int	i;
 
@@ -165,10 +231,11 @@ t_status	*init_status(t_double_link_node *node, t_status *status, char **env)
 	i = nb_token_for_cmd(&node);
 	status->cmd = malloc(sizeof(t_format));
 	status->cmd->_tab = (char **)malloc((i + 1) * sizeof(char *));
-	status->envp = (char **)malloc(100 * sizeof(char *));
+	status->envp = malloc(sizeof(t_mylist));
 	status->envp = env;
 	status->fdout = NULL;
 	status->fdin = NULL;
+	status->envc = env_to_tab(env);
 	to_fill_(status, node, env, i);
 	status->next_process = next_process(&node);
 	status->nb_cmd = nb_of_cmd(status, node);

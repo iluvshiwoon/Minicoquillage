@@ -55,8 +55,7 @@ void ft_close(t_status *mystatus, int in , int out)
 
 void	execute_simple_command_2(t_status *mystatus)
 {
-
-	if (execve(mystatus->cmd->_path, mystatus->cmd->_tab, mystatus->envp) == -1)
+	if (execve(mystatus->cmd->_path, mystatus->cmd->_tab, mystatus->envc) == -1)
 	{
 		printf("execve simple command failed %d (%s)\n", errno, strerror(errno));
 		exit(EXIT_FAILURE);

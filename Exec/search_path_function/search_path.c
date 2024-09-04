@@ -32,21 +32,31 @@ char	*pss_permission(char **envs_path, char *cmd)
 	return (cmd_path);
 }
 
-char	*get_path(char **env)
+// char	*get_path(char **env)
+// {
+// 	if (!env || !*env)
+// 		return (NULL);
+// 	while (env || *env)
+// 	{
+// 		if (ft_strnstr(*env, "PATH=/", 6))
+// 			return (*env);
+// 		else
+// 			++env;
+// 	}
+// 	return (NULL);
+// }
+
+char	*get_path(t_mylist *env)
 {
-	if (!env || !*env)
-		return (NULL);
-	while (env || *env)
-	{
-		if (ft_strnstr(*env, "PATH=/", 6))
-			return (*env);
-		else
-			++env;
-	}
-	return (NULL);
+	t_mylist	*envc;
+
+	envc = env;
+	while (ft_strncmp(envc->var, "PATH", 5))
+		envc = envc->next;
+	return (envc->val);
 }
 
-char	*ft_sx_path(char *cmd, char **env_var)
+char	*ft_sx_path(char *cmd, t_mylist *env_var)
 {
 	char	*sx_cmd;
 	char	*cmd_clean;
@@ -62,6 +72,8 @@ char	*ft_sx_path(char *cmd, char **env_var)
 	return (pss_permission(envp, sx_cmd));
 	//  TODO:manage free & garbage collector
 }
+
+
 
 // int	main(int ac, char **av, char **env)
 // {

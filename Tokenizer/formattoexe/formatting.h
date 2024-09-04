@@ -14,7 +14,8 @@ typedef struct s_format
 typedef struct s_status
 {
 	t_format			*cmd;
-	char				**envp;
+	t_mylist			*envp;
+	char				**envc;
 	t_double_link_node	*next_process;
 	char				*fdin;
 	char				*fdout;
@@ -24,6 +25,6 @@ typedef struct s_status
 }	t_status;
 
 t_double_link_node	*next_process(t_double_link_node **node);
-t_status			*init_status(t_double_link_node *node, t_status *status, char **env);
+t_status			*init_status(t_double_link_node *node, t_status *status, t_mylist *env);
 
 #endif

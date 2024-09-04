@@ -66,16 +66,25 @@ int	add_var(t_mylist **env, char *variable, char *subchar)
 	char	*val;
 	char	*var;
 	int		separator;
+	char	*valc;
 	char	*varc;
 
 	separator = has_character(variable, '=');
+	varc = NULL;
 	var = ft_substr(variable, 0, separator);
 	val = ft_substr(variable, separator, ft_strlen(variable) -separator);
 	if (has_character(var, '$') == 0)
 		return (1);
-	varc = ft_substr(val, 0, has_character(val, '$'));
+	else if(has_character(var, '$') > 0)
+		varc = var;
+	if(varc)
+	{
+		var = ft_substr(varc, 0, has_character(varc, '$'));
+		free(varc);
+	}
+	valc = ft_substr(val, 0, has_character(val, '$'));
 	free(val);
-	addto_env(env, var, varc);
+	addto_env(env, var, valc);
 	return (0);
 }
 

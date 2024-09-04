@@ -25,7 +25,7 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	copyenv = ft_env(env);
-	expander = expand(copyenv, "un $test bd");
+	expander = expand(copyenv, "un $test bete");
 	ft_printf("%s\n", expander);
 	return (0);
 }

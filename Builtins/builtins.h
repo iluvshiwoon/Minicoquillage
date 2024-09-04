@@ -1,7 +1,7 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# define CD_ERR "cd: no such file or directory:"
+# define CD_ERR "cd: no such file or directory:\n"
 
 # include <unistd.h>
 # include <stdio.h>
@@ -22,8 +22,10 @@ typedef struct s_mylist
 t_mylist	*ft_env(char **env);
 int			ft_pwd(void);
 void		ft_unset(t_mylist *env, char *variable);
-void	ft_export(t_mylist *env, char *variable);
-void	ft_cd(char *new_path, char **env);
+void		ft_export(t_mylist *env, char *variable);
+void	ft_cd(char *new_path, t_mylist *env);
+void ft_echo(char **msg);
+void ft_exit(void);
 
 
 void	put_env(t_mylist *env);

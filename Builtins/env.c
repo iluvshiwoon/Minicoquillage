@@ -82,22 +82,16 @@ void	put_envc(t_mylist *env)
 	}
 }
 
-int	main(int ac, char **av, char **env)
-{
-	t_mylist	*envc;
+// int	main(int ac, char **av, char **env)
+// {
+// 	t_mylist	*envc;
 
-	(void )		ac;
-	(void )		av;
-	envc = ft_env(env);
-	ft_export(envc, " GOGO=GOOGLE  rara=raaaaaa 1koko=kok");
-	put_envc(envc);
-	ft_unset(envc, "coco");
-	ft_unset(envc, "toto");
-	puts("\n");
-	puts("\n");
-	put_envc(envc);
-	return (0);
-}
+// 	(void )		ac;
+// 	(void )		av;
+// 	envc = ft_env(env);
+// 	ft_cd("/home/bsunda/Documents/projet_1/Minicoquillage", envc);
+// 	return (0);
+// }
 
 
 

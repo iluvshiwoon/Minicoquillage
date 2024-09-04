@@ -1,38 +1,57 @@
 #include "./builtins.h"
 
-char	*put_var_env(char *var, char **env, char *value)
-{
 
-	if (!env || !*env)
-		return (NULL);
-	while (env || *env)
-	{
-		if (ft_strnstr(*env, var, ft_strlen(var) + 1))
-		{
-			*env = ft_strdup(value);
-			return (*env);
-		}
-		else
-			++env;
-	}
-	return (NULL);
+
+
+
+
+
+void	ft_cd(char *newpath, t_mylist *env)
+{
+	// char	*currentpath;
+	// char	*oldpath;
+
+	// currentpath = get_pwd();
+	// oldpath = get_oldpwd();
+	// if (!newpath)
+	// 	newpath = go_user();
+	// if(newpath != 0)
+	// 	ft_putstr_fd(CD_ERR, 2);
 }
 
-char	*value_new(char *path, char **env)
-{
-	char *name = ft_strdup("PWD=");
-	char *new = ft_strjoin((const char*)name, (const char*)path);
-	return (new);
-}
+// char	*put_var_env(char *var, char **env, char *value)
+// {
 
-void	change_dir(char *oldpwd, char *newpath, char **env)
-{
-	char	*var;
+// 	if (!env || !*env)
+// 		return (NULL);
+// 	while (env || *env)
+// 	{
+// 		if (ft_strnstr(*env, var, ft_strlen(var) + 1))
+// 		{
+// 			*env = ft_strdup(value);
+// 			return (*env);
+// 		}
+// 		else
+// 			++env;
+// 	}
+// 	return (NULL);
+// }
 
-	if (chdir(newpath) != 0)
-		printf("%s\n", "cd error");
-	var = put_var_env("PWD=", env, value_new(newpath, env));
-}
+// char	*value_new(char *path, char **env)
+// {
+// 	char *name = ft_strdup("PWD=");
+// 	char *new = ft_strjoin((const char*)name, (const char*)path);
+// 	return (new);
+// }
+
+// void	change_dir(char *oldpwd, char *newpath, char **env)
+// {
+// 	char	*var;
+
+// 	if (chdir(newpath) != 0)
+// 		printf("%s\n", "cd error");
+// 	var = put_var_env("PWD=", env, value_new(newpath, env));
+// }
 
 // void	ft_cd(char *newpath, char **env)
 // {

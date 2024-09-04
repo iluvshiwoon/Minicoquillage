@@ -16,36 +16,8 @@
 
 char	**content(void);
 
-// typedef struct s_pipex
-// {
-// 	int				infile;
-// 	int				outfile;
-// 	int				here_doc;
-// 	int				tube[2];
-// 	char			**env;
-// 	char			**path_cmd;
-// 	char			**cmds;
-// }					t_pipex;
 
-
-
-
-// typedef struct s_format
-// {
-// 	int		fd_in;
-// 	int		fd_out;
-// 	int		here_doc;
-// 	int		tube[2];
-// 	char	**env;
-// 	char	**path;
-// 	char	**cmds;
-// }			t_format;
-
-
-
-
-
-char	*ft_sx_path(char *cmd, char **env_var);
+char	*ft_sx_path(char *cmd, t_mylist *env_var);
 void	content_cmd(t_double_link_list **to_exec, t_double_link_list **list);
 
 
@@ -55,10 +27,10 @@ char	**ft_cmd(char **to_exec, int *i, char **tokens);
 
 int		ft_strlen2(char **tab);
 void	*ft_free_tab(char **s, size_t i);
-char	**ft_env(char **env);
+// char	**ft_env(char **env);
 
 int		pss_ok(char *path);
 char	*pss_permission(char **envs_path, char *cmd);
-char	*get_path(char **env);
+char	*get_path(t_mylist *env);
 int		pss_ok(char *path);
 #endif
