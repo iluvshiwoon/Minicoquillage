@@ -18,9 +18,27 @@ int	has_character(char *var, char c)
 	return (-1);
 }
 
+int	var_missing(t_mylist **env, char *str)
+{
+	t_mylist	*envc;
+	char		*var;
+	int			separator;
+
+	separator = has_character(str, '=');
+	var = ft_substr(str, 0, separator);
+	envc = *env;
+	while (envc)
+	{
+		if (!ft_strncmp(envc->var, var, ft_strlen(var + 1)))
+			return (0);
+		envc = envc->next;
+	}
+	return (1);
+}
+
 int	is_formatted(char *var, char *subchar)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!var)
@@ -72,12 +90,12 @@ int	add_var(t_mylist **env, char *variable, char *subchar)
 	separator = has_character(variable, '=');
 	varc = NULL;
 	var = ft_substr(variable, 0, separator);
-	val = ft_substr(variable, separator, ft_strlen(variable) -separator);
+	val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator);
 	if (has_character(var, '$') == 0)
 		return (1);
-	else if(has_character(var, '$') > 0)
+	else if (has_character(var, '$') > 0)
 		varc = var;
-	if(varc)
+	if (varc)
 	{
 		var = ft_substr(varc, 0, has_character(varc, '$'));
 		free(varc);
@@ -85,6 +103,53 @@ int	add_var(t_mylist **env, char *variable, char *subchar)
 	valc = ft_substr(val, 0, has_character(val, '$'));
 	free(val);
 	addto_env(env, var, valc);
+	return (0);
+}
+
+void	updateto_env(t_mylist **env, char *var, char *val)
+{
+	t_mylist	*envc;
+	char		*old_env_val;
+
+	envc = *env;
+
+	while (envc)
+	{
+		old_env_val = envc->val;
+		if (!ft_strncmp(envc->var, var, ft_strlen(var + 1)))
+		{
+			envc->val = val;
+			free(old_env_val);
+			return ;
+		}
+		envc = envc->next;
+	}
+}
+
+int	update_var(t_mylist **env, char *variable)
+{
+	char		*var;
+	char		*val;
+	char		*valc;
+	char		*varc;
+	int			separator;
+
+	separator = has_character(variable, '=');
+	varc = NULL;
+	var = ft_substr(variable, 0, separator);
+	if (has_character(var, '$') == 0)
+		return (1);
+	else if (has_character(var, '$') > 0)
+		varc = var;
+	if (varc)
+	{
+		var = ft_substr(varc, 0, has_character(varc, '$'));
+		free(varc);
+	}
+	val = ft_substr(variable, separator + 1, ft_strlen(variable) -separator);
+	valc = ft_substr(val, 0, has_character(val, '$'));
+	free(val);
+	updateto_env(env, var, valc);
 	return (0);
 }
 
@@ -103,7 +168,12 @@ void	ft_export(t_mylist *env, char *variable)
 		subchar[1] = 0;
 		is_form = is_formatted(tab[i], subchar);
 		if (is_form)
-			add_var(&env, tab[i], subchar);
+		{
+			if (var_missing(&env, tab[i]))
+				add_var(&env, tab[i], subchar);
+			else
+				update_var(&env, tab[i]);
+		}
 		i++;
 	}
 }

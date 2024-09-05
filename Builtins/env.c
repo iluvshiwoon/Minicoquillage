@@ -25,7 +25,7 @@ t_mylist	*fill_content(char *str, int sep)
 		return (NULL);
 	node->next = NULL;
 	node->var = ft_substr(str, 0, sep);
-	node->val = ft_substr(str, sep, ft_strlen(str) - sep);
+	node->val = ft_substr(str, sep + 1, ft_strlen(str) - sep);
 	return (node);
 }
 
@@ -82,16 +82,22 @@ void	put_envc(t_mylist *env)
 	}
 }
 
-// int	main(int ac, char **av, char **env)
-// {
-// 	t_mylist	*envc;
+int	main(int ac, char **av, char **env)
+{
+	t_mylist	*envc;
 
-// 	(void )		ac;
-// 	(void )		av;
-// 	envc = ft_env(env);
-// 	ft_cd("/home/bsunda/Documents/projet_1/Minicoquillage", envc);
-// 	return (0);
-// }
+	(void )		ac;
+	(void )		av;
+	envc = ft_env(env);
+	ft_export(envc, "num=num");
+	put_envc(envc);
+	puts("\n");
+	puts("\n");
+	puts("\n");
+	ft_export(envc, "num=numero numero=num");
+	put_envc(envc);
+	return (0);
+}
 
 
 
