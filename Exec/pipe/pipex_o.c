@@ -45,8 +45,8 @@ int	handle_redirect_write(t_status *mystatus)
 
 void ft_close(t_status *mystatus, int in , int out)
 {
-	close(mystatus->cmd->tube[0]);
-	close(mystatus->cmd->tube[1]);
+	close(mystatus->tube[0]);
+	close(mystatus->tube[1]);
 	if (in > STDERR_FILENO)
 		close(in);
 	if (out > STDERR_FILENO)
@@ -77,11 +77,11 @@ void	execute_first_pipes_2(t_status *mystatus)
 		exit(1);
 	if (pid == 0)
 	{
-		close(mystatus->cmd->tube[0]);
+		close(mystatus->tube[0]);
 		if (fdout > 2)
 			dup2(fdout, 1);
 		else
-			dup2(mystatus->cmd->tube[1], 1);
+			dup2(mystatus->tube[1], 1);
 		if (fdin > 2)
 			dup2(fdin, 0);
 		ft_close(mystatus, fdin, fdout);
@@ -89,7 +89,6 @@ void	execute_first_pipes_2(t_status *mystatus)
 	}
 	else
 	{
-		close(mystatus->cmd->tube[1]);
 		waitpid(pid, &status, 0);
 	}
 }
@@ -103,16 +102,18 @@ void	execute_with_pipes_2(t_status *mystatus)
 
 	fdin = handle_redirect_read(mystatus);
 	fdout = handle_redirect_write(mystatus);
+	if (pipe(mystatus->tube) == -1)
+		exit(1);
 	pid = fork();
 	if (pid == -1)
 		exit(1);
 	if (pid == 0)
 	{
-		close(mystatus->cmd->tube[1]);
+		close(mystatus->tube[1]);
 		if (fdout > 2)
 			dup2(fdout, 1);
 		else
-			dup2(mystatus->cmd->tube[0], 0);
+			dup2(mystatus->tube[0], 0);
 		if (fdin > 2)
 			dup2(fdin, 0);
 		ft_close(mystatus, fdin, fdout);
@@ -120,7 +121,7 @@ void	execute_with_pipes_2(t_status *mystatus)
 	}
 	else
 	{
-		close(mystatus->cmd->tube[1]);
+		close(mystatus->tube[1]);
 		waitpid(pid, &status, 0);
 	}
 }
@@ -134,18 +135,18 @@ void	last_command(t_status *mystatus)
 
 	fdin = handle_redirect_read(mystatus);
 	fdout = handle_redirect_write(mystatus);
-	if (pipe(mystatus->cmd->tube) == -1)
+	if (pipe(mystatus->tube) == -1)
 		exit(1);
 	pid = fork();
 	if (pid == -1)
 		exit(1);
 	if (pid == 0)
 	{
-		close(mystatus->cmd->tube[1]);
+		close(mystatus->tube[1]);
 		if (fdout > 2)
 			dup2(fdout, 1);
 		else
-			dup2(mystatus->cmd->tube[0], 0);
+			dup2(mystatus->tube[0], 0);
 		if (fdin > 2)
 			dup2(fdin, 0);
 		ft_close(mystatus, fdin, fdout);
@@ -153,11 +154,25 @@ void	last_command(t_status *mystatus)
 	}
 	else
 	{
-		close(mystatus->cmd->tube[1]);
+		close(mystatus->tube[1]);
 		waitpid(pid, &status, 0);
 	}
 }
 
+void	init_pipefds(t_status *mystatus)
+{
+	int	i;
+	int	nb;
+
+	nb = mystatus->nb_cmd;
+	i = 0;
+	while (i < (2 * (nb - 1)))
+	{
+		if (pipe(mystatus->tube[i]) == -1)
+			exit(1);
+		i++;
+	}
+}
 
 // Version 0
 // void execut(t_status *mystatus)
@@ -173,13 +188,9 @@ void	last_command(t_status *mystatus)
 // 		if (mystatus->nb_cmd == 1)
 // 			last_command(mystatus);
 // 		else if (mystatus->current_cmd == nb)
-// 		{
-// 			printf("line 178\n");
 // 			execute_first_pipes_2(mystatus);
-// 		}
 // 		else if (mystatus->current_cmd != 1)
 // 		{
-// 			printf("line 183\n");
 // 			execute_first_pipes_2(mystatus);
 // 			// execute_with_pipes_2(mystatus);
 // 		}
@@ -188,7 +199,6 @@ void	last_command(t_status *mystatus)
 // 		close(mystatus->tube[1]);
 // 		mystatus->current_cmd = mystatus->current_cmd - 1;
 // 		sx_process_next_2(mystatus);
-// 		printf("Commande a exec: %s\n", mystatus->cmd->_tab[0]);
 // 	}
 // }
 
@@ -210,7 +220,7 @@ void	last_command(t_status *mystatus)
 // 			if (pid == -1)
 // 				exit(1);
 // 			if (pid == 0)
-// 					execute_first_pipes_2(mystatus);
+// 				execute_first_pipes_2(mystatus);
 // 			else
 // 			{
 // 				close(mystatus->tube[1]);
@@ -223,9 +233,10 @@ void	last_command(t_status *mystatus)
 // 		}
 // }
 
+
+
 //version 2 GPT??
 void	execut(t_status *mystatus)
 {
+
 }
-
-

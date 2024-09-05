@@ -82,22 +82,22 @@ void	put_envc(t_mylist *env)
 	}
 }
 
-int	main(int ac, char **av, char **env)
-{
-	t_mylist	*envc;
+// int	main(int ac, char **av, char **env)
+// {
+// 	t_mylist	*envc;
 
-	(void )		ac;
-	(void )		av;
-	envc = ft_env(env);
-	ft_export(envc, "num=num");
-	put_envc(envc);
-	puts("\n");
-	puts("\n");
-	puts("\n");
-	ft_export(envc, "num=numero numero=num");
-	put_envc(envc);
-	return (0);
-}
+// 	(void )		ac;
+// 	(void )		av;
+// 	envc = ft_env(env);
+// 	ft_export(envc, "num=num");
+// 	put_envc(envc);
+// 	puts("\n");
+// 	puts("\n");
+// 	puts("\n");
+// 	ft_export(envc, "num=numero numero=num");
+// 	put_envc(envc);
+// 	return (0);
+// }
 
 
 

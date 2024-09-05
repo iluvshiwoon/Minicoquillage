@@ -240,10 +240,8 @@ t_status	*init_status(t_double_link_node *node, t_status *status, t_mylist *env)
 	status->next_process = next_process(&node);
 	status->nb_cmd = nb_of_cmd(status, node);
 	status->current_cmd = status->nb_cmd;
-	if (!status->next_process)
-		status->cmd->_haspipe = 0;
-	else
-		status->cmd->_haspipe = 1;
+	if (status->nb_cmd > 1)
+		status->tube[(2 * status->nb_cmd - 2)];
 	return (status);
 }
 

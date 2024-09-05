@@ -8,7 +8,6 @@ typedef struct s_format
 	char	**_tab;
 	int		_haspipe;
 	int		mypid;
-	int					tube[2];
 }	t_format;
 
 
@@ -22,7 +21,7 @@ typedef struct s_status
 	char				*fdout;
 	int					nb_cmd;
 	int					current_cmd;
-	int					tube[2];
+	int					tube[];
 }	t_status;
 
 t_double_link_node	*next_process(t_double_link_node **node);
