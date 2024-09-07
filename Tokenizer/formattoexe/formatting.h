@@ -8,6 +8,7 @@ typedef struct s_format
 	char	**_tab;
 	int		_haspipe;
 	int		mypid;
+	int		tube[2];
 }	t_format;
 
 

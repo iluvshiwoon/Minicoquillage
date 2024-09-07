@@ -1,9 +1,13 @@
 #include "pipex.h"
 #include <stdarg.h>
 
-void	sx_process_next_2(t_status *mystatus)
+t_status	*sx_process_next_2(t_status *mystatus)
 {
-	mystatus = init_status(mystatus->next_process, mystatus, mystatus->envp);
+	if (!mystatus->next_process)
+		mystatus = NULL;
+	else
+		mystatus = init_status(mystatus->next_process, mystatus, mystatus->envp);
+	return (mystatus);
 }
 
 int	open_file(char *file, int in_or_out)
@@ -159,19 +163,154 @@ void	last_command(t_status *mystatus)
 	}
 }
 
-void	init_pipefds(t_status *mystatus)
+void	init_pipefds(t_status *mystatus, int tube[])
 {
 	int	i;
 	int	nb;
 
-	nb = mystatus->nb_cmd;
-	i = 0;
-	while (i < (2 * (nb - 1)))
+	tube = malloc(sizeof(int) * ((mystatus->nb_cmd - 1) * 2));
+	nb = mystatus->nb_cmd - 1;
+	if (nb != 0)
 	{
-		if (pipe(mystatus->tube[i]) == -1)
-			exit(1);
-		i++;
+		i = 0;
+		while (i < (2 * (nb)))
+		{
+			if (pipe(&tube[i]) == -1)
+				exit(1);
+			i++;
+		}
 	}
+}
+
+
+int	close_pipefds(t_status *mystatus)
+{
+	int	i;
+	int	nb;
+
+	nb = mystatus->nb_cmd - 1;
+	if (nb != 0)
+	{
+		i = 0;
+		while (i < (2 * (nb - 1)))
+		{
+			close(mystatus->tube[i]);
+			i++;
+		}
+		return (0);
+	}
+	return (1);
+}
+
+
+// void	run_command(t_status *mystatus, int j, int tube[])
+// {
+// 	pid_t	pid;
+// 	int		status;
+// 	int		fdin;
+// 	int		fdout;
+
+// 	fdin = handle_redirect_read(mystatus);
+// 	fdout = handle_redirect_write(mystatus);
+// 	pid = fork();
+// 	if (pid == -1)
+// 		exit(1);
+// 	if (pid == 0)
+// 	{
+// 		// Si ce n'est pas la première commande, rediriger l'entrée
+// 		if (j != 0)
+// 		{
+// 			if (dup2(tube[(j - 1) * 2], STDIN_FILENO) < 0)
+// 			{
+// 				perror("dup2");
+// 				exit(EXIT_FAILURE);
+// 			}
+// 		}
+// 		// Si ce n'est pas la dernière commande, rediriger la sortie
+// 		if (j != mystatus->nb_cmd - 1)
+// 		{
+// 			if (dup2(tube[j * 2 + 1], STDOUT_FILENO) < 0)
+// 			{
+// 				perror("dup2");
+// 				exit(EXIT_FAILURE);
+// 			}
+// 		}
+// 		close_pipefds(mystatus);
+// 		execute_simple_command_2(mystatus);
+// 	}
+// 	else
+// 	{
+// 		close_pipefds(mystatus);
+// 		waitpid(pid, &status, 0);
+// 	}
+// }
+
+void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+		exit(1);
+	if (pid == 0)
+	{
+		// Si c' est la derniere commande, rediriger l'entrée
+		if (total_cmd - pos_cmd == 1)
+		{
+			if (dup2(buff[0], STDIN_FILENO) < 0)
+			{
+				perror("dup2");
+				exit(EXIT_FAILURE);
+			}
+		}
+		// Si c' est la premiere commande, rediriger la sortie
+		else if (pos_cmd == total_cmd)
+		{
+			close(mystatus->cmd->tube[0]);
+			if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) < 0)
+			{
+				perror("dup2");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			printf("ok\n");
+		}
+		//close condition
+		if (pos_cmd == 1)
+			close(mystatus->cmd->tube[0]);
+		else if (pos_cmd == total_cmd)
+		{
+			close(mystatus->cmd->tube[1]);
+		}
+		else
+		{
+			close(buff[0]);
+			close(mystatus->cmd->tube[1]);
+		}
+		execute_simple_command_2(mystatus);
+	}
+	else
+	{
+		if (total_cmd - pos_cmd == 0)
+			close(mystatus->cmd->tube[1]);
+		else if (pos_cmd == 1)
+		{
+			close(mystatus->cmd->tube[0]);
+			close(mystatus->cmd->tube[1]);
+			close(buff[0]);
+		}
+		else
+		{
+			close(buff[0]);
+			close(mystatus->cmd->tube[1]);
+
+		}
+		waitpid(pid, &status, 0);
+	}
+	buff = &mystatus->cmd->tube[0];
 }
 
 // Version 0
@@ -238,5 +377,19 @@ void	init_pipefds(t_status *mystatus)
 //version 2 GPT??
 void	execut(t_status *mystatus)
 {
+	int	j;
+	int	*buff_tube;
+	int	nb_cmd;
+
+	j = 0;
+	buff_tube = NULL;
+	nb_cmd = mystatus->nb_cmd;
+	while (mystatus)
+	{
+		if (pipe(mystatus->cmd->tube) == -1)
+			exit(1);
+		run_command(mystatus, nb_cmd, mystatus->current_cmd, buff_tube);
+		mystatus = sx_process_next_2(mystatus);
+	}
 
 }

@@ -2,13 +2,16 @@
 
 size_t	count_var(t_mylist *env)
 {
-	size_t	len;
+	size_t		len;
+	t_mylist	*envc;
 
 	len = 0;
-	while (env)
+	envc = env;
+	while (envc)
 	{
 		len++;
-		env = env->next;
+		//if (envc->next)
+		envc = envc->next;
 	}
 	return (len);
 }
@@ -169,9 +172,11 @@ void	display_tab_of_cmd(char **tab)
 
 t_format *to_fill_(t_status *status, t_double_link_node *node, t_mylist *env, int i)
 {
-	char *my_path;
+	char		*my_path;
+	t_mylist	*envc;
 
-	my_path = ft_sx_path(((t_token *)node->data)->value, env);
+	envc = env;
+	my_path = ft_sx_path(((t_token *)node->data)->value, envc);
 	status->cmd->_path = my_path;
 	fill_2(status, &node, i);
 	//display_tab_of_cmd(status->cmd->_tab);
@@ -192,11 +197,11 @@ t_double_link_node	*next_process(t_double_link_node **node)
 	// while ((t_token *)((next_node->next))->data)
 	{
 		next_node = (next_node)->next;
-		if (!(next_node) )
+		if (!(next_node))
 			break ;
 		if (((t_token *)(next_node)->data)->type == COMMAND)
 		{
-			printf("NC : %s\n", ((t_token *)(next_node)->data)->value);
+			//printf("NC : %s\n", ((t_token *)(next_node)->data)->value);
 			return (next_node);
 		}
 	}
@@ -225,23 +230,23 @@ int	nb_of_cmd(t_status *status, t_double_link_node *node)
 t_status	*init_status(t_double_link_node *node, t_status *status, t_mylist *env)
 {
 	int	i;
+	t_mylist *envc;
 
 	if (!node)
 		return (NULL);
+	envc = env;
 	i = nb_token_for_cmd(&node);
 	status->cmd = malloc(sizeof(t_format));
 	status->cmd->_tab = (char **)malloc((i + 1) * sizeof(char *));
 	status->envp = malloc(sizeof(t_mylist));
-	status->envp = env;
+	status->envp = envc;
 	status->fdout = NULL;
 	status->fdin = NULL;
-	status->envc = env_to_tab(env);
-	to_fill_(status, node, env, i);
+	status->envc = env_to_tab(envc);
+	to_fill_(status, node, envc, i);
 	status->next_process = next_process(&node);
 	status->nb_cmd = nb_of_cmd(status, node);
 	status->current_cmd = status->nb_cmd;
-	if (status->nb_cmd > 1)
-		status->tube[(2 * status->nb_cmd - 2)];
 	return (status);
 }
 

@@ -51,9 +51,13 @@ char	*get_path(t_mylist *env)
 	t_mylist	*envc;
 
 	envc = env;
-	while (ft_strncmp(envc->var, "PATH", 5))
+	while (envc)
+	{
+		if (!ft_strncmp(envc->var, "PATH", 5))
+			return (envc->val);
 		envc = envc->next;
-	return (envc->val);
+	}
+	return (NULL);
 }
 
 char	*ft_sx_path(char *cmd, t_mylist *env_var)
