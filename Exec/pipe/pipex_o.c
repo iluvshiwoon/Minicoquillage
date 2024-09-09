@@ -255,62 +255,80 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		exit(1);
 	if (pid == 0)
 	{
-		// Si c' est la derniere commande, rediriger l'entrée
-		if (total_cmd - pos_cmd == 1)
-		{
-			if (dup2(buff[0], STDIN_FILENO) < 0)
-			{
-				perror("dup2");
-				exit(EXIT_FAILURE);
-			}
-		}
 		// Si c' est la premiere commande, rediriger la sortie
-		else if (pos_cmd == total_cmd)
+		if (pos_cmd == total_cmd)
 		{
 			close(mystatus->cmd->tube[0]);
 			if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) < 0)
 			{
-				perror("dup2");
+				perror("dup2-f");
 				exit(EXIT_FAILURE);
 			}
 		}
+		else if (pos_cmd != 1)
+		{
+			dup2(buff[0], mystatus->cmd->tube[0]);
+			dup2(mystatus->cmd->tube[0] , STDIN_FILENO);
+			close(mystatus->cmd->tube[0]);
+			if (buff[0]> 3)
+				ft_putnbr_fd(buff[0], 2);
+			if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) == -1)
+				perror("dup2-tube2");
+		}
+		// Si c' est la derniere commande, rediriger l'entrée
 		else
 		{
-			printf("ok\n");
+			close(mystatus->cmd->tube[0]);
+			close(mystatus->cmd->tube[1]);
+			if (dup2(buff[0], STDIN_FILENO) < 0)
+			{
+				perror("dernier-dup2-l");
+				printf("dernier-cmd-dup2 %d (%s)\n", errno, strerror(errno));
+				exit(EXIT_FAILURE);
+			}
 		}
 		//close condition
-		if (pos_cmd == 1)
-			close(mystatus->cmd->tube[0]);
-		else if (pos_cmd == total_cmd)
+		if (pos_cmd == total_cmd)
 		{
 			close(mystatus->cmd->tube[1]);
 		}
+		else if(pos_cmd == 1)
+		{
+			if(close(buff[0]) == -1)
+				perror("dernier-buff-close");
+		}
 		else
 		{
-			close(buff[0]);
-			close(mystatus->cmd->tube[1]);
+			if(close(buff[0]) == -1)
+				perror("buff-close");
+			if(close(mystatus->cmd->tube[1]) == -1)
+				perror("midcmd-tube1-close");
 		}
 		execute_simple_command_2(mystatus);
 	}
 	else
 	{
-		if (total_cmd - pos_cmd == 0)
+		if (total_cmd == pos_cmd)
+		{
 			close(mystatus->cmd->tube[1]);
+			buff = &mystatus->cmd->tube[0];
+			waitpid(pid, &status, 0);
+		}
 		else if (pos_cmd == 1)
 		{
-			close(mystatus->cmd->tube[0]);
 			close(mystatus->cmd->tube[1]);
-			close(buff[0]);
+			close(mystatus->cmd->tube[0]);
+			// close(buff[0]);
+			waitpid(pid, &status, 0);
 		}
 		else
 		{
-			close(buff[0]);
 			close(mystatus->cmd->tube[1]);
-
+			dup2(mystatus->cmd->tube[0], buff[0]);
+			close(mystatus->cmd->tube[0]);
+			waitpid(pid, &status, 0);
 		}
-		waitpid(pid, &status, 0);
 	}
-	buff = &mystatus->cmd->tube[0];
 }
 
 // Version 0
@@ -382,7 +400,7 @@ void	execut(t_status *mystatus)
 	int	nb_cmd;
 
 	j = 0;
-	buff_tube = NULL;
+	buff_tube = mystatus->cmd->tube;
 	nb_cmd = mystatus->nb_cmd;
 	while (mystatus)
 	{
@@ -390,6 +408,7 @@ void	execut(t_status *mystatus)
 			exit(1);
 		run_command(mystatus, nb_cmd, mystatus->current_cmd, buff_tube);
 		mystatus = sx_process_next_2(mystatus);
+		// if (*buff_tube)
+		// 	printf("prev_tube: %d\n", *buff_tube);
 	}
-
 }
