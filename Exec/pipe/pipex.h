@@ -16,7 +16,7 @@
 
 t_status	*sx_process_next_2(t_status *mystatus);
 void		execut(t_status *mystatus);
-void		execute_simple_command_2(t_status *mystatus);
+void		m_execve(t_status *mystatus);
 void		execute_with_pipes_2(t_status *mystatus);
 void		exec_multi(t_status *mystatus);
 void		last_command(t_status *status);
