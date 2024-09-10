@@ -123,7 +123,7 @@ void	handle_redirection(t_status *status, t_double_link_node **node)
 	if (!ft_strncmp(((t_token *)(*node)->data)->value, "<", 1))
 	{
 		status->fdin = ft_strdup(((t_token *)file->data)->value);
-		printf("handle_redir  %s %s\n", ((t_token *)file->data)->value , status->fdin);
+		// printf("handle_redir  %s %s\n", ((t_token *)file->data)->value , status->fdin);
 	}
 	if (!ft_strncmp(((t_token *)(*node)->data)->value, ">", 1))
 		status->fdout = ft_strdup(((t_token *)file->data)->value);

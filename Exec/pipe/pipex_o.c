@@ -63,6 +63,13 @@ void	m_execve(t_status *mystatus)
 	}
 }
 
+void close_fds(int *fds)
+{
+	if (fds[0] > 2)
+		close(fds[0]);
+	if (fds[1] > 2)
+		close(fds[1]);
+}
 
 void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 {
@@ -82,12 +89,34 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		{
 			close(mystatus->cmd->tube[0]);
 			close(mystatus->cmd->tube[1]);
+			if (fds[0] > 2)
+				dup2(fds[0], 0);
+			if (fds[1] > 2)
+				dup2(fds[1], 1);
 		}
 		// Si c' est la premiere commande, rediriger la sortie
 		else if (pos_cmd == total_cmd)
 		{
-			close(mystatus->cmd->tube[0]);
-			dup2(mystatus->cmd->tube[1], STDOUT_FILENO);
+			if (fds[0] > 2)
+			{
+				dup2(buff[0], STDIN_FILENO);
+				// if (dup2(mystatus->cmd->tube[0], STDIN_FILENO) == -1)
+				// 	perror("T2");
+				// if (dup2(fds[0], mystatus->cmd->tube[0]) == -1)
+				// 	perror("T1");
+			}
+			if (fds[1] < 2)
+			{
+				if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) == -1)
+					perror("T3");
+			}
+			else
+			{
+				if (dup2(fds[1], mystatus->cmd->tube[1]) == -1)
+					perror("T4");
+				if (dup2(fds[1], STDOUT_FILENO) == -1)
+					perror("T5");
+			}
 		}
 		else if (pos_cmd != 1)
 		{
@@ -101,17 +130,35 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		{
 			close(mystatus->cmd->tube[0]);
 			close(mystatus->cmd->tube[1]);
-			dup2(buff[0], STDIN_FILENO);
+			if (fds[0] < 2)
+			{
+				if (dup2(buff[0], STDIN_FILENO) == -1)
+					perror("T6");
+			}
+			else
+			{
+				close(buff[0]);
+				if (dup2(fds[0], STDIN_FILENO) == -1)
+					perror("T7");
+			}
 		}
 		//close condition
 		if (pos_cmd == total_cmd)
+		{
+			close_fds(fds);
+			close(mystatus->cmd->tube[0]);
 			close(mystatus->cmd->tube[1]);
-		else if (pos_cmd == 1)
+		}
+		else if (pos_cmd != 1)
+		{
+			close_fds(fds);
 			close(buff[0]);
+			close(mystatus->cmd->tube[1]);
+		}
 		else
 		{
+			close_fds(fds);
 			close(buff[0]);
-			close(mystatus->cmd->tube[1]);
 		}
 		m_execve(mystatus);
 	}
@@ -120,20 +167,24 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		if (total_cmd == 1)
 		{
 			close(mystatus->cmd->tube[0]);
-			close(mystatus->cmd->tube[0]);
-			wait(NULL);
+			close(mystatus->cmd->tube[1]);
+			waitpid(pid, &status, 0);
+			close_fds(fds);
 		}
 		else if (total_cmd == pos_cmd)
 		{
 			close(mystatus->cmd->tube[1]);
 			dup2(mystatus->cmd->tube[0], buff[0]);
 			waitpid(pid, &status, 0);
+			close_fds(fds);
 		}
 		else if (pos_cmd == 1)
 		{
 			close(mystatus->cmd->tube[1]);
 			close(mystatus->cmd->tube[0]);
 			waitpid(pid, &status, 0);
+			close_fds(fds);
+			// close buff
 		}
 		else
 		{
@@ -141,6 +192,7 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 			dup2(mystatus->cmd->tube[0], buff[0]);
 			close(mystatus->cmd->tube[0]);
 			waitpid(pid, &status, 0);
+			close_fds(fds);
 		}
 	}
 }
@@ -149,9 +201,9 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 
 void	execut(t_status *mystatus)
 {
-	int	j;
-	int	*buff_tube;
-	int	nb_cmd;
+	int		j;
+	int		*buff_tube;
+	int		nb_cmd;
 
 	j = 0;
 	buff_tube = mystatus->cmd->tube;

@@ -1,0 +1,5 @@
+redirection file
+error handler liste
+yes y | head demqnder infos
+cmd or builtin
+
