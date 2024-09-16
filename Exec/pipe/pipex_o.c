@@ -100,10 +100,6 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 			if (fds[0] > 2)
 			{
 				dup2(buff[0], STDIN_FILENO);
-				// if (dup2(mystatus->cmd->tube[0], STDIN_FILENO) == -1)
-				// 	perror("T2");
-				// if (dup2(fds[0], mystatus->cmd->tube[0]) == -1)
-				// 	perror("T1");
 			}
 			if (fds[1] < 2)
 			{
@@ -112,9 +108,9 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 			}
 			else
 			{
-				if (dup2(fds[1], mystatus->cmd->tube[1]) == -1)
+				if (dup2(mystatus->cmd->tube[1], fds[1]) == -1)
 					perror("T4");
-				if (dup2(fds[1], STDOUT_FILENO) == -1)
+				if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) == -1)
 					perror("T5");
 			}
 		}
@@ -139,6 +135,11 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 			{
 				close(buff[0]);
 				if (dup2(fds[0], STDIN_FILENO) == -1)
+					perror("T7");
+			}
+			if (fds[1] > 2)
+			{
+				if (dup2(fds[1], STDOUT_FILENO) == -1)
 					perror("T7");
 			}
 		}
@@ -184,7 +185,6 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 			close(mystatus->cmd->tube[0]);
 			waitpid(pid, &status, 0);
 			close_fds(fds);
-			// close buff
 		}
 		else
 		{
