@@ -21,6 +21,7 @@ void		execute_with_pipes_2(t_status *mystatus);
 void		exec_multi(t_status *mystatus);
 void		last_command(t_status *status);
 
+int	run_built(t_double_link_node *node_orig, t_mylist **env);
 
 
 #endif

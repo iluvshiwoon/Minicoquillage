@@ -34,11 +34,7 @@ void	echo_display(t_double_link_node *node, t_mylist **env, int fd)
 	content = (char *)node->data;
 	while (content[i])
 	{
-		printf("37\n");
-		if (content[i] == '$' && content[i + 1] != ' ')
-			display_env(fd, env, &content[++i]);
-		else
-			write(fd, &content[i], 1);
+		write(fd, &content[i], 1);
 		printf("42\n");
 		i++;
 	}
@@ -53,15 +49,8 @@ void	echo_display_opt(t_double_link_node *node, t_mylist **env, int fd)
 	content = (char *)node->data;
 	while (content[i])
 	{
-		printf("56\n");
-		if (content[i] == '$' && content[i + 1] != ' ')
-		{
-			i++;
-			display_env(fd, env, &content[i]);
-		}
-		else
-			write(fd, &content[i], 1);
-		printf("64\n");
+		write(fd, &content[i], 1);
+		printf("42\n");
 		i++;
 	}
 	write(fd, "\%", 1);
