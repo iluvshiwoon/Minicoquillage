@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 15:12:56 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:24:02 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	check_syntax(char *line)
 char	*concat_input(t_double_link_list *list)
 {
 	t_double_link_node	*node;
-	t_double_link_node	*temp_node;
+	// t_double_link_node	*temp_node;
 	size_t				i;
 	t_string			string;
 

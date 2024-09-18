@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:03:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/18 14:04:10 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:22:35 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
@@ -15,7 +15,6 @@ void	assign_quote(t_double_link_node *node)
 {
 	t_control_dll	control;
 	t_open_quote	open;
-	char			*temp;
 	size_t			j;
 
 	init_expand(&open, &control, &j, node);

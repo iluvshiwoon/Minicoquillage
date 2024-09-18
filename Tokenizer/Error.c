@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:54:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 14:44:54 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:20:36 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	print_error(char *error, t_control_dll *control, t_token *token)
 int	check_error1(t_control_dll *control, t_token *next)
 {
 	char	*error;
-	char	*newline;
+	// char	*newline;
 
 	error = "Minicoquillage: syntax error near unexpected token `%s'\n";
-	newline = "Minicoquillage: syntax error near unexpected token `newline'\n";
+	// newline = "Minicoquillage: syntax error near unexpected token `newline'\n";
 	if (control->token->type >= REDIRECTION && control->token->type <= HERE_DOC
 		&& next->type >= REDIRECTION && next->type <= HERE_DOC)
 		return (print_error(error, control, next), EXIT_FAILURE);
@@ -100,6 +100,7 @@ int	check_error_tokens(t_control_dll *control)
 
 	control->node = control->list->first_node;
 	control->token = NULL;
+    next = NULL;
 	if (check_error(control, control->list->first_node->data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	while (control->node)

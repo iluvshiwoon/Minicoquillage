@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/18 14:04:32 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:29:33 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 typedef enum e_token_type
 {
-	R_FILE = 0,
+	R_FILE = 1,
 	OPTION,
 	ARG,
 	OPEN_PARENTHESIS,

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:06:44 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/10 16:56:49 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:24:57 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ int	expand(size_t *j, char **value, char **temp,
 
 	token = (*node)->data;
     len = ft_strlen(token->value);
-	*temp = expand_expand(*j, *value);
-    while ((*value)[*j] && (*value)[*j] != '"' && (*value)[*j] != '\'' && !ft_sep((*value)[*j]))
+    *temp = expand_expand(*j, *value);
+    while ((*value)[*j] && (*value)[*j] != '"' &&\
+(*value)[*j] != '\'' && !ft_sep((*value)[*j]))
         ++(*j);
-	free(*value);
+    free(*value);
 	token->value = *temp;
 	*value = *temp;
 	(*j) = *j + ft_strlen(*value) - len - 1;

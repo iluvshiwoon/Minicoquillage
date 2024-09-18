@@ -1,5 +1,5 @@
-C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c)
-# C_FLAGS = -Wall -Werror -Wextra
+C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c)
+C_FLAGS = -Wall -Werror -Wextra
 INTERACTIVE = 0
 DEBUG = 1
 TOKEN = 2

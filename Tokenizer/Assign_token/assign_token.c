@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:00:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 15:09:48 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/18 17:23:13 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	populate_first_token(t_control_dll *control)
 {
-	t_token	*previous_token;
+	// t_token	*previous_token;
 	size_t	len_token;
 
 	control->token = control->list->first_node->data;
