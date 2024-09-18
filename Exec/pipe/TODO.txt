@@ -1,5 +1,5 @@
 redirection file
 error handler liste
-yes y | head demqnder infos
+yes y | head demander infos
 cmd or builtin
 

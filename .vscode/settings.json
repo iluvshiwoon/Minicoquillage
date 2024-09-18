@@ -73,6 +73,7 @@
     "minicoquillage.h": "c",
     "format.h": "c",
     "mylibc.h": "c",
-    "execution.h": "c"
+    "execution.h": "c",
+    "pipex.h": "c"
   }
 }

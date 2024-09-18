@@ -122,11 +122,11 @@ void	handle_redirection(t_status *status, t_double_link_node **node)
 	file = (*node)->next;
 	if (!ft_strncmp(((t_token *)(*node)->data)->value, "<", 1))
 	{
-		status->fdin = ft_strdup(((t_token *)file->data)->value);
+		status->cmd->fdin_ = ft_strdup(((t_token *)file->data)->value);
 		// printf("handle_redir  %s %s\n", ((t_token *)file->data)->value , status->fdin);
 	}
 	if (!ft_strncmp(((t_token *)(*node)->data)->value, ">", 1))
-		status->fdout = ft_strdup(((t_token *)file->data)->value);
+		status->cmd->fdout_ = ft_strdup(((t_token *)file->data)->value);
 }
 
 void	fill_2(t_status *status, t_double_link_node **node, int i)
@@ -229,24 +229,27 @@ int	nb_of_cmd(t_status *status, t_double_link_node *node)
 
 t_status	*init_status(t_double_link_node *node, t_status *status, t_mylist *env)
 {
-	int	i;
-	t_mylist *envc;
+	int			i;
+	t_mylist	*envc;
 
 	if (!node)
 		return (NULL);
-	envc = env;
-	i = nb_token_for_cmd(&node);
-	status->cmd = malloc(sizeof(t_format));
-	status->cmd->_tab = (char **)malloc((i + 1) * sizeof(char *));
-	status->envp = malloc(sizeof(t_mylist));
-	status->envp = envc;
-	status->fdout = NULL;
-	status->fdin = NULL;
-	status->envc = env_to_tab(envc);
-	to_fill_(status, node, envc, i);
-	status->next_process = next_process(&node);
-	status->nb_cmd = nb_of_cmd(status, node);
-	status->current_cmd = status->nb_cmd;
+	if (run_built(node, &env))
+	{
+		envc = env;
+		i = nb_token_for_cmd(&node);
+		status->cmd = malloc(sizeof(t_format));
+		status->cmd->_tab = (char **)malloc((i + 1) * sizeof(char *));
+		status->envp = malloc(sizeof(t_mylist));
+		status->envp = envc;
+		status->cmd->fdout_ = NULL;
+		status->cmd->fdin_ = NULL;
+		status->envc = env_to_tab(envc);
+		to_fill_(status, node, envc, i);
+		status->next_process = next_process(&node);
+		status->nb_cmd = nb_of_cmd(status, node);
+		status->current_cmd = status->nb_cmd;
+	}
 	return (status);
 }
 

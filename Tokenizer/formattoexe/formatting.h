@@ -9,6 +9,8 @@ typedef struct s_format
 	int		_haspipe;
 	int		mypid;
 	int		tube[2];
+	char	*fdin_;
+	char	*fdout_;
 	int		prev_tube;
 }	t_format;
 

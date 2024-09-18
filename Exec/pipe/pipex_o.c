@@ -29,8 +29,9 @@ int	handle_redirect_read(t_status *mystatus)
 	int	fdin;
 
 	fdin = STDIN_FILENO;
-	if (mystatus->fdin != NULL)
-		fdin = open_file(mystatus->fdin, STDIN_FILENO);
+	if (mystatus->cmd->fdin_ != NULL)
+		fdin = open_file(mystatus->cmd->fdin_, STDIN_FILENO);
+	// printf("FDIN: %s pour %s\n", mystatus->cmd->fdin_, mystatus->cmd->_tab[0]);
 	return (fdin);
 }
 
@@ -39,8 +40,8 @@ int	handle_redirect_write(t_status *mystatus)
 	int	fdout;
 
 	fdout = STDOUT_FILENO;
-	if (mystatus->fdout != NULL)
-		fdout = open_file(mystatus->fdout, STDOUT_FILENO);
+	if (mystatus->cmd->fdout_ != NULL)
+		fdout = open_file(mystatus->cmd->fdout_, STDOUT_FILENO);
 	return (fdout);
 }
 
@@ -97,29 +98,32 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		// Si c' est la premiere commande, rediriger la sortie
 		else if (pos_cmd == total_cmd)
 		{
-			if (fds[0] > 2)
+			// if (fds[0] < 2 && fds[1] < 2)
 			{
-				dup2(buff[0], STDIN_FILENO);
-			}
-			if (fds[1] < 2)
-			{
-				if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) == -1)
-					perror("T3");
-			}
-			else
-			{
-				if (dup2(mystatus->cmd->tube[1], fds[1]) == -1)
-					perror("T4");
-				if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) == -1)
-					perror("T5");
+				if (fds[0] > 2)
+					dup2(fds[0], STDIN_FILENO);
+				close(mystatus->cmd->tube[0]);
+				if (fds[1] < 2)
+				{
+					if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) == -1)
+						perror("T5");
+				}
+				else{
+					dup2(fds[1], mystatus->cmd->tube[1]);
+					dup2(mystatus->cmd->tube[1], STDOUT_FILENO);
+				}
+
 			}
 		}
 		else if (pos_cmd != 1)
 		{
-			dup2(buff[0], mystatus->cmd->tube[0]);
-			dup2(mystatus->cmd->tube[0] , STDIN_FILENO);
-			close(mystatus->cmd->tube[0]);
-			dup2(mystatus->cmd->tube[1], STDOUT_FILENO);
+			if (fds[0] < 2 && fds[1] < 2)
+			{
+				dup2(buff[0], mystatus->cmd->tube[0]);
+				dup2(mystatus->cmd->tube[0] , STDIN_FILENO);
+				close(mystatus->cmd->tube[0]);
+				dup2(mystatus->cmd->tube[1], STDOUT_FILENO);
+			}
 		}
 		// Si c' est la derniere commande, rediriger l'entrée
 		else
@@ -154,6 +158,7 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		{
 			close_fds(fds);
 			close(buff[0]);
+			close(mystatus->cmd->tube[0]);
 			close(mystatus->cmd->tube[1]);
 		}
 		else
@@ -175,7 +180,6 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		else if (total_cmd == pos_cmd)
 		{
 			close(mystatus->cmd->tube[1]);
-			dup2(mystatus->cmd->tube[0], buff[0]);
 			waitpid(pid, &status, 0);
 			close_fds(fds);
 		}
