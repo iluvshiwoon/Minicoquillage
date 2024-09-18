@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/16 17:02:04 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/18 14:04:32 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,5 +183,8 @@ int	expand(size_t *j, char **value, char **temp,
 		t_double_link_node **node);
 char	*expand_expand(size_t j, char *token);
 char * expand_all(char * str);
+
+// assign_quote.c
+void	assign_quote(t_double_link_node *node);
 
 #endif
