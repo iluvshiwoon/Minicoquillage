@@ -6,12 +6,11 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/07 12:15:05 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/09/20 19:11:58 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
-#include "./../Exec/execution.h"
 #include "./../Exec/pipe/pipex.h"
 
 int	check_syntax(char *line)

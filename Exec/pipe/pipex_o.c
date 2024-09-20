@@ -55,10 +55,19 @@ void ft_close(t_status *mystatus, int in , int out)
 		close(out);
 }
 
+void	printExecveVars(t_status *mystatus)
+{
+	printf("CMD: %s\n", mystatus->cmd->_path);
+	printf("CMD: %s\n", mystatus->cmd->_tab[0]);
+	printf("CMD: %s\n", mystatus->cmd->_tab[1]);
+}
+
 void	m_execve(t_status *mystatus)
 {
+	printExecveVars(mystatus);
 	if (execve(mystatus->cmd->_path, mystatus->cmd->_tab, mystatus->envc) == -1)
 	{
+		printf("COUCOUCOCU\n");
 		printf("execve simple command failed %d (%s)\n", errno, strerror(errno));
 		exit(EXIT_FAILURE);
 	}

@@ -46,28 +46,72 @@ void	env_to_tab_2(t_mylist *env, char **envtab, size_t nb_var)
 
 char	**env_to_tab(t_mylist *env)
 {
-	t_mylist	*envc;
-	char		**envtab;
-	size_t		nb_var;
-	int			i;
+    int count = 0;
+    t_mylist *current = env;
 
-	i = -1;
-	envc = env;
-	nb_var = count_var(env);
-	envtab = malloc(nb_var * sizeof(char *));
-	if (!envtab)
-		return (NULL);
-	while (envtab[++i])
-		envtab[i] = ft_strdup("");
-	while (envc)
-	{
-		envtab[i] = ft_strdup(envc->var);
-		envc = envc->next;
-	}
-	envtab[i] = NULL;
-	env_to_tab_2(env, envtab, nb_var);
-	return (envtab);
+    // Compter le nombre d'éléments dans la liste
+    while (current != NULL)
+    {
+        count++;
+        current = current->next;
+    }
+
+    // Allouer de la mémoire pour le tableau de chaînes de caractères
+    char **tab = malloc((count + 1) * sizeof(char *));
+    if (tab == NULL)
+        return NULL;
+
+    // Remplir le tableau avec les éléments de la liste
+    current = env;
+    for (int i = 0; i < count; i++)
+    {
+        // Créer une chaîne formatée "var=val"
+        tab[i] = malloc(strlen((char *)current->var) + strlen((char *)current->val) + 2); // +2 pour '=' et '\0'
+        if (tab[i] == NULL)
+        {
+            // Libérer la mémoire en cas d'échec
+            for (int j = 0; j < i; j++)
+                free(tab[j]);
+            free(tab);
+            return NULL;
+        }
+        sprintf(tab[i], "%s=%s", (char *)current->var, (char *)current->val);
+        current = current->next;
+    }
+
+    // Terminer le tableau avec un pointeur NULL
+    tab[count] = NULL;
+
+    return tab;
 }
+
+// char	**env_to_tab(t_mylist *env)
+// {
+// 	// t_mylist	*envc;
+// 	// char		**envtab;
+// 	// size_t		nb_var;
+// 	// int			i;
+
+// 	// i = -1;
+// 	// envc = env;
+// 	// nb_var = count_var(env);
+// 	// envtab = malloc(nb_var * sizeof(char *));
+// 	// if (!envtab)
+// 	// 	return (NULL);
+// 	// while (envtab[++i])
+// 	// 	envtab[i] = ft_strdup("");
+// 	// while (envc)
+// 	// {
+// 	// 	envtab[i] = ft_strdup(envc->var);
+// 	// 	envc = envc->next;
+// 	// }
+// 	// envtab[i] = NULL;
+// 	// env_to_tab_2(env, envtab, nb_var);
+// 	// return (envtab);
+
+
+
+// }
 
 int	expression(t_token *token)
 {
@@ -232,10 +276,11 @@ t_status	*init_status(t_double_link_node *node, t_status *status, t_mylist *env)
 	int			i;
 	t_mylist	*envc;
 
+	// printf("env->val : %s\n", (char *)env->val);
 	if (!node)
 		return (NULL);
-	if (run_built(node, &env))
-	{
+	// if (run_built(node, &env))
+	// {
 		envc = env;
 		i = nb_token_for_cmd(&node);
 		status->cmd = malloc(sizeof(t_format));
@@ -244,12 +289,12 @@ t_status	*init_status(t_double_link_node *node, t_status *status, t_mylist *env)
 		status->envp = envc;
 		status->cmd->fdout_ = NULL;
 		status->cmd->fdin_ = NULL;
-		status->envc = env_to_tab(envc);
+		status->envc = env_to_tab(env);
 		to_fill_(status, node, envc, i);
 		status->next_process = next_process(&node);
 		status->nb_cmd = nb_of_cmd(status, node);
 		status->current_cmd = status->nb_cmd;
-	}
+	// }
 	return (status);
 }
 
