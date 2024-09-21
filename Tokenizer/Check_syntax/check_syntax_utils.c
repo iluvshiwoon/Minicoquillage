@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 15:27:47 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/21 12:38:58 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	init_control(t_control_dll *control)
 	control->node = malloc(sizeof(*control->node));
 	if (!control->list || !control->node)
 		return (free(control->list), free(control->node), exit(EXIT_FAILURE));
+    *control->node = (t_double_link_node){};
+    *control->list = (t_double_link_list){};
 	init_list(control->list);
 }
 
@@ -65,6 +67,7 @@ char	*update_node(t_control_dll *control, char *prompt, char *line)
 	if (!control->node)
 		return (dl_free_list(control->list), free(prompt), free(line),
 			exit(EXIT_FAILURE), NULL);
+    *control->node = (t_double_link_node){};
 	line = readline("· ");
 	if (!control->node)
 		return (dl_free_list(control->list), free(prompt), free(line),

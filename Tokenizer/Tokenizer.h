@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/18 17:29:33 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/21 11:54:22 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,12 @@ typedef enum e_token_type
 	OR,
 	REDIRECTION,
 	HERE_DOC,
+    // EOE
 }						t_token_type;
 
 typedef enum e_quote_type
 {
-	NONE,
+	NONE = 0,
 	DOUBLE,
 	SINGLE,
 }						t_quote_type;

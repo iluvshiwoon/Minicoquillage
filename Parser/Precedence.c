@@ -6,12 +6,11 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:55:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/19 19:15:07 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/21 11:39:49 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
-int compute_expr(t_control_dll * control, t_double_link_node * beg, t_double_link_node * end);
 
 void	print_expr(t_double_link_node * beg, t_double_link_node * end)
 {
@@ -84,7 +83,8 @@ int compute_atom(t_control_dll * control, t_double_link_node ** beg, t_double_li
     return (exit_status);
 }
 
-int compute_expr(t_control_dll * control, t_double_link_node * beg, t_double_link_node * end)
+int compute_expr(t_control_dll * control,\
+                 t_double_link_node * beg, t_double_link_node * end, t_ast * ast)
 {   
     int exit_status;
     t_double_link_node atom_end;
@@ -102,12 +102,15 @@ int compute_expr(t_control_dll * control, t_double_link_node * beg, t_double_lin
     return(exit_status);
 }
 
-void rec_parser(t_control_dll * control)
+void parser(t_control_dll * control)
 {
     t_double_link_node * beg;
     t_double_link_node * end;
+    t_ast * ast;
 
+    ast = malloc(sizeof(*ast));
+    *ast = (t_ast){};
     beg = control->list->first_node;
     end = control->list->last_node;
-    compute_expr(control, beg, end);
+    compute_expr(control, beg, end, ast);
 }

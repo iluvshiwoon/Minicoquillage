@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/18 14:05:01 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/21 12:35:49 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
@@ -16,7 +16,9 @@ void	add_token(size_t i, size_t j, char *line, t_control_dll *control)
 	char	*temp;
 
 	control->node = malloc(sizeof(*control->node));
+    *control->node = (t_double_link_node){};
 	control->token = malloc(sizeof(*control->token));
+    *control->token = (t_token){};
 	control->token->type = COMMAND;
 	temp = malloc(sizeof(char) * (j - i + 1));
 	ft_strlcpy(temp, line + i, j - i + 1);
@@ -47,6 +49,7 @@ size_t	init_create_tokens(t_open_quote *open, t_control_dll *control,
 	open->double_quote = 0;
 	open->single_quote = 0;
 	control->list = malloc(sizeof(*control->list));
+    *control->list = (t_double_link_list){};
 	if (!(control->list))
 		return (dl_free_token_list(control->list), free(line),
 			exit(EXIT_SUCCESS), *j);
@@ -69,5 +72,11 @@ t_double_link_list	*expand_nodes(size_t i, size_t j, t_control_dll *control,
         assign_quote(control->node);
 		control->node = control->node->next;
 	}
+    // control->token = malloc(sizeof(*(control->token)));
+    // control->node = malloc(sizeof(*control->node));
+    // *(control->token) = (t_token){};
+    // control->token->type = EOE;
+    // control->node->data = control->token;
+    // control->list->pf_insert_end(control->list,control->node);
 	return (control->list);
 }
