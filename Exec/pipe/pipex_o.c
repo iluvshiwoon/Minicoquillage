@@ -64,10 +64,9 @@ void	printExecveVars(t_status *mystatus)
 
 void	m_execve(t_status *mystatus)
 {
-	printExecveVars(mystatus);
+	// printExecveVars(mystatus);
 	if (execve(mystatus->cmd->_path, mystatus->cmd->_tab, mystatus->envc) == -1)
 	{
-		printf("COUCOUCOCU\n");
 		printf("execve simple command failed %d (%s)\n", errno, strerror(errno));
 		exit(EXIT_FAILURE);
 	}
@@ -107,7 +106,6 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		// Si c' est la premiere commande, rediriger la sortie
 		else if (pos_cmd == total_cmd)
 		{
-			// if (fds[0] < 2 && fds[1] < 2)
 			{
 				if (fds[0] > 2)
 					dup2(fds[0], STDIN_FILENO);
