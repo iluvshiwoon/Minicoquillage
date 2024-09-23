@@ -1,4 +1,4 @@
-C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c)
+C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c)
 C_FLAGS = -Wall -Werror -Wextra
 INTERACTIVE = 0
 DEBUG = 1
