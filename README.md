@@ -4,7 +4,7 @@
 2. Create Map with precedence value and associativity
 3. Implement precedence climbing on the list : [algo](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing)
 4. Implement Signal
-5. Error Management
+5. Error Management (check syntax error for heredoc)
 
 ## IN NO SPECIFIC ORDER
 * Implement Pipe [Pipex Guide](https://reactive.so/post/42-a-comprehensive-guide-to-pipex)
