@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:55:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/24 17:50:58 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/24 18:25:52 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ bool is_op(int type)
     return (false);
 }
 
-t_double_link_node * get_next_op(t_control_dll * control, t_double_link_node * beg)
+t_double_link_node * get_next_op(t_control_dll * control, t_double_link_node * beg\
+                                 ,t_double_link_node * end)
 {
     int count_parenthesis;
 
@@ -47,10 +48,14 @@ t_double_link_node * get_next_op(t_control_dll * control, t_double_link_node * b
     control->token = beg->data;
     if (control->token->type == OPEN_PARENTHESIS)
         count_parenthesis++;
-    while ((count_parenthesis || !is_op(control->token->type)) && beg->next)
+    while ((count_parenthesis || !is_op(control->token->type)) && beg->next != end->next)
     {
         beg = beg->next;
         control->token = beg->data;
+        if (control->token->type == OPEN_PARENTHESIS)
+            count_parenthesis++;
+        else if (control->token->type == CLOSE_PARENTHESIS)
+            count_parenthesis--;
     }
     return(beg); 
 }
@@ -166,6 +171,7 @@ int compute_atom(t_control_dll * control, t_double_link_node * beg,\
     if (control->token->type == OPEN_PARENTHESIS)
     {
         int count = 1;
+        control->node = beg;
         while (count)
         {
             control->node = control->node->next; 
@@ -206,7 +212,7 @@ int compute_expr(t_control_dll * control,\
     {
         p_node = malloc(sizeof(*p_node));
         *p_node = (t_parser_node){};
-        next_op = get_next_op(control,beg); // fix op outside parenth
+        next_op = get_next_op(control,beg,end); // fix op outside parenth
         current_node->data = p_node;
         if (next_op == end)
         {
