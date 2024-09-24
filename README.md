@@ -13,7 +13,7 @@
 * Implement Here-Doc [DONE: decide output]
 * Search Path function [DONE: may be refacto]
 * Bultins [TO COMPLETE]
-* Unit Test [TOKENS, SYNTAX, LEAK] (Could add more test to each) (Check LEAK BEHAVIOR)
+* Unit Test [TOKENS, SYNTAX, LEAK] (Could add more test to each) (Check LEAK BEHAVIOR) (Sanitize + malloc protection)
 
 ## OPTIONAL
 * Add path to prompt [DONE]
