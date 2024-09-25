@@ -28,9 +28,8 @@ t_mylist	*ft_env(char **env);
 int			ft_pwd(void);
 void		ft_unset(t_mylist *env, char *variable);
 void		ft_export(t_mylist *env, char *variable);
-void	ft_echo( t_double_link_node *node, t_mylist **env, int fd);
+void		ft_echo( t_double_link_node *node, t_mylist **env, int fd);
 void	ft_cd(char *new_path, t_mylist *env);
-// void ft_echo(char **msg);
 void ft_exit(void);
 
 

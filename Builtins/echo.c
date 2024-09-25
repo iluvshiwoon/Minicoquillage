@@ -3,7 +3,7 @@
 
 int	is_option(t_double_link_node *node)
 {
-	if (((t_token *)node->data)->type == REDIRECTION)
+	if (((t_token *)node->data)->type == OPTION)
 		return (1);
 	return (0);
 }
@@ -31,42 +31,49 @@ void	echo_display(t_double_link_node *node, t_mylist **env, int fd)
 	char	*content;
 
 	i = 0;
-	content = (char *)node->data;
+	content = ((t_token *)node->data)->value;
 	while (content[i])
 	{
 		write(fd, &content[i], 1);
-		printf("42\n");
 		i++;
 	}
 }
 
 void	echo_display_opt(t_double_link_node *node, t_mylist **env, int fd)
 {
-	int		i;
-	char	*content;
+	int				i;
+	char			*content;
+	t_token_type	type;
 
 	i = 0;
-	content = (char *)node->data;
-	while (content[i])
+	content = ((t_token *)node->data)->value;
+	type = ((t_token *)node->data)->type;
+	if (type == OPTION)
+		return ;
+	else
 	{
-		write(fd, &content[i], 1);
-		printf("42\n");
-		i++;
+		while (content[i])
+		{
+			write(fd, &content[i], 1);
+			i++;
+		}
 	}
-	write(fd, "\%", 1);
 }
 
-void	next_arg_display(t_double_link_node *node)
+t_double_link_node	*next_arg_display(t_double_link_node *node)
 {
 	if (node->next)
 	{
 		if (((t_token *)node->data)->type == REDIRECTION)
-			node = node->next->next;
+			return node->next->next;
+		else if (((t_token *)node->data)->type == OPTION)
+			return node->next;
 		else if (((t_token *)node->data)->type == ARG)
-			node = node->next;
+			return node->next;
 		else
-			node = NULL;
+			return NULL;
 	}
+	return NULL;
 }
 
 void	ft_echo(t_double_link_node *node_orig, t_mylist **env, int fd)
@@ -79,11 +86,16 @@ void	ft_echo(t_double_link_node *node_orig, t_mylist **env, int fd)
 	node = node->next;
 	if (is_option(node))
 	{
-		// node = node->next;
+		node = node->next;
 		while (node)
 		{
-			echo_display_opt(node, env, fd);
-			next_arg_display(node);
+			if (((t_token *)node->data)->type == ARG)
+			{
+				echo_display_opt(node, env, fd);
+				if (node)
+					write(fd, " ", 1);
+			}
+			node = next_arg_display(node);
 		}
 	}
 	else
@@ -91,7 +103,11 @@ void	ft_echo(t_double_link_node *node_orig, t_mylist **env, int fd)
 		while (node)
 		{
 			echo_display(node, env, fd);
-			next_arg_display(node);
+			node = next_arg_display(node);
+			if (node)
+				write(fd, " ", 1);
+			else
+				write(fd, "\n", 1);
 		}
 	}
 }
