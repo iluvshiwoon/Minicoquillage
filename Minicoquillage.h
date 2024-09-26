@@ -10,9 +10,7 @@
 
 enum e_mode {
     INTERACTIVE,
-    DEBUG,
-    TOKEN,
-    EXPANSION,
+    TOKENIZER,
 };
 
 #ifndef MODE

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/25 16:23:32 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/26 16:20:25 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ void	debug(char *line)
 	populate_tokens(&control);
 	if (check_error_tokens(&control) == EXIT_FAILURE)
 		return ;
-    if (MODE == DEBUG)
+    if (MODE == TOKENIZER)
         print_csv(control.list);
-    else if (MODE == EXPANSION)
-        print_first_token(&control); 
+    // else if (MODE == EXPANSION)
+    //     print_first_token(&control); 
     return (dl_free_token_list(control.list));
 }
