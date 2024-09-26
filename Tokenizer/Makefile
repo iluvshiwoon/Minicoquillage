@@ -6,16 +6,16 @@ TOKENIZER = 1
 NAME = Minicoquillage
 TEST = ./test
 
-.PHONY: all clean fclean re syntax token
-.DEFAULT: all
+.PHONY: clean fclean re syntax token
+.DEFAULT: test
 
 syntax: $(C_FILES) | build
 	@cc -g $(C_FLAGS) -D MODE=$(TOKENIZER) $^ -o $(NAME) -L ../42_MyLibC -lft -lreadline
-	@bash $(TEST)/tester_syntax.sh $(TEST)/syntax_error_test.csv $(CURDIR)/../$(NAME)
+	@bash $(TEST)/tester_syntax.sh $(TEST)/syntax_error_test.csv $(CURDIR)/$(NAME)
 
 token: $(C_FILES) | build
 	@cc -g $(C_FLAGS) -D MODE=$(TOKENIZER) $^ -o $(NAME) -L ../42_MyLibC -lft -lreadline
-	@bash $(TEST)/tester_tokens.sh $(TEST)/tokens_test.csv $(CURDIR)/../$(NAME)
+	@bash $(TEST)/tester_tokens.sh $(TEST)/tokens_test.csv $(CURDIR)/$(NAME)
 
 test: | syntax token
 
@@ -37,4 +37,4 @@ fclean: clean
 	@-rm -f $(NAME)
 	@$(MAKE) -C ../42_MyLibC fclean >/dev/null
 
-re: fclean all
+re: fclean test
