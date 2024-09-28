@@ -12,8 +12,7 @@ $(NAME): $(C_FILES) | build
 	cc -g $(C_FLAGS) $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 
 tokenizer:
-	@printf "\n"
-	@$(MAKE) -C ./Tokenizer test | ./test.sh
+	@$(MAKE) -sC ./Tokenizer
 
 build:
 	$(MAKE) -C 42_MyLibC

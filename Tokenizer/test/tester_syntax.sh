@@ -10,8 +10,9 @@ TEST_COUNT=0
 FAILED_TESTS=0
 
 # Print a header
-echo "Test Results:"
-echo "------------"
+# echo "Test Results:"
+# echo "------------"
+echo ""
 
 # Iterate over each row in the csv file
 while IFS="," read -r input expected_output
@@ -44,8 +45,8 @@ do
         done
         echo -e "$diff_output\033[0m"
         echo
-    else
-        printf "\033[92mTest %3d: Passed\033[0m\n" "$TEST_COUNT"
+    # else
+    #     printf "\033[92mTest %3d: Passed\033[0m\n" "$TEST_COUNT"
         # echo "  Input:    '$input'"
         # echo
     fi
