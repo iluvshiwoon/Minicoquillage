@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/26 16:20:46 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/29 17:18:50 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int	main(int argc, char **argv)
         while (1)
         {
             if(tokenizer(&control) == EXIT_SUCCESS)
+            {
                 parser(&control);
+                dl_free_token_list(control.list);
+            }
         }
     }
 	return (0);

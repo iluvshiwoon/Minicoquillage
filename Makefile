@@ -2,6 +2,7 @@ C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c)
 C_FLAGS = -Wall -Werror -Wextra
 
 NAME = Minicoquillage
+TEST = ./test
 
 .PHONY: all clean fclean re syntax token
 .DEFAULT: all
@@ -13,6 +14,9 @@ $(NAME): $(C_FILES) | build
 
 tokenizer:
 	@$(MAKE) -sC ./Tokenizer
+
+leak: $(NAME)
+	expect -f $(TEST)/expect_leak $(TEST)/leak_test.csv $(CURDIR)/$(NAME)
 
 build:
 	$(MAKE) -C 42_MyLibC

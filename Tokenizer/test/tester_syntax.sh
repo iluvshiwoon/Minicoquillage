@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Set the path to your C program
 PROGRAM="$2"
@@ -58,4 +58,3 @@ echo -e "\033[94mTest Summary: Syntax\033[0m"
 echo -e "  Total Tests:  $TEST_COUNT"
 echo -e "  \033[91mFailed Tests: $FAILED_TESTS\033[0m"
 echo -e "  \033[92mPassed Tests: $((TEST_COUNT - FAILED_TESTS))\033[0m"
-
