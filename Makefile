@@ -2,6 +2,9 @@ C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c)
 C_FLAGS = -Wall -Werror -Wextra
 
 NAME = Minicoquillage
+TOKENIZER = ./Tokenizer/test
+LEAK = $(TOKENIZER)/syntax_error_cmd.txt $(TOKENIZER)/tokens_cmd.txt
+
 TEST = ./test
 
 .PHONY: all clean fclean re syntax token
@@ -16,6 +19,7 @@ tokenizer:
 	@$(MAKE) -sC ./Tokenizer
 
 leak: $(NAME)
+	cat $(LEAK) > $(TEST)/leak_test.csv
 	expect -f $(TEST)/expect_leak $(TEST)/leak_test.csv $(CURDIR)/$(NAME)
 
 build:
