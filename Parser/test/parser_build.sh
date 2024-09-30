@@ -12,11 +12,13 @@ while IFS= read -r line; do
 $line 
 EOF
 )
+printf "%s" "$line2bash"
   parser=$(./Minicoquillage "$line")
   parser2bash=$(bash --posix 2>&1 <<EOF
 $parser 
 EOF
 )
+printf "%s" "$parser2bash"
 # output=$(echo "$output" | sed '2d' | sed -r 's/^bash: line 1: (.*)$/Minicoquillage: \1/') 
 
   # Store the command and output in the CSV file
