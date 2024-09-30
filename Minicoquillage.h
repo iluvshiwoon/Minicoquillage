@@ -11,6 +11,7 @@
 enum e_mode {
     INTERACTIVE,
     TOKENIZER,
+    PARSER,
 };
 
 #ifndef MODE

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/29 17:18:50 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/09/30 19:03:58 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,7 @@ int	main(int argc, char **argv)
 {
 	t_control_dll	control;
 
-    if (MODE == TOKENIZER)
-	{
-        if (argc == 1)
-            return (EXIT_FAILURE);
-		debug(argv[1]);
-		return (0);
-	}
-    else if (MODE == INTERACTIVE)
+    if (MODE == INTERACTIVE)
     {
         while (1)
         {
@@ -34,5 +27,12 @@ int	main(int argc, char **argv)
             }
         }
     }
+    else 
+	{
+        if (argc == 1)
+            return (EXIT_FAILURE);
+		    debug(argv[1]);
+		return (0);
+	}
 	return (0);
 }
