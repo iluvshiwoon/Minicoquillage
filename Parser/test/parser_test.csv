@@ -1,72 +1,28 @@
-,parser_build.sh
-parser_cmd.txt
-parser_test.csv
-parser_test.sh
-Directory listed
-Mon Sep 30 21:03:53 CEST 2024
-,parser_build.sh
-parser_cmd.txt
-parser_test.csv
-parser_test.sh
-/home/kgriset/Documents/Minicoquillage/Parser/test
-,parser_build.sh
-parser_cmd.txt
-parser_test.csv
-parser_test.sh
-Directory listed
-Mon Sep 30 21:03:53 CEST 2024
-,parser_build.sh
-parser_cmd.txt
-parser_test.csv
-parser_test.sh
-/home/kgriset/Documents/Minicoquillage/Parser/test
-Hello
-,parser_build.sh
-parser_cmd.txt
-parser_test.csv
-parser_test.sh
-Directory listed
-Mon Sep 30 21:03:53 CEST 2024
-Hello
-,parser_build.sh
-parser_cmd.txt
-parser_test.csv
-parser_test.sh
-/home/kgriset/Documents/Minicoquillage/Parser/test
-,parser_build.sh
-parser_cmd.txt
-parser_test.csv
-parser_test.sh
-Directory listed
-Mon Sep 30 21:03:53 CEST 2024
-Hello
-,parser_build.sh
-parser_cmd.txt
-parser_test.csv
-parser_test.sh
-/home/kgriset/Documents/Minicoquillage/Parser/test
-Hello
-,
-,bash: line 1: input.txt: No such file or directory
-,
-,bash: line 1: input.txt: No such file or directory
-,/home/kgriset/Documents/Minicoquillage/Parser/test
-,
-,/home/kgriset/Documents/Minicoquillage/Parser/test
-,
-,bash: line 1: input.txt: No such file or directory
-,bash: line 1: input.txt: No such file or directory
-,bash: line 1: input.txt: No such file or directory
-,bash: line 1: input.txt: No such file or directory
-,Hello
-,Mon Sep 30 21:03:53 CEST 2024
-Date printed
-,Hello
-World
-,Hello
-,Hello
-,Hello
-World
-,Hello
-World
-,Hello
+MakefileMinicoquillageParser.hPrecedence.ctestDirectory listedTue Oct  1 18:53:18 CEST 2024,MakefileMinicoquillageParser.hPrecedence.ctestDirectory listedTue Oct  1 18:53:18 CEST 2024
+MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/Parser,MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/Parser
+MakefileMinicoquillageParser.hPrecedence.ctestDirectory listedTue Oct  1 18:53:18 CEST 2024,MakefileMinicoquillageParser.hPrecedence.ctestDirectory listedTue Oct  1 18:53:18 CEST 2024
+MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/ParserHello,MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/ParserHello
+MakefileMinicoquillageParser.hPrecedence.ctestDirectory listedTue Oct  1 18:53:18 CEST 2024Hello,MakefileMinicoquillageParser.hPrecedence.ctestDirectory listedTue Oct  1 18:53:18 CEST 2024Hello
+MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/Parser,MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/Parser
+MakefileMinicoquillageParser.hPrecedence.ctestDirectory listedTue Oct  1 18:53:18 CEST 2024Hello,MakefileMinicoquillageParser.hPrecedence.ctestDirectory listedTue Oct  1 18:53:18 CEST 2024Hello
+MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/ParserHello,MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/ParserHello
+MakefileMinicoquillageParser.hPrecedence.ctest,
+MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/Parser,bash: line 1: input.txt: No such file or directory
+MakefileMinicoquillageParser.hPrecedence.ctest,
+MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/ParserHello,bash: line 1: input.txt: No such file or directory
+Makefile,Makefile
+Makefile/home/kgriset/Documents/Minicoquillage/Parser,Makefile/home/kgriset/Documents/Minicoquillage/Parser
+Makefile,Makefile
+Makefile/home/kgriset/Documents/Minicoquillage/ParserHello,Makefile/home/kgriset/Documents/Minicoquillage/ParserHello
+MakefileMinicoquillageParser.hPrecedence.ctestTue Oct  1 18:53:18 CEST 2024Hello,bash: line 1: input.txt: No such file or directory
+MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/Parser,bash: line 1: input.txt: No such file or directory
+MakefileMinicoquillageParser.hPrecedence.ctestTue Oct  1 18:53:18 CEST 2024Hello,bash: line 1: input.txt: No such file or directory
+MakefileMinicoquillageParser.hPrecedence.ctest/home/kgriset/Documents/Minicoquillage/ParserHello,bash: line 1: input.txt: No such file or directory
+Hello,Hello
+Tue Oct  1 18:53:18 CEST 2024Date printed,Tue Oct  1 18:53:18 CEST 2024Date printed
+HelloWorld,HelloWorld
+Hello,Hello
+Hello,Hello
+HelloWorld,HelloWorld
+HelloWorld,HelloWorld
+Hello,Hello

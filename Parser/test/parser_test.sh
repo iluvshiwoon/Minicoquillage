@@ -25,7 +25,7 @@ do
         # Increment the failed tests count
         ((FAILED_TESTS++))
         printf "\033[91mTest %3d: Failed\033[0m\n" "$TEST_COUNT"
-        echo "  Input:    $input"
+        # echo "  Input:    $input"
         echo "  Expected: $expected_output"
         # echo "  Got:      '$output'"
         # echo
