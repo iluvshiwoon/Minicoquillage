@@ -1,6 +1,5 @@
 #include "./builtins.h"
 
-
 int	ft_separator(char *variable)
 {
 	int		i;
@@ -81,6 +80,7 @@ void	put_envc(t_mylist *env)
 		cursor = cursor->next;
 	}
 }
+
 
 // int	main(int ac, char **av, char **env)
 // {

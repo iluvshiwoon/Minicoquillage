@@ -6,7 +6,7 @@ int ft_pwd(void)
 
 	if(getcwd(cwd, sizeof(cwd)))
 	{
-		ft_printf("%s\n", cwd);
+		printf("%s\n", cwd);
 		return (0);
 	}
 	return (1);

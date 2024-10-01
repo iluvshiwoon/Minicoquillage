@@ -17,7 +17,7 @@ char	*var_exist(char *var, char **env)
 	return (NULL);
 }
 
-void	is_variable(char *variable, char **env)
+char	*is_variable(char *variable, char **env)
 {
 	int		i;
 	char	*space;

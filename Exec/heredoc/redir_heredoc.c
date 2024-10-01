@@ -52,9 +52,9 @@ int heredoc(char *limiter)
 	return (hd);
 }
 
-int main()
+int main(int ac , char **av)
 {
-	int k = heredoc("toto to");
+	int k = heredoc(av[1]);
 	close (k);
 }
 

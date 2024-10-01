@@ -29,7 +29,7 @@ int	var_missing(t_mylist **env, char *str)
 	envc = *env;
 	while (envc)
 	{
-		if (!ft_strncmp(envc->var, var, ft_strlen(var + 1)))
+		if (!ft_strncmp(envc->var, var, ft_strlen(var) + 1))
 			return (0);
 		envc = envc->next;
 	}
@@ -116,7 +116,7 @@ void	updateto_env(t_mylist **env, char *var, char *val)
 	while (envc)
 	{
 		old_env_val = envc->val;
-		if (!ft_strncmp(envc->var, var, ft_strlen(var + 1)))
+		if (!ft_strncmp(envc->var, var, ft_strlen(var) + 1))
 		{
 			envc->val = val;
 			free(old_env_val);
@@ -179,6 +179,16 @@ void	ft_export(t_mylist *env, char *variable)
 }
 
 
+// int	main(int ac, char **av, char **env)
+// {
+// 	t_mylist	*envc;
+
+// 	(void )		ac;
+// 	(void )		av;
+// 	envc = ft_env(env);
+// 	ft_export(envc, av[1]);
+// 	return (0);
+// }
 
 // int	isformatted(char *var, char *subchar)
 // {

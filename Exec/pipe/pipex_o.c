@@ -107,18 +107,13 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		else if (pos_cmd == total_cmd)
 		{
 			{
-				if (fds[0] > 2)
-					dup2(fds[0], STDIN_FILENO);
+				dup2(fds[0], STDIN_FILENO);
 				close(mystatus->cmd->tube[0]);
-				if (fds[1] < 2)
 				{
 					if (dup2(mystatus->cmd->tube[1], STDOUT_FILENO) == -1)
-						perror("T5");
+						perror("T1");
 				}
-				else{
-					dup2(fds[1], mystatus->cmd->tube[1]);
-					dup2(mystatus->cmd->tube[1], STDOUT_FILENO);
-				}
+				// dup2(STDOUT_FILENO, fds[1]);
 
 			}
 		}

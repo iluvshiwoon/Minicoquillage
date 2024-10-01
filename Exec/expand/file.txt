@@ -1,0 +1,15 @@
+"b 'a' ba " c ca
+"b '$test' ba " c ca
+$test "b 'a' ba " c ca
+
+
+liste_chaine, env,  fdout
+
+0 prendre le bloc d entree
+1 afficher chaque caractere du cursor
+2 si on voit $
+	* subchar la var env
+	* se deplacer a la fin de la var env, EV
+	* afficher la var env
+3 continuer a partir de 1 jusquq le \0
+
