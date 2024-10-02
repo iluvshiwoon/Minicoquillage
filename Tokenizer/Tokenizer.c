@@ -6,7 +6,7 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/25 16:17:53 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/10/02 11:55:17 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,9 +271,9 @@ int	main(int argc, char ** argv, char **env)
 	{
 		int i = 0;
 		tokens_lists = tokenizer(tokens_lists);
-		init_status((*tokens_lists)->first_node, status, envc);
-		// ft_echo((*tokens_lists)->first_node, &envc, 1);
-		execut(status);
+		// init_status((*tokens_lists)->first_node, status, envc);
+		ft_echo((*tokens_lists)->first_node, &envc, 1);
+		// execut(status);
 	}
 	return (0);
 }

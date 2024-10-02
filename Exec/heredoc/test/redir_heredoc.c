@@ -1,4 +1,4 @@
-#include "./../exec.h"
+#include "./../../exec.h"
 
 void	put_in_fd(char *buff, int hd)
 {
@@ -48,10 +48,12 @@ int heredoc(char *limiter)
 		buff = get_next_line(0);
 	}
 	hd = open("/tmp/heredoc", O_RDONLY, 0777);
-	write_fd(hd);
+	// write_fd(hd);
 	return (hd);
 }
 
+
+//checker messages d'erreurs surget_next_line _bonus
 int main(int ac , char **av)
 {
 	int k = heredoc(av[1]);

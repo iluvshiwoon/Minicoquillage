@@ -2,18 +2,18 @@
 
 
 
-void	ft_cd(char *newpath, t_mylist *env)
-{
-	char	*currentpath;
-	char	*oldpath;
+// void	ft_cd(char *newpath, t_mylist *env)
+// {
+// 	char	*currentpath;
+// 	char	*oldpath;
 
-	currentpath = get_pwd();
-	oldpath = get_oldpwd();
-	if (!newpath)
-		newpath = go_user();
-	if (newpath != 0)
-		ft_putstr_fd(CD_ERR, 2);
-}
+// 	currentpath = get_pwd();
+// 	oldpath = get_oldpwd();
+// 	if (!newpath)
+// 		newpath = go_user();
+// 	if (newpath != 0)
+// 		ft_putstr_fd(CD_ERR, 2);
+// }
 
 
 // char	*put_var_env(char *var, char **env, char *value)

@@ -1,6 +1,8 @@
 #include "../Tokenizer/Tokenizer.h"
 #include "./builtins.h"
 
+
+
 int	is_option(t_double_link_node *node)
 {
 	if (((t_token *)node->data)->type == OPTION)
@@ -8,7 +10,7 @@ int	is_option(t_double_link_node *node)
 	return (0);
 }
 
-void	display_env(int fd, t_mylist **env, char *content)
+char	*display_env(int fd, t_mylist **env, char *content)
 {
 	t_mylist	*c_env;
 	int			end_;
@@ -16,28 +18,88 @@ void	display_env(int fd, t_mylist **env, char *content)
 
 	c_env = *env;
 	end_ = 0;
-	while (content[end_] != ' ' || content[end_] != 0 || content[end_] != '\n')
+	while (content[end_] != ' ' && content[end_] != 0 && content[end_] != '\n')
 		end_++;
-	printf("22\n");
 	var = ft_substr(content, 0, end_);
-	while (ft_strncmp(c_env->var, var, end_))
+	while (c_env && ft_strncmp(c_env->var, var, end_))
 		c_env = c_env->next;
-	ft_putstr_fd((char *)c_env->val, fd);
+	free(var);
+	if (!c_env)
+		return (NULL);
+	else
+		return (ft_putstr_fd((char *)c_env->val, fd), content + end_);
 }
+
+int is_quote(int in_quote, char c, char *content)
+{
+	int	i;
+
+	i = 0;
+	if (content[i] == c)
+	{
+		while (content[++i])
+		{
+			if (content[i] == c)
+				return (1);
+		}
+	}
+	return (-1);
+}
+
 
 void	echo_display(t_double_link_node *node, t_mylist **env, int fd)
 {
 	int		i;
 	char	*content;
+	char	*expanded_content;
+	int		in_quote;
 
-	i = 0;
+	in_quote = 0;
 	content = ((t_token *)node->data)->value;
-	while (content[i])
+	i = 0;
+	if (((t_token *)node->data)->type == OPTION)
+		return ;
+	else
 	{
-		write(fd, &content[i], 1);
-		i++;
+		while (content[i])
+		{
+			in_quote += is_quote(in_quote, '\'', &content[i]);
+			if (content[i] == '$')
+			{
+				expanded_content = display_env(fd, env, content + i + 1);
+				if (expanded_content && in_quote)
+				{
+					content = expanded_content;
+					i = 0;
+				}
+				else
+				{
+					write(fd, &content[i], 1);
+					i++;
+				}
+			}
+			else
+			{
+				write(fd, &content[i], 1);
+				i++;
+			}
+		}
 	}
 }
+
+// void	echo_display(t_double_link_node *node, t_mylist **env, int fd)
+// {
+// 	int		i;
+// 	char	*content;
+
+// 	i = 0;
+// 	content = ((t_token *)node->data)->value;
+// 	while (content[i])
+// 	{
+// 		write(fd, &content[i], 1);
+// 		i++;
+// 	}
+// }
 
 void	echo_display_opt(t_double_link_node *node, t_mylist **env, int fd)
 {
@@ -91,7 +153,7 @@ void	ft_echo(t_double_link_node *node_orig, t_mylist **env, int fd)
 		{
 			if (((t_token *)node->data)->type == ARG)
 			{
-				echo_display_opt(node, env, fd);
+				echo_display(node, env, fd);
 				if (node)
 					write(fd, " ", 1);
 			}
