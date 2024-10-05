@@ -45,14 +45,18 @@ int	handle_redirect_write(t_status *mystatus)
 	return (fdout);
 }
 
-void ft_close(t_status *mystatus, int in , int out)
+void ft_close(t_status *mystatus, t_status *stop)
 {
-	close(mystatus->tube[0]);
-	close(mystatus->tube[1]);
-	if (in > STDERR_FILENO)
-		close(in);
-	if (out > STDERR_FILENO)
-		close(out);
+	t_status *cpy_mystatus;
+
+	cpy_mystatus = mystatus;
+	while(cpy_mystatus != stop)
+	{
+		close(cpy_mystatus->cmd->tube[0]);
+		close(cpy_mystatus->cmd->tube[1]);
+		cpy_mystatus = sx_process_next_2(cpy_mystatus);
+	}
+	close(cpy_mystatus->cmd->tube[1]);
 }
 
 void	printExecveVars(t_status *mystatus)
@@ -241,6 +245,7 @@ void execute_command(t_status *mystatus, int input_fd, int output_fd)
 		}
 		dup2(in_fd, STDIN_FILENO);
 		close(in_fd);
+
 	}
 	else if (input_fd != -1)
 	{
@@ -272,7 +277,7 @@ void execute_command(t_status *mystatus, int input_fd, int output_fd)
 
 
 
-void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
+void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, t_status *cpy_mystatus)
 {
 	pid_t	pid;
 	int		status;
@@ -298,7 +303,7 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		else if (pos_cmd != 1)
 		{
 			{
-				dup2(buff[0], mystatus->cmd->tube[0]);
+				dup2(mystatus->buff[0], mystatus->cmd->tube[0]);
 				dup2(mystatus->cmd->tube[0] , STDIN_FILENO);
 				dup2(mystatus->cmd->tube[1], STDOUT_FILENO);
 				close(mystatus->cmd->tube[0]);
@@ -310,56 +315,65 @@ void	run_command(t_status *mystatus, int total_cmd, int pos_cmd, int *buff)
 		{
 			close(mystatus->cmd->tube[0]);
 			close(mystatus->cmd->tube[1]);
-			execute_command(mystatus, buff[0], -1);
+			execute_command(mystatus, mystatus->buff[0], -1);
 		}
 	}
 	else
 	{
 		if (total_cmd == 1)
 		{
+			waitpid(pid, &status, 0);
 			close(mystatus->cmd->tube[0]);
 			close(mystatus->cmd->tube[1]);
-			waitpid(pid, &status, 0);
 		}
 		else if (total_cmd == pos_cmd)
 		{
-			dup2(mystatus->cmd->tube[0], buff[0]);
-			dup2(mystatus->cmd->tube[1], buff[1]);
-			close(mystatus->cmd->tube[1]);
 			waitpid(pid, &status, 0);
+			close(mystatus->cmd->tube[1]);
 		}
 		else if (pos_cmd == 1)
 		{
-			close(mystatus->cmd->tube[0]);
-			close(mystatus->cmd->tube[1]);
 			waitpid(pid, &status, 0);
+			// close(mystatus->cmd->tube[0]);
+			close(mystatus->cmd->tube[1]);
+
 		}
 		else
 		{
-			dup2(mystatus->cmd->tube[0], buff[0]);
+			waitpid(pid, &status, 0);
+			dup2(mystatus->cmd->tube[0], mystatus->buff[0]);
 			close(mystatus->cmd->tube[0]);
 			close(mystatus->cmd->tube[1]);
-			waitpid(pid, &status, 0);
+
 		}
 	}
 }
 
-//stop
+// STOP HERE
 
 void	execut(t_status *mystatus)
 {
 	int		j;
 	int		*buff_tube;
 	int		nb_cmd;
+	t_status *cpy_mystatus;
 
 	j = 0;
-	buff_tube = mystatus->cmd->tube;
+	mystatus->buff = mystatus->cmd->tube;
 	nb_cmd = mystatus->nb_cmd;
+
+	cpy_mystatus = mystatus;
+	// while (cpy_mystatus)
+	// {
+	// 	if (pipe(cpy_mystatus->cmd->tube) == -1)
+	// 		exit(1);
+	// 	cpy_mystatus = sx_process_next_2(cpy_mystatus);
+	// }
 	while (mystatus)
 	{
 		if (pipe(mystatus->cmd->tube) == -1)
 			exit(1);
-		run_command(mystatus, nb_cmd, mystatus->current_cmd, buff_tube);
+		run_command(mystatus, nb_cmd, mystatus->current_cmd, cpy_mystatus);
 		mystatus = sx_process_next_2(mystatus);
 	}
 }

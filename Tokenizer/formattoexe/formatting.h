@@ -25,7 +25,7 @@ typedef struct s_status
 	char				*fdout;
 	int					nb_cmd;
 	int					current_cmd;
-	int					tube[];
+	int					*buff;
 }	t_status;
 
 t_double_link_node	*next_process(t_double_link_node **node);
