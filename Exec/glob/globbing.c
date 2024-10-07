@@ -22,6 +22,31 @@ int	position_pattern(const char *str, const char *pattern)
 	return (-1);
 }
 
+int	single_case(char **patterns)
+{
+	int	i;
+
+	i = 0;
+	while (patterns[i])
+		i++;
+
+	if (i == 1 && ft_strlen(patterns[0]) == 1)
+		return (1);
+	return (0);
+}
+
+
+int	result(char **patterns, char *glob, char *str, int i)
+{
+	int	a;
+
+	a = ft_strlen(patterns[i - 1]);
+	if (glob[ft_strlen(glob) - 1] != '*'
+		&& patterns[i - 1][a - 1] != str[ft_strlen(str) - 1])
+		return (0);
+	return (1);
+}
+
 /*
  *exemple glob: *str*
  *exemple str:  -str1
@@ -39,9 +64,10 @@ int	glob(char *str, char *glob)
 	if (ft_strlen(glob) == 1 && glob[0] == '*')
 		return (0);
 	patterns = ft_split(glob, '*');
+	if (single_case(patterns))
+		return (0);
 	while (patterns[i])
 	{
-		ft_printf("%s\n", patterns[i]);
 		pp = position_pattern((const char *)&str[sx], patterns[i]);
 		if (pp >= 0)
 		{
@@ -51,13 +77,13 @@ int	glob(char *str, char *glob)
 		else
 			return (0);
 	}
-	return (1);
+	return (result(patterns, glob, str, i));
 }
 
 
 
-int	main(void)
+int	main(int ac, char **av)
 {
-	ft_printf("position %d\n", position_pattern("un truc", "un"));
-	ft_printf("glob %d\n", glob("untruc", "*u8*n*c"));
+	printf("%d\n", glob(av[1], av[2]));
+	return glob(av[1], av[2]);
 }
