@@ -1,0 +1,9 @@
+
+export my_test=my_test
+unset  my_test
+export myTest
+unset un_mot
+export test1=test
+export test2=test
+export test3=test
+export test4=test

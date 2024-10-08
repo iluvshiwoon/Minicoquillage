@@ -83,24 +83,20 @@ void	ft_cd(char *newpath, t_mylist *env)
 }
 
 
-int main(int ac, char **av, char **env)
-{
-	t_mylist	*envc;
-	char		*path;
+// int main(int ac, char **av, char **env)
+// {
+// 	t_mylist	*envc;
+// 	char		*path;
 
-	// path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
-	// // path = "/homes/bsunst";
-	// // path = NULL;
-	// envc = ft_env(env);
-	// ft_cd(path, envc);
-	// // ft_putstr_fd(path, 1);
-	// // put_envc(envc);
-	// return (0);
-	if(chdir(av[1]) != 0)
-	{
-		printf("cd: %d (%s)\n", errno, strerror(errno));
-	}
-}
+// 	path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
+// 	// path = "/homes/bsunst";
+// 	// path = NULL;
+// 	envc = ft_env(env);
+// 	ft_cd(path, envc);
+// 	// ft_putstr_fd(path, 1);
+// 	// put_envc(envc);
+// 	return (0);
+// }
 
 
 

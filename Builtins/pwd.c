@@ -12,8 +12,4 @@ int ft_pwd(void)
 	return (1);
 }
 
-// int	main(void)
-// {
-// 	ft_pwd();
-// 	return (0);
-// }
+

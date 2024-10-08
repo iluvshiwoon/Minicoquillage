@@ -1,0 +1,6 @@
+
+cd
+cd ~
+cd /
+cd ~/Documents/projet_1
+cd /home/bsunda/error
