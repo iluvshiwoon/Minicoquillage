@@ -1,5 +1,5 @@
 VAR1=value1
 VAR2=value2
 VAR3=value3
-
-
+VAR=" un truc"
+VAR7= un truc

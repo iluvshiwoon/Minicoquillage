@@ -1,7 +1,0 @@
-VAR=value
-VAR=value
-VAR2=value2
-VAR=value
-VAR3=value3
-VAR=value
-VAR=value
