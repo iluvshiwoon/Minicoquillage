@@ -5,6 +5,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "42_MyLibC/mylibc.h"
+# include "Utils/Utils.h"
 # include "Tokenizer/Tokenizer.h"
 # include "Parser/Parser.h"
 

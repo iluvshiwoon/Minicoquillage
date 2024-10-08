@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/24 17:59:39 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/08 19:23:45 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_control_dll
 {
 	t_double_link_list	*list;
 	t_double_link_node	*node;
+    t_heap_allocated * heap_allocated;
 	t_token				*token;
 	int					complete;
 }						t_control_dll;
