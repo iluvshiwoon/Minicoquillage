@@ -6,7 +6,7 @@
 /*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/05 14:28:36 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/10/08 13:24:38 by bsunda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,13 +267,15 @@ int	main(int argc, char ** argv, char **env)
 		tokens_lists = debug(argv[1]);
 		return (0);
 	}
+	// char *path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
+	// ft_cd(path, envc);
 	while (1)
 	{
 		int i = 0;
 		tokens_lists = tokenizer(tokens_lists);
 		init_status((*tokens_lists)->first_node, status, envc);
-		// ft_echo((*tokens_lists)->first_node, &envc, 1);
 		execut(status);
+		// ft_echo((*tokens_lists)->first_node, &envc, 1);
 	}
 	return (0);
 }

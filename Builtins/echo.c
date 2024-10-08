@@ -63,9 +63,9 @@ void	echo_display(t_double_link_node *node, t_mylist **env, int fd)
 	{
 		while (content[i])
 		{
-			if(content[i] == '\"')
-				in_quote += is_quote(in_quote, '\"', &content[i]);
-			printf("in_quote: %d\n", in_quote);
+			// if(content[i] == '\"')
+			// 	in_quote += is_quote(in_quote, '\"', &content[i]);
+			// printf("in_quote: %d\n", in_quote);
 			if (content[i] == '$' && in_quote != 0)
 			{
 				expanded_content = display_env(fd, env, content + i + 1);
