@@ -27,7 +27,6 @@ char	**ft_cmd(char **to_exec, int *i, char **tokens);
 
 int		ft_strlen2(char **tab);
 void	*ft_free_tab(char **s, size_t i);
-// char	**ft_env(char **env);
 
 int		pss_ok(char *path);
 char	*pss_permission(char **envs_path, char *cmd);

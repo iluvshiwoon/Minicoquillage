@@ -41,7 +41,7 @@ void	go_home(t_mylist *env, t_mylist *oldpath, t_mylist *currentpath)
 	home = get_var(env, "HOME");
 	pwd = get_var(env, "PWD");
 	oldpwd = get_var(env, "OLDPWD");
-	if (chdir(home->val) == -1)
+	if (chdir(home->val) != 0)
 		printf("cd: %d (%s)\n", errno, strerror(errno));
 	else
 	{
@@ -57,7 +57,7 @@ void	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, 
 
 	pwd = currentpath;
 	env = env_origin;
-	if (chdir((const char *) newpath) == -1)
+	if (chdir((const char *) newpath) != 0)
 	{
 		// printf("cd: %d (%s)\n", errno, strerror(errno));
 		perror("cd: chemin incorrect\n");
@@ -83,20 +83,24 @@ void	ft_cd(char *newpath, t_mylist *env)
 }
 
 
-// int main(int ac, char **av, char **env)
-// {
-// 	t_mylist	*envc;
-// 	char		*path;
+int main(int ac, char **av, char **env)
+{
+	t_mylist	*envc;
+	char		*path;
 
-// 	path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
-// 	// path = "/homes/bsunst";
-// 	// path = NULL;
-// 	envc = ft_env(env);
-// 	ft_cd(path, envc);
-// 	// ft_putstr_fd(path, 1);
-// 	// put_envc(envc);
-// 	return (0);
-// }
+	// path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
+	// // path = "/homes/bsunst";
+	// // path = NULL;
+	// envc = ft_env(env);
+	// ft_cd(path, envc);
+	// // ft_putstr_fd(path, 1);
+	// // put_envc(envc);
+	// return (0);
+	if(chdir(av[1]) != 0)
+	{
+		printf("cd: %d (%s)\n", errno, strerror(errno));
+	}
+}
 
 
 

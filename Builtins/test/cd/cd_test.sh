@@ -43,4 +43,4 @@
 
 cc -o ft_cd ../../cd.c ../../env.c -L../../../42_MyLibC -lft
 
-./ft_cd
+# ./ft_cd
