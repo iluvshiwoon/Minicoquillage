@@ -1,5 +1,8 @@
+VAR=" un truc"
+VAR7= un
+$VAR8=value8
 VAR1=value1
 VAR2=value2
 VAR3=value3
-VAR=" un truc"
-VAR7= un truc
+$VAR1=value1
+LAR1=ligne1 LAR2=ligne2
