@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/30 19:03:58 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/05 13:52:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	main(int argc, char **argv)
 {
 	t_control_dll	control;
+    // TODO dll for memory management + malloc wrapper
 
     if (MODE == INTERACTIVE)
     {

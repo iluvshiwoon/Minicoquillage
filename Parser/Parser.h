@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:26:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/25 16:04:19 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/04 19:13:52 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_atom {
     char ** std_in;
     bool * append;
     bool heredoc;
+    int heredoc_fd; // for heredoc before execution
 } t_atom;
 
 typedef struct s_parser_node {
