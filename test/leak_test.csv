@@ -52,9 +52,14 @@ echo a ;<<
 ls  && ()
 echo "infile" && (|)
 ls| (cat file) -e
-> a ()
->> a ()
-< a ()
+> a (echo)
+>> a (echo)
+< a (echo)
+echo > (echo)
+echo >> (echo)
+echo < (echo)
+echo << (echo)
+
 echo hello > test && cat test
 cat
 ls -"l"
@@ -81,3 +86,31 @@ ls |(grep file)
 ((ls) | (grep o))
 ( (ls) | (grep o) )
 ( ((ls)) )
+(ls && echo "Directory listed") || (pwd && echo "Current directory printed") && (date || echo "Date not printed")
+(ls || echo "Directory not listed") && (pwd || echo "Current directory not printed") || (date && echo "Date printed")
+(ls && echo "Directory listed") || (pwd && echo "Current directory printed") && (date || echo "Date not printed") || (echo "Hello" && echo "World")
+(ls || echo "Directory not listed") && (pwd || echo "Current directory not printed") || (date && echo "Date printed") && (echo "Hello" || echo "World")
+((ls && echo "Directory listed") || (pwd && echo "Current directory printed")) && ((date || echo "Date not printed") && (echo "Hello" || echo "World"))
+((ls || echo "Directory not listed") && (pwd || echo "Current directory not printed")) || ((date && echo "Date printed") || (echo "Hello" && echo "World"))
+(((ls && echo "Directory listed") || (pwd && echo "Current directory printed")) && ((date || echo "Date not printed") && (echo "Hello" || echo "World"))) || (echo "Hello" && echo "World")
+(((ls || echo "Directory not listed") && (pwd || echo "Current directory not printed")) || ((date && echo "Date printed") || (echo "Hello" && echo "World"))) && (echo "Hello" || echo "World")
+(ls && echo "Directory listed") > output.txt || (pwd && echo "Current directory printed") >> output.txt
+(ls || echo "Directory not listed") < input.txt && (pwd || echo "Current directory not printed") >> output.txt
+(ls && echo "Directory listed") > output.txt || (pwd && echo "Current directory printed") >> output.txt || (echo "Hello" && echo "World") >> output.txt
+(ls || echo "Directory not listed") < input.txt && (pwd || echo "Current directory not printed") >> output.txt && (echo "Hello" || echo "World") >> output.txt
+(ls && echo "Directory listed") | grep "file" || (pwd && echo "Current directory printed") | grep "home"
+(ls || echo "Directory not listed") | grep "file" && (pwd || echo "Current directory not printed") | grep "home"
+(ls && echo "Directory listed") | grep "file" || (pwd && echo "Current directory printed") | grep "home" || (echo "Hello" && echo "World") | grep "World"
+(ls || echo "Directory not listed") | grep "file" && (pwd || echo "Current directory not printed") | grep "home" && (echo "Hello" || echo "World") | grep "Hello"
+((ls && echo "Directory listed") > output.txt || (pwd && echo "Current directory printed") >> output.txt) && ((date || echo "Date not printed") < input.txt && (echo "Hello" || echo "World") >> output.txt)
+((ls || echo "Directory not listed") < input.txt && (pwd || echo "Current directory not printed") >> output.txt) || ((date && echo "Date printed") > output.txt || (echo "Hello" && echo "World") >> output.txt)
+(((ls && echo "Directory listed") > output.txt || (pwd && echo "Current directory printed") >> output.txt) && ((date || echo "Date not printed") < input.txt && (echo "Hello" || echo "World") >> output.txt)) || (echo "Hello" && echo "World") >> output.txt
+(((ls || echo "Directory not listed") < input.txt && (pwd || echo "Current directory not printed") >> output.txt) || ((date && echo "Date printed") > output.txt || (echo "Hello" && echo "World") >> output.txt)) && (echo "Hello" || echo "World") >> output.txt
+(ls | grep "file") | (echo "Directory listed" && date) | (echo "Hello" || echo "World")
+(ls && echo "Directory listed") | (pwd || echo "Current directory not printed") | (date && echo "Date printed")
+(ls | grep "file") | (echo "Directory listed" && date) | (echo "Hello" || echo "World") | (echo "Hello" && echo "World")
+(ls && echo "Directory listed") | (pwd || echo "Current directory not printed") | (date && echo "Date printed") | (echo "Hello" || echo "World")
+(ls | grep "file") | (echo "Directory listed" && date) | (echo "Hello" || echo "World") | (echo "Hello" && echo "World") | (echo "Hello" || echo "World")
+(ls && echo "Directory listed") | (pwd || echo "Current directory not printed") | (date && echo "Date printed") | (echo "Hello" || echo "World") | (echo "Hello" && echo "World")
+(ls | grep "file") | (echo "Directory listed" && date) | (echo "Hello" || echo "World") | (echo "Hello" && echo "World") | (echo "Hello" || echo "World") | (echo "Hello" && echo "World")
+(ls && echo "Directory listed") | (pwd || echo "Current directory not printed") | (date && echo "Date printed") | (echo "Hello" || echo "World") | (echo "Hello" && echo "World") | (echo "Hello" || echo "World")

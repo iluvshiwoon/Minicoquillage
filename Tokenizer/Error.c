@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:54:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/04 19:15:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/09 16:24:18 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	check_error1(t_control_dll *control, t_token *next)
 	if (control->token->type >= REDIRECTION && control->token->type <= HERE_DOC
 		&& next->type >= REDIRECTION && next->type <= HERE_DOC)
 		return (print_error(error, control, next), EXIT_FAILURE);
-	else if (control->token->type == REDIRECTION && next->type != R_FILE)
+	else if ((control->token->type == REDIRECTION || control->token->type == HERE_DOC)&& next->type != R_FILE)
 		return (print_error(error, control, next), EXIT_FAILURE);
 	else if (control->token->type >= CMD_SEP && control->token->type <= OR
 		&& next->type >= CMD_SEP && next->type <= OR)
@@ -40,6 +40,9 @@ int	check_error1(t_control_dll *control, t_token *next)
 		return (print_error(error, control, next), EXIT_FAILURE);
 	else if (control->token->type == CLOSE_PARENTHESIS
 		&& !(next->type >= CLOSE_PARENTHESIS && next->type <= HERE_DOC))
+		return (print_error(error, control, next), EXIT_FAILURE);
+    else if (next->type == OPEN_PARENTHESIS &&\
+            !((control->token->type >= CMD_SEP && control->token->type <= OR)||control->token->type == OPEN_PARENTHESIS))
 		return (print_error(error, control, next), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

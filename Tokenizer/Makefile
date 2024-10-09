@@ -11,6 +11,7 @@ TEST = ./test
 test: syntax token 
 
 syntax: $(NAME)
+	@bash $(TEST)/build_syntax_csv.sh $(TEST)/syntax_error_cmd.txt $(TEST)/syntax_error_test.csv
 	@bash $(TEST)/tester_syntax.sh $(TEST)/syntax_error_test.csv $(CURDIR)/$(NAME)
 
 token: $(NAME)

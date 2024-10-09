@@ -3,7 +3,8 @@ C_FLAGS = -Wall -Werror -Wextra
 
 NAME = Minicoquillage
 TOKENIZER = ./Tokenizer/test
-LEAK = $(TOKENIZER)/syntax_error_cmd.txt $(TOKENIZER)/tokens_cmd.txt
+PARSER = ./Parser/test
+LEAK = $(TOKENIZER)/syntax_error_cmd.txt $(TOKENIZER)/tokens_cmd.txt $(PARSER)/parser_cmd.txt
 
 TEST = ./test
 

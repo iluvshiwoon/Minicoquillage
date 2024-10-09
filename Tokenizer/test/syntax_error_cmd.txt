@@ -52,6 +52,11 @@ echo a ;<<
 ls  && ()
 echo "infile" && (|)
 ls| (cat file) -e
-> a ()
->> a ()
-< a ()
+> a (echo)
+>> a (echo)
+< a (echo)
+echo > (echo)
+echo >> (echo)
+echo < (echo)
+echo << (echo)
+
