@@ -1,1 +1,0 @@
-LAR1=ligne1

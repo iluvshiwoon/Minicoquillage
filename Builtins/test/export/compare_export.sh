@@ -35,6 +35,8 @@ while IFS='=' read -r var val; do
     grep $var < my_export.txt >> custom_export.txt
 done < variables.txt
 
+
+
 # Afficher les variables après ft_export (C)
 echo "Après ft_export (C):"
 # cat custom_export.txt

@@ -91,6 +91,8 @@ int	add_var(t_mylist **env, char *variable, char *subchar)
 	varc = NULL;
 	var = ft_substr(variable, 0, separator);
 	val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator);
+	if (val == NULL)
+		val = ft_strdup("");
 	if (has_character(var, '$') == 0)
 		return (1);
 	else if (has_character(var, '$') > 0)
@@ -147,6 +149,8 @@ int	update_var(t_mylist **env, char *variable)
 		free(varc);
 	}
 	val = ft_substr(variable, separator + 1, ft_strlen(variable) -separator);
+	if (val == NULL)
+		val = ft_strdup("");
 	valc = ft_substr(val, 0, has_character(val, '$'));
 	free(val);
 	updateto_env(env, var, valc);

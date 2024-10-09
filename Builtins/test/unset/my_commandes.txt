@@ -1,3 +1,0 @@
-export A=A;
-export bA=A;
-export cA=A;

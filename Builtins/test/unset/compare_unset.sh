@@ -1,17 +1,24 @@
-# # !/bin/bash
+#!/bin/bash
 
-# gcc -o my_unset ./main.c ./../../unset.c ./../../env.c ./../../utils.c -L../../../42_MyLibC -lft
+gcc -o ft_unset ./main.c ./../../unset.c  ./../../env.c -L../../../42_MyLibC -lft
 
-# # Exécutez la commande env et votre programme, en redirigeant les sorties
-# env | sort > original_env.txt
-# ./my_unset | sort > custom_env.txt
+bash --posix
+env | sort > original_env.txt
 
-# # Filtrer les lignes commençant par "_=" et comparer les sorties
-# grep -v '^_=' original_env.txt > filtered_original_env.txt
-# grep -v '^_=' custom_env.txt > filtered_custom_env.txt
+# Lire le fichier d'entrée et définir les variables d'environnement avec export
+while IFS='=' read -r var val; do
+    export $var=$val
+done < variables.txt
 
-# # Comparez les fichiers filtrés
-# diff filtered_original_env.txt filtered_custom_env.txt
+# Pour chaque ligne de my_commandes.txt, extraire la valeur sur la ligne et executer
+# la fonction main.c avec pour argument la valeur extraite
+while IFS= read -r commande; do
+	./ft_unset $command
+done < my_variables.txt > new_env.txt
+cat new_env.txt | sort > custom_env.txt
 
-# # Nettoyage des fichiers temporaires
-# rm original_env.txt custom_env.txt filtered_original_env.txt filtered_custom_env.txt
+# Comparer les variables d'environnement
+diff original_env.txt custom_env.txt
+
+# Nettoyer les fichiers temporaires
+rm original_env.txt custom_env.txt new_env.txt ft_unset

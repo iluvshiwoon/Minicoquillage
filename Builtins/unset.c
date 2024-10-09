@@ -44,6 +44,11 @@ void	del_var(t_mylist *envc, int position)
 	}
 }
 
+
+void format_var(char *variable)
+{
+
+}
 void	ft_unset(t_mylist *env, char *variable)
 {
 	char	**tab;
@@ -54,7 +59,10 @@ void	ft_unset(t_mylist *env, char *variable)
 	i = 0;
 	while (tab[i])
 	{
-		is_set = is_present(env, tab[i]);
+		if(tab[i][0] == '$')
+			is_set = is_present(env, &tab[i][1]);
+		else
+			is_set = is_present(env, tab[i]);
 		if (is_set > -1)
 			del_var(env, is_set);
 		i++;
@@ -68,7 +76,7 @@ void	ft_unset(t_mylist *env, char *variable)
 // 	(void )		ac;
 // 	(void )		av;
 // 	envc = ft_env(env);
-
+// 	ft_unset(envc, av[1]);
 // 	put_envc(envc);
 // 	return (0);
 // }

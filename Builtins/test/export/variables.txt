@@ -1,5 +1,5 @@
 VAR=" un truc"
-VAR7= un
+VAR7= 
 $VAR8=value8
 VAR1=value1
 VAR2=value2
