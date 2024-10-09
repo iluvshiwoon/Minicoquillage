@@ -18,6 +18,9 @@ $(NAME): $(C_FILES) | build
 tokenizer:
 	@$(MAKE) -sC ./Tokenizer
 
+parser:
+	@$(MAKE) -sC ./Parser
+
 leak: $(NAME)
 	cat $(LEAK) > $(TEST)/leak_test.csv
 	expect -f $(TEST)/expect_leak $(TEST)/leak_test.csv $(CURDIR)/$(NAME)
