@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/08 19:23:45 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/09 15:13:15 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void					print_csv(t_double_link_list *tokens_lists);
 
 // Tokenizer.c
 int		tokenizer(t_control_dll * control);
-void					debug(char *line);
+void	debug(char *line, t_control_dll * control);
 
 // Tokens.c
 void					expand_tokens(t_double_link_node *node);

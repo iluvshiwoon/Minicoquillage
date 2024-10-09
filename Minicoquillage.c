@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/08 20:03:45 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/09 15:14:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,13 @@ int	main(int argc, char **argv)
     }
     else 
 	{
+        if (init_heap(&heap_allocated) == EXIT_FAILURE)
+            error_exit("init_heap failed", &heap_allocated);
+        control.heap_allocated = &heap_allocated;
         if (argc == 1)
             return (EXIT_FAILURE);
-		    debug(argv[1]);
+		    debug(argv[1],&control);
+        free_heap(&heap_allocated);
 		return (0);
 	}
     printf("here\n");
