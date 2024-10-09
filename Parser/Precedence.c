@@ -6,7 +6,6 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:55:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/08 20:15:18 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +112,25 @@ void	print_tree(t_ast_node * first_node)
             print_t_stdout(p_node->atom);
         }
         p_node = first_node->data;
-        if(p_node->ops != EOE)
-            printf("%s ",type[p_node->ops]);
+        if(p_node->ops)
+        {
+            if (p_node->atom)
+            {
+                if (p_node->atom->heredoc)
+                {
+                    print_t_stdin(p_node->atom);
+                    print_t_heredoc(p_node->atom);
+                }
+                else 
+                {
+                    print_t_heredoc(p_node->atom);
+                    print_t_stdin(p_node->atom);
+                }
+                print_t_stdout(p_node->atom);
+            }
+            if (p_node->ops != EOE)
+                printf("%s ",type[p_node->ops]);
+        }
         first_node = first_node->right;
 	}
 }
@@ -147,11 +163,11 @@ t_double_link_node * get_next_op(t_control_dll * control, t_double_link_node * b
     return(beg); 
 }
 
-void count_token(t_double_link_node * beg, t_token_count * count)
+void count_token(t_double_link_node * beg,t_double_link_node * end, t_token_count * count)
 {
     t_token * token;
     token = beg->data;
-    while (!is_op(token->type) && beg)
+    while (!is_op(token->type) && beg && beg != end->next)
     {
         token = beg->data;
         if (token->type == COMMAND)
@@ -189,14 +205,14 @@ void alloc_atom(t_control_dll * control,t_token_count count, t_atom * atom)
 }
 
 
-void fill_in(t_atom * atom, t_double_link_node * beg)
+void fill_in(t_atom * atom, t_double_link_node * beg, t_double_link_node * end)
 {
     t_token * token;
     t_token_count count;
     
     count = (t_token_count){};
     token = beg->data;
-    while (!is_op(token->type) && beg)
+    while (!is_op(token->type) && beg && beg != end->next)
     {
         token = beg->data;
         if (token->type == COMMAND)
@@ -233,7 +249,7 @@ void fill_in(t_atom * atom, t_double_link_node * beg)
     }
 }
 
-int fill_atom(t_control_dll * control,t_ast_node ** current_node, t_double_link_node * beg)
+int fill_atom(t_control_dll * control,t_ast_node ** current_node, t_double_link_node * beg, t_double_link_node * end)
 {
     t_parser_node * p_node;
     t_token_count count;
@@ -244,9 +260,9 @@ int fill_atom(t_control_dll * control,t_ast_node ** current_node, t_double_link_
     p_node->atom = wrap_malloc(control->heap_allocated->AST,sizeof(*p_node->atom));
     *p_node->atom = (t_atom){};
     (*current_node)->left->data = p_node;
-    count_token(beg, &count);
+    count_token(beg,end, &count);
     alloc_atom(control,count, p_node->atom);
-    fill_in(p_node->atom, beg);
+    fill_in(p_node->atom, beg, end);
     return(EXIT_SUCCESS);
 }
 
@@ -275,24 +291,83 @@ int compute_atom(t_control_dll * control, t_double_link_node * beg,\
             else if (control->token->type == CLOSE_PARENTHESIS)
                 count--;
         }
-        // *current_node = (*current_node)->left;
         compute_expr(control,beg->next,control->node->previous,(*current_node)->left);
         (*current_node)->right = wrap_malloc(control->heap_allocated->AST,sizeof(*(*current_node)->right));
         *(*current_node)->right = (t_ast_node){};
         (*current_node)->right->previous = (*current_node);
         return(exit_status);
     }
-    // node->left = cmd...
-    fill_atom(control,current_node,beg);
+    fill_atom(control,current_node,beg,end);
     control->token = end->data;
-    if (!is_op(control->token->type))// source of leak ??
+    if (!is_op(control->token->type))
         return(exit_status);
-    //
     (*current_node)->right = wrap_malloc(control->heap_allocated->AST,sizeof(*(*current_node)->right));
     *(*current_node)->right = (t_ast_node){};
     (*current_node)->right->previous = (*current_node);
-    // (*current_node) = (*current_node)->right;
     return(exit_status);
+}
+
+void skip_through(t_control_dll * control,t_parser_node * p_node, t_double_link_node * next_op)
+{
+    t_token * token;
+    t_token_count count;
+    t_double_link_node * og_next_op;
+
+    count = (t_token_count){};
+    token = NULL;
+    og_next_op = next_op;
+    if (!next_op)
+        return;
+    while (next_op->previous)
+    {
+        token = next_op->previous->data;
+        if (token->type == CLOSE_PARENTHESIS)
+            break;
+        next_op = next_op->previous;
+    }
+    if (token && token->type != CLOSE_PARENTHESIS)
+        return;
+    p_node->atom = malloc(sizeof(*p_node->atom));
+    *p_node->atom = (t_atom){};
+    count_token(next_op,og_next_op, &count);
+    alloc_atom(control,count, p_node->atom);
+    fill_in(p_node->atom, next_op, og_next_op);
+}
+
+void skip_through_parenthesis(t_control_dll * control, t_parser_node * p_node, t_double_link_node * beg, t_double_link_node * next_op)
+{
+    t_double_link_node * i; 
+    t_token_count t_count;
+    t_token * token;
+    int count;
+
+    i = beg;
+    count = 0;
+    t_count = (t_token_count){};
+    token = i->data;
+    if (token->type == OPEN_PARENTHESIS)
+    {
+        count++;
+        while(count)
+        {
+            i = i->next;
+            if (!i)
+                break;
+            token = i->data;
+            if (token->type == OPEN_PARENTHESIS)
+                count++;
+            else if (token->type == CLOSE_PARENTHESIS)
+                count--;
+        }
+        if (i && i->next && i->next != next_op)
+        {
+            p_node->atom = malloc(sizeof(*p_node->atom));
+            *p_node->atom = (t_atom){};
+            count_token(i->next,next_op, &t_count);
+            alloc_atom(control,t_count, p_node->atom);
+            fill_in(p_node->atom, i->next, next_op);
+        }
+    }
 }
 
 int compute_expr(t_control_dll * control,\
@@ -307,17 +382,23 @@ int compute_expr(t_control_dll * control,\
     {
         p_node = wrap_malloc(control->heap_allocated->AST,sizeof(*p_node));
         *p_node = (t_parser_node){};
-        next_op = get_next_op(control,beg,end); // fix op outside parenth
+        next_op = get_next_op(control,beg,end);
         current_node->data = p_node;
+        // skip_through(p_node,next_op);
+        skip_through_parenthesis(control,p_node,beg,next_op); 
         if (next_op == end)
         {
             p_node->ops = EOE;
+            // skip_through_parenthesis(p_node,beg,next_op->next); 
             compute_atom(control,beg,end,&current_node);
-            //TODO add EOE op
             break;
         }
         control->token = next_op->data;
         p_node->ops = control->token->type;
+        // TODO
+        // Do sth here to get redirection after parenthesis + syntax error if before parenthesis + do all here doc before execution so map them
+        // Weird edge case here doc before parenthesis launched before syntax error (maybe don't implement as it's weird and dumb)
+        // skip_through_parenthesis(p_node,beg,next_op); 
         exit_status = compute_atom(control, beg ,next_op, &current_node);
         current_node = current_node->right;
         beg = next_op->next;
@@ -337,6 +418,7 @@ void parser(t_control_dll * control)
     *ast->first_node = (t_ast_node){};
     beg = control->list->first_node;
     end = control->list->last_node;
+    // print_list(control->list);
     compute_expr(control, beg, end, ast->first_node);
     print_tree(ast->first_node);
     printf("\n");
