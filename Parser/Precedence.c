@@ -361,7 +361,7 @@ void skip_through_parenthesis(t_control_dll * control, t_parser_node * p_node, t
         }
         if (i && i->next && i->next != next_op)
         {
-            p_node->atom = malloc(sizeof(*p_node->atom));
+            p_node->atom = wrap_malloc(control->heap_allocated->AST,sizeof(*p_node->atom));
             *p_node->atom = (t_atom){};
             count_token(i->next,next_op, &t_count);
             alloc_atom(control,t_count, p_node->atom);
