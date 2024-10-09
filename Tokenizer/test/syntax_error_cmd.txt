@@ -59,4 +59,34 @@ echo > (echo)
 echo >> (echo)
 echo < (echo)
 echo << (echo)
-
+echo (
+echo (    (
+echo ((
+echo )    )
+echo ))
+> > > >
+>> >> >>
+<< << <<
+> > >>
+>> > >
+> > >
+>> >>
+<< <<
+> > > > >
+;
+;;
+;;;
+echo ; ; echo
+| | |
+| | | |
+echo | | echo
+( (echo) ) ) ) )
+&& &&
+|| ||
+echo && && echo
+echo || || echo
+< ()
+> ( )
+< > ( )
+> < ( )
+(ls || echo "Directory not listed") < (input.txt) && (pwd || echo "Current directory not printed") >> (output.txt) && (echo "Hello" || echo "World") >> (output.txt)

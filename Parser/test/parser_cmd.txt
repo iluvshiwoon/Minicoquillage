@@ -26,3 +26,19 @@
 (ls && echo "Directory listed") | (pwd || echo "Current directory not printed") | (date && echo "Date printed") | (echo "Hello" || echo "World") | (echo "Hello" && echo "World")
 (ls | grep "file") | (echo "Directory listed" && date) | (echo "Hello" || echo "World") | (echo "Hello" && echo "World") | (echo "Hello" || echo "World") | (echo "Hello" && echo "World")
 (ls && echo "Directory listed") | (pwd || echo "Current directory not printed") | (date && echo "Date printed") | (echo "Hello" || echo "World") | (echo "Hello" && echo "World") | (echo "Hello" || echo "World")
+
+(ls && echo "Directory listed") || (pwd && echo "Current directory printed")
+(ls || echo "Directory not listed") && (pwd || echo "Current directory not printed")
+(ls && echo "Directory listed") > output.txt
+(ls || echo "Directory not listed") < input.txt
+((ls && echo "Directory listed") || (pwd && echo "Current directory printed")) && ((date || echo "Date not printed") && (echo "Hello" || echo "World"))
+(((ls && echo "Directory listed") || (pwd && echo "Current directory printed")) && ((date || echo "Date not printed") && (echo "Hello" || echo "World"))) || (echo "Hello" && echo "World")
+(ls && echo "Directory listed") | grep "file" | grep "home" || (pwd && echo "Current directory printed") | grep "file" | grep "home"
+(ls || echo "Directory not listed") < input.txt && (pwd || echo "Current directory not printed") >> output.txt && (echo "Hello" || echo "World") >> output.txt
+(((ls && echo "Directory listed") || (pwd && echo "Current directory printed")) && ((date || echo "Date not printed") && (echo "Hello" || echo "World"))) || (echo "Hello" && echo "World")
+((((ls && echo "Directory listed") || (pwd && echo "Current directory printed")) && ((date || echo "Date not printed") && (echo "Hello" || echo "World"))) || (echo "Hello" && echo "World")) || (echo "Hello" && echo "World")
+(ls && echo "Directory listed") | (grep "file" | grep "home") || (pwd && echo "Current directory printed") | (grep "file" | grep "home")
+(ls && echo "Directory listed") > output.txt >> output2.txt
+(ls || echo "Directory not listed") < input.txt >> output.txt
+(ls && echo "Directory listed") | grep "file" > output.txt
+(ls || echo "Directory not listed") < input.txt | grep "file" >> output.txt
