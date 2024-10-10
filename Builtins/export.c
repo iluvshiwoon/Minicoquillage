@@ -47,7 +47,7 @@ int	is_formatted(char *var, char *subchar)
 		return (0);
 	while (*var)
 	{
-		if ( *var == ';' || *var == '|' || *var == '<' || *var == '>' || *var == '&')
+		if (*var == ';' || *var == '|' || *var == '<' || *var == '>' || *var == '&')
 			return (0);
 		if (ft_isalnum(*var) || *var == '=')
 		{
@@ -167,6 +167,8 @@ void	ft_export(t_mylist *env, char *variable)
 	int		i;
 
 	tab = ft_split(variable, ' ');
+	ft_putstr_fd(tab[0], 1);
+	ft_putstr_fd(tab[1], 1);
 	i = 0;
 	while (tab[i])
 	{

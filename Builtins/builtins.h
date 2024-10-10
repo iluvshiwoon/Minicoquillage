@@ -9,7 +9,7 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <string.h>
-# include "../42_MyLibC/mylibc.h"
+# include "./../42_MyLibC/mylibc.h"
 
 typedef struct	s_mylist
 {

@@ -52,5 +52,6 @@ Mkfile.old
 dkms.conf
 .ccls*
 
-# VScode settings
+# VScode settings and container Docker
 .vscode
+.devcontainer
