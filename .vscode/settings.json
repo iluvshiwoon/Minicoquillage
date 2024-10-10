@@ -74,6 +74,7 @@
     "format.h": "c",
     "mylibc.h": "c",
     "execution.h": "c",
-    "pipex.h": "c"
+    "pipex.h": "c",
+    "fcntl.h": "c"
   }
 }

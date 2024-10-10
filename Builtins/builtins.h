@@ -3,6 +3,7 @@
 
 # define CD_ERR "cd: no such file or directory:\n"
 
+# include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
