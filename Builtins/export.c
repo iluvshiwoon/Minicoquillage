@@ -47,6 +47,8 @@ int	is_formatted(char *var, char *subchar)
 		return (0);
 	while (*var)
 	{
+		if ( *var == ';' || *var == '|' || *var == '<' || *var == '>' || *var == '&')
+			return (0);
 		if (ft_isalnum(*var) || *var == '=')
 		{
 			subchar[1] = subchar[1] + 1;

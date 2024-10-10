@@ -10,11 +10,11 @@ int	main(int ac, char **av, char **env)
 	(void )		ac;
 	(void )		av;
 	envc = ft_env(env);
-	while(av[i])
-	{
+	// while(av[i])
+	// {
 		ft_export(envc, av[i]);
-		i++;
-	}
+		// i++;
+	// }
 	put_envc(envc);
 	return (0);
 }

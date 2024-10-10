@@ -4,7 +4,7 @@ gcc -o ft_export ./main.c ./../../export.c  ./../../env.c -L../../../42_MyLibC -
 
 # Lire le fichier d'entrée et définir les variables d'environnement avec export
 while IFS='=' read -r var val; do
-    export $var=$val
+    export "$var"="$val" && env
 done < variables.txt
 # while IFS='=' read -r var val; do
 #     # Supprimer les espaces en début et fin de chaîne
