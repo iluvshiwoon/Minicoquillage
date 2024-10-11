@@ -69,87 +69,55 @@ void	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, 
 	}
 }
 
-void	ft_cd(char *newpath, t_mylist *env)
+void	ft_cd_abs(char *newpath, t_mylist *env)
 {
 	t_mylist	*currentpath;
 	t_mylist	*oldpath;
 
 	currentpath = get_var(env, "PWD");
 	oldpath = get_var(env, "OLDPWD");
-	if (!newpath)
+	if (!newpath || !ft_strncmp(newpath, "", 1))
 		go_home(env, oldpath, currentpath);
 	else
 		change_dir(env, oldpath, currentpath, newpath);
 }
 
+int	is_absolute_path(char *path)
+{
+	int	i;
 
-// int main(int ac, char **av, char **env)
-// {
-// 	t_mylist	*envc;
-// 	char		*path;
+	i = 0;
+	if (path[i])
+	{
+		if (path[i] == '~')
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
-// 	path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
-// 	// path = "/homes/bsunst";
-// 	// path = NULL;
-// 	envc = ft_env(env);
-// 	ft_cd(path, envc);
-// 	// ft_putstr_fd(path, 1);
-// 	// put_envc(envc);
-// 	return (0);
-// }
+void ft_cd_rel(char *relative_path, char **env)
+{
+	t_mylist	*currentpath;
+	t_mylist	*oldpath;
+	char		*goto_path;
 
+	currentpath = get_var(env, "PWD");
+	oldpath = get_var(env, "OLDPWD");
+	paths = ft_split(relative_path, '/');
+	if(relative_path[0] == '~')
+	{
+		goto_path = ft_strjoin(get_var(env, "HOME")->val, relative_path + 1);
+	}
+	ft_cd_abs(goto_path, env);
+}
 
-
-// char	*put_var_env(char *var, char **env, char *value)
-// {
-
-// 	if (!env || !*env)
-// 		return (NULL);
-// 	while (env || *env)
-// 	{
-// 		if (ft_strnstr(*env, var, ft_strlen(var) + 1))
-// 		{
-// 			*env = ft_strdup(value);
-// 			return (*env);
-// 		}
-// 		else
-// 			++env;
-// 	}
-// 	return (NULL);
-// }
-
-// char	*value_new(char *path, char **env)
-// {
-// 	char *name = ft_strdup("PWD=");
-// 	char *new = ft_strjoin((const char*)name, (const char*)path);
-// 	return (new);
-// }
-
-// void	change_dir(char *oldpwd, char *newpath, char **env)
-// {
-// 	char	*var;
-
-// 	if (chdir(newpath) != 0)
-// 		printf("%s\n", "cd error");
-// 	var = put_var_env("PWD=", env, value_new(newpath, env));
-// }
-
-// void	ft_cd(char *newpath, char **env)
-// {
-// 	if (change_dir(getenv("PWD"), newpath, env))
-// 		ft_putstr_fd(CD_ERR, 2);
-
-// }
-
-// int	main(int ac, char **av, char **environment)
-// {
-// 	char **env = ft_env(environment);
-// 	char *path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
-// 	change_dir("", path, env);
-// 	// ft_cd(path, env);
-// 	put_env(env);
-// 	return (0);
-// }
-
-
-
+void	ft_cd(char *new_path, t_mylist *env)
+{
+	if (!new_path)
+		ft_cd_abs(NULL, env);
+	else if (is_absolute_path(new_path))
+		ft_cd_rel(new_path, env);
+	else
+		ft_cd_abs(new_path, env);
+}

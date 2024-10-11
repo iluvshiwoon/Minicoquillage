@@ -1,0 +1,6 @@
+/workspaces/Minicoquillage/Builtins/test/cd_pwd
+/workspaces/Minicoquillage/Builtins/test/cd_pwd
+/workspaces/Minicoquillage/Builtins/test/cd_pwd
+/workspaces/Minicoquillage/Builtins/test/cd_pwd
+/workspaces/Minicoquillage/Builtins/test/cd_pwd
+/workspaces/Minicoquillage/Builtins/test/cd_pwd

@@ -2,3 +2,6 @@ a=A  a
 b=b  b
 c=C  c
 aad=   aad
+del=del det
+ho=ho $ho
+h=h h$

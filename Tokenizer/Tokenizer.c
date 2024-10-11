@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bsunda <bsunda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: xxxx <xxxx@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/08 16:24:47 by bsunda           ###   ########.fr       */
+/*   Updated: 2024/10/11 11:17:06 by xxxx             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ int	main(int argc, char ** argv, char **env)
 		tokens_lists = debug(argv[1]);
 		return (0);
 	}
-	char *path = "/home/bsunda/Documents/projet_1/Minicoquillage/Builtins/test";
+	char *path = "./../Builtins/test";
 	ft_cd(path, envc);
 	while (1)
 	{
@@ -275,6 +275,7 @@ int	main(int argc, char ** argv, char **env)
 		tokens_lists = tokenizer(tokens_lists);
 		init_status((*tokens_lists)->first_node, status, envc);
 		execut(status);
+		// ft_pwd();
 		// ft_echo((*tokens_lists)->first_node, &envc, 1);
 	}
 	return (0);

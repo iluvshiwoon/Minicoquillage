@@ -18,6 +18,12 @@ typedef struct	s_mylist
 	struct s_mylist	*next;
 }	t_mylist;
 
+typedef struct	s_expand
+{
+	void			*content;
+	struct s_expand	*next;
+}	t_expand;
+
 typedef struct	s_built
 {
 	char			*cmd;
