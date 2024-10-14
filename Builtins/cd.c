@@ -60,7 +60,9 @@ void	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, 
 	if (chdir((const char *) newpath) != 0)
 	{
 		// printf("cd: %d (%s)\n", errno, strerror(errno));
-		perror("cd: chemin incorrect\n");
+		ft_putstr_fd("cd: no such file or directory: ", 2);
+		ft_putstr_fd(newpath, 2);
+		ft_putstr_fd("\n", 2);
 	}
 	else
 	{
@@ -96,7 +98,7 @@ int	is_absolute_path(char *path)
 	return (0);
 }
 
-void ft_cd_rel(char *relative_path, char **env)
+void ft_cd_rel(char *relative_path, t_mylist *env)
 {
 	t_mylist	*currentpath;
 	t_mylist	*oldpath;
@@ -104,10 +106,13 @@ void ft_cd_rel(char *relative_path, char **env)
 
 	currentpath = get_var(env, "PWD");
 	oldpath = get_var(env, "OLDPWD");
-	paths = ft_split(relative_path, '/');
 	if(relative_path[0] == '~')
 	{
 		goto_path = ft_strjoin(get_var(env, "HOME")->val, relative_path + 1);
+	}
+	else
+	{
+		goto_path = relative_path;;
 	}
 	ft_cd_abs(goto_path, env);
 }

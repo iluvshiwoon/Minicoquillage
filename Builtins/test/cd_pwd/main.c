@@ -2,7 +2,7 @@
 
 // int	main(int ac, char **av, char **env)
 // {
-// 	int pid
+// 	int pid;
 
 // 	pid = fork();
 // 	if (pid == 0)
