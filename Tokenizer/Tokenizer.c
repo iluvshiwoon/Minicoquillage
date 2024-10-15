@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/09 15:29:16 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 15:37:25 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int tokenizer(t_control_dll * control)
 {
 	char			*line;
 
-	line = get_line();
+	line = get_line(control->heap_allocated);
 	if (!line || !*line)
 		return (free(line), EXIT_FAILURE);
-	control->list = create_tokens(line);
+	control->list = create_tokens(control->heap_allocated,line);
 	control->complete = 1;
 	free(line);
 	populate_tokens(control);
@@ -40,7 +40,7 @@ void print_first_token (t_control_dll * control)
 
 void	debug(char *line, t_control_dll * control)
 {
-	control->list = create_tokens(line);
+	control->list = create_tokens(control->heap_allocated,line);
 	control->complete = 1;
 	populate_tokens(control);
 	if (check_error_tokens(control) == EXIT_FAILURE)
@@ -51,5 +51,4 @@ void	debug(char *line, t_control_dll * control)
         parser(control);
     // else if (MODE == EXPANSION)
     //     print_first_token(&control); 
-    return (dl_free_token_list(control->list));
 }

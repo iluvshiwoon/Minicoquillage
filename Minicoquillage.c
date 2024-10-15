@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/09 15:21:24 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 15:36:40 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 int init_heap(t_heap_allocated * heap_allocated)
 {
-    if (init_alloc(&heap_allocated->Tokens) == NULL) 
+    if (init_alloc(&heap_allocated->tokens) == NULL) 
         return (EXIT_FAILURE);
-    if (init_alloc(&heap_allocated->AST) == NULL)
-        return (free(heap_allocated->Tokens),EXIT_FAILURE);
+    if (init_alloc(&heap_allocated->ast) == NULL)
+        return (free(heap_allocated->tokens),EXIT_FAILURE);
+    if (init_alloc(&heap_allocated->input) == NULL)
+        return (free(heap_allocated->input),EXIT_FAILURE);
     return (EXIT_SUCCESS);
 }
 
@@ -34,10 +36,7 @@ int	main(int argc, char **argv)
                 error_exit("init_heap failed", &heap_allocated);
             control.heap_allocated = &heap_allocated;
             if(tokenizer(&control) == EXIT_SUCCESS)
-            {
                 parser(&control);
-                dl_free_token_list(control.list);
-            }
             free_heap(&heap_allocated);
         }
     }
@@ -50,8 +49,7 @@ int	main(int argc, char **argv)
             return (EXIT_FAILURE);
 		    debug(argv[1],&control);
         free_heap(&heap_allocated);
-		return (0);
+		return (EXIT_SUCCESS);
 	}
-    printf("here\n");
-	return (0);
+	return (EXIT_SUCCESS);
 }

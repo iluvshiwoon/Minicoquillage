@@ -191,16 +191,16 @@ void count_token(t_double_link_node * beg,t_double_link_node * end, t_token_coun
 
 void alloc_atom(t_control_dll * control,t_token_count count, t_atom * atom)
 {
-    atom->std_in = wrap_malloc(control->heap_allocated->AST,sizeof(*atom->std_in)*(count.std_in + 1));
+    atom->std_in = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*atom->std_in)*(count.std_in + 1));
     atom->std_in[count.std_in] = NULL;
-    atom->std_out = wrap_malloc(control->heap_allocated->AST,sizeof(*atom->std_out)*(count.std_out + 1));
+    atom->std_out = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*atom->std_out)*(count.std_out + 1));
     atom->std_out[count.std_out] = NULL;
-    atom->append = wrap_malloc(control->heap_allocated->AST,sizeof(*atom->append)*(count.std_out));
-    atom->args = wrap_malloc(control->heap_allocated->AST,sizeof(*atom->args)*(count.args + 1));
+    atom->append = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*atom->append)*(count.std_out));
+    atom->args = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*atom->args)*(count.args + 1));
     atom->args[count.args] = NULL;
-    atom->options = wrap_malloc(control->heap_allocated->AST,sizeof(*atom->options)*(count.options + 1));
+    atom->options = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*atom->options)*(count.options + 1));
     atom->options[count.options] = NULL;
-    atom->heredoc_eof = wrap_malloc(control->heap_allocated->AST,sizeof(*atom->heredoc_eof)*(count.heredoc_eof + 1));
+    atom->heredoc_eof = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*atom->heredoc_eof)*(count.heredoc_eof + 1));
     atom->heredoc_eof[count.heredoc_eof] = NULL;
 }
 
@@ -255,9 +255,9 @@ int fill_atom(t_control_dll * control,t_ast_node ** current_node, t_double_link_
     t_token_count count;
 
     count = (t_token_count){};
-    p_node = wrap_malloc(control->heap_allocated->AST,sizeof(*p_node));
+    p_node = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*p_node));
     *p_node = (t_parser_node){};
-    p_node->atom = wrap_malloc(control->heap_allocated->AST,sizeof(*p_node->atom));
+    p_node->atom = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*p_node->atom));
     *p_node->atom = (t_atom){};
     (*current_node)->left->data = p_node;
     count_token(beg,end, &count);
@@ -272,7 +272,7 @@ int compute_atom(t_control_dll * control, t_double_link_node * beg,\
     int exit_status;
 
     exit_status = EXIT_SUCCESS;
-    (*current_node)->left = wrap_malloc(control->heap_allocated->AST,sizeof(*(*current_node)->left));
+    (*current_node)->left = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*(*current_node)->left));
     *(*current_node)->left = (t_ast_node){};
     (*current_node)->left->previous = *current_node;
     control->token = beg->data;
@@ -292,7 +292,7 @@ int compute_atom(t_control_dll * control, t_double_link_node * beg,\
                 count--;
         }
         compute_expr(control,beg->next,control->node->previous,(*current_node)->left);
-        (*current_node)->right = wrap_malloc(control->heap_allocated->AST,sizeof(*(*current_node)->right));
+        (*current_node)->right = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*(*current_node)->right));
         *(*current_node)->right = (t_ast_node){};
         (*current_node)->right->previous = (*current_node);
         return(exit_status);
@@ -301,7 +301,7 @@ int compute_atom(t_control_dll * control, t_double_link_node * beg,\
     control->token = end->data;
     if (!is_op(control->token->type))
         return(exit_status);
-    (*current_node)->right = wrap_malloc(control->heap_allocated->AST,sizeof(*(*current_node)->right));
+    (*current_node)->right = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*(*current_node)->right));
     *(*current_node)->right = (t_ast_node){};
     (*current_node)->right->previous = (*current_node);
     return(exit_status);
@@ -361,7 +361,7 @@ void skip_through_parenthesis(t_control_dll * control, t_parser_node * p_node, t
         }
         if (i && i->next && i->next != next_op)
         {
-            p_node->atom = wrap_malloc(control->heap_allocated->AST,sizeof(*p_node->atom));
+            p_node->atom = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*p_node->atom));
             *p_node->atom = (t_atom){};
             count_token(i->next,next_op, &t_count);
             alloc_atom(control,t_count, p_node->atom);
@@ -380,7 +380,7 @@ int compute_expr(t_control_dll * control,\
     exit_status = EXIT_SUCCESS;
     while(1) 
     {
-        p_node = wrap_malloc(control->heap_allocated->AST,sizeof(*p_node));
+        p_node = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*p_node));
         *p_node = (t_parser_node){};
         next_op = get_next_op(control,beg,end);
         current_node->data = p_node;
@@ -412,9 +412,9 @@ void parser(t_control_dll * control)
     t_double_link_node * end;
     t_ast * ast;
 
-    ast = wrap_malloc(control->heap_allocated->AST,sizeof(*ast));
+    ast = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*ast));
     *ast = (t_ast){};
-    ast->first_node = wrap_malloc(control->heap_allocated->AST,sizeof(*ast->first_node));
+    ast->first_node = wrap_malloc(control->heap_allocated,control->heap_allocated->ast,sizeof(*ast->first_node));
     *ast->first_node = (t_ast_node){};
     beg = control->list->first_node;
     end = control->list->last_node;

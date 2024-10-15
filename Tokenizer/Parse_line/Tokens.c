@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/07/09 16:28:04 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 14:44:52 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
@@ -96,13 +96,14 @@ void	skip_space_wrapper(size_t j, size_t *i, char *line, t_open_quote *open)
 	}
 }
 
-t_double_link_list	*create_tokens(char *line)
+t_double_link_list	*create_tokens(t_heap_allocated * heap_allocated,char *line)
 {
 	t_control_dll	control;
 	t_open_quote	open;
 	size_t			i;
 	size_t			j;
 
+    control.heap_allocated = heap_allocated;
 	i = init_create_tokens(&open, &control, line, &j);
 	while (line[j])
 	{

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/18 17:24:02 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 15:51:44 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,9 @@ int	check_syntax(char *line)
 	return (EXIT_SUCCESS);
 }
 
-char	*concat_input(t_double_link_list *list)
+char	*concat_input(t_heap_allocated * heap_allocated,t_double_link_list *list)
 {
 	t_double_link_node	*node;
-	// t_double_link_node	*temp_node;
 	size_t				i;
 	t_string			string;
 
@@ -53,14 +52,13 @@ char	*concat_input(t_double_link_list *list)
 		string.dst = node->data;
 	else if (i-- >= 2)
 	{
-		string.dst = wrapper_strjoin_concat((char *)node->data,
-				(char *)node->next->data, list, &string);
+		string.dst = wrapper_strjoin_concat(heap_allocated,(char *)node->data,
+				(char *)node->next->data, &string);
 		node = node->next->next;
 	}
 	while (i-- != 1)
 	{
-		string.temp = wrapper_strjoin_concat(string.dst, (char *)node->data,
-				list, &string);
+		string.temp = wrapper_strjoin_concat(heap_allocated,string.dst, (char *)node->data, &string);
 		free(string.dst);
 		string.dst = string.temp;
 		node = node->next;
@@ -68,14 +66,14 @@ char	*concat_input(t_double_link_list *list)
 	return (string.dst);
 }
 
-int	check_temp_syntax(char *line)
+int	check_temp_syntax(t_heap_allocated * heap_allocated,char *line)
 {
 	t_control_dll	control_temp;
 	int				r_value;
 
 	if (!line || !(*line))
 		return (EXIT_FAILURE);
-	control_temp.list = create_tokens(line);
+	control_temp.list = create_tokens(heap_allocated,line);
 	control_temp.complete = 0;
 	populate_tokens(&control_temp);
 	r_value = check_error_tokens(&control_temp);
@@ -83,48 +81,46 @@ int	check_temp_syntax(char *line)
 		return (EXIT_FAILURE);
 	else if (r_value == CONTINUE)
 		return (CONTINUE);
-	return (dl_free_token_list(control_temp.list), EXIT_SUCCESS);
-}
-
-int	handle_line(t_get_line *get_line, t_control_dll *control, int *r_value)
-{
-	if (*r_value == EXIT_FAILURE)
-	{
-		if (get_line->line && *get_line->line)
-			add_history(get_line->line);
-		return (dl_free_list(control->list), free(get_line->prompt),
-			EXIT_FAILURE);
-	}
-	get_line->temp = update_node(control, get_line->prompt, get_line->line);
-	get_line->line = concat_input(control->list);
-	*r_value = check_temp_syntax(get_line->line);
 	return (EXIT_SUCCESS);
 }
 
-char	*get_line(void)
+int	handle_line(t_heap_allocated * heap_allocated, t_get_line *get_line, t_double_link_list * lines, int *r_value)
 {
-	t_control_dll	control;
+	if (*r_value == EXIT_FAILURE)
+	{
+	    if (get_line->line && *get_line->line)
+		    add_history(get_line->line);
+		return(EXIT_FAILURE);
+	}
+	update_node(heap_allocated,lines,get_line->line);
+	get_line->line = concat_input(heap_allocated,lines);
+	*r_value = check_temp_syntax(heap_allocated,get_line->line);
+	return (EXIT_SUCCESS);
+}
+
+char	*get_line(t_heap_allocated * heap_allocated)
+{
 	int				r_value;
 	t_get_line		get_line;
+    t_double_link_list * lines;
 
-	init_control(&control);
-	get_line.prompt = get_prompt(&control);
-	get_line.line = init_line(&control, get_line.prompt);
+	lines = wrap_malloc(heap_allocated,heap_allocated->input,sizeof(*lines));
+    *lines = (t_double_link_list){};
+	init_list(lines);
+	get_line.prompt = get_prompt(heap_allocated);
+	get_line.line = init_line(heap_allocated, lines, get_line.prompt);
 	get_line.temp = get_line.line;
-	r_value = check_temp_syntax(get_line.line);
+	r_value = check_temp_syntax(heap_allocated,get_line.line);
 	while (check_syntax(get_line.temp) == EXIT_FAILURE
 		|| r_value == EXIT_FAILURE || r_value == CONTINUE)
 	{
-		if (handle_line(&get_line, &control, &r_value) == EXIT_FAILURE)
+		if (handle_line(heap_allocated, &get_line, lines, &r_value) == EXIT_FAILURE)
 			return (NULL);
 	}
-	get_line.line = concat_input(control.list);
+	get_line.line = concat_input(heap_allocated,lines);
 	if (get_line.line && *get_line.line)
 		add_history(get_line.line);
-	if (!control.list->first_node->next)
+	if (!lines->first_node->next)
 		get_line.line = ft_strdup(get_line.line);
-	if (!get_line.line)
-		return (dl_free_list(control.list), free(get_line.prompt),
-			free(get_line.line), exit(EXIT_FAILURE), NULL);
-	return (dl_free_list(control.list), free(get_line.prompt), get_line.line);
+	return (get_line.line);
 }

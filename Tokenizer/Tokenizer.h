@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/09 15:13:15 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 15:52:45 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,20 +97,17 @@ void					add_type(t_control_dll *control, int type, int *cmd);
 
 // check_syntax.c
 int						check_syntax(char *line);
-char					*concat_input(t_double_link_list *list);
-int						check_temp_syntax(char *line);
-int						handle_line(t_get_line *get_line,
-							t_control_dll *control, int *r_value);
-char					*get_line(void);
+char	*concat_input(t_heap_allocated * heap_allocated,t_double_link_list *list);
+int	check_temp_syntax(t_heap_allocated * heap_allocated,char *line);
+int	handle_line(t_heap_allocated * heap_allocated, t_get_line *get_line, t_double_link_list * lines, int *r_value);
+char	*get_line(t_heap_allocated * heap_allocated);
 
 // check_syntax_utils.c
 void					toggle_quote(int *quote, int *quote1);
-char					*wrapper_strjoin_concat(char *s1, char *s2,
-							t_double_link_list *list, t_string *string);
-void					init_control(t_control_dll *control);
-char					*init_line(t_control_dll *control, char *prompt);
-char					*update_node(t_control_dll *control, char *prompt,
-							char *line);
+char	*wrapper_strjoin_concat(t_heap_allocated * heap_allocated,char *s1, char *s2, t_string *string);
+void	init_control(t_control_dll *control, t_control_dll * gl_control);
+char	*init_line(t_heap_allocated * heap_allocated,t_double_link_list * lines, char *prompt);
+void update_node(t_heap_allocated * heap_allocated,t_double_link_list *lines,char *line);
 
 // check_syntax_utils1.c
 size_t					count_node(t_double_link_list *list);
@@ -119,16 +116,15 @@ size_t					count_node(t_double_link_list *list);
 int						ft_sep(int c);
 
 // Error.c
-void					print_error(char *error, t_control_dll *control,
-							t_token *token);
+void	print_error(char *error, t_token *token);
 int						check_error(t_control_dll *control, t_token *next);
 int						check_error1(t_control_dll *control, t_token *next);
 int						check_parenthesis(t_control_dll *control);
 int						check_error_tokens(t_control_dll *control);
 
 // Prompt.c
-char					*get_prompt(t_control_dll *control);
-char					*build_prompt(void);
+char					*get_prompt(t_heap_allocated *heap_allocated);
+char	*build_prompt(t_heap_allocated * heap_allocated);
 char					*last_ocur(char *string, char c);
 
 // Free.c
@@ -152,7 +148,7 @@ int						is_sep(char *line, size_t *i, size_t *j,
 							t_control_dll *control);
 void					skip_space_wrapper(size_t j, size_t *i, char *line,
 							t_open_quote *open);
-t_double_link_list		*create_tokens(char *line);
+t_double_link_list	*create_tokens(t_heap_allocated * heap_allocated,char *line);
 
 // Utils_Tokens.c
 size_t					skip_space(char *line, size_t index);
