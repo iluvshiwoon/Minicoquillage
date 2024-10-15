@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 15:54:57 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 16:08:14 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,13 @@ void	toggle_quote(int *quote, int *quote1)
 		*quote = 1;
 }
 
-char	*wrapper_strjoin_concat(t_heap_allocated * heap_allocated,char *s1, char *s2, t_string *string)
-{
-	char	*r_value;
-
-	r_value = mini_ft_strjoin(heap_allocated,heap_allocated->input,s1, s2);
-	if (!r_value)
-	{
-		if (string->dst)
-			free(string->dst);
-		if (string->temp)
-			free(string->temp);
-	}
-	return (r_value);
-}
+// char	*wrapper_strjoin_concat(t_heap_allocated * heap_allocated,char *s1, char *s2, t_string *string)
+// {
+// 	char	*r_value;
+//
+// 	r_value = mini_ft_strjoin(heap_allocated,heap_allocated->input,s1, s2);
+// 	return (r_value);
+// }
 
 void	init_control(t_control_dll *control, t_control_dll * gl_control)
 {

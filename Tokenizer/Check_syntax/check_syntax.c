@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 15:51:44 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 16:07:49 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,15 @@ char	*concat_input(t_heap_allocated * heap_allocated,t_double_link_list *list)
 		string.dst = node->data;
 	else if (i-- >= 2)
 	{
-		string.dst = wrapper_strjoin_concat(heap_allocated,(char *)node->data,
-				(char *)node->next->data, &string);
+		// string.dst = wrapper_strjoin_concat(heap_allocated,(char *)node->data,
+		// 		(char *)node->next->data, &string);
+        string.dst = mini_ft_strjoin(heap_allocated,heap_allocated->input,node->data,node->next->data);
 		node = node->next->next;
 	}
 	while (i-- != 1)
 	{
-		string.temp = wrapper_strjoin_concat(heap_allocated,string.dst, (char *)node->data, &string);
-		free(string.dst);
+		// string.temp = wrapper_strjoin_concat(heap_allocated,string.dst, (char *)node->data, &string);
+        string.temp = mini_ft_strjoin(heap_allocated,heap_allocated->input,string.dst, node->data);
 		string.dst = string.temp;
 		node = node->next;
 	}
