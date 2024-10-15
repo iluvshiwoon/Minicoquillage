@@ -11,25 +11,33 @@ path_of_fonction="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_
 
 # utilise les commandes de base en utilisant cd et fd
 while IFS= read line; do
-	echo $line
-	mv path_cd $line
+	# echo $line
+	# mv path_cd $line
 	cd $line
-	pwd >> path_cd
+	pwd >> o_path_cd
+	cp o_path_cd path_cd
 	mv path_cd $path_of_fonction
 	cd $path_of_fonction
 done < my_paths.txt
 
-# Lire chaque ligne du fichier my_paths.txt
+echo "######################################################################################################################################################################################################################################################################"
 while IFS= read line; do
-	./ft_cd $line  >> path_ft_cd
-done < my_paths.txt
-
-sort path_cd > sort_path_cd.txt
-sort path_ft_cd > sort_path_ft_cd.txt
+	echo $line
+done < path_cd
 
 echo "######################################################################################################################################################################################################################################################################"
 
-diff sort_path_cd.txt sort_path_ft_cd.txt
+# # Lire chaque ligne du fichier my_paths.txt
+# while IFS= read line; do
+# 	./ft_cd $line  >> path_ft_cd
+# done < my_paths.txt
+
+# sort path_cd > sort_path_cd.txt
+# sort path_ft_cd > sort_path_ft_cd.txt
+
+# echo "######################################################################################################################################################################################################################################################################"
+
+# diff sort_path_cd.txt sort_path_ft_cd.txt
 
 
 # rm path_cd sort_path_cd.txt
@@ -40,8 +48,10 @@ diff sort_path_cd.txt sort_path_ft_cd.txt
 # /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/env
 # ./../../
 # ~/Documents
-# ~/Documents/..
 # ~~/Documents
 # ~/~/Documents
+# ~/.
+# ~/Documents/..
+
 
 
