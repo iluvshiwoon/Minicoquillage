@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gcc -o my_env ./main.c ./../../env.c ./../../utils.c -L../../../42_MyLibC -lft
+gcc -o my_env ./main.c ./../../Builtins/env.c ./../../Builtins/utils.c -L../../42_MyLibC -lft
 
 # Exécutez la commande env et votre programme, en redirigeant les sorties
 env | sort > original_env.txt
