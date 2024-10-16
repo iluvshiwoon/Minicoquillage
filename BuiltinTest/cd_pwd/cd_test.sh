@@ -1,57 +1,40 @@
 #!/bin/bash
 
+
+
 cc -o ft_cd ./main.c ./../../Builtins/cd.c ./../../Builtins/pwd.c ./../../Builtins/env.c -L../../42_MyLibC -lft
 
-# Créer un lien symbolique et un répertoire
-touch path_ft_cd
-touch path_cd
 
 # Cree une variable chemin qui contient le chemin du répertoire courant
-path_of_fonction="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd"
+# path_of_fonction="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd"
+path_of_fonction="/workspaces/Minicoquillage/BuiltinTest/cd_pwd"
+path_cd="/workspaces/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
+
 
 # utilise les commandes de base en utilisant cd et fd
 while IFS= read line; do
-	# echo $line
-	# mv path_cd $line
-	cd $line
-	pwd >> o_path_cd
-	cp o_path_cd path_cd
-	mv path_cd $path_of_fonction
-	cd $path_of_fonction
-done < my_paths.txt
+	if cd "$line" &> /dev/null; then
+        echo "$(pwd)" >> $path_cd
+    else
+        echo "Error Path" >> $path_cd
+    fi
+done < my_path_dock.txt
 
-echo "######################################################################################################################################################################################################################################################################"
-while IFS= read line; do
-	echo $line
-done < path_cd
 
-echo "######################################################################################################################################################################################################################################################################"
-
-# # Lire chaque ligne du fichier my_paths.txt
-# while IFS= read line; do
-# 	./ft_cd $line  >> path_ft_cd
-# done < my_paths.txt
-
-# sort path_cd > sort_path_cd.txt
-# sort path_ft_cd > sort_path_ft_cd.txt
 
 # echo "######################################################################################################################################################################################################################################################################"
 
-# diff sort_path_cd.txt sort_path_ft_cd.txt
+cd $path_of_fonction
+# Lire chaque ligne du fichier my_paths.txt
+while IFS= read line; do
+	./ft_cd $line  >> path_ft_cd
+done < my_path_dock.txt
+
+diff path_ft_cd path_cd
+
+rm path_ft_cd path_cd
 
 
-# rm path_cd sort_path_cd.txt
-# rm path_ft_cd sort_path_ft_cd.txt
-
-# /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd/res
-# /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/echo/res
-# /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/env
-# ./../../
-# ~/Documents
-# ~~/Documents
-# ~/~/Documents
-# ~/.
-# ~/Documents/..
 
 
 

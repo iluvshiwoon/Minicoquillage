@@ -32,7 +32,7 @@ t_mylist	*get_var(t_mylist *env, char *var)
 	return (NULL);
 }
 
-void	go_home(t_mylist *env, t_mylist *oldpath, t_mylist *currentpath)
+int	go_home(t_mylist *env, t_mylist *oldpath, t_mylist *currentpath)
 {
 	t_mylist	*home;
 	t_mylist	*oldpwd;
@@ -42,15 +42,19 @@ void	go_home(t_mylist *env, t_mylist *oldpath, t_mylist *currentpath)
 	pwd = get_var(env, "PWD");
 	oldpwd = get_var(env, "OLDPWD");
 	if (chdir(home->val) != 0)
+	{
 		printf("cd: %d (%s)\n", errno, strerror(errno));
+		return (1);
+	}
 	else
 	{
 		put_var(env, "OLDPWD", pwd->val);
 		put_var(env, "PWD", home->val);
+		return (0);
 	}
 }
 
-void	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, char *newpath)
+int	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, char *newpath)
 {
 	t_mylist	*pwd;
 	t_mylist	*env;
@@ -63,15 +67,17 @@ void	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, 
 		ft_putstr_fd("cd: no such file or directory: ", 2);
 		ft_putstr_fd(newpath, 2);
 		ft_putstr_fd("\n", 2);
+		return (1);
 	}
 	else
 	{
 		put_var(env, "OLDPWD", pwd->val);
 		put_var(env, "PWD", newpath);
+		return (0);
 	}
 }
 
-void	ft_cd_abs(char *newpath, t_mylist *env)
+int	ft_cd_abs(char *newpath, t_mylist *env)
 {
 	t_mylist	*currentpath;
 	t_mylist	*oldpath;
@@ -79,9 +85,9 @@ void	ft_cd_abs(char *newpath, t_mylist *env)
 	currentpath = get_var(env, "PWD");
 	oldpath = get_var(env, "OLDPWD");
 	if (!newpath || !ft_strncmp(newpath, "", 1))
-		go_home(env, oldpath, currentpath);
+		return go_home(env, oldpath, currentpath);
 	else
-		change_dir(env, oldpath, currentpath, newpath);
+		return change_dir(env, oldpath, currentpath, newpath);
 }
 
 int	is_absolute_path(char *path)
@@ -98,7 +104,7 @@ int	is_absolute_path(char *path)
 	return (0);
 }
 
-void ft_cd_rel(char *relative_path, t_mylist *env)
+int ft_cd_rel(char *relative_path, t_mylist *env)
 {
 	t_mylist	*currentpath;
 	t_mylist	*oldpath;
@@ -114,15 +120,15 @@ void ft_cd_rel(char *relative_path, t_mylist *env)
 	{
 		goto_path = relative_path;;
 	}
-	ft_cd_abs(goto_path, env);
+	return ft_cd_abs(goto_path, env);
 }
 
-void	ft_cd(char *new_path, t_mylist *env)
+int	ft_cd(char *new_path, t_mylist *env)
 {
 	if (!new_path)
-		ft_cd_abs(NULL, env);
+		return ft_cd_abs(NULL, env);
 	else if (is_absolute_path(new_path))
-		ft_cd_rel(new_path, env);
+		return ft_cd_rel(new_path, env);
 	else
-		ft_cd_abs(new_path, env);
+		return ft_cd_abs(new_path, env);
 }

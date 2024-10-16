@@ -1,0 +1,9 @@
+/workspaces/Minicoquillage/BuiltinTest/cd_pwd/res
+/workspaces/Minicoquillage/BuiltinTest/echo/res
+/workspaces/Minicoquillage/BuiltinTest/env
+./../../
+~/workspaces
+~~/workspaces
+~/~/workspaces
+~/.
+~/workspaces/..

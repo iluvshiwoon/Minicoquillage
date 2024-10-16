@@ -1,0 +1,9 @@
+/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd/res
+/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/echo/res
+/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/env
+./../../
+~/Documents
+~~/Documents
+~/~/Documents
+~/.
+~/Documents/..

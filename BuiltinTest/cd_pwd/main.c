@@ -8,8 +8,10 @@ int	main(int ac, char **av, char **env)
 	pid = fork();
 	if (pid == 0)
 	{
-		ft_cd(av[1], ft_env(env));
-		ft_pwd();
+		if (!ft_cd(av[1], ft_env(env)))
+			ft_pwd();
+		else
+			printf("Error Path\n");
 	}
 	wait(NULL);
 	return (0);
