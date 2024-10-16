@@ -43,8 +43,10 @@ int	is_formatted(char *var, char *subchar)
 	i = 0;
 	if (!var)
 		return (0);
-	if (has_character(var, '=') < 0 || ft_isdigit(*var))
+	if (has_character(var, '=') < 0 && ft_isdigit(*var))
 		return (0);
+	if (has_character(var, '=') < 0 && ft_strlen(var) > 0)
+		;
 	while (*var)
 	{
 		if (*var == ';' || *var == '|' || *var == '<' || *var == '>' || *var == '&')
@@ -91,8 +93,16 @@ int	add_var(t_mylist **env, char *variable, char *subchar)
 
 	separator = has_character(variable, '=');
 	varc = NULL;
-	var = ft_substr(variable, 0, separator);
-	val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator);
+	if (separator < 0)
+	{
+		var = ft_strdup(variable);
+		val = NULL;
+	}
+	else
+	{
+		var = ft_substr(variable, 0, separator);
+		val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator);
+	}
 	if (val == NULL)
 		val = ft_strdup("");
 	if (has_character(var, '$') == 0)
@@ -177,7 +187,13 @@ void	ft_export(t_mylist *env, char *variable)
 		is_form = is_formatted(tab[i], subchar);
 		if (is_form)
 		{
-			if (var_missing(&env, tab[i]))
+			if (has_character(variable, '=') == 0)
+			{
+				ft_putstr_fd("export: `", 2);
+				ft_putstr_fd(tab[i], 2);
+				ft_putstr_fd(" not a valid identifier\n", 2);
+			}
+			else if (var_missing(&env, tab[i]))
 				add_var(&env, tab[i], subchar);
 			else
 				update_var(&env, tab[i]);

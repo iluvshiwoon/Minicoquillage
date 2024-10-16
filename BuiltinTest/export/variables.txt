@@ -1,10 +1,10 @@
 VAR="untruc"
-VAR7=
 $VAR8=value8
 VAR1=value1
 VAR2=value2
 VAR3=value3
-VAR1=value1
+VAR1=value4
 VARLAR1=ligne1
 VARLAR2=ligne2
 VAR5;= value5
+VAR7=

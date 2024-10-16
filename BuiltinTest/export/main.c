@@ -1,20 +1,44 @@
 #include "./../../Builtins/builtins.h"
-
+#include <fcntl.h>
 
 int	main(int ac, char **av, char **env)
 {
 	t_mylist	*envc;
-	int i;
+	int fd;
+	char *line;
 
-	i = 1;
 	(void )		ac;
 	(void )		av;
 	envc = ft_env(env);
-	while(av[i])
+	fd = open("variables.txt",  O_RDONLY, 0777);
+	if (fd == -1)
 	{
-		ft_export(envc, av[i]);
-		i++;
+		printf("Error in opening file\n");
+		return (1);
 	}
-	put_envc(envc);
+	while ((line = get_next_line(fd)) > 0)
+	{
+		// ft_export(envc, line);
+		printf("%s\n", line);
+	}
+	// put_envc(envc);
 	return (0);
 }
+
+// int	main(int ac, char **av, char **env)
+// {
+// 	t_mylist	*envc;
+// 	int i;
+
+// 	i = 1;
+// 	(void )		ac;
+// 	(void )		av;
+// 	envc = ft_env(env);
+// 	while(av[i])
+// 	{
+// 		ft_export(envc, av[i]);
+// 		i++;
+// 	}
+// 	put_envc(envc);
+// 	return (0);
+// }
