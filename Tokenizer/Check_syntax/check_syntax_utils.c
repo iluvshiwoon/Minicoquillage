@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 16:08:14 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/16 14:51:22 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*init_line(t_heap_allocated * heap_allocated,t_double_link_list * lines, ch
 
 	line = readline(prompt);
 	if (!line)
-		return (error_exit("readline failed\n", heap_allocated),NULL);
+		return (error_exit(NULL, heap_allocated),NULL);
     node = wrap_malloc(heap_allocated, heap_allocated->input,sizeof(*node));
     dup_line = mini_ft_strdup(heap_allocated,heap_allocated->input,line);
     free(line);
@@ -54,14 +54,17 @@ char	*init_line(t_heap_allocated * heap_allocated,t_double_link_list * lines, ch
 	return (dup_line);
 }
 
-void update_node(t_heap_allocated * heap_allocated,t_double_link_list *lines,char *line)
+char * update_node(t_heap_allocated * heap_allocated,t_double_link_list *lines)
 {
     t_double_link_node * node;
+    char * line;
 
 	node = wrap_malloc(heap_allocated,heap_allocated->input,sizeof(*node));
     *node = (t_double_link_node){};
 	line = readline("· ");
-	node->data = mini_ft_strdup(heap_allocated,heap_allocated->input,line);
-	lines->pf_insert_end(lines, node);
-    free(line);
+    if (!line)
+        return (NULL);
+    node->data = mini_ft_strdup(heap_allocated,heap_allocated->input,line);
+    lines->pf_insert_end(lines, node);
+    return (line);
 }

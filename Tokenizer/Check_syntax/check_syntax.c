@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 16:07:49 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/16 18:46:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ int	handle_line(t_heap_allocated * heap_allocated, t_get_line *get_line, t_doubl
 		    add_history(get_line->line);
 		return(EXIT_FAILURE);
 	}
-	update_node(heap_allocated,lines,get_line->line);
+	get_line->line = update_node(heap_allocated,lines);
+    // if (!get_line->line)
+    //     return (EXIT_FAILURE);
+    free(get_line->line);
 	get_line->line = concat_input(heap_allocated,lines);
 	*r_value = check_temp_syntax(heap_allocated,get_line->line);
 	return (EXIT_SUCCESS);
@@ -122,6 +125,6 @@ char	*get_line(t_heap_allocated * heap_allocated)
 	if (get_line.line && *get_line.line)
 		add_history(get_line.line);
 	if (!lines->first_node->next)
-		get_line.line = ft_strdup(get_line.line);
+		get_line.line = mini_ft_strdup(heap_allocated, heap_allocated->input, get_line.line);
 	return (get_line.line);
 }

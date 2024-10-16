@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 15:37:25 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/16 18:44:15 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int tokenizer(t_control_dll * control)
 		return (free(line), EXIT_FAILURE);
 	control->list = create_tokens(control->heap_allocated,line);
 	control->complete = 1;
-	free(line);
+	// free(line);
 	populate_tokens(control);
 	if (check_error_tokens(control) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
