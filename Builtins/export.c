@@ -29,7 +29,7 @@ int	var_missing(t_mylist **env, char *str)
 	envc = *env;
 	while (envc)
 	{
-		if (!ft_strncmp(envc->var, var, ft_strlen(var) + 1))
+		if (!ft_strncmp(envc->var, var, ft_strlen(var) - 1))
 			return (0);
 		envc = envc->next;
 	}

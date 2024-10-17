@@ -72,4 +72,4 @@ GIO_LAUNCHED_DESKTOP_FILE_PID=139671
 GIO_LAUNCHED_DESKTOP_FILE=/usr/share/applications/code.desktop
 OLDPWD=/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/export
 TERM_PROGRAM=vscode
-_=./ft_export
+_=/usr/bin/env
