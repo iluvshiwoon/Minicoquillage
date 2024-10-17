@@ -29,7 +29,7 @@ void	del_var(t_mylist *envc, int position)
 	next = envc;
 	while (i <= position)
 	{
-		if (position == 0 || i == j )
+		if (position == 0 || i == j)
 			prev = next;
 		i++;
 		if (next->next && i != position)
@@ -45,10 +45,7 @@ void	del_var(t_mylist *envc, int position)
 }
 
 
-void format_var(char *variable)
-{
 
-}
 void	ft_unset(t_mylist *env, char *variable)
 {
 	char	**tab;

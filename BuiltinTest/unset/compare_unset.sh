@@ -2,7 +2,7 @@
 
 
 
-gcc -o ft_unset ./main.c ./../../unset.c  ./../../env.c -L../../../42_MyLibC -lft
+gcc -o ft_unset ./main.c ./../../Builtins/unset.c  ./../../Builtins/env.c -L../../42_MyLibC -lft
 
 # env | sort > original_env.txt
 # cat original_env.txt | sort > cpy_original_env.txt
@@ -60,4 +60,5 @@ diff ft_tmp_sort.txt ft_update_sort.txt
 rm env_update.txt ft_update.txt ft_tmp.txt env_unset.txt
 
 # # Nettoyer les fichiers temporaires txt tries
-rm env_update_sort.txt ft_update_sort.txt ft_tmp_sort.txt
+rm env_update_sort.txt
+# rm ft_update_sort.txt ft_tmp_sort.txt
