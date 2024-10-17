@@ -14,7 +14,7 @@ done < variables.txt
 #  cat env_update.txt
 
 # Lire le fichier d'entrée et définir les variables d'environnement avec unset
-while IFS=' ' read -r export_val unset_val; do
+while IFS=' ' read -r export_var unset_val; do
     unset $unset_val && env > env_unset.txt
 done < variables.txt
 # cat env_unset.txt
@@ -22,8 +22,8 @@ done < variables.txt
 # Comparer les variables d'environnement avant et après l'exécution de unset
 # diff env_update.txt env_unset.txt
 
-while IFS=' ' read -r export_val unset_val; do
-    export $export_val && env > env_update.txt
+while IFS=' ' read -r export_var unset_val; do
+    export $export_var && env > env_update.txt
 done < variables.txt
 # cat env_update.txt
 
