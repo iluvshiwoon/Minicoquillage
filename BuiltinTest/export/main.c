@@ -10,7 +10,7 @@ int	main(int ac, char **av, char **env)
 	(void )		ac;
 	(void )		av;
 	envc = ft_env(env);
-	fd = open("variables.txt",  O_RDONLY, 0777);
+	fd = open("variables.txt",  O_RDWR);
 	if (fd == -1)
 	{
 		printf("Error in opening file\n");
@@ -18,10 +18,9 @@ int	main(int ac, char **av, char **env)
 	}
 	while ((line = get_next_line(fd)) > 0)
 	{
-		// ft_export(envc, line);
-		printf("%s\n", line);
+		ft_export(envc, line);
 	}
-	// put_envc(envc);
+	put_envc(envc);
 	return (0);
 }
 

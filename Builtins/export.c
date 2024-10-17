@@ -43,10 +43,10 @@ int	is_formatted(char *var, char *subchar)
 	i = 0;
 	if (!var)
 		return (0);
-	if (has_character(var, '=') < 0 && ft_isdigit(*var))
+	if (has_character(var, '=') < 0 && ft_isdigit(*var) && has_character(var, ';'))
 		return (0);
-	if (has_character(var, '=') < 0 && ft_strlen(var) > 0)
-		;
+	// if (has_character(var, '=') < 0 && ft_strlen(var) > 0)
+	// 	;
 	while (*var)
 	{
 		if (*var == ';' || *var == '|' || *var == '<' || *var == '>' || *var == '&')
@@ -95,13 +95,13 @@ int	add_var(t_mylist **env, char *variable, char *subchar)
 	varc = NULL;
 	if (separator < 0)
 	{
-		var = ft_strdup(variable);
+		var = ft_substr(variable, 0, ft_strlen(variable) - 1);
 		val = NULL;
 	}
 	else
 	{
 		var = ft_substr(variable, 0, separator);
-		val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator);
+		val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator - 2);
 	}
 	if (val == NULL)
 		val = ft_strdup("");
@@ -160,7 +160,7 @@ int	update_var(t_mylist **env, char *variable)
 		var = ft_substr(varc, 0, has_character(varc, '$'));
 		free(varc);
 	}
-	val = ft_substr(variable, separator + 1, ft_strlen(variable) -separator);
+	val = ft_substr(variable, separator + 1, ft_strlen(variable) -separator - 2);
 	if (val == NULL)
 		val = ft_strdup("");
 	valc = ft_substr(val, 0, has_character(val, '$'));
@@ -177,8 +177,6 @@ void	ft_export(t_mylist *env, char *variable)
 	int		i;
 
 	tab = ft_split(variable, ' ');
-	ft_putstr_fd(tab[0], 1);
-	ft_putstr_fd(tab[1], 1);
 	i = 0;
 	while (tab[i])
 	{

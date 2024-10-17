@@ -6,5 +6,6 @@ VAR3=value3
 VAR1=value4
 VARLAR1=ligne1
 VARLAR2=ligne2
+VAR10;
 VAR5;= value5
 VAR7=

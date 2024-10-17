@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gcc -o ft_export ./main.c ./../../Builtins/export.c  ./../../Builtins/env.c -L../../42_MyLibC -lft
+gcc -g3 -o ft_export ./main.c ./../../Builtins/export.c  ./../../Builtins/env.c -L../../42_MyLibC -lft
 
 # Parcourir un fichier et ajouter les variables d'environnement avec export
 # while IFS='=' read -r var val; do
@@ -10,7 +10,6 @@ gcc -o ft_export ./main.c ./../../Builtins/export.c  ./../../Builtins/env.c -L..
 # Spécifiez le nom du fichier
 file_name="variables.txt"
 
-env > original_env.txt
 
 # Lire chaque ligne du fichier
 while IFS=' ' read -ra elements; do
@@ -30,8 +29,16 @@ while IFS=' ' read -ra elements; do
 	done
 done < original_export.txt
 
-original_env.txt > sort_original_env.txt
-original_export.txt > sort_original_export.txt
+env | sort > original_env.txt
 
-diff sort_original_env.txt sort_original_export.txt
+./ft_export > custom_export.txt
+
+cat original_env.txt | sort > sort_original_env.txt
+cat original_export.txt | sort > sort_original_export.txt
+cat custom_export.txt | sort > sort_custom_export.txt
+
+diff sort_original_export.txt sort_custom_export.txt
+
+rm original_export.txt custom_export.txt my_export.txt sort_original_export.txt sort_custom_export.txt
+rm original_env.txt
 
