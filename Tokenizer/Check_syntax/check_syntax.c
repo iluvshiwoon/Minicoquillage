@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/16 18:46:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/17 19:02:03 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 
 int	check_syntax(char *line)
 {
-	static int	open_double;
-	static int	open_single;
-	static int	open_parenthesis;
+	int	open_double;
+	int	open_single;
+	int	open_parenthesis;
 
+	open_double = 0;
+	open_single = 0;
+	open_parenthesis = 0;
 	while (*line)
 	{
 		if (*line == '(' && (!open_single && !open_double))
@@ -25,16 +28,14 @@ int	check_syntax(char *line)
 		else if (*line == ')' && (!open_single && !open_double))
 			--open_parenthesis;
 		if (*line == '\'')
-			toggle_quote(&open_single, &open_double);
+			toggle_quote(&open_double, &open_single, *line);
 		else if (*line == '\"')
-			toggle_quote(&open_double, &open_single);
+			toggle_quote(&open_double, &open_single, *line);
 		line++;
 	}
 	if (open_parenthesis < 0)
 		open_parenthesis = 0;
-	if (open_double || open_single)
-		return (EXIT_FAILURE);
-	else if (open_parenthesis)
+	if (open_double || open_single || open_parenthesis)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -94,8 +95,8 @@ int	handle_line(t_heap_allocated * heap_allocated, t_get_line *get_line, t_doubl
 		return(EXIT_FAILURE);
 	}
 	get_line->line = update_node(heap_allocated,lines);
-    // if (!get_line->line)
-    //     return (EXIT_FAILURE);
+    if (!get_line->line)
+        return (EXIT_FAILURE);
     free(get_line->line);
 	get_line->line = concat_input(heap_allocated,lines);
 	*r_value = check_temp_syntax(heap_allocated,get_line->line);
@@ -107,24 +108,33 @@ char	*get_line(t_heap_allocated * heap_allocated)
 	int				r_value;
 	t_get_line		get_line;
     t_double_link_list * lines;
+    t_double_link_node * node;
 
+    node = wrap_malloc(heap_allocated, heap_allocated->input, sizeof(*node));
 	lines = wrap_malloc(heap_allocated,heap_allocated->input,sizeof(*lines));
     *lines = (t_double_link_list){};
 	init_list(lines);
 	get_line.prompt = get_prompt(heap_allocated);
 	get_line.line = init_line(heap_allocated, lines, get_line.prompt);
-	get_line.temp = get_line.line;
-	r_value = check_temp_syntax(heap_allocated,get_line.line);
-	while (check_syntax(get_line.temp) == EXIT_FAILURE
-		|| r_value == EXIT_FAILURE || r_value == CONTINUE)
+    r_value = check_temp_syntax(heap_allocated,get_line.line);
+    get_line.temp = get_line.line;
+    if (check_syntax(get_line.temp) == EXIT_FAILURE)
+    {
+        node->data = mini_ft_strdup(heap_allocated, heap_allocated->input,"\n");
+        lines->pf_insert_end(lines,node);
+    }
+    while (check_syntax(get_line.temp) == EXIT_FAILURE
+        || r_value == EXIT_FAILURE || r_value == CONTINUE)
 	{
 		if (handle_line(heap_allocated, &get_line, lines, &r_value) == EXIT_FAILURE)
-			return (NULL);
+            break;
+			// return (NULL);
+        get_line.temp = concat_input(heap_allocated,lines);
 	}
 	get_line.line = concat_input(heap_allocated,lines);
 	if (get_line.line && *get_line.line)
 		add_history(get_line.line);
-	if (!lines->first_node->next)
-		get_line.line = mini_ft_strdup(heap_allocated, heap_allocated->input, get_line.line);
+	// if (!lines->first_node->next)
+	// 	get_line.line = mini_ft_strdup(heap_allocated, heap_allocated->input, get_line.line);
 	return (get_line.line);
 }

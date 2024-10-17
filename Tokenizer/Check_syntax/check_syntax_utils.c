@@ -6,18 +6,22 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/16 14:51:22 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/17 18:25:47 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Minicoquillage.h"
 
-void	toggle_quote(int *quote, int *quote1)
+void	toggle_quote(int *open_double, int *open_single, char c)
 {
-	if (*quote)
-		*quote = 0;
-	else if (!(*quote1))
-		*quote = 1;
+    if (!*open_double && !*open_single && c=='"')
+        *open_double += 1;
+    else if (!*open_double && !*open_single && c=='\'')
+        *open_single +=1;
+    else if (*open_double && c == '"')
+        *open_double = 0;
+    else if (*open_single && c == '\'')
+        *open_single = 0;
 }
 
 // char	*wrapper_strjoin_concat(t_heap_allocated * heap_allocated,char *s1, char *s2, t_string *string)
@@ -64,7 +68,8 @@ char * update_node(t_heap_allocated * heap_allocated,t_double_link_list *lines)
 	line = readline("· ");
     if (!line)
         return (NULL);
-    node->data = mini_ft_strdup(heap_allocated,heap_allocated->input,line);
+    // node->data = mini_ft_strdup(heap_allocated,heap_allocated->input,line);
+    node->data = mini_ft_strjoin(heap_allocated,heap_allocated->input,line,"\n");
     lines->pf_insert_end(lines, node);
     return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/16 14:48:35 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/17 17:52:25 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	handle_line(t_heap_allocated * heap_allocated, t_get_line *get_line, t_doubl
 char	*get_line(t_heap_allocated * heap_allocated);
 
 // check_syntax_utils.c
-void					toggle_quote(int *quote, int *quote1);
+void	toggle_quote(int *open_double, int *open_single, char c);
 char	*wrapper_strjoin_concat(t_heap_allocated * heap_allocated,char *s1, char *s2, t_string *string);
 void	init_control(t_control_dll *control, t_control_dll * gl_control);
 char	*init_line(t_heap_allocated * heap_allocated,t_double_link_list * lines, char *prompt);
