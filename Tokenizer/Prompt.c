@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:46:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 14:39:46 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:27:12 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,11 @@ char	*build_prompt(t_heap_allocated * heap_allocated)
 	prompt = last_ocur(buffer, '/');
 	prompt = mini_ft_strjoin(heap_allocated, heap_allocated->input,"\1\033[1;34m\2", prompt + 1);
 	temp = mini_ft_strjoin(heap_allocated, heap_allocated->input,prompt, "\1\033[0m\2");
-	prompt = mini_ft_strjoin(heap_allocated, heap_allocated->input,temp,
-			(char *){" via \1🐚\2 \1\033[1;34m\2(Minicoquillage)\1\n🦪\2 \1→\2 \1\033[0m\2"});
+	// prompt = mini_ft_strjoin(heap_allocated, heap_allocated->input,temp,
+	// 		(char *){" via \1🐚\2 \1\033[1;34m\2(Minicoquillage)\1\n🦪\2 \1→\2 \1\033[0m\2"});
+    prompt = mini_ft_strjoin(heap_allocated, heap_allocated->input,temp,
+			mini_ft_strjoin(heap_allocated,heap_allocated->input,\
+mini_ft_strjoin(heap_allocated,heap_allocated->input," via \1\033[1;34m\2",last_ocur(getenv("SHELL"),'/')+1),"\1\n🦪\2 \1→\2 \1\033[0m\2"));
 	return (prompt);
 }
 
