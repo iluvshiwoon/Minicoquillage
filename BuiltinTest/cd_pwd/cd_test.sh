@@ -32,7 +32,7 @@ done < my_path_dock.txt
 
 diff path_ft_cd path_cd
 
-rm path_ft_cd path_cd
+# rm path_ft_cd path_cd
 
 
 
