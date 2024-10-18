@@ -17,6 +17,4 @@ foreach item $list {
     send -- "$item\n"
 }
 interact 
-# expect ""
-# send -- "\x04"
 expect eof

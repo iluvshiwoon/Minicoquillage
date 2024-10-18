@@ -26,6 +26,9 @@ leak: $(NAME)
 	cat $(LEAK) > $(TEST)/leak_test.csv
 	expect -f $(TEST)/expect_leak $(TEST)/leak_test.csv $(CURDIR)/$(NAME)
 
+ml: $(NAME)
+	expect $(TEST)/expect_ml
+
 build:
 	$(MAKE) -C 42_MyLibC
 
