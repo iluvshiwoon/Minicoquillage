@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Set the path to your C program
 PROGRAM="$2"
@@ -10,9 +10,8 @@ TEST_COUNT=0
 FAILED_TESTS=0
 
 # Print a header
-# echo "Test Results:"
-# echo "------------"
-echo ""
+echo "Test Results:"
+echo "------------"
 
 # Iterate over each row in the csv file
 while IFS="," read -r input expected_output
@@ -28,7 +27,7 @@ do
     if [ "$output" != "$expected_output" ]; then
         # Increment the failed tests count
         ((FAILED_TESTS++))
-        printf "\033[91mTest %3d: Failed\033[0m\n" "$TEST_COUNT"
+        echo -e "\033[91mTest $TEST_COUNT: Failed\033[0m"
         echo "  Input:    $input"
         echo "  Expected: $expected_output"
         # echo "  Got:      '$output'"
@@ -45,8 +44,8 @@ do
         done
         echo -e "$diff_output\033[0m"
         echo
-    # else
-    #     printf "\033[92mTest %3d: Passed\033[0m\n" "$TEST_COUNT"
+    else
+        echo -e "\033[92mTest $TEST_COUNT: Passed\033[0m"
         # echo "  Input:    '$input'"
         # echo
     fi
@@ -54,7 +53,8 @@ done < "$FILE"
 
 # Print a summary
 echo -e "\033[94m------------\033[0m"
-echo -e "\033[94mTest Summary: Syntax\033[0m"
+echo -e "\033[94mTest Summary:\033[0m"
 echo -e "  Total Tests:  $TEST_COUNT"
 echo -e "  \033[91mFailed Tests: $FAILED_TESTS\033[0m"
 echo -e "  \033[92mPassed Tests: $((TEST_COUNT - FAILED_TESTS))\033[0m"
+

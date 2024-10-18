@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 15:22:56 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 15:06:31 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
@@ -15,10 +15,12 @@ void	add_token(size_t i, size_t j, char *line, t_control_dll *control)
 {
 	char	*temp;
 
-	control->node = malloc(sizeof(*control->node));
-	control->token = malloc(sizeof(*control->token));
+	control->node = wrap_malloc(control->heap_allocated,control->heap_allocated->tokens,sizeof(*control->node));
+    *control->node = (t_double_link_node){};
+	control->token = wrap_malloc(control->heap_allocated,control->heap_allocated->tokens,sizeof(*control->token));
+    *control->token = (t_token){};
 	control->token->type = COMMAND;
-	temp = malloc(sizeof(char) * (j - i + 1));
+	temp = wrap_malloc(control->heap_allocated,control->heap_allocated->tokens,sizeof(char) * (j - i + 1));
 	ft_strlcpy(temp, line + i, j - i + 1);
 	control->token->value = temp;
 	control->node->data = control->token;
@@ -46,10 +48,8 @@ size_t	init_create_tokens(t_open_quote *open, t_control_dll *control,
 	*j = 0;
 	open->double_quote = 0;
 	open->single_quote = 0;
-	control->list = malloc(sizeof(*control->list));
-	if (!(control->list))
-		return (dl_free_token_list(control->list), free(line),
-			exit(EXIT_SUCCESS), *j);
+	control->list = wrap_malloc(control->heap_allocated,control->heap_allocated->tokens,sizeof(*control->list));
+    *control->list = (t_double_link_list){};
 	*j = skip_space(line, *j);
 	if (ft_isspace(line[*j]))
 		*j += 1;
@@ -65,8 +65,15 @@ t_double_link_list	*expand_nodes(size_t i, size_t j, t_control_dll *control,
 	control->node = control->list->first_node;
 	while (control->node)
 	{
-		expand_tokens(control->node);
+		// expand_tokens(control->node);
+        assign_quote(control->node);
 		control->node = control->node->next;
 	}
+    // control->token = malloc(sizeof(*(control->token)));
+    // control->node = malloc(sizeof(*control->node));
+    // *(control->token) = (t_token){};
+    // control->token->type = EOE;
+    // control->node->data = control->token;
+    // control->list->pf_insert_end(control->list,control->node);
 	return (control->list);
 }

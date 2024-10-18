@@ -10,7 +10,7 @@ OUTPUT_CSV="$2"
 # Read the input file line by line
 while IFS= read -r line; do
   # Run your shell program with the input line and capture the output
-  output=$(../../a.out "$line")
+  output=$(../../Minicoquillage "$line")
 
   # Create the CSV row
   csv_row="$line,\"$output\""

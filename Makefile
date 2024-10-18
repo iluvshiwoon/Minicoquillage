@@ -1,7 +1,12 @@
-C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c)
-# C_FLAGS = -Wall -Werror -Wextra
+C_FILES = $(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c ./Utils/*.c)
+C_FLAGS = -Wall -Werror -Wextra
+
 NAME = Minicoquillage
-TEST = ./Tokenizer/test
+TOKENIZER = ./Tokenizer/test
+PARSER = ./Parser/test
+LEAK = $(TOKENIZER)/syntax_error_cmd.txt $(TOKENIZER)/tokens_cmd.txt $(PARSER)/parser_cmd.txt
+
+TEST = ./test
 
 .PHONY: all clean fclean re syntax token
 .DEFAULT: all
@@ -11,11 +16,18 @@ all: $(NAME)
 $(NAME): $(C_FILES) | build
 	cc -g $(C_FLAGS) $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 
-syntax: all
-	bash $(TEST)/tester_syntax.sh $(TEST)/syntax_error_test.csv $(CURDIR)/$(NAME)
+tokenizer:
+	@$(MAKE) -sC ./Tokenizer
 
-token: all
-	bash $(TEST)/tester_tokens.sh $(TEST)/tokens_test.csv $(CURDIR)/$(NAME)
+parser:
+	@$(MAKE) -sC ./Parser
+
+leak: $(NAME)
+	cat $(LEAK) > $(TEST)/leak_test.csv
+	expect -f $(TEST)/expect_leak $(TEST)/leak_test.csv $(CURDIR)/$(NAME)
+
+ml: $(NAME)
+	expect $(TEST)/expect_ml
 
 build:
 	$(MAKE) -C 42_MyLibC
@@ -25,7 +37,6 @@ clean:
 
 fclean: clean
 	-rm -f $(NAME)
-	-rm -f $(CHECKER)
 	$(MAKE) -C 42_MyLibC fclean
 
 

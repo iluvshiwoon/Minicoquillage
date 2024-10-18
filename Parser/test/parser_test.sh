@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # Set the path to your C program
-PROGRAM="$2"
 FILE="$1"
 
 # Initialize a counter for the number of tests
@@ -21,27 +20,24 @@ do
     # Increment the test count
     ((TEST_COUNT++))
 
-    # Execute your C program with the input
-    output=$("$PROGRAM" "$input")
-
     # Compare the output with the expected output
-    if [ "$output" != "$expected_output" ]; then
+    if [ "$input" != "$expected_output" ]; then
         # Increment the failed tests count
         ((FAILED_TESTS++))
         printf "\033[91mTest %3d: Failed\033[0m\n" "$TEST_COUNT"
-        echo "  Input:    $input"
+        # echo "  Input:    $input"
         echo "  Expected: $expected_output"
         # echo "  Got:      '$output'"
         # echo
         echo -n "  Got:      "
         diff_output=""
-        for ((i=0; i<${#output}; i++)); do
-            if [ "${output:i:1}" != "${expected_output:i:1}" ]; then
+        for ((i=0; i<${#input}; i++)); do
+            if [ "${input:i:1}" != "${expected_output:i:1}" ]; then
                 diff_output+='\033[91m'
             else
                 diff_output+='\033[0m'
             fi
-            diff_output+="${output:i:1}"
+            diff_output+="${input:i:1}"
         done
         echo -e "$diff_output\033[0m"
         echo

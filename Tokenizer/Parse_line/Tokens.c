@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 14:57:48 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/15 14:44:52 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
@@ -21,15 +21,20 @@ void	expand_tokens(t_double_link_node *node)
 	init_expand(&open, &control, &j, node);
 	while (control.token->value[j])
 	{
-		if (handle_quote(&control, &open, j) == EXIT_SUCCESS)
+        if (handle_quote(&control, &open, j) == EXIT_SUCCESS)
 			j = j;
-		else if (control.token->value[j] == '"' && open.double_quote)
+        else if (control.token->value[j] == '$' && !open.double_quote && !open.single_quote)
+        {
+            expand(&j, &control.token->value,
+					&temp, &node);
+        }
+        else if (control.token->value[j] == '"' && open.double_quote)
 		{
 			open.double_quote = expand_double_quote(&j, &control.token->value,
 					&temp, &node);
 			control.token->quote = DOUBLE;
 		}
-		else if (control.token->value[j] == '\'' && open.single_quote)
+        else if (control.token->value[j] == '\'' && open.single_quote)
 		{
 			open.single_quote = expand_single_quote(&j, &control.token->value,
 					&temp, &node);
@@ -91,13 +96,14 @@ void	skip_space_wrapper(size_t j, size_t *i, char *line, t_open_quote *open)
 	}
 }
 
-t_double_link_list	*create_tokens(char *line)
+t_double_link_list	*create_tokens(t_heap_allocated * heap_allocated,char *line)
 {
 	t_control_dll	control;
 	t_open_quote	open;
 	size_t			i;
 	size_t			j;
 
+    control.heap_allocated = heap_allocated;
 	i = init_create_tokens(&open, &control, line, &j);
 	while (line[j])
 	{

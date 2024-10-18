@@ -48,6 +48,45 @@ echo a ;>>
 echo a ;<<
 echo a ;<<
 (cat ) -e
+-e (cat )
 ls  && ()
 echo "infile" && (|)
 ls| (cat file) -e
+> a (echo)
+>> a (echo)
+< a (echo)
+echo > (echo)
+echo >> (echo)
+echo < (echo)
+echo << (echo)
+echo (
+echo (    (
+echo ((
+echo )    )
+echo ))
+> > > >
+>> >> >>
+<< << <<
+> > >>
+>> > >
+> > >
+>> >>
+<< <<
+> > > > >
+;
+;;
+;;;
+echo ; ; echo
+| | |
+| | | |
+echo | | echo
+( (echo) ) ) ) )
+&& &&
+|| ||
+echo && && echo
+echo || || echo
+< ()
+> ( )
+< > ( )
+> < ( )
+(ls || echo "Directory not listed") < (input.txt) && (pwd || echo "Current directory not printed") >> (output.txt) && (echo "Hello" || echo "World") >> (output.txt)

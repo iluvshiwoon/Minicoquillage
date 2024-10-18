@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Utils.c                                            :+:      :+:    :+:   */
+/*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 17:27:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/09/21 12:23:47 by kgriset          ###   ########.fr       */
+/*   Created: 2024/10/08 18:43:57 by kgriset           #+#    #+#             */
+/*   Updated: 2024/10/15 13:39:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
-int	ft_sep(int c)
+void error_exit(char * msg, t_heap_allocated * heap_allocated)
 {
-	return (c == '&' || c == '|' || c == '>' || c == '<' || c == ';' || c == '('
-		|| c == ')');
+    if (msg)
+        perror(msg);
+    free_heap(heap_allocated);
+    exit(EXIT_FAILURE);
 }

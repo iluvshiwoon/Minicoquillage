@@ -6,70 +6,70 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/06/26 15:27:47 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/17 18:25:47 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Minicoquillage.h"
 
-void	toggle_quote(int *quote, int *quote1)
+void	toggle_quote(int *open_double, int *open_single, char c)
 {
-	if (*quote)
-		*quote = 0;
-	else if (!(*quote1))
-		*quote = 1;
+    if (!*open_double && !*open_single && c=='"')
+        *open_double += 1;
+    else if (!*open_double && !*open_single && c=='\'')
+        *open_single +=1;
+    else if (*open_double && c == '"')
+        *open_double = 0;
+    else if (*open_single && c == '\'')
+        *open_single = 0;
 }
 
-char	*wrapper_strjoin_concat(char *s1, char *s2, t_double_link_list *list,
-		t_string *string)
-{
-	char	*r_value;
+// char	*wrapper_strjoin_concat(t_heap_allocated * heap_allocated,char *s1, char *s2, t_string *string)
+// {
+// 	char	*r_value;
+//
+// 	r_value = mini_ft_strjoin(heap_allocated,heap_allocated->input,s1, s2);
+// 	return (r_value);
+// }
 
-	r_value = ft_strjoin(s1, s2);
-	if (!r_value)
-	{
-		if (string->dst)
-			free(string->dst);
-		if (string->temp)
-			free(string->temp);
-		return (dl_free_list(list), exit(EXIT_FAILURE), r_value);
-	}
-	return (r_value);
+void	init_control(t_control_dll *control, t_control_dll * gl_control)
+{
+	gl_control->list = wrap_malloc(control->heap_allocated,control->heap_allocated->input,sizeof(*control->list));
+	gl_control->node = wrap_malloc(control->heap_allocated,control->heap_allocated->input,sizeof(*control->node));
+    *gl_control->node = (t_double_link_node){};
+    *gl_control->list = (t_double_link_list){};
+	init_list(gl_control->list);
 }
 
-void	init_control(t_control_dll *control)
-{
-	control->list = malloc(sizeof(*control->list));
-	control->node = malloc(sizeof(*control->node));
-	if (!control->list || !control->node)
-		return (free(control->list), free(control->node), exit(EXIT_FAILURE));
-	init_list(control->list);
-}
-
-char	*init_line(t_control_dll *control, char *prompt)
+char	*init_line(t_heap_allocated * heap_allocated,t_double_link_list * lines, char *prompt)
 {
 	char	*line;
+    char    *dup_line;
+    t_double_link_node * node;
 
 	line = readline(prompt);
 	if (!line)
-		return (free(control->list), free(control->node), free(prompt),
-			free(line), exit(EXIT_FAILURE), NULL);
-	control->node->data = line;
-	control->list->pf_insert_end(control->list, control->node);
-	return (line);
+		return (error_exit(NULL, heap_allocated),NULL);
+    node = wrap_malloc(heap_allocated, heap_allocated->input,sizeof(*node));
+    dup_line = mini_ft_strdup(heap_allocated,heap_allocated->input,line);
+    free(line);
+	node->data = dup_line;
+	lines->pf_insert_end(lines, node);
+	return (dup_line);
 }
 
-char	*update_node(t_control_dll *control, char *prompt, char *line)
+char * update_node(t_heap_allocated * heap_allocated,t_double_link_list *lines)
 {
-	control->node = malloc(sizeof(*control->node));
-	if (!control->node)
-		return (dl_free_list(control->list), free(prompt), free(line),
-			exit(EXIT_FAILURE), NULL);
+    t_double_link_node * node;
+    char * line;
+
+	node = wrap_malloc(heap_allocated,heap_allocated->input,sizeof(*node));
+    *node = (t_double_link_node){};
 	line = readline("· ");
-	if (!control->node)
-		return (dl_free_list(control->list), free(prompt), free(line),
-			exit(EXIT_FAILURE), NULL);
-	control->node->data = line;
-	control->list->pf_insert_end(control->list, control->node);
-	return (line);
+    if (!line)
+        return (NULL);
+    // node->data = mini_ft_strdup(heap_allocated,heap_allocated->input,line);
+    node->data = mini_ft_strjoin(heap_allocated,heap_allocated->input,line,"\n");
+    lines->pf_insert_end(lines, node);
+    return (line);
 }
