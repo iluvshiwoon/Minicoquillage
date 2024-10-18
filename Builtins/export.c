@@ -1,6 +1,14 @@
 #include "./builtins.h"
 
 
+int	error_message(char *tab)
+{
+	ft_putstr_fd("export: `", 2);
+	ft_putstr_fd(tab, 2);
+	ft_putstr_fd(" not a valid identifier\n", 2);
+	return (0);
+}
+
 int	has_character(char *var, char c)
 {
 	char	*cpy;
@@ -45,8 +53,8 @@ int	is_formatted(char *var, char *subchar)
 		return (0);
 	if (has_character(var, '=') < 0 && ft_isdigit(*var) && has_character(var, ';'))
 		return (0);
-	// if (has_character(var, '=') < 0 && ft_strlen(var) > 0)
-	// 	;
+	// if (*var == '=')
+	// 	return error_message(var);
 	while (*var)
 	{
 		if (*var == ';' || *var == '|' || *var == '<' || *var == '>' || *var == '&')
@@ -65,6 +73,7 @@ int	is_formatted(char *var, char *subchar)
 	}
 	return (1);
 }
+
 
 void	addto_env(t_mylist **env, char *var, char *val)
 {
@@ -185,13 +194,7 @@ void	ft_export(t_mylist *env, char *variable)
 		is_form = is_formatted(tab[i], subchar);
 		if (is_form)
 		{
-			if (has_character(variable, '=') == 0)
-			{
-				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(tab[i], 2);
-				ft_putstr_fd(" not a valid identifier\n", 2);
-			}
-			else if (var_missing(&env, tab[i]))
+			if (var_missing(&env, tab[i]))
 				add_var(&env, tab[i], subchar);
 			else
 				update_var(&env, tab[i]);

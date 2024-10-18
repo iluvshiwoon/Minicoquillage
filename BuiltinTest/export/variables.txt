@@ -9,3 +9,4 @@ VARLAR2=ligne2
 VAR10;
 VAR5;= value5
 VAR7=
+VAR75==

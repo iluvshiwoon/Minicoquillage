@@ -1,0 +1,29 @@
+export: `AR="untruc"
+ not a valid identifier
+export: `VAR8=value8
+ not a valid identifier
+export: `AR1=value1
+ not a valid identifier
+export: `AR2=value2
+ not a valid identifier
+export: `AR3=value3
+ not a valid identifier
+export: `AR1=value4
+ not a valid identifier
+export: `ARLAR1=ligne1
+ not a valid identifier
+export: `ARLAR2=ligne2
+ not a valid identifier
+export: `AR10;
+ not a valid identifier
+export: `AR5;= not a valid identifier
+export: `alue5
+ not a valid identifier
+export: `AR7=
+ not a valid identifier
+export: `AR75==
+ not a valid identifier
+export: `VAR10;
+ not a valid identifier
+export: `value5
+ not a valid identifier

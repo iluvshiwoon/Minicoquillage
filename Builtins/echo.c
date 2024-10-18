@@ -200,11 +200,13 @@ int	is_option(char *msg)
 	return (0);
 }
 
-void	ft_echo(char **msg)
+void	ft_echo(char *input)
 {
-	int	option_n;
-	int	i;
+	int		option_n;
+	int		i;
+	char	**msg;
 
+	msg = ft_split(input, ' ');
 	i = 0;
 	option_n = 0;
 	if (is_option(msg[0]))
@@ -214,27 +216,11 @@ void	ft_echo(char **msg)
 	}
 	while (msg[i])
 	{
-		ft_printf("%s", msg[i]);
+		printf("%s", msg[i]);
 		if (msg[i + 1] != NULL)
-			ft_printf(" ");
+			printf(" ");
 		i++;
 	}
-	if(!option_n)
-		ft_printf("\n");
+	if (!option_n)
+		printf("\n");
 }
-
-// int	main(void)
-// {
-// 	char	*test[4];
-// 	test[0] = "-n";
-// 	test[1] = "hello";
-// 	test[2] = "word";
-// 	test[3] = NULL;
-// 	int i = is_option(test[0]);
-
-// 	ft_printf("%d\n", i);
-// 	ft_echo(test);
-// 	ft_echo(test);
-
-// 	return (0);
-// }
