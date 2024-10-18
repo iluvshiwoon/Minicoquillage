@@ -63,10 +63,9 @@ int	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, c
 	env = env_origin;
 	if (chdir((const char *) newpath) != 0)
 	{
-		// printf("cd: %d (%s)\n", errno, strerror(errno));
-		ft_putstr_fd("cd: no such file or directory: ", 2);
+		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(newpath, 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (1);
 	}
 	else
@@ -97,7 +96,7 @@ int	is_absolute_path(char *path)
 	i = 0;
 	if (path[i])
 	{
-		if (path[i] == '~')
+		if (path[i] == '~' && path[i + 1] == '/')
 			return (1);
 		i++;
 	}

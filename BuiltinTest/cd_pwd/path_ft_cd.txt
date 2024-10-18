@@ -1,16 +1,9 @@
 /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd/res
 /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/echo/res
 /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/env
-./../../
-~/Documents
-~~/Documents
-~/~/Documents
-~/.
-~/Documents/..
-//
-..//
-/..//
-.~
-~.
-hello
-/hello
+/home/bsunda/Documents/projet_1/Minicoquillage
+/home/bsunda/Documents
+cd: ~~/Documents: No such file or directory
+cd: /home/bsunda/~/Documents: No such file or directory
+/home/bsunda
+/home/bsunda
