@@ -1,9 +1,10 @@
 # TODO
 ## ROADMAP
 1. Tokenizer + Expand: Doubly linked list with substring and enum value for token [MERGED]
-2. Implement precedence climbing on the list : [algo](https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing)
-3. Implement Signal
-4. Error Management (check syntax error for heredoc + permission for files)
+2. Parser
+3. Execution and with globing and expansion
+4. Implement Signal
+5. Error Management (check syntax error for heredoc + permission for files)
 
 ## IN NO SPECIFIC ORDER
 * Implement Pipe [Pipex Guide](https://reactive.so/post/42-a-comprehensive-guide-to-pipex)
