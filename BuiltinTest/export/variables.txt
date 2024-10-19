@@ -18,6 +18,7 @@ VAR75==
 VAR5=update
 zvariable
 zzvariable zvar
+z01 z02 z03 z04= z05
 zzz
 zzzzz
 zzvariables

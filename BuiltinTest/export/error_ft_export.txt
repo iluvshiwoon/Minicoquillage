@@ -1,6 +1,0 @@
-export: `$VAR8=value8': not a valid identifier
-export: `=': not a valid identifier
-export: `11VAR11=': not a valid identifier
-export: `11VAR12=value12': not a valid identifier
-export: `=VARTRASH': not a valid identifier
-export: `9=VARTRASH9': not a valid identifier

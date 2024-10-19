@@ -42,6 +42,7 @@ int	var_missing(t_mylist **env, char *str)
 
 	separator = has_character(str, '=');
 	var = ft_substr(str, 0, separator);
+
 	envc = *env;
 	while (envc)
 	{
@@ -74,11 +75,16 @@ int	add_var(t_mylist **env, char *variable)
 	char	*val;
 	char	*var;
 	int		separator;
+	int 	end_var;
 
 	separator = has_character(variable, '=');
 	if (separator < 0)
 	{
-		var = ft_substr(variable, 0, ft_strlen(variable) - 1);
+		end_var = ft_strlen(variable) - 1;
+		if (variable[end_var] == '\n')
+			var = ft_substr(variable, 0, end_var);
+		else
+			var = variable;
 		val = ft_strdup("");
 	}
 	else
@@ -86,6 +92,8 @@ int	add_var(t_mylist **env, char *variable)
 		var = ft_substr(variable, 0, separator);
 		val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator - 2);
 	}
+	if (!ft_strncmp(val, "=", 1))
+		val = ft_strdup("");
 	addto_env(env, var, val);
 	return (0);
 }
@@ -118,16 +126,12 @@ int	update_var(t_mylist **env, char *variable)
 	int			separator;
 
 	separator = has_character(variable, '=');
-	if (separator < 0)
-	{
-		var = ft_substr(variable, 0, ft_strlen(variable) - 1);
-		val = ft_strdup("");
-	}
-	else
 	{
 		var = ft_substr(variable, 0, separator);
 		val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator - 2);
 	}
+	if (!ft_strncmp(val, "=", 1))
+		val = ft_strdup("");
 	updateto_env(env, var, val);
 	return (0);
 }
