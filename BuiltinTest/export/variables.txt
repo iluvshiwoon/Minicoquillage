@@ -3,10 +3,21 @@ $VAR8=value8
 VAR1=value1
 VAR2=value2
 VAR3=value3
+VAR3=value32
 VAR1=value4
 VARLAR1=ligne1
 VARLAR2=ligne2
-VAR10;
-VAR5;= value5
+VAR11=value11
+VAR5 = value5
 VAR7=
 VAR75==
+11VAR11
+11VAR12=value12
+=VARTRASH
+9=VARTRASH9
+VAR5=update
+zvariable
+zzvariable zvar
+zzz
+zzzzz
+zzvariables

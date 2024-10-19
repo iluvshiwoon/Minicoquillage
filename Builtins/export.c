@@ -1,14 +1,5 @@
 #include "./builtins.h"
 
-
-int	error_message(char *tab)
-{
-	ft_putstr_fd("export: `", 2);
-	ft_putstr_fd(tab, 2);
-	ft_putstr_fd(" not a valid identifier\n", 2);
-	return (0);
-}
-
 int	has_character(char *var, char c)
 {
 	char	*cpy;
@@ -26,6 +17,23 @@ int	has_character(char *var, char c)
 	return (-1);
 }
 
+int	error_message(char *tab)
+{
+	int	i;
+
+	i = 0;
+	ft_putstr_fd("export: `", 2);
+	while (tab[i] != '\0' && tab[i] != '\n')
+	{
+		ft_putchar_fd(tab[i], 2);
+		i++;
+	}
+	if (has_character(tab, '=') == -1)
+		ft_putchar_fd('=', 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	return (0);
+}
+
 int	var_missing(t_mylist **env, char *str)
 {
 	t_mylist	*envc;
@@ -37,43 +45,12 @@ int	var_missing(t_mylist **env, char *str)
 	envc = *env;
 	while (envc)
 	{
-		if (!ft_strncmp(envc->var, var, ft_strlen(var) - 1))
+		if (!ft_strncmp(envc->var, var, ft_strlen(var)))
 			return (0);
 		envc = envc->next;
 	}
 	return (1);
 }
-
-int	is_formatted(char *var, char *subchar)
-{
-	int	i;
-
-	i = 0;
-	if (!var)
-		return (0);
-	if (has_character(var, '=') < 0 && ft_isdigit(*var) && has_character(var, ';'))
-		return (0);
-	// if (*var == '=')
-	// 	return error_message(var);
-	while (*var)
-	{
-		if (*var == ';' || *var == '|' || *var == '<' || *var == '>' || *var == '&')
-			return (0);
-		if (ft_isalnum(*var) || *var == '=')
-		{
-			subchar[1] = subchar[1] + 1;
-			var++;
-		}
-		else
-		{
-			subchar[1] = subchar[1] + 1;
-			subchar[0] = subchar[1];
-			var++;
-		}
-	}
-	return (1);
-}
-
 
 void	addto_env(t_mylist **env, char *var, char *val)
 {
@@ -92,40 +69,24 @@ void	addto_env(t_mylist **env, char *var, char *val)
 	envc->next = new;
 }
 
-int	add_var(t_mylist **env, char *variable, char *subchar)
+int	add_var(t_mylist **env, char *variable)
 {
 	char	*val;
 	char	*var;
 	int		separator;
-	char	*valc;
-	char	*varc;
 
 	separator = has_character(variable, '=');
-	varc = NULL;
 	if (separator < 0)
 	{
 		var = ft_substr(variable, 0, ft_strlen(variable) - 1);
-		val = NULL;
+		val = ft_strdup("");
 	}
 	else
 	{
 		var = ft_substr(variable, 0, separator);
 		val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator - 2);
 	}
-	if (val == NULL)
-		val = ft_strdup("");
-	if (has_character(var, '$') == 0)
-		return (1);
-	else if (has_character(var, '$') > 0)
-		varc = var;
-	if (varc)
-	{
-		var = ft_substr(varc, 0, has_character(varc, '$'));
-		free(varc);
-	}
-	valc = ft_substr(val, 0, has_character(val, '$'));
-	free(val);
-	addto_env(env, var, valc);
+	addto_env(env, var, val);
 	return (0);
 }
 
@@ -135,11 +96,10 @@ void	updateto_env(t_mylist **env, char *var, char *val)
 	char		*old_env_val;
 
 	envc = *env;
-
 	while (envc)
 	{
 		old_env_val = envc->val;
-		if (!ft_strncmp(envc->var, var, ft_strlen(var) + 1))
+		if (!ft_strncmp(envc->var, var, ft_strlen(var)))
 		{
 			envc->val = val;
 			free(old_env_val);
@@ -158,112 +118,44 @@ int	update_var(t_mylist **env, char *variable)
 	int			separator;
 
 	separator = has_character(variable, '=');
-	varc = NULL;
-	var = ft_substr(variable, 0, separator);
-	if (has_character(var, '$') == 0)
-		return (1);
-	else if (has_character(var, '$') > 0)
-		varc = var;
-	if (varc)
+	if (separator < 0)
 	{
-		var = ft_substr(varc, 0, has_character(varc, '$'));
-		free(varc);
-	}
-	val = ft_substr(variable, separator + 1, ft_strlen(variable) -separator - 2);
-	if (val == NULL)
+		var = ft_substr(variable, 0, ft_strlen(variable) - 1);
 		val = ft_strdup("");
-	valc = ft_substr(val, 0, has_character(val, '$'));
-	free(val);
-	updateto_env(env, var, valc);
+	}
+	else
+	{
+		var = ft_substr(variable, 0, separator);
+		val = ft_substr(variable, separator + 1, ft_strlen(variable) - separator - 2);
+	}
+	updateto_env(env, var, val);
 	return (0);
 }
 
 void	ft_export(t_mylist *env, char *variable)
 {
 	char	**tab;
-	char	subchar[2];
 	int		is_form;
 	int		i;
+	char 	*firstchar;
 
 	tab = ft_split(variable, ' ');
 	i = 0;
 	while (tab[i])
 	{
-		subchar[0] = 0;
-		subchar[1] = 0;
-		is_form = is_formatted(tab[i], subchar);
-		if (is_form)
+		firstchar = ft_substr(tab[i], 0, 1);
+		if (tab[i][0] == '=')
+			error_message(tab[i]);
+		else if (!ft_isalpha((*firstchar)))
+			error_message(tab[i]);
+		else
 		{
 			if (var_missing(&env, tab[i]))
-				add_var(&env, tab[i], subchar);
+				add_var(&env, tab[i]);
 			else
 				update_var(&env, tab[i]);
 		}
 		i++;
+		free(firstchar);
 	}
 }
-
-
-// int	main(int ac, char **av, char **env)
-// {
-// 	t_mylist	*envc;
-
-// 	(void )		ac;
-// 	(void )		av;
-// 	envc = ft_env(env);
-// 	ft_export(envc, av[1]);
-// 	return (0);
-// }
-
-// int	isformatted(char *var, char *subchar)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	if (!var)
-// 		return (0);
-// 	if (has_character(var, '=') < 0 || ft_atoi(*var))
-// 		return (0);
-// 	while (*var)
-// 	{
-// 		if (ft_isalpha(*var) || ft_isdigit(*var) || *var == '=')
-// 		{
-// 			subchar[1] = subchar[1] + 1;
-// 			var++;
-// 		}
-// 		else
-// 		{
-// 			subchar[1] = subchar[1] + 1;
-// 			subchar[0] = subchar[1];
-// 			var++;
-// 		}
-// 	}
-// 	return (1);
-// }
-
-// void	add_to_env(char **env, char *variable)
-// {
-// 	char	**cpy;
-
-// 	cpy = env;
-// 	while (*cpy)
-// 		cpy++;
-// 	*cpy = ft_strdup(variable);
-// 	cpy++;
-// 	*cpy = NULL;
-// }
-
-// void	ft_export(char **env, char *variable)
-// {
-// 	char	subchar[2];
-// 	char	*var;
-
-// 	subchar[0] = 0;
-// 	subchar[1] = 0;
-// 	if (isformatted(variable, subchar))
-// 	{
-// 		var = ft_substr(variable, subchar[0], subchar[1] - subchar[0]);
-// 		add_to_env(env, var);
-// 	}
-// }
-
