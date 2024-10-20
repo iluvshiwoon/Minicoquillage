@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash --posix
 
 # Vérifiez si le fichier my_commandes.txt existe
 if [ ! -f my_commandes.txt ]; then

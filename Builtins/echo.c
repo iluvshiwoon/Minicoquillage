@@ -200,27 +200,28 @@ int	is_option(char *msg)
 	return (0);
 }
 
-void	ft_echo(char *input)
+void	ft_echo(char *input, int option_n)
 {
-	int		option_n;
-	int		i;
-	char	**msg;
+	// int		option_n;
+	// int		i;
+	// char	**msg;
 
-	msg = ft_split(input, ' ');
-	i = 0;
-	option_n = 0;
-	if (is_option(msg[0]))
-	{
-		i++;
-		option_n = 1;
-	}
-	while (msg[i])
-	{
-		printf("%s", msg[i]);
-		if (msg[i + 1] != NULL)
-			printf(" ");
-		i++;
-	}
+	// msg = ft_split(input, ' ');
+	// i = 0;
+	// option_n = 0;
+	// if (is_option(msg[0]))
+	// {
+	// 	i++;
+	// 	option_n = 1;
+	// }
+	// while (msg[i])
+	// {
+	// 	printf("%s", msg[i]);
+	// 	if (msg[i + 1] != NULL)
+	// 		printf(" ");
+	// 	i++;
+	// }
+	ft_putstr_fd(input, 1);
 	if (!option_n)
 		printf("\n");
 }

@@ -1,6 +1,6 @@
 #!/bin/bash --posix
 
-gcc -o ft_unset ./main.c ./../../Builtins/unset_2.c  ./../../Builtins/env.c -L../../42_MyLibC -lft
+gcc -o ft_unset ./main.c ./../../Builtins/unset.c  ./../../Builtins/env.c -L../../42_MyLibC -lft
 
 # # ENV
 # Exporter les variables d'environnement dans un fichier
@@ -61,10 +61,10 @@ rm env_update_2.txt
 rm ft_unset_update.txt
 
 # Fichier temporaire pour les erreurs
-# rm ft_unset_fail.txt
+rm ft_unset_fail.txt
 
 # # Nettoyer les fichiers temporaires txt tries
 rm original_env_sort.txt
-# rm env_unset_sort.txt
-# rm ft_update_sort.txt
+rm env_unset_sort.txt
+rm ft_update_sort.txt
 
