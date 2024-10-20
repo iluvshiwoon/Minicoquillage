@@ -1,5 +1,25 @@
 #include "./builtins.h"
 
+
+int	msg_error(char *msg_origin)
+{
+	char	*msg;
+
+	msg = msg_origin;
+	while (*msg)
+	{
+		if (!ft_isalnum(*msg) && *msg != '_')
+		{
+			ft_putstr_fd("unset: `", 2);
+			ft_putstr_fd(msg_origin, 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			return (1);
+		}
+		msg++;
+	}
+	return (0);
+}
+
 static int	is_present(t_mylist *env, char *variable)
 {
 	t_mylist	*envc;
@@ -44,8 +64,6 @@ void	del_var(t_mylist *envc, int position)
 	}
 }
 
-
-
 void	ft_unset(t_mylist *env, char *variable)
 {
 	char	**tab;
@@ -56,12 +74,14 @@ void	ft_unset(t_mylist *env, char *variable)
 	i = 0;
 	while (tab[i])
 	{
-		if(tab[i][0] == '$')
-			is_set = is_present(env, &tab[i][1]);
+		if (msg_error(tab[i]))
+			;
 		else
+		{
 			is_set = is_present(env, tab[i]);
-		if (is_set > -1)
-			del_var(env, is_set);
+			if (is_set > -1)
+				del_var(env, is_set);
+		}
 		i++;
 	}
 }

@@ -1,0 +1,10 @@
+a=A
+b=b
+ho=ho
+hoo=hoo
+hho=hho
+c=C
+aad=aad
+del=del
+h=h
+o=o

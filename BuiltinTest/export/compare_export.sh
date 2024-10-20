@@ -47,13 +47,12 @@ execute_ft_export
 execute_original_export
 clean_error_export_file
 remove_original_export
-# diff original_env.txt sort_original_export.txt
 
 diff sort_original_export.txt sort_custom_export.txt
-# diff clean_error_export.txt error_ft_export.txt
+diff clean_error_export.txt error_ft_export.txt
 
 rm original_env.txt
-# rm sort_original_export.txt
+rm sort_original_export.txt
 rm error_export.txt
 rm clean_error_export.txt
 rm custom_export.txt

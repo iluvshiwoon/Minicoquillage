@@ -61,6 +61,11 @@ t_mylist	*ft_env(char **env)
 	t_mylist	**envc;
 	t_mylist	*content;
 
+	if(env == NULL || *env == NULL)
+	{
+		ft_putstr_fd("Environnement empty\n", 2);
+		return (NULL);
+	}
 	envc = malloc(sizeof(t_mylist *));
 	envc = fill_envc(env, envc);
 	return (*envc);
