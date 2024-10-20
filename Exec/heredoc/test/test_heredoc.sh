@@ -22,8 +22,8 @@ if diff bash_output.txt /tmp/heredoc > /dev/null; then
 else
     echo "Les résultats sont différents."
     echo "Différences:"
-    diff bash_output.txt c_output.txt
+    diff bash_output.txt /tmp/heredoc
 fi
 
 # Nettoyer les fichiers temporaires
-# rm bash_output.txt c_output.txt
+rm bash_output.txt /tmp/heredoc
