@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/bash --posix
 
 # compile programme C globbing.c
-cc -g3 ../globbing.c  -L../../../42_MyLibC -lft -o globbing
+cc -g3 -o globbing ../globbing.c  -L../../../42_MyLibC -lft
 
 while IFS=' ' read -r str glob; do
     ./globbing "$str" "$glob"
@@ -31,3 +31,5 @@ done < tests.txt > results_origin.txt
 # Comparer les résultats
 diff results_custom.txt results_origin.txt
 
+#Supprimer les fichiers temporaires
+rm results_custom.txt results_origin.txt
