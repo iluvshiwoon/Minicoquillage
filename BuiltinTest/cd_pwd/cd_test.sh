@@ -1,6 +1,4 @@
-#!/bin/bash
-
-
+#!/bin/bash --posix
 
 cc -o ft_cd ./main.c ./../../Builtins/cd.c ./../../Builtins/pwd.c ./../../Builtins/env.c -L../../42_MyLibC -lft
 

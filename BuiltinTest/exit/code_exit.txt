@@ -1,0 +1,17 @@
+0
+1
+2
+255
+256
+300
+-1
+-255
+256
+-300
+
+mot
+trap1
+tr4p
+une phrase .
+Une phrase pi4ge !
+Dernier -piege 404 .

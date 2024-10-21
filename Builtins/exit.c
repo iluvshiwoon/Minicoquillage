@@ -2,19 +2,48 @@
 #include <stdio.h>
 #include "builtins.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
-void exit_custom(int status)
+static void	msg_error(char *arg)
 {
-	// Appeler exit avec le code de sortie
-	exit(status);
+	printf("exit: ");
+	printf("%s: ", arg);
+	printf("numeric argument required\n");
 }
 
-int main()
+static int	is_number(char *av)
 {
-    printf("Ce programme va se terminer.\n");
-    exit_custom(0); // Appel de la fonction personnalisée
-	printf("Ce message ne sera jamais affiché.\n");
-    return 0; // Ce code ne sera jamais atteint
+	char	*input;
+
+	input = av;
+	if (input[0] == '-' || (input[0] >= '0' && input[0] <= '9'))
+		input++;
+	else
+		return (0);
+	while (*input)
+	{
+		if (*input < '0' || *input > '9')
+			return (0);
+		input++;
+	}
+	return (1);
+}
+
+void	ft_exit(char *arg)
+{
+	int	exit_code;
+
+	if (arg == NULL)
+		exit(0);
+	exit_code = ft_atoi(arg);
+	if (is_number(arg))
+	{
+		if (exit_code < 0)
+			exit(256 - ((-1 * exit_code) % 256));
+		else
+			exit(exit_code % 256);
+	}
+	else
+	{
+		msg_error(arg);
+		exit(2);
+	}
 }
