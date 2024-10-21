@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/17 19:03:00 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/21 18:45:00 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ void print_first_token (t_control_dll * control)
 
 void	debug(char *line, t_control_dll * control)
 {
+    t_heap heap;
+    t_ast * ast;
+
+    heap.heap_allocated = control->heap_allocated;
+    heap.list = control->heap_allocated->exec;
 	control->list = create_tokens(control->heap_allocated,line);
 	control->complete = 1;
 	populate_tokens(control);
@@ -47,7 +52,10 @@ void	debug(char *line, t_control_dll * control)
     if (MODE == TOKENIZER)
         print_csv(control->list);
     else if (MODE == PARSER)
-        parser(control);
+    {
+        ast = parser(control);
+        print_tree(&heap, ast->first_node);
+    }
     // else if (MODE == EXPANSION)
     //     print_first_token(&control); 
 }

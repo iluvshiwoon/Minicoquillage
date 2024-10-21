@@ -8,6 +8,7 @@
 # include "Utils/Utils.h"
 # include "Tokenizer/Tokenizer.h"
 # include "Parser/Parser.h"
+# include "Exec/exec.h"
 
 enum e_mode {
     INTERACTIVE,

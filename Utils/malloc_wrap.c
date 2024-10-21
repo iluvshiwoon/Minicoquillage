@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 18:37:44 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 13:46:46 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/21 17:11:18 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,25 @@ void free_heap(t_heap_allocated * heap_allocated)
     if (!heap_allocated)
         return;
     if (heap_allocated->tokens)
+    {
         dl_free_list(heap_allocated->tokens);
+        heap_allocated->tokens = NULL;
+    }
     if (heap_allocated->ast)
+    {
         dl_free_list(heap_allocated->ast);
+        heap_allocated->ast = NULL;
+    }
     if (heap_allocated->input)
+    {
         dl_free_list(heap_allocated->input);
+        heap_allocated->input = NULL;
+    }
+    if (heap_allocated->exec)
+    {
+        dl_free_list(heap_allocated->exec);
+        heap_allocated->exec = NULL;
+    }
 }
 
 void * wrap_malloc(t_heap_allocated * heap_allocated, t_double_link_list * list, size_t size)

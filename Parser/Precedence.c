@@ -10,130 +10,9 @@
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
-bool is_op(int type);
 
 int compute_expr(t_control_dll * control,\
                  t_double_link_node * beg, t_double_link_node * end, t_ast_node * current_node);
-
-void print_t_options(t_atom * atom)
-{
-    int i;
-    i = -1;
-    while(atom->options[++i])
-        printf("%s ",atom->options[i]);
-}
-
-void print_t_args(t_atom * atom)
-{
-    int i;
-    i = -1;
-    while(atom->args[++i])
-        printf("%s ",atom->args[i]);
-}
-
-void print_t_heredoc(t_atom * atom)
-{
-    int i;
-    i = -1;
-    while(atom->heredoc_eof[++i])
-        printf("<< %s ",atom->heredoc_eof[i]);
-}
-
-void print_t_stdin(t_atom * atom)
-{
-    int i;
-    i = -1;
-    while(atom->std_in[++i])
-        printf("< %s ",atom->std_in[i]);
-}
-
-void print_t_stdout(t_atom * atom)
-{
-    int i;
-    i = -1;
-    while(atom->std_out[++i])
-    {
-        if (atom->append[i])
-            printf(">> %s ",atom->std_out[i]);
-        else
-            printf("> %s ",atom->std_out[i]);
-    }
-}
-
-void	build_tree_type(char **type)
-{
-	type[COMMAND] = "COMMAND";
-	type[ARG] = "ARGUMENT";
-	type[PIPE] = "|";
-	type[REDIRECTION] = "REDIRECTION";
-	type[HERE_DOC] = "HERE DOC";
-	type[OPTION] = "OPTION";
-	type[AND] = "&&";
-	type[OR] = "||";
-	type[OPEN_PARENTHESIS] = "OPEN PARENTHESIS";
-	type[CLOSE_PARENTHESIS] = "CLOSE PARENTHESIS";
-	type[CMD_SEP] = ";";
-	type[R_FILE] = "FILE";
-    type[EOE] = "";
-}
-
-void	print_tree(t_ast_node * first_node)
-{
-    t_ast_node * left;
-    t_parser_node * p_node;
-	char				*type[13];
-
-	build_tree_type(type);
-	while (first_node && first_node->left)
-	{
-        left = first_node->left;
-        p_node = left->data;
-        if (is_op(p_node->ops))
-        {
-            printf("(");
-            print_tree(left);
-            printf(") ");
-        }
-        else 
-        {
-            printf("%s ",p_node->atom->cmd);
-            print_t_options(p_node->atom);
-            print_t_args(p_node->atom);
-            if (p_node->atom->heredoc)
-            {
-                print_t_stdin(p_node->atom);
-                print_t_heredoc(p_node->atom);
-            }
-            else 
-            {
-                print_t_heredoc(p_node->atom);
-                print_t_stdin(p_node->atom);
-            }
-            print_t_stdout(p_node->atom);
-        }
-        p_node = first_node->data;
-        if(p_node->ops)
-        {
-            if (p_node->atom)
-            {
-                if (p_node->atom->heredoc)
-                {
-                    print_t_stdin(p_node->atom);
-                    print_t_heredoc(p_node->atom);
-                }
-                else 
-                {
-                    print_t_heredoc(p_node->atom);
-                    print_t_stdin(p_node->atom);
-                }
-                print_t_stdout(p_node->atom);
-            }
-            if (p_node->ops != EOE)
-                printf("%s ",type[p_node->ops]);
-        }
-        first_node = first_node->right;
-	}
-}
 
 bool is_op(int type)
 {
@@ -406,7 +285,7 @@ int compute_expr(t_control_dll * control,\
     return(exit_status);
 }
 
-void parser(t_control_dll * control)
+t_ast * parser(t_control_dll * control)
 {
     t_double_link_node * beg;
     t_double_link_node * end;
@@ -420,6 +299,5 @@ void parser(t_control_dll * control)
     end = control->list->last_node;
     // print_list(control->list);
     compute_expr(control, beg, end, ast->first_node);
-    print_tree(ast->first_node);
-    printf("\n");
+    return (ast);
 }
