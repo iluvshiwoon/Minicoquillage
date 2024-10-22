@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/17 17:52:25 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:19:13 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_control_dll
     t_heap_allocated * heap_allocated;
 	t_token				*token;
 	int					complete;
+    char * line;
 }						t_control_dll;
 
 typedef struct s_open_quote

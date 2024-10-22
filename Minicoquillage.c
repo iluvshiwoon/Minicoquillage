@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/21 18:02:57 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:57:44 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int argc, char **argv)
 	t_control_dll	control;
     t_heap_allocated heap_allocated;
 
-    if (MODE == INTERACTIVE)
+    if (MODE == INTERACTIVE && isatty(STDIN_FILENO))
     {
         while (1)
         {
@@ -38,11 +38,13 @@ int	main(int argc, char **argv)
                 error_exit("init_heap failed", &heap_allocated);
             control.heap_allocated = &heap_allocated;
             if(tokenizer(&control) == EXIT_SUCCESS)
-                execution(&heap_allocated,parser(&control));
+                execution(&heap_allocated,parser(&control),control.line);
+            else if (control.line && *control.line)
+                add_history(control.line);
             free_heap(&heap_allocated);
         }
     }
-    else 
+    else if (MODE != INTERACTIVE)
 	{
         if (init_heap(&heap_allocated) == EXIT_FAILURE)
             error_exit("init_heap failed", &heap_allocated);

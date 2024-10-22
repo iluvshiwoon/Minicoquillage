@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/17 19:02:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:21:50 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,6 @@ char	*get_line(t_heap_allocated * heap_allocated)
         get_line.temp = concat_input(heap_allocated,lines);
 	}
 	get_line.line = concat_input(heap_allocated,lines);
-	if (get_line.line && *get_line.line)
-		add_history(get_line.line);
 	// if (!lines->first_node->next)
 	// 	get_line.line = mini_ft_strdup(heap_allocated, heap_allocated->input, get_line.line);
 	return (get_line.line);
