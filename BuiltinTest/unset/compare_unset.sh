@@ -15,7 +15,7 @@ done < variables_export.txt
 # # UNSET
 # Lire le fichier d'entrée et définir les variables d'environnement avec unset
 while IFS=' ' read -r unset_val; do
-    unset $unset_val && env > env_unset.txt
+    unset $unset_val  && env > env_unset.txt
 done < variables_unset.txt
 
 
@@ -37,7 +37,7 @@ diff env_update.txt env_update_2.txt
 # si ft unset sest bien effectue mettre a jour env
 # sinon ecrire un message derreur dans le fichier ft_unset_fail.txt
 while IFS=' ' read -r unset_val; do
-	./ft_unset $unset_val | sort > ft_unset_tmp.txt
+	./ft_unset $unset_val 2>>ft_unset_status.txt | sort > ft_unset_tmp.txt
 	# Rechercher la variable dans le fichier
 	if grep -q "^$unset_val=" ft_unset_tmp.txt; then
 		# Afficher la variable et sa valeur
@@ -61,7 +61,10 @@ rm env_update_2.txt
 rm ft_unset_update.txt
 
 # Fichier temporaire pour les erreurs
-rm ft_unset_fail.txt
+if [ -f "ft_unset_fail.txt" ]; then
+	rm ft_unset_fail.txt
+fi
+rm ft_unset_status.txt
 
 # # Nettoyer les fichiers temporaires txt tries
 rm original_env_sort.txt

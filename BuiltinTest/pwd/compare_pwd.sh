@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash --posix
 
-gcc -o my_pwd ./main.c ./../../pwd.c ./../../utils.c -L../../../42_MyLibC -lft
+gcc -o my_pwd ./main.c ./../../Builtins/pwd.c ./../../Builtins/utils.c -L../../42_MyLibC -lft
 
 # Exécutez la commande env et votre programme, en redirigeant les sorties
 pwd | sort > original_pwd.txt
