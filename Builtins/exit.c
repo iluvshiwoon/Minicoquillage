@@ -14,7 +14,7 @@ static int	is_number(char *av)
 	char	*input;
 
 	input = av;
-	if (input[0] == '-' || (input[0] >= '0' && input[0] <= '9'))
+	if ((input[0] == '-' || input[0] == '+') || (input[0] >= '0' && input[0] <= '9'))
 		input++;
 	else
 		return (0);
