@@ -2,14 +2,18 @@
 
 gcc -o binary redir_heredoc.c -L../../../42_MyLibC -lft
 
+
+
+
+
 # Définir le délimiteur pour le heredoc
 LIMITER="EOF"
 
 # Utiliser le heredoc du Bash pour capturer l'entrée
-cat <<EOF > bash_output.txt
+cat <<$LIMITER > bash_output.txt
 Ceci est un test.
 Ligne suivante.
-EOF
+$LIMITER
 
 # Utiliser votre programme C pour capturer l'entrée
 # Assurez-vous que votre programme C est compilé et accessible sous le nom heredoc
