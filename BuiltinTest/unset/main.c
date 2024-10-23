@@ -26,16 +26,18 @@
 int	main(int ac, char **av, char **env)
 {
 	t_mylist	*envc;
-	int i;
+	int			i;
+	int			status;
 
 	i = 1;
+	status = 0;
 	(void )		ac;
 	envc = ft_env(env);
 	while (av[i])
 	{
-		ft_unset(envc, av[i]);
+		status += ft_unset(envc, av[i]);
 		i++;
 	}
 	put_envc(envc);
-	return (0);
+	return (status);
 }

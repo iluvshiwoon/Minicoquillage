@@ -136,22 +136,37 @@ int	update_var(t_mylist **env, char *variable)
 	return (0);
 }
 
-void	ft_export(t_mylist *env, char *variable)
+int error_case(char **tab, int i, char *firstchar)
+{
+	if (tab[i][0] == '=')
+	{
+		error_message(tab[i]);
+		return (1);
+	}
+	else if (!ft_isalpha((*firstchar)))
+	{
+		error_message(tab[i]);
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_export(t_mylist *env, char *variable)
 {
 	char	**tab;
 	int		is_form;
 	int		i;
-	char 	*firstchar;
+	char	*firstchar;
+	int		status;
 
+	status = 0;
 	tab = ft_split(variable, ' ');
 	i = 0;
 	while (tab[i])
 	{
 		firstchar = ft_substr(tab[i], 0, 1);
-		if (tab[i][0] == '=')
-			error_message(tab[i]);
-		else if (!ft_isalpha((*firstchar)))
-			error_message(tab[i]);
+		if (error_case(tab, i, firstchar))
+			status += 1;
 		else
 		{
 			if (var_missing(&env, tab[i]))
@@ -162,4 +177,5 @@ void	ft_export(t_mylist *env, char *variable)
 		i++;
 		free(firstchar);
 	}
+	return (status);
 }
