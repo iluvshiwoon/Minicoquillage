@@ -41,6 +41,11 @@ int	go_home(t_mylist *env, t_mylist *oldpath, t_mylist *currentpath)
 	home = get_var(env, "HOME");
 	pwd = get_var(env, "PWD");
 	oldpwd = get_var(env, "OLDPWD");
+	if(home == NULL)
+	{
+		ft_putstr_fd("cd: HOME not set\n", 2);
+		return (1);
+	}
 	if (chdir(home->val) != 0)
 	{
 		printf("cd: %d (%s)\n", errno, strerror(errno));
@@ -113,7 +118,7 @@ int ft_cd_rel(char *relative_path, t_mylist *env)
 	oldpath = get_var(env, "OLDPWD");
 	if(relative_path[0] == '~')
 	{
-		goto_path = ft_strjoin(get_var(env, "HOME")->val, relative_path + 1);
+		goto_path = ft_strjoin(get_var(env, "USER_ZDOTDIR")->val, relative_path + 1);
 	}
 	else
 	{
