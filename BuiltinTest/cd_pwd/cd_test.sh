@@ -8,8 +8,13 @@ INPUT_FILE=./my_path.txt
 
 # # SECTION 2
 # Cree une variable chemin qui contient le chemin du répertoire courant
-path_of_fonction="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd"
-path_cd="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
+#UBUNTU
+# path_of_fonction="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd"
+# path_cd="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
+#FEDORA
+path_cd="/home/bsunda/Documents/projet/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
+path_of_fonction="/home/bsunda/Documents/Projet/Minicoquillage/BuiltinTest/cd_pwd"
+#DOCKER
 # path_of_fonction="/workspaces/Minicoquillage/BuiltinTest/cd_pwd"
 # path_cd="/workspaces/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
 
@@ -32,7 +37,7 @@ done < "$INPUT_FILE"
 
 # # SECTION 5
 # # utilise les commandes de base en utilisant ft_cd
-cd $path_of_fonction
+cd "$path_of_fonction"
 # Lire chaque ligne du fichier my_paths.txt
 while IFS= read line; do
 # Run the command and capture the output
@@ -45,8 +50,4 @@ diff path_ft_cd.txt path_cd.txt
 
 # # SECTION 7
 rm path_ft_cd.txt path_cd.txt
-
-
-
-
 

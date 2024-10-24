@@ -112,13 +112,15 @@ int ft_cd_rel(char *relative_path, t_mylist *env)
 {
 	t_mylist	*currentpath;
 	t_mylist	*oldpath;
+	t_mylist	*username;
 	char		*goto_path;
 
+	username = get_var(env, "USERNAME");
 	currentpath = get_var(env, "PWD");
 	oldpath = get_var(env, "OLDPWD");
 	if(relative_path[0] == '~')
 	{
-		goto_path = ft_strjoin(get_var(env, "USER_ZDOTDIR")->val, relative_path + 1);
+		goto_path = ft_strjoin(get_var(env, "HOME")->val, relative_path + 1);
 	}
 	else
 	{
