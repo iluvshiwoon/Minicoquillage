@@ -6,12 +6,18 @@ gcc -o my_env ./main.c ./../../Builtins/env.c ./../../Builtins/utils.c -L../../4
 env | sort > original_env.txt
 ./my_env | sort > custom_env.txt
 
-# Filtrer les lignes commençant par "_=" et comparer les sorties
-grep -v '^_=' original_env.txt > filtered_original_env.txt
-grep -v '^_=' custom_env.txt > filtered_custom_env.txt
+#Trier les fichier avant de les comparer
+sort original_env.txt > original_env_sorted.txt
+sort custom_env.txt > custom_env_sorted.txt
 
-# Comparez les fichiers filtrés
-diff filtered_original_env.txt filtered_custom_env.txt
+# Comparez les sorties
+# diff original_env_sorted.txt custom_env_sorted.txt
+
+#Comparer les sortie en omettant l variables "_="
+diff <(grep -v '^_=' original_env_sorted.txt) <(grep -v '^_=' custom_env_sorted.txt)
+
+
+#Comparaison des codes de retour
 
 # Nettoyage des fichiers temporaires
-rm original_env.txt custom_env.txt filtered_original_env.txt filtered_custom_env.txt
+rm original_env.txt custom_env.txt original_env_sorted.txt custom_env_sorted.txt

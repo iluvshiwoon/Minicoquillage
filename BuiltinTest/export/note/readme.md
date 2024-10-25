@@ -1,0 +1,3 @@
+Dans les systèmes Unix et Linux, la variable d'environnement _ (underscore) est généralement utilisée pour stocker le dernier argument de la dernière commande exécutée. Cela peut être utile dans les scripts ou lors de l'utilisation de l'interpréteur de commandes pour référencer rapidement ce dernier argument sans avoir à le retaper.
+
+Par exemple, si vous exécutez une commande comme echo hello, la variable _ contiendra la valeur hello. Cela permet de simplifier certaines opérations dans le shell. Notez que le comportement peut légèrement varier selon le shell utilisé (comme Bash, Zsh, etc.), mais cette utilisation est assez courante.
