@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/22 16:18:10 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/25 19:34:15 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,8 @@ void print_t_heredoc(t_atom * atom);
 void print_t_stdin(t_atom * atom);
 void print_t_stdout(t_atom * atom);
 void	build_tree_type(char **type);
+
+// heredoc.c
+void	heredoc(t_heap * heap,t_ast_node * first_node);
+void	clean_heredoc(t_heap * heap,t_ast_node * first_node);
 #endif

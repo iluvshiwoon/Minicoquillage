@@ -1,6 +1,8 @@
 #ifndef MINICOQUILLAGE_H
 # define MINICOQUILLAGE_H
 # include <stdio.h>
+# include <fcntl.h>
+# include <string.h>
 # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
