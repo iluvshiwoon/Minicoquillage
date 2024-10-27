@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/25 19:34:15 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/27 15:27:16 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #endif
 
 char * get_path(t_heap * heap, char * cmd);
-void execution(t_heap_allocated * heap_allocated, t_ast * tree, char * line);
+void execution(t_heap_allocated * heap_allocated, t_ast * tree, char * line, char ** envp);
 void	print_tree(t_heap * heap,t_ast_node * first_node);
 
 // print_utils.c 

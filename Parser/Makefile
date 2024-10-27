@@ -1,4 +1,4 @@
-C_FILES = $(wildcard ../Tokenizer/*.c ../Tokenizer/*/*.c ../*.c ../Parser/*.c ../Utils/*.c ../Exec/*.c)
+C_FILES = $(filter-out $(wildcard ../*/i_*.c) ,$(wildcard ../Tokenizer/*.c ../Tokenizer/*/*.c ../*.c ../Parser/*.c ../Utils/*.c ../Exec/*.c))
 C_FLAGS = -Wall -Werror -Wextra
 INTERACTIVE = 0
 TOKENIZER = 1

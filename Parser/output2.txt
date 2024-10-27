@@ -381,3 +381,228 @@ Parser.h
 Precedence.c
 test
 Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_parser.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_parser.c
+Directory listed
+i_parser.old
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_parser.c
+Directory listed
+i_parser.old
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+Precedence.c
+test
+Directory listed
+i_parser.old
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+Precedence.c
+test
+Directory listed
+i_parser.old
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.old
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.old
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.old
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed
+i_parser.c
+Makefile
+Minicoquillage
+output2.txt
+output.txt
+Parser.h
+test
+test_precedence.c
+Directory listed

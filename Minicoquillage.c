@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/22 16:57:44 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/27 15:45:07 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int init_heap(t_heap_allocated * heap_allocated)
     return (EXIT_SUCCESS);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char ** envp)
 {
 	t_control_dll	control;
     t_heap_allocated heap_allocated;
@@ -38,9 +38,7 @@ int	main(int argc, char **argv)
                 error_exit("init_heap failed", &heap_allocated);
             control.heap_allocated = &heap_allocated;
             if(tokenizer(&control) == EXIT_SUCCESS)
-                execution(&heap_allocated,parser(&control),control.line);
-            else if (control.line && *control.line)
-                add_history(control.line);
+                execution(&heap_allocated,parser(&control),control.line, envp);
             free_heap(&heap_allocated);
         }
     }
