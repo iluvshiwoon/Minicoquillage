@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/25 19:30:30 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/25 23:59:25 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,15 @@ void    open_heredoc(t_heap * heap, t_atom * atom)
     char * nb;
 
     tmp = "/tmp/tmp_file";
-    if (access("/tmp",F_OK) == EXIT_FAILURE)
+    if (access("/tmp",F_OK) != EXIT_SUCCESS)
         error_exit("/tmp directory doesn't exist!\n", heap->heap_allocated);
-    else if (access("/tmp",R_OK | W_OK) == EXIT_FAILURE)
+    else if (access("/tmp",R_OK | W_OK) != EXIT_SUCCESS)
         error_exit("Wrong permission for /tmp directory\n", heap->heap_allocated);
     nb = ft_itoa(i++);
     tmp = mini_ft_strjoin(heap->heap_allocated,heap->list,tmp,nb);
     free(nb);
+    if (access(tmp, F_OK) == EXIT_SUCCESS)
+        unlink(tmp);
     atom->heredoc_fd = open(tmp, O_RDWR | O_EXCL | O_CREAT , S_IRUSR | S_IWUSR);
     if (atom->heredoc_fd == -1)
         return(perror(NULL),error_exit("open failed\n", heap->heap_allocated));
@@ -53,9 +55,18 @@ void    open_heredoc(t_heap * heap, t_atom * atom)
 void    listen_heredoc(t_heap * heap, int * fd, char * eof)
 {
     char * line;
+    int i;
+    
+    i = 0;
     while (1)
     {
+        ++i;
         line = readline("> ");
+        if (!line)
+        {
+            printf("Minicoquillage: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",i,eof);
+            break;
+        }
         if (strncmp(eof,line,ft_strlen(eof))==EXIT_SUCCESS)
             break;
         if (*fd) 

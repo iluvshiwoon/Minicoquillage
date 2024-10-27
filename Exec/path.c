@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:37:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/22 16:06:32 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/26 00:00:01 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char * get_path(t_heap * heap, char * cmd)
         return(printf("%s",mini_ft_strjoin(heap->heap_allocated, heap->list, cmd, ": shell built-in command\n")),NULL);
     if (is_path(cmd) && access(cmd, F_OK) == EXIT_SUCCESS)
         return (cmd);
-    else if (is_path(cmd) && access(cmd, F_OK))
+    else if (is_path(cmd) && access(cmd, F_OK) != EXIT_SUCCESS)
         return (printf("%s",mini_ft_strjoin(heap->heap_allocated,heap->list,mini_ft_strjoin(heap->heap_allocated,heap->list,"Minicoquillage: ",cmd),": No such file or directory\n")),NULL);
     while (path[++i])
     {
