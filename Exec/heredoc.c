@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/25 23:59:25 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/28 16:39:19 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,17 @@ void    open_heredoc(t_heap * heap, t_atom * atom)
     free(nb);
     if (access(tmp, F_OK) == EXIT_SUCCESS)
         unlink(tmp);
-    atom->heredoc_fd = open(tmp, O_RDWR | O_EXCL | O_CREAT , S_IRUSR | S_IWUSR);
-    if (atom->heredoc_fd == -1)
+    atom->in_fd = open(tmp, O_RDWR | O_EXCL | O_CREAT , S_IRUSR | S_IWUSR);
+    if (atom->in_fd == -1)
         return(perror(NULL),error_exit("open failed\n", heap->heap_allocated));
     atom->file_heredoc = tmp;
+}
+
+size_t _max_len(size_t len1, size_t len2)
+{
+    if (len1 >= len2)
+        return (len1);
+    return (len2);
 }
 
 void    listen_heredoc(t_heap * heap, int * fd, char * eof)
@@ -67,7 +74,8 @@ void    listen_heredoc(t_heap * heap, int * fd, char * eof)
             printf("Minicoquillage: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",i,eof);
             break;
         }
-        if (strncmp(eof,line,ft_strlen(eof))==EXIT_SUCCESS)
+        
+        if (strncmp(eof,line,_max_len(ft_strlen(eof),ft_strlen(line)))==EXIT_SUCCESS)
             break;
         if (*fd) 
         {
@@ -86,7 +94,7 @@ void    run_heredoc(t_heap * heap, t_atom * atom)
     {
         if (atom->heredoc && atom->heredoc_eof[i+1] == NULL)
             open_heredoc(heap, atom);
-        listen_heredoc(heap,&atom->heredoc_fd,atom->heredoc_eof[i]);
+        listen_heredoc(heap,&atom->in_fd,atom->heredoc_eof[i]);
     }
 }
 
@@ -130,7 +138,7 @@ void	clean_heredoc(t_heap * heap,t_ast_node * first_node)
             clean_heredoc(heap,left);
         else if (p_node->atom->heredoc) 
         {
-            close(p_node->atom->heredoc_fd);
+            close(p_node->atom->in_fd);
             unlink(p_node->atom->file_heredoc);
         }
         p_node = first_node->data;
@@ -138,7 +146,7 @@ void	clean_heredoc(t_heap * heap,t_ast_node * first_node)
         {
             if (p_node->atom && p_node->atom->heredoc)
             {
-                close(p_node->atom->heredoc_fd);
+                close(p_node->atom->in_fd);
                 unlink(p_node->atom->file_heredoc);
             }
         }

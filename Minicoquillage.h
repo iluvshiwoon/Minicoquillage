@@ -1,7 +1,9 @@
 #ifndef MINICOQUILLAGE_H
 # define MINICOQUILLAGE_H
 # include <stdio.h>
+#include <errno.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <fcntl.h>
 # include <string.h>
 # include <stdbool.h>
