@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 15:38:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/22 15:51:15 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/29 16:28:29 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	print_tree(t_heap * heap,t_ast_node * first_node)
     t_ast_node * left;
     t_parser_node * p_node;
 	char				*type[13];
+    int status;
 
 	build_tree_type(type);
 	while (first_node && first_node->left)
@@ -33,7 +34,7 @@ void	print_tree(t_heap * heap,t_ast_node * first_node)
         {
             if (MODE == INTERACTIVE)
             {
-                char * s = get_path(heap,p_node->atom->cmd);
+                char * s = get_path(heap,&status,p_node->atom->cmd);
                 if (s)
                     printf("%s\n",s);
             }

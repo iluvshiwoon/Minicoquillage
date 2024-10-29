@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/27 15:27:16 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/29 17:28:24 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../Minicoquillage.h"
 #endif
 
-char * get_path(t_heap * heap, char * cmd);
+char * get_path(t_heap * heap,int * status, char * cmd);
 void execution(t_heap_allocated * heap_allocated, t_ast * tree, char * line, char ** envp);
 void	print_tree(t_heap * heap,t_ast_node * first_node);
 
@@ -30,5 +30,6 @@ void	build_tree_type(char **type);
 
 // heredoc.c
 void	heredoc(t_heap * heap,t_ast_node * first_node);
+size_t _max_len(size_t len1, size_t len2);
 void	clean_heredoc(t_heap * heap,t_ast_node * first_node);
 #endif

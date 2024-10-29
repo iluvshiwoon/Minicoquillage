@@ -6,14 +6,14 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/28 22:44:53 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/29 18:22:56 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 // heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
 // edit readme to add tricky point to remember for future evaluation
-// bitshifting for correct permisssion when recreating file from stat
+// pipeline
 void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp);
 
 void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char ** envp)
@@ -35,7 +35,7 @@ int _exec_node(t_heap * heap, char * path, t_parser_node * p_node, char ** envp)
 
     pid = fork();
     if (pid < 0)
-        return(perror(NULL),error_exit("fork failed\n",heap->heap_allocated),4);
+        return(perror("pid"),error_exit("fork failed\n",heap->heap_allocated),4);
     if (pid == 0)
     {
         execve(path,p_node->atom->args,envp);
@@ -86,7 +86,6 @@ int     _stdout(int * skip, int * status, t_atom * atom)
 {
     int i = -1;
     struct stat sb;
-    mode_t mode;
 
     while (atom->std_out[++i])
     {
@@ -103,18 +102,16 @@ int     _stdout(int * skip, int * status, t_atom * atom)
             return(_error("minicoquillage: %s: Is a directory\n",skip,status,atom->std_out[i]),1);
         else if (access(atom->std_out[i],W_OK) == 0 && atom->append[i] == false)
         {
-            mode = sb.st_mode;
-            if (unlink(atom->std_out[i]))
-                perror("unlink"); // FIXME what to do here?
-            atom->out_fd = open(atom->std_out[i], O_EXCL | O_CREAT ,\
-_mode(mode,S_IRUSR) | _mode(mode,S_IWUSR) |_mode(mode,S_IXUSR)|\
-_mode(mode,S_IRGRP) |_mode(mode,S_IWGRP) |_mode(mode,S_IXGRP) |\
-_mode(mode,S_IROTH)|_mode(mode,S_IWOTH)|_mode(mode,S_IXOTH)|\
-_mode(mode,S_ISUID)|_mode(mode,S_ISGID)|_mode(mode,S_ISVTX));
+            atom->out_fd = open(atom->std_out[i], O_WRONLY | O_TRUNC);
             close(atom->out_fd);
         }
         if (!atom->std_out[i+1])
-            atom->out_fd = open(atom->std_out[i], O_WRONLY);
+        {
+            if (atom->append[i])
+                atom->out_fd = open(atom->std_out[i], O_WRONLY | O_APPEND);
+            else
+                atom->out_fd = open(atom->std_out[i], O_WRONLY);
+        }
         if (atom->out_fd == -1)
             perror("open"); // FIXME redirection fail ? skip ?
     }
@@ -168,12 +165,20 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
         left = first_node->left;
         p_node = left->data;
         if (!skip)
-            redirect(&skip, &status, first_node);
+            redirect(&skip, &status, first_node); // dont want to redirect if pipe is next ops but want to if () want to skip _exec node if next op is pipe and run custom function for pipeline
         if (is_op(p_node->ops) && !skip)
+        {
             _exec_tree(heap,left, envp);
+            p_node = first_node->data;
+            if (p_node->atom->in_fd)
+                close(p_node->atom->in_fd);
+            if (p_node->atom->out_fd)
+                close(p_node->atom->out_fd);
+            p_node = left->data;
+        }
         else 
         {
-            path = get_path(heap,p_node->atom->cmd);
+            path = get_path(heap,&status,p_node->atom->cmd);
             if (path && !skip)
             {
                 status = _exec_node(heap,path,p_node,envp);
@@ -182,22 +187,6 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
                 if (p_node->atom->out_fd)
                     close(p_node->atom->out_fd);
             }
-            else if (!path)
-                status = 127;
-            // printf("%s ",p_node->atom->cmd);
-            // print_t_options(p_node->atom);
-            // print_t_args(p_node->atom);
-            // if (p_node->atom->heredoc)
-            // {
-            //     print_t_stdin(p_node->atom);
-            //     print_t_heredoc(p_node->atom);
-            // }
-            // else 
-            // {
-            //     print_t_heredoc(p_node->atom);
-            //     print_t_stdin(p_node->atom);
-            // }
-            // print_t_stdout(p_node->atom);
         }
         p_node = first_node->data;
         if(p_node->ops)
@@ -206,22 +195,6 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
                 skip = 1;
             else if (p_node->ops)
                 skip = 0;
-            // if (p_node->atom)
-            // {
-            //     if (p_node->atom->heredoc)
-            //     {
-            //         print_t_stdin(p_node->atom);
-            //         print_t_heredoc(p_node->atom);
-            //     }
-            //     else 
-            //     {
-            //         print_t_heredoc(p_node->atom);
-            //         print_t_stdin(p_node->atom);
-            //     }
-            //     print_t_stdout(p_node->atom);
-            // }
-            // if (p_node->ops != EOE)
-            //     printf("%s ",type[p_node->ops]);
         }
         _reset_fd(og_stdin, og_stdout);
         first_node = first_node->right;
