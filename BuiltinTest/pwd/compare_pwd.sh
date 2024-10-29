@@ -1,8 +1,5 @@
 #!/bin/bash --posix
 
-
-
-
 path_of_fonction="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/pwd"
 script="./compare_pwd.sh"
 binary="./my_pwd"
