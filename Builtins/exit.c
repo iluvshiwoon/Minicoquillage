@@ -4,9 +4,14 @@
 
 static void	msg_error(char *arg)
 {
-	printf("exit: ");
-	printf("%s: ", arg);
-	printf("numeric argument required\n");
+	ft_putstr_fd("exit: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": numeric argument required\n",2);
+}
+
+static void msg_error_too_many_args(void)
+{
+	ft_putstr_fd("exit: too many arguments\n", 2);
 }
 
 static int	is_number(char *av)
@@ -27,15 +32,22 @@ static int	is_number(char *av)
 	return (1);
 }
 
-void	ft_exit(char *arg)
+void	ft_exit(char **input)
 {
 	int	exit_code;
+	char	*arg;
 
+	arg = input[0];
 	if (arg == NULL)
 		exit(0);
 	exit_code = ft_atoi(arg);
 	if (is_number(arg))
 	{
+		if (input[1] != NULL)
+		{
+			msg_error_too_many_args();
+			exit(1);
+		}
 		if (exit_code < 0)
 			exit(256 - ((-1 * exit_code) % 256));
 		else

@@ -23,20 +23,25 @@ test_exit() {
 count=0
 # Test automatique a partir d'entree issue dun fichier
 while IFS= read line; do
-	test_exit "$line"
+	test_exit "$line" 2>>msg_error.txt
 	test1_exit=$?
-	test_ft_exit "$line"
+	test_ft_exit "$line" 2>>ft_msg_error.txt
 	test1_ft_exit=$?
 	if [ $test1_ft_exit -eq $test1_exit ]; then
-		echo "Test $count réussi : exit argument : '$line'"
+		# echo "Test $count réussi : exit argument : '$line'"
+		:
 	else
 		echo "Test $count échoué"
 		echo "exit retourne $test1_exit"
 		echo "ft_exit retourne $test1_ft_exit"
+		echo
 	fi
-	echo
 	count=$((count+1))
 done < "$INPUT_FILE"
+
+
+rm msg_error.txt
+rm ft_msg_error.txt
 
 # # Test 1: Appel sans argument
 # test_exit

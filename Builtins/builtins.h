@@ -39,7 +39,7 @@ int				ft_cd(char *new_path, t_mylist *env);
 int				ft_unset(t_mylist *env, char *variable);
 int				ft_export(t_mylist *env, char *variable);
 // void			ft_exit(int status);
-void			ft_exit(char *arg);
+void			ft_exit(char **input);
 void			ft_echo(char *msg, int option_n);
 
 //t_expand	*ft_expand(char *content, char **env);

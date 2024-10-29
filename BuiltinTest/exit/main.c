@@ -37,7 +37,7 @@ int	main(int argc, char *argv[], char *env[])
 		}
 
 		if (argc > 1)
-			ft_exit(argv[1]);
+			ft_exit(++argv);
 		else
 			ft_exit(NULL);
 	}

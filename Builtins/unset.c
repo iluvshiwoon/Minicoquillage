@@ -70,6 +70,7 @@ int	ft_unset(t_mylist *env, char *variable)
 	int		i;
 	int		is_set;
 	int		status;
+	t_mylist	*envc;
 
 	status = 0;
 	tab = ft_split(variable, ' ');
@@ -80,9 +81,10 @@ int	ft_unset(t_mylist *env, char *variable)
 			status += 1;
 		else
 		{
-			is_set = is_present(env, tab[i]);
+			envc = env;
+			is_set = is_present(envc, tab[i]);
 			if (is_set > -1)
-				del_var(env, is_set);
+				del_var(envc, is_set);
 		}
 		i++;
 	}

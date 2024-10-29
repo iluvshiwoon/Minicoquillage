@@ -53,6 +53,7 @@ rm ft_unset_tmp.txt
 cat ft_unset_update.txt | sort > ft_update_sort.txt
 diff ft_update_sort.txt env_unset_sort.txt
 
+
 # # Nettoyer les fichiers temporaires txt non tries
 rm original_env.txt
 rm env_unset.txt

@@ -2,6 +2,7 @@
 
 int	main(void)
 {
-	ft_pwd();
-	return (0);
+	int ret;
+	ret = ft_pwd();
+	return (ret);
 }
