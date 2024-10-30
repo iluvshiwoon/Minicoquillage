@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/29 18:22:56 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/30 17:19:17 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,79 @@ void _reset_fd(int og_stdin, int og_stdout)
     dup2(og_stdout, STDOUT_FILENO);
 }
 
+void    _count_pipe(t_heap * heap, int (**pipefd)[2], int * pipe_nb, t_ast_node * first_node)
+{
+    t_parser_node * p_node;
+    *pipe_nb = 0;
+    while(first_node && first_node->left)
+    {
+        p_node = first_node->data;
+        if (p_node->ops && p_node->ops == PIPE)
+            (*pipe_nb)++;
+        else
+            break;
+    }
+    *pipefd = wrap_malloc(heap->heap_allocated,heap->list,sizeof(**pipefd) * *pipe_nb);
+}
+
+void	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp)
+{
+    int (*pipefd)[2];
+    int pipe_nb;
+    t_ast_node * left;
+    t_parser_node * p_node;
+    char * path;
+    static int status;
+    int skip;
+    int og_stdin;
+    int og_stdout;
+
+    skip = 0;
+    og_stdin = dup(STDIN_FILENO);
+    og_stdout = dup(STDOUT_FILENO);
+    _count_pipe(heap,&pipefd,&pipe_nb,first_node);
+	while (first_node && first_node->left)
+	{
+        left = first_node->left;
+        p_node = left->data;
+        redirect(&skip, &status, first_node);
+        if (is_op(p_node->ops))
+        {
+            _exec_tree(heap,left, envp);
+            p_node = first_node->data;
+            if (p_node->atom && p_node->atom->in_fd)
+                close(p_node->atom->in_fd);
+            if (p_node->atom && p_node->atom->out_fd)
+                close(p_node->atom->out_fd);
+            p_node = left->data;
+        }
+        else 
+        {
+            path = get_path(heap,&status,p_node->atom->cmd);
+            if (path)
+            {
+                status = _exec_node(heap,path,p_node,envp);
+                if (p_node->atom && p_node->atom->in_fd)
+                    close(p_node->atom->in_fd);
+                if (p_node->atom && p_node->atom->out_fd)
+                    close(p_node->atom->out_fd);
+            }
+        }
+        p_node = first_node->data;
+        if(p_node->ops && p_node->ops != PIPE)
+        {
+            _reset_fd(og_stdin, og_stdout);
+            close(og_stdin);
+            close(og_stdout);
+            break;
+        }
+        _reset_fd(og_stdin, og_stdout);
+        first_node = first_node->right;
+	}
+    close(og_stdin);
+    close(og_stdout);
+}
+
 void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
 {
     t_ast_node * left;
@@ -163,16 +236,23 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
 	while (first_node && first_node->left)
 	{
         left = first_node->left;
+        p_node = first_node->data;
+        if (p_node->ops && p_node->ops == PIPE)
+        {
+            skip = 1;
+            // handle pipeline;
+        }
         p_node = left->data;
         if (!skip)
-            redirect(&skip, &status, first_node); // dont want to redirect if pipe is next ops but want to if () want to skip _exec node if next op is pipe and run custom function for pipeline
+            redirect(&skip, &status, first_node); // dont want to redirect if
+        // pipe is next ops but want to if () want to skip _exec node if next op is pipe and run custom function for pipeline
         if (is_op(p_node->ops) && !skip)
         {
             _exec_tree(heap,left, envp);
             p_node = first_node->data;
-            if (p_node->atom->in_fd)
+            if (p_node->atom && p_node->atom->in_fd)
                 close(p_node->atom->in_fd);
-            if (p_node->atom->out_fd)
+            if (p_node->atom && p_node->atom->out_fd)
                 close(p_node->atom->out_fd);
             p_node = left->data;
         }
@@ -182,9 +262,9 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
             if (path && !skip)
             {
                 status = _exec_node(heap,path,p_node,envp);
-                if (p_node->atom->in_fd)
+                if (p_node->atom && p_node->atom->in_fd)
                     close(p_node->atom->in_fd);
-                if (p_node->atom->out_fd)
+                if (p_node->atom && p_node->atom->out_fd)
                     close(p_node->atom->out_fd);
             }
         }
@@ -193,7 +273,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
         {
             if (p_node->ops == AND && status)
                 skip = 1;
-            else if (p_node->ops)
+            else if (p_node->ops && p_node->ops != PIPE)
                 skip = 0;
         }
         _reset_fd(og_stdin, og_stdout);
