@@ -78,7 +78,7 @@ int	ft_unset(t_mylist *env, char *variable)
 	while (tab[i])
 	{
 		if (msg_error(tab[i]))
-			status += 1;
+			;
 		else
 		{
 			envc = env;
