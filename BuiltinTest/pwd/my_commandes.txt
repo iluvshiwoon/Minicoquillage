@@ -4,3 +4,4 @@ cd /home/bsunda/Documents/projet_1/Minicoquillage/
 cd /home/bsunda/Documents/projet_1
 cd /home/bsunda/Documents/..
 cd /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/
+cd /home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/

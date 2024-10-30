@@ -129,6 +129,8 @@ int ft_cd_rel(char *relative_path, t_mylist *env)
 	return ft_cd_abs(goto_path, env);
 }
 
+
+
 int	ft_cd(char *new_path, t_mylist *env)
 {
 	if (!new_path)
