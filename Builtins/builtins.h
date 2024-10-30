@@ -43,7 +43,7 @@ void			ft_exit(char **input);
 int				ft_echo(char *msg, int option_n);
 
 //t_expand	*ft_expand(char *content, char **env);
-
+char	*my_vpath(char *vpath, t_mylist *curpath);
 void	put_envc(t_mylist *env);
 char	*get_var_env(char *var, char **env);
 int		get_env(char **env, char *var);

@@ -130,13 +130,38 @@ int ft_cd_rel(char *relative_path, t_mylist *env)
 }
 
 
-
 int	ft_cd(char *new_path, t_mylist *env)
 {
+	t_mylist	*currentpath;
+	char		*path;
+
+	currentpath = get_var(env, "PWD");
 	if (!new_path)
 		return ft_cd_abs(NULL, env);
-	else if (is_absolute_path(new_path))
-		return ft_cd_rel(new_path, env);
 	else
-		return ft_cd_abs(new_path, env);
+	{
+		path = my_vpath(new_path, currentpath);
+		printf("path: %s\n", path);
+		if (is_absolute_path(new_path))
+			return ft_cd_rel(new_path, env);
+		else
+			return ft_cd_abs(new_path, env);
+	}
+}
+
+
+int main(int ac , char **av, char **env)
+{
+	t_mylist	*env_list;
+	char		*new_path;
+
+	env_list = ft_env(env);
+	if (ac == 1)
+		ft_cd(NULL, env_list);
+	else
+	{
+		new_path = av[1];
+		ft_cd(new_path, env_list);
+	}
+	return (0);
 }
