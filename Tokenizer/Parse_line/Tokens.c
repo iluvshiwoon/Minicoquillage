@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 14:44:52 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/10/30 15:22:21 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
@@ -21,8 +21,7 @@ void	expand_tokens(t_double_link_node *node)
 	init_expand(&open, &control, &j, node);
 	while (control.token->value[j])
 	{
-        if (handle_quote(&control, &open, j) == EXIT_SUCCESS)
-			j = j;
+        if (handle_quote(&control, &open, j) == EXIT_SUCCESS);
         else if (control.token->value[j] == '$' && !open.double_quote && !open.single_quote)
         {
             expand(&j, &control.token->value,
