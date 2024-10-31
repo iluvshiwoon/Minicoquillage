@@ -7,7 +7,7 @@ INPUT_FILE="text_to_print.txt"
 # Lire le fichier et affiche avec echo et option -n
 while IFS= read line; do
 # Run the command and capture the output
-    echo -n "$line"  >>echo_option_n.txt
+    echo "-n $line"  >>echo_option_n.txt
 done < "$INPUT_FILE"
 
 # Lire le fichier et affiche avec echo sans option -n

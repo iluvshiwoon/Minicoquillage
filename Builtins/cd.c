@@ -76,7 +76,7 @@ int	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, c
 	else
 	{
 		put_var(env, "OLDPWD", pwd->val);
-		put_var(env, "PWD", newpath);
+		put_var(env, "PWD", getcwd(NULL, 0));
 		return (0);
 	}
 }
@@ -140,8 +140,8 @@ int	ft_cd(char *new_path, t_mylist *env)
 		return ft_cd_abs(NULL, env);
 	else
 	{
-		path = my_vpath(new_path, currentpath);
-		printf("path: %s\n", path);
+		// path = my_vpath(new_path, currentpath);
+		// printf("path: %s\n", path);
 		if (is_absolute_path(new_path))
 			return ft_cd_rel(new_path, env);
 		else
@@ -150,18 +150,19 @@ int	ft_cd(char *new_path, t_mylist *env)
 }
 
 
-int main(int ac , char **av, char **env)
-{
-	t_mylist	*env_list;
-	char		*new_path;
+// int main(int ac , char **av, char **env)
+// {
+// 	t_mylist	*env_list;
+// 	char		*new_path;
 
-	env_list = ft_env(env);
-	if (ac == 1)
-		ft_cd(NULL, env_list);
-	else
-	{
-		new_path = av[1];
-		ft_cd(new_path, env_list);
-	}
-	return (0);
-}
+// 	env_list = ft_env(env);
+// 	if (ac == 1)
+// 		ft_cd(NULL, env_list);
+// 	else
+// 	{
+// 		new_path = av[1];
+// 		ft_cd(new_path, env_list);
+// 	}
+// 	put_envc(env_list);
+// 	return (0);
+// }

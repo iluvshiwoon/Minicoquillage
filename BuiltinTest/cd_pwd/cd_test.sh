@@ -9,14 +9,14 @@ INPUT_FILE=./my_path.txt
 # # SECTION 2
 # Cree une variable chemin qui contient le chemin du répertoire courant
 #UBUNTU
-path_of_fonction="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd"
-path_cd="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
+# path_of_fonction="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd"
+# path_cd="/home/bsunda/Documents/projet_1/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
 #FEDORA
 # path_cd="/home/bsunda/Documents/projet/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
 # path_of_fonction="/home/bsunda/Documents/Projet/Minicoquillage/BuiltinTest/cd_pwd"
 #DOCKER
-# path_of_fonction="/workspaces/Minicoquillage/BuiltinTest/cd_pwd"
-# path_cd="/workspaces/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
+path_of_fonction="/workspaces/Minicoquillage/BuiltinTest/cd_pwd"
+path_cd="/workspaces/Minicoquillage/BuiltinTest/cd_pwd/path_cd"
 
 
 # # SECTION 3

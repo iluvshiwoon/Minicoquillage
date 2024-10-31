@@ -1,4 +1,3 @@
-
     Bonjour! Aujourd'hui, nous allons explorer le monde des caractères spéciaux: @, #, $, %, &, *.
     Les chiffres comme 1, 2, 3, 4, 5 sont essentiels dans notre vie quotidienne.
     Avez-vous déjà remarqué que les lettres de l'alphabet peuvent former des mots?
