@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/27 15:45:07 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/01 16:06:45 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int argc, char **argv, char ** envp)
             return (EXIT_FAILURE);
 		    debug(argv[1],&control);
         free_heap(&heap_allocated);
-		return (EXIT_SUCCESS);
 	}
-	return (EXIT_SUCCESS);
+	return (clear_history(),EXIT_SUCCESS);
+	// return (EXIT_SUCCESS);
 }

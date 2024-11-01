@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:37:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/29 17:46:25 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/01 15:25:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,5 @@ char * get_path(t_heap * heap,int * status, char * cmd)
             return(*status = 126,printf("minicoquillage: Permission denied\n"),NULL);
         }
     }
-    return(printf("%s",mini_ft_strjoin(heap->heap_allocated,heap->list,cmd,": command not found\n")),NULL);
+    return(*status = 127,printf("%s",mini_ft_strjoin(heap->heap_allocated,heap->list,cmd,": command not found\n")),NULL);
 }

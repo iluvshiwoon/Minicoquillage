@@ -6,14 +6,18 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/31 18:22:45 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/01 17:12:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
+// expansion && quote
 // heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
 // edit readme to add tricky point to remember for future evaluation
-// pipeline
+// signal
+// managing term var (ex vim killed...)
+// bonus change arrow color depending on exit status;
+// TEST: script to test path / exec / expansion with echo and export / expansion in heredoc 
 void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp);
 
 void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char ** envp)
@@ -181,20 +185,17 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp)
     t_ast_node * left;
     t_parser_node * p_node;
     char * path;
-    static int status;
+    int status;
     int skip;
-    // int og_stdin;
-    // int og_stdout;
 
     i = -1;
     skip = 0;
-    // og_stdin = dup(STDIN_FILENO);
-    // og_stdout = dup(STDOUT_FILENO);
+    status = 0;
     _count_pipe(heap,&pipefd,&pipe_nb,first_node);
     while (++i < pipe_nb + 1)
     {
         pid = fork();// same as for open wrapper for failure; 
-        if (pid == 0) // close all necessary fd and redirect pipe; then redirect base on stdin etc then call either _exec_tree or execve
+        if (pid == 0)
         {
             int j; 
             j = -1;
@@ -265,8 +266,10 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp)
             else 
             {
                 path = get_path(heap,&status,p_node->atom->cmd);
+                // printf("%d\n",status);
                 if (path)
                 {
+                    // printf("%s\n",path);
                     execve(path,p_node->atom->args,envp);
                     // status = _exec_node(heap,path,p_node,envp);
                     if (p_node->atom && p_node->atom->in_fd)
@@ -275,6 +278,8 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp)
                         close(p_node->atom->out_fd);
                 }
             }   
+            free_heap(heap->heap_allocated);
+            exit(status);
         }
     }
     i = -1;
@@ -292,7 +297,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp)
         }
     }
     if (WIFEXITED(wstatus))
-        return (WEXITSTATUS(wstatus));
+        return (/* printf("%d\n",WEXITSTATUS(wstatus)), */WEXITSTATUS(wstatus));
     return (error_exit("pipeline failure\n",heap->heap_allocated),42);
 }
 
@@ -307,9 +312,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
     int og_stdout;
 
     skip = 0;
-    og_stdin = dup(STDIN_FILENO);
-    og_stdout = dup(STDOUT_FILENO);
-	while (first_node && first_node->left)
+    while (first_node && first_node->left)
 	{
         left = first_node->left;
         p_node = first_node->data;
@@ -323,6 +326,8 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
                 p_node = first_node->data;
             }
         }
+        og_stdin = dup(STDIN_FILENO);
+        og_stdout = dup(STDOUT_FILENO);
         p_node = left->data;
         if (!skip)
             redirect(&skip, &status, first_node);
@@ -336,10 +341,10 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
                 close(p_node->atom->out_fd);
             p_node = left->data;
         }
-        else 
+        else if (!skip) 
         {
             path = get_path(heap,&status,p_node->atom->cmd);
-            if (path && !skip)
+            if (path)
             {
                 status = _exec_node(heap,path,p_node,envp);
                 if (p_node->atom && p_node->atom->in_fd)
@@ -357,8 +362,8 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
                 skip = 0;
         }
         _reset_fd(og_stdin, og_stdout);
+        close(og_stdin);
+        close(og_stdout);
         first_node = first_node->right;
 	}
-    close(og_stdin);
-    close(og_stdout);
 }
