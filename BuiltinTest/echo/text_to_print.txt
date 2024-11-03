@@ -10,11 +10,11 @@
     Les lettres peuvent être majuscules ou minuscules: A, a, B, b.
     Les caractères spéciaux peuvent aussi servir à la programmation: { }, [ ], ( ).
     En combinant tout cela, nous pouvons créer des phrases intéressantes!
-    Par exemple: "Le code est: 1234@abcd!"
+-n    Par exemple: "Le code est: 1234@abcd!"
     Les chiffres romains sont aussi fascinants: I, II, III, IV, V.
-    Les mots de passe doivent contenir des lettres, des chiffres et des caractères spéciaux.
-    Un bon exemple de mot de passe serait: P@ssw0rd123!
-    Les jeux de mots peuvent être créatifs: "C'est l'heure de coder: 10h30!"
+-n -n    Les mots de passe doivent contenir des lettres, des chiffres et des caractères spéciaux.
+-nnn    Un bon exemple de mot de passe serait: P@ssw0rd123!
+-nnnn  -nnnnn    Les jeux de mots peuvent être créatifs: "C'est l'heure de coder: 10h30!"
     Les caractères spéciaux peuvent aussi être utilisés pour l'art ASCII.
     En résumé, les lettres, les chiffres et les caractères spéciaux sont tous importants.
     Amusez-vous à les utiliser dans vos écrits et vos créations!

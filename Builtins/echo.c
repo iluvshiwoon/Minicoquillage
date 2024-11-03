@@ -96,22 +96,22 @@ int	ft_echo(char *input, int option_n)
 	option_n = 0;
 	while (is_option(msg))
 	{
-		while(*msg == ' ')
+		while (*msg == ' ')
 			msg++;
-		while(*msg != ' ')
+		while (*msg != ' ')
 			msg++;
 		option_n = 1;
 	}
-	while(*msg == ' ')
-			msg++;
+	while (*msg == ' ')
+		msg++;
 	ft_putstr_fd(msg, 1);
 	if (!option_n)
 		printf("\n");
 	return (0);
 }
 
-int	main(int ac, char **av)
-{
-	ft_echo(av[1], 0);
-	return (0);
-}
+// int	main(int ac, char **av)
+// {
+// 	ft_echo(av[1], 0);
+// 	return (0);
+// }
