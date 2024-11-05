@@ -64,6 +64,16 @@ void	del_var(t_mylist *envc, int position)
 	}
 }
 
+
+/**
+ * ft_unset: unset the variable in the environment from the linked list
+ * @env: list of environment variables transformed into a linked list t_mylist
+ * @variable: the variable to unset
+ * @return: 0 if the variable is unset, 1 if the variable is not found
+ * 			env is updated
+ * To free:
+ * 				- no free
+ */
 int	ft_unset(t_mylist *env, char *variable)
 {
 	char	**tab;

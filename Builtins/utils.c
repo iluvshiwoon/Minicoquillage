@@ -28,6 +28,12 @@ char	*store_env(char *tab, char *var, char *val)
 	return (tab);
 }
 
+
+
+/**
+ * env_to_tab - convert a linked list of environment variables into a table of strings
+ * @env: linked list of environment variables
+ */
 char	**env_to_tab(t_mylist *env)
 {
 	int count;

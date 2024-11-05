@@ -56,6 +56,16 @@ t_mylist	**fill_envc(char **env, t_mylist **content)
 	return (content);
 }
 
+
+/**
+ * ft_env: transform the environment variables into a linked list t_mylist
+ * @env: the environment variables from the main
+ * @return: the linked list t_mylist
+ * To free:
+ * 				- free all var from the linked list
+ *				- free all val from the linked list
+ * 				- then free the linked list after using it
+ */
 t_mylist	*ft_env(char **env)
 {
 	t_mylist	**envc;
@@ -87,7 +97,23 @@ void	put_envc(t_mylist *env)
 }
 
 
+// int main(int ac, char **av, char **env)
+// {
+// 	t_mylist	*envc;
+// 	char		**envp;
 
+// 	(void )		ac;
+// 	(void )		av;
+// 	envc = ft_env(env);
+// 	envp = env_to_tab(envc);
+// 	while (*envp)
+// 	{
+// 		ft_putstr_fd(*envp, 1);
+// 		ft_putstr_fd("\n", 1);
+// 		envp++;
+// 	}
+// 	return (0);
+// }
 
 
 // static size_t	len_tab(char **env)

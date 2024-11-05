@@ -151,6 +151,13 @@ int error_case(char **tab, int i, char *firstchar)
 	return (0);
 }
 
+/**
+ * ft_export - export a variable from the env list
+ * @env: list of environment variables transformed into a linked list t_mylist
+ * @variable: the variable to export
+ * @return: 0 if the variable is exported, 1 if the variable is not exported,
+ * 			env is updated
+ */
 int	ft_export(t_mylist *env, char *variable)
 {
 	char	**tab;
