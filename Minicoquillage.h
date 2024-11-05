@@ -14,6 +14,8 @@
 # include "Tokenizer/Tokenizer.h"
 # include "Parser/Parser.h"
 # include "Exec/exec.h"
+# include "Expand/expand.h"
+# include "Builtins/builtins.h"
 
 enum e_mode {
     INTERACTIVE,
