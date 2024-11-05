@@ -47,9 +47,13 @@ int	result(char **patterns, char *glob, char *str, int i)
 	return (1);
 }
 
-/*
- *exemple glob: *str*
- *exemple str:  -str1
+/**
+ *glob - function that compare a string with a pattern
+ *@glob: *str* exemple of pattern acceped
+ *@str:  -str1 exemple a string to compare
+ *Return: 0 if the string is not accepted by the pattern,  else 1
+ *To Free:
+ *		-none
  */
 int	glob(char *str, char *glob)
 {
