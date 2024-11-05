@@ -6,12 +6,12 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/01 17:12:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/04 18:41:45 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
-// expansion && quote
+// expansion && quote : 1. do expansion keep track in an array of char that were expanded or not 2. do globbing 
 // heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
 // edit readme to add tricky point to remember for future evaluation
 // signal

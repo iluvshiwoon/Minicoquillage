@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/27 17:57:15 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/04 18:18:10 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,4 @@ void	debug(char *line, t_control_dll * control)
         ast = parser(control);
         print_tree(&heap, ast->first_node);
     }
-    // else if (MODE == EXPANSION)
-    //     print_first_token(&control); 
 }
