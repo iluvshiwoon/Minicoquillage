@@ -47,6 +47,7 @@ void	del_var(t_mylist *envc, int position)
 	i = 0;
 	j = position - 1;
 	next = envc;
+    prev = NULL;
 	while (i <= position)
 	{
 		if (position == 0 || i == j)

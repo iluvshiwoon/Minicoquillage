@@ -6,42 +6,42 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/30 15:22:21 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:35:27 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
 
-void	expand_tokens(t_double_link_node *node)
-{
-	t_control_dll	control;
-	t_open_quote	open;
-	char			*temp;
-	size_t			j;
-
-	init_expand(&open, &control, &j, node);
-	while (control.token->value[j])
-	{
-        if (handle_quote(&control, &open, j) == EXIT_SUCCESS);
-        else if (control.token->value[j] == '$' && !open.double_quote && !open.single_quote)
-        {
-            expand(&j, &control.token->value,
-					&temp, &node);
-        }
-        else if (control.token->value[j] == '"' && open.double_quote)
-		{
-			open.double_quote = expand_double_quote(&j, &control.token->value,
-					&temp, &node);
-			control.token->quote = DOUBLE;
-		}
-        else if (control.token->value[j] == '\'' && open.single_quote)
-		{
-			open.single_quote = expand_single_quote(&j, &control.token->value,
-					&temp, &node);
-			control.token->quote = SINGLE;
-		}
-		++j;
-	}
-}
+// void	expand_tokens(t_double_link_node *node)
+// {
+// 	t_control_dll	control;
+// 	t_open_quote	open;
+// 	char			*temp;
+// 	size_t			j;
+//
+// 	init_expand(&open, &control, &j, node);
+// 	while (control.token->value[j])
+// 	{
+//         if (handle_quote(&control, &open, j) == EXIT_SUCCESS);
+//         else if (control.token->value[j] == '$' && !open.double_quote && !open.single_quote)
+//         {
+//             expand(&j, &control.token->value,
+// 					&temp, &node);
+//         }
+//         else if (control.token->value[j] == '"' && open.double_quote)
+// 		{
+// 			open.double_quote = expand_double_quote(&j, &control.token->value,
+// 					&temp, &node);
+// 			control.token->quote = DOUBLE;
+// 		}
+//         else if (control.token->value[j] == '\'' && open.single_quote)
+// 		{
+// 			open.single_quote = expand_single_quote(&j, &control.token->value,
+// 					&temp, &node);
+// 			control.token->quote = SINGLE;
+// 		}
+// 		++j;
+// 	}
+// }
 
 int	shenanigans(char *line, size_t *i, size_t *j, size_t *k)
 {

@@ -69,7 +69,6 @@ t_mylist	**fill_envc(char **env, t_mylist **content)
 t_mylist	*ft_env(char **env)
 {
 	t_mylist	**envc;
-	t_mylist	*content;
 
 	if(env == NULL || *env == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 15:06:31 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:34:15 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
@@ -66,7 +66,7 @@ t_double_link_list	*expand_nodes(size_t i, size_t j, t_control_dll *control,
 	while (control->node)
 	{
 		// expand_tokens(control->node);
-        assign_quote(control->node);
+        // assign_quote(control->node);
 		control->node = control->node->next;
 	}
     // control->token = malloc(sizeof(*(control->token)));

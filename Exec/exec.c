@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/04 18:41:45 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:48:50 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,24 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
     clean_heredoc(&heap, ast->first_node);
 }
 
-int _exec_node(t_heap * heap, char * path, t_parser_node * p_node, char ** envp)
+int _exec_node(t_heap * heap, t_parser_node * p_node, char ** envp)
 {
     pid_t pid;
     int wstatus;
+    char * path;
+    t_expanded * expanded;
 
+    expanded = _expand(heap, p_node->atom->args, envp);
+    printf("%s\n", expanded->value[0]);
+    path = get_path(heap, &wstatus,expanded->value[0]);
+    if (!path)
+        return(wstatus);
     pid = fork();
     if (pid < 0)
         return(perror("pid"),error_exit("fork failed\n",heap->heap_allocated),4);
     if (pid == 0)
     {
-        execve(path,p_node->atom->args,envp);
+        execve(path,expanded->value,envp);
         perror("execve");
     }
     waitpid(pid, &wstatus,0);
@@ -305,7 +312,6 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
 {
     t_ast_node * left;
     t_parser_node * p_node;
-    char * path;
     static int status;
     int skip;
     int og_stdin;
@@ -343,15 +349,11 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
         }
         else if (!skip) 
         {
-            path = get_path(heap,&status,p_node->atom->cmd);
-            if (path)
-            {
-                status = _exec_node(heap,path,p_node,envp);
-                if (p_node->atom && p_node->atom->in_fd)
-                    close(p_node->atom->in_fd);
-                if (p_node->atom && p_node->atom->out_fd)
-                    close(p_node->atom->out_fd);
-            }
+            status = _exec_node(heap,p_node,envp);
+            if (p_node->atom && p_node->atom->in_fd)
+                close(p_node->atom->in_fd);
+            if (p_node->atom && p_node->atom->out_fd)
+                close(p_node->atom->out_fd);
         }
         p_node = first_node->data;
         if(p_node->ops)

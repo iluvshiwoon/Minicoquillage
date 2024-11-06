@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:29:12 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/05 16:32:01 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:28:58 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,5 @@ typedef struct s_expanded {
     bool ** litteral;
 } t_expanded;
 
+t_expanded * _expand(t_heap * heap, char ** to_expand, char ** envp);
 #endif

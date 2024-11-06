@@ -1,4 +1,4 @@
-C_FILES = $(filter-out $(wildcard ./*/test_*.c) ,$(wildcard ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c ./Utils/*.c ./Exec/*.c))
+C_FILES = $(filter-out $(wildcard ./*/test_*.c) ,$(wildcard ./Builtins/*.c ./Expand/*.c ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c ./Utils/*.c ./Exec/*.c))
 C_FLAGS = -Wall -Werror -Wextra
 
 NAME = Minicoquillage

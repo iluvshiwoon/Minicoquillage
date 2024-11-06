@@ -121,8 +121,6 @@ int	update_var(t_mylist **env, char *variable)
 {
 	char		*var;
 	char		*val;
-	char		*valc;
-	char		*varc;
 	int			separator;
 
 	separator = has_character(variable, '=');
@@ -161,7 +159,6 @@ int error_case(char **tab, int i, char *firstchar)
 int	ft_export(t_mylist *env, char *variable)
 {
 	char	**tab;
-	int		is_form;
 	int		i;
 	char	*firstchar;
 	int		status;
