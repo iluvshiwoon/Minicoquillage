@@ -11,3 +11,7 @@ Hello He*lo
 Hello He*llo
 Hello He*ll*
 Hello He*z*
+.Hello .*
+.Hello .**
+Hello.c *.*
+Hello.c *
