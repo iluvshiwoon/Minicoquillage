@@ -7,6 +7,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <stdbool.h>
+# include <dirent.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "42_MyLibC/mylibc.h"
@@ -16,6 +17,7 @@
 # include "Exec/exec.h"
 # include "Expand/expand.h"
 # include "Builtins/builtins.h"
+# include "glob/glob.h"
 
 enum e_mode {
     INTERACTIVE,
