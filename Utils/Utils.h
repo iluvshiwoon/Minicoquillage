@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 18:39:08 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/21 18:16:02 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/07 15:05:53 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,5 @@ char	*mini_ft_strdup(t_heap_allocated * heap_allocated, t_double_link_list * lis
 char	**mini_ft_split(t_heap * heap,char const *s, char c);
 char	*mini_ft_strtrim(t_heap * heap, char const *s1, char const *set);
 char	*mini_ft_substr(t_heap * heap,char const *s, unsigned int start, size_t len);
+char	*mini_ft_itoa(t_heap * heap, int n);
 #endif

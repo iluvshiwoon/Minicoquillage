@@ -6,18 +6,19 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/06 16:48:50 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/07 16:00:45 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 // expansion && quote : 1. do expansion keep track in an array of char that were expanded or not 2. do globbing 
 // heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
-// edit readme to add tricky point to remember for future evaluation
 // signal
 // managing term var (ex vim killed...)
-// bonus change arrow color depending on exit status;
 // TEST: script to test path / exec / expansion with echo and export / expansion in heredoc 
+//
+// bonus change arrow color depending on exit status;
+// edit readme to add tricky point to remember for future evaluation
 void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp);
 
 void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char ** envp)
@@ -32,15 +33,14 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
     clean_heredoc(&heap, ast->first_node);
 }
 
-int _exec_node(t_heap * heap, t_parser_node * p_node, char ** envp)
+int _exec_node(t_heap * heap, t_parser_node * p_node, char ** envp, int status)
 {
     pid_t pid;
     int wstatus;
     char * path;
     t_expanded * expanded;
 
-    expanded = _expand(heap, p_node->atom->args, envp);
-    printf("%s\n", expanded->value[0]);
+    expanded = _expand(heap, p_node->atom->args, envp, status);
     path = get_path(heap, &wstatus,expanded->value[0]);
     if (!path)
         return(wstatus);
@@ -349,7 +349,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
         }
         else if (!skip) 
         {
-            status = _exec_node(heap,p_node,envp);
+            status = _exec_node(heap,p_node,envp, status);
             if (p_node->atom && p_node->atom->in_fd)
                 close(p_node->atom->in_fd);
             if (p_node->atom && p_node->atom->out_fd)
