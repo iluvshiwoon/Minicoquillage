@@ -1,12 +1,8 @@
 #ifndef GLOB_H
 # define GLOB_H
-
-# include <stdio.h>
-# include <stdlib.h>
-# include <dirent.h>
-# include <string.h>
-# include "../../42_MyLibC/mylibc.h"
-
+#ifndef MINICOQUILLAGE_H
+# include "../Minicoquillage.h"
+#endif
 
 typedef struct s_glob
 {

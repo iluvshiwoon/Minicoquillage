@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:32:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/07 16:13:00 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/08 18:04:42 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,4 +246,9 @@ t_expanded * _expand(t_heap * heap, char ** to_expand, char ** envp, int status)
         }
     }
     return (expanded);
+}
+
+char ** _glob_args(t_heap * heap, t_expanded * expanded)
+{
+ 
 }

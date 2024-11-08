@@ -1,7 +1,4 @@
-#include "./glob.h"
-
-
-
+#include "../Minicoquillage.h"
 
 void put_glob(t_glob *head, int fd)
 {
@@ -18,8 +15,6 @@ void put_glob(t_glob *head, int fd)
 		tmp = tmp->next;
 	}
 }
-
-
 
 int	max_file(void)
 {
@@ -139,20 +134,17 @@ t_glob	*glob(const char *pattern)
 	return head_glob;
 }
 
-
-int main (int ac, char **av)
-{
-
-	t_glob	*head;
-	const char *pattern;
-
-	if (ac != 2)
-		return EXIT_FAILURE;
-	pattern = (const char *)av[1];
-	head = glob(av[1]);
-	put_glob(head, 1);
-
-	return EXIT_SUCCESS;
-}
-
-
+// int main (int ac, char **av)
+// {
+//
+// 	t_glob	*head;
+// 	const char *pattern;
+//
+// 	if (ac != 2)
+// 		return EXIT_FAILURE;
+// 	pattern = (const char *)av[1];
+// 	head = glob(av[1]);
+// 	put_glob(head, 1);
+//
+// 	return EXIT_SUCCESS;
+// }

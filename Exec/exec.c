@@ -6,12 +6,15 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/07 16:00:45 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/08 18:08:31 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 // expansion && quote : 1. do expansion keep track in an array of char that were expanded or not 2. do globbing 
+// modify globbing algo for litteral *
+// globbing of args is done before globbing of file
+// careful globbing on file should be done atomically for ambiguous redirection 
 // heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
 // signal
 // managing term var (ex vim killed...)
