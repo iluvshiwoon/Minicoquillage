@@ -1,8 +1,12 @@
 #ifndef GLOB_H
 # define GLOB_H
-#ifndef MINICOQUILLAGE_H
-# include "../Minicoquillage.h"
-#endif
+
+# include <stdio.h>
+# include <stdlib.h>
+# include <dirent.h>
+# include <string.h>
+# include "../../42_MyLibC/mylibc.h"
+
 
 typedef struct s_glob
 {
@@ -11,7 +15,7 @@ typedef struct s_glob
 }	t_glob;
 
 int		globbing(const char *str, const char *glob);
-t_glob	*glob(t_heap * heap, const char *pattern);
+t_glob	*glob(const char *pattern);
 int		match( const char *str, const char *glob);
 
 #endif

@@ -1,5 +1,6 @@
 #include "../exec.h"
 
+
 int match( const char *str, const char *glob) {
 	int	gx;
 	int	sx;
@@ -44,6 +45,11 @@ int match( const char *str, const char *glob) {
 }
 
 
+// int	main(int ac, char **av)
+// {
+// 	printf("%d\n", match(av[1], av[2]));
+// 	return match(av[1], av[2]);
+// }
 
 // int	position_pattern(const char *str, const char *pattern)
 // {
