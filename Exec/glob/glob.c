@@ -72,8 +72,9 @@ t_glob	*store_match(char **tmp, const char *pattern, t_glob *head_glob)
 	while (tmp[i] != NULL)
 	{
 		if (match(tmp[i], pattern)
-			&& ft_strncmp(tmp[i], ".", 2) != 0
-			&& ft_strncmp(tmp[i], "..", 2) != 0)
+			&& ft_strncmp(tmp[i], ".", ft_strlen(tmp[i]) + 1) != 0
+			&& ft_strncmp(tmp[i], "..", ft_strlen(tmp[i]) + 1) != 0
+			&& tmp[i][0] != '.')
 		{
 			new = malloc(sizeof(t_glob));
 			if (new == NULL)
@@ -89,7 +90,34 @@ t_glob	*store_match(char **tmp, const char *pattern, t_glob *head_glob)
 	return head_glob;
 }
 
+t_glob	*store_hidden(char **tmp, const char *pattern, t_glob *head_glob)
+{
+	t_glob *new;
+	t_glob *head_empty;
+	int i;
 
+	i = 0;
+	head_empty = head_glob;
+	while (tmp[i] != NULL)
+	{
+		if (match(tmp[i], pattern)
+			&& ft_strncmp(tmp[i], ".", ft_strlen(tmp[i]) + 1) != 0
+			&& ft_strncmp(tmp[i], "..", ft_strlen(tmp[i]) + 1) != 0
+			&& tmp[i][0] == '.')
+		{
+			new = malloc(sizeof(t_glob));
+			if (new == NULL)
+				return head_glob;
+			new->file = ft_strdup(tmp[i]);
+			new->next = head_glob->next;
+			head_glob->next = new;
+		}
+		i++;
+	}
+	head_glob = head_empty->next;
+	free(head_empty);
+	return head_glob;
+}
 
 t_glob	*glob(const char *pattern)
 {
@@ -104,7 +132,10 @@ t_glob	*glob(const char *pattern)
 		return NULL;
 	head_glob->file = NULL;
 	head_glob->next = NULL;
-	head_glob = store_match(tmp, pattern, head_glob);
+	if (pattern[0] == '.')
+		head_glob = store_hidden(tmp, pattern, head_glob);
+	else
+		head_glob = store_match(tmp, pattern, head_glob);
 	return head_glob;
 }
 
