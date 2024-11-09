@@ -6,20 +6,17 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/08 18:08:31 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/09 19:29:33 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
-// expansion && quote : 1. do expansion keep track in an array of char that were expanded or not 2. do globbing 
-// modify globbing algo for litteral *
-// globbing of args is done before globbing of file
-// careful globbing on file should be done atomically for ambiguous redirection 
+// add globbing and expand to pipeline;
 // heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
 // signal
 // managing term var (ex vim killed...)
+// Check builtins
 // TEST: script to test path / exec / expansion with echo and export / expansion in heredoc 
-//
 // bonus change arrow color depending on exit status;
 // edit readme to add tricky point to remember for future evaluation
 void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp);
@@ -41,10 +38,10 @@ int _exec_node(t_heap * heap, t_parser_node * p_node, char ** envp, int status)
     pid_t pid;
     int wstatus;
     char * path;
-    t_expanded * expanded;
+    char ** globbed;
 
-    expanded = _expand(heap, p_node->atom->args, envp, status);
-    path = get_path(heap, &wstatus,expanded->value[0]);
+    globbed = _glob_args(heap,_expand(heap, p_node->atom->args, envp, status));
+    path = get_path(heap, &wstatus,globbed[0]);
     if (!path)
         return(wstatus);
     pid = fork();
@@ -52,7 +49,7 @@ int _exec_node(t_heap * heap, t_parser_node * p_node, char ** envp, int status)
         return(perror("pid"),error_exit("fork failed\n",heap->heap_allocated),4);
     if (pid == 0)
     {
-        execve(path,expanded->value,envp);
+        execve(path,globbed,envp);
         perror("execve");
     }
     waitpid(pid, &wstatus,0);
@@ -68,18 +65,31 @@ void    _error(char * error, int * skip, int * status, char * filename)
     printf(error,filename);
 }
 
-int     _stdin(int * skip, int * status, t_atom * atom)
+int     _stdin(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp)
 {
     int i = -1;
+    t_expanded * expanded;
+    char * globbed;
+    t_glob * _globbed;
 
-    while (atom->std_in[++i])
+    expanded = _expand(heap, atom->std_in, envp, *status);
+    while (expanded->value[++i])
     {
-        if (access(atom->std_in[i],F_OK))
-            return (_error("minicoquillage: %s: No such file or directory\n", skip, status, atom->std_in[i]),1);
-        else if(access(atom->std_in[i],R_OK)) 
-            return (_error("minicoquillage: %s: Permission denied\n", skip, status, atom->std_in[i]),1);
+        if (_count_glob(heap, expanded->value[i],expanded->litteral[i]) > 1)
+            return(_error("minicoquillage: %s: ambiguous redirect\n",skip,status,expanded->value[i]),1);
+        else
+        {
+            _globbed = glob(heap, expanded->value[i], expanded->litteral[i]); 
+            globbed = expanded->value[i];
+            if (_globbed)
+                globbed = _globbed->file;
+        }
+        if (access(globbed,F_OK))
+            return (_error("minicoquillage: %s: No such file or directory\n", skip, status, globbed),1);
+        else if(access(globbed,R_OK)) 
+            return (_error("minicoquillage: %s: Permission denied\n", skip, status, globbed),1);
         else if (!atom->std_in[i+1] && atom->heredoc == false)
-            atom->in_fd = open(atom->std_in[i], O_RDONLY);
+            atom->in_fd = open(globbed, O_RDONLY);
     }
     if (atom->heredoc)
     {
@@ -91,40 +101,48 @@ int     _stdin(int * skip, int * status, t_atom * atom)
     return (0);
 }
 
-mode_t    _mode(mode_t mode,mode_t mask)
-{
-    return(mode & mask);
-}
-
-int     _stdout(int * skip, int * status, t_atom * atom)
+int     _stdout(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp)
 {
     int i = -1;
+    t_expanded * expanded;
+    char * globbed;
+    t_glob * _globbed;
     struct stat sb;
 
-    while (atom->std_out[++i])
+    expanded = _expand(heap, atom->std_out, envp, *status);
+    while (expanded->value[++i])
     {
-        if (stat(atom->std_out[i], &sb) == -1 && errno == EACCES)
-            return(_error("minicoquillage: %s: Permission denied\n",skip,status,atom->std_out[i]),1);
-        else if (stat(atom->std_out[i], &sb) == -1 && errno == ENOENT)
+        if (_count_glob(heap, expanded->value[i],expanded->litteral[i]) > 1)
+            return(_error("minicoquillage: %s: ambiguous redirect\n",skip,status,expanded->value[i]),1);
+        else
         {
-            atom->out_fd = open(atom->std_out[i], O_EXCL | O_CREAT , S_IRUSR | S_IWUSR | S_IROTH | S_IRGRP);
+            _globbed = glob(heap, expanded->value[i], expanded->litteral[i]); 
+            globbed = expanded->value[i];
+            if (_globbed)
+                globbed = _globbed->file;
+        }
+        if (stat(globbed, &sb) == -1 && errno == EACCES)
+            return(_error("minicoquillage: %s: Permission denied\n",skip,status,globbed),1);
+        else if (stat(globbed, &sb) == -1 && errno == ENOENT)
+        {
+            atom->out_fd = open(globbed, O_EXCL | O_CREAT , S_IRUSR | S_IWUSR | S_IROTH | S_IRGRP);
             close(atom->out_fd);
         }
-        else if (access(atom->std_out[i],W_OK))
-            return(_error("minicoquillage: %s: Permission denied\n",skip,status,atom->std_out[i]),1);
+        else if (access(globbed,W_OK))
+            return(_error("minicoquillage: %s: Permission denied\n",skip,status,globbed),1);
         else if (S_ISDIR(sb.st_mode))
-            return(_error("minicoquillage: %s: Is a directory\n",skip,status,atom->std_out[i]),1);
-        else if (access(atom->std_out[i],W_OK) == 0 && atom->append[i] == false)
+            return(_error("minicoquillage: %s: Is a directory\n",skip,status,globbed),1);
+        else if (access(globbed,W_OK) == 0 && atom->append[i] == false)
         {
-            atom->out_fd = open(atom->std_out[i], O_WRONLY | O_TRUNC);
+            atom->out_fd = open(globbed, O_WRONLY | O_TRUNC);
             close(atom->out_fd);
         }
-        if (!atom->std_out[i+1])
+        if (!expanded->value[i+1])
         {
             if (atom->append[i])
-                atom->out_fd = open(atom->std_out[i], O_WRONLY | O_APPEND);
+                atom->out_fd = open(globbed, O_WRONLY | O_APPEND);
             else
-                atom->out_fd = open(atom->std_out[i], O_WRONLY);
+                atom->out_fd = open(globbed, O_WRONLY);
         }
         if (atom->out_fd == -1)
             perror("open"); // FIXME redirection fail ? skip ?
@@ -134,13 +152,13 @@ int     _stdout(int * skip, int * status, t_atom * atom)
     return (0);
 }
 
-void    _redirect(int * skip, int * status, t_atom * atom)
+void    _redirect(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp)
 {
-    _stdin(skip, status, atom); 
-    _stdout(skip, status, atom);
+    _stdin(heap, skip, status, atom, envp); 
+    _stdout(heap, skip, status, atom, envp);
 }
 
-void    redirect(int * skip, int * status, t_ast_node * first_node)
+void    redirect(t_heap * heap, int * skip, int * status, t_ast_node * first_node, char ** envp)
 {
     t_parser_node * p_node;
 
@@ -149,10 +167,10 @@ void    redirect(int * skip, int * status, t_ast_node * first_node)
     {
         p_node = first_node->data;
         if (p_node->atom)
-            _redirect(skip, status, p_node->atom);    
+            _redirect(heap, skip, status, p_node->atom, envp);    
     }
     else if (p_node->atom)
-        _redirect(skip, status, p_node->atom);
+        _redirect(heap, skip, status, p_node->atom, envp);
 }
 
 void _reset_fd(int og_stdin, int og_stdout)
@@ -262,7 +280,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp)
                 first_node = first_node->right; 
             left = first_node->left;
             p_node = left->data;
-            redirect(&skip, &status, first_node);
+            redirect(heap, &skip, &status, first_node, envp);
             if (is_op(p_node->ops))
             {
                 _exec_tree(heap,left, envp);
@@ -339,7 +357,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
         og_stdout = dup(STDOUT_FILENO);
         p_node = left->data;
         if (!skip)
-            redirect(&skip, &status, first_node);
+            redirect(heap, &skip, &status, first_node, envp);
         if (is_op(p_node->ops) && !skip)
         {
             _exec_tree(heap,left, envp);

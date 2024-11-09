@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:32:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/08 18:04:42 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/09 19:07:04 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,59 @@ t_expanded * _expand(t_heap * heap, char ** to_expand, char ** envp, int status)
     return (expanded);
 }
 
+int _count_glob(t_heap * heap, char * str, bool * litteral)
+{
+    int count;  
+    t_glob * globbed;
+    
+    globbed = glob(heap, str, litteral);
+    count = 0;
+    while(globbed)
+    {
+        count++;
+        globbed = globbed->next;
+    }
+    return count; 
+}
+
 char ** _glob_args(t_heap * heap, t_expanded * expanded)
 {
- 
+    int i;
+    int j;
+    int count; 
+    char ** r_value;
+    t_glob * globbed;
+
+    i = -1;
+    count = 0;
+    while (expanded->value[++i])
+    {
+        j = _count_glob(heap, expanded->value[i], expanded->litteral[i]);
+        if (j)
+            count += j;
+        else 
+            count++;
+    }
+    r_value = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*r_value) * (count + 1));
+    r_value[count] = NULL;
+    i = -1;
+    j = -1;
+    while (expanded->value[++i])
+    {
+        globbed = glob(heap, expanded->value[i], expanded->litteral[i]);
+        if (globbed)
+        {
+            while (globbed)
+            {
+                r_value[++j] = globbed->file; 
+                globbed = globbed->next;
+            }
+        }
+        else
+        {
+            ++j;
+            r_value[j] = expanded->value[i];
+        }
+    }
+    return r_value;
 }

@@ -1,22 +1,23 @@
-#include "../exec.h"
+#include "../Minicoquillage.h"
 
-
-int match( const char *str, const char *glob) {
-	int	gx;
-	int	sx;
-	int	lastgx;
-	int	nextsx;
+int match( const char *str, const char *glob, bool * litteral) 
+{
+	long long	gx;
+	long long	sx;
+	long long	lastgx;
+	long long	nextsx;
 
 	gx = 0;
 	sx = 0;
 	lastgx = -1;
 	nextsx = 0;
-	while (gx < strlen(glob) || sx < strlen(str))
+	while (gx < (long long)ft_strlen(glob) || sx < (long long)ft_strlen(str))
 	{
-		if (gx < strlen(glob))
+		if (gx < (long long)ft_strlen(glob))
 		{
 			char c = glob[gx];
-			if (c == '*')
+            char lit = litteral[gx];
+			if (c == '*' && lit == false)
 			{
 				lastgx = gx;
 				nextsx = sx + 1;
@@ -25,7 +26,7 @@ int match( const char *str, const char *glob) {
 			}
 			else
 			{
-				if (sx < strlen(str) && str[sx] == c)
+				if (sx < (long long)ft_strlen(str) && str[sx] == c)
 				{
 					gx++;
 					sx++;
@@ -33,7 +34,7 @@ int match( const char *str, const char *glob) {
 				}
 			}
 		}
-		if (nextsx > 0 && nextsx <= strlen(str))
+		if (nextsx > 0 && nextsx <= (long long)ft_strlen(str))
 		{
 			gx = lastgx;
 			sx = nextsx;
