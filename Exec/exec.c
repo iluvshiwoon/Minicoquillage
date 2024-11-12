@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/12 01:46:23 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 18:12:42 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,18 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
     clean_heredoc(&heap, ast->first_node);
 }
 
-int _exec_node(t_heap * heap, t_parser_node * p_node, char ** envp, int status)
+void _call_builtin(t_heap * heap, char ** globbed, char ** envp)
+{
+    // compare globbed[0] and call the correct builtin
+}
+
+int _exec_node(t_heap * heap, char ** globbed, char ** envp, int status)
 {
     pid_t pid;
     int wstatus;
     char * path;
-    char ** globbed;
 
     wstatus = status;
-    globbed = _glob_args(heap,_expand(heap, p_node->atom->args, envp, status));
     path = get_path(heap, &wstatus,globbed[0]);
     if (!path)
         return(wstatus);
@@ -301,14 +304,19 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp, int og_stdout
             else if (!skip)
             {
                 char ** globbed = _glob_args(heap,_expand(heap, p_node->atom->args, envp, status));
-                path = get_path(heap,&status,globbed[0]);
-                if (path)
+                if (check_builtin(heap, globbed[0]))
+                    _call_builtin(heap, globbed, envp);
+                else
                 {
-                    execve(path,globbed,envp);
-                    if (p_node->atom && p_node->atom->in_fd)
-                        close(p_node->atom->in_fd);
-                    if (p_node->atom && p_node->atom->out_fd)
-                        close(p_node->atom->out_fd);
+                    path = get_path(heap,&status,globbed[0]);
+                    if (path)
+                    {
+                        execve(path,globbed,envp);
+                        if (p_node->atom && p_node->atom->in_fd)
+                            close(p_node->atom->in_fd);
+                        if (p_node->atom && p_node->atom->out_fd)
+                            close(p_node->atom->out_fd);
+                    }
                 }
             }   
             free_heap(heap->heap_allocated);
@@ -377,11 +385,17 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
         }
         else if (!skip) 
         {
-            status = _exec_node(heap,p_node,envp, status);
-            if (p_node->atom && p_node->atom->in_fd)
-                close(p_node->atom->in_fd);
-            if (p_node->atom && p_node->atom->out_fd)
-                close(p_node->atom->out_fd);
+            char ** globbed = _glob_args(heap,_expand(heap, p_node->atom->args, envp, status));
+            if (check_builtin(heap, globbed[0]))
+                _call_builtin(heap, globbed, envp);
+            else
+            {
+                status = _exec_node(heap,globbed,envp, status);
+                if (p_node->atom && p_node->atom->in_fd)
+                    close(p_node->atom->in_fd);
+                if (p_node->atom && p_node->atom->out_fd)
+                    close(p_node->atom->out_fd);
+            }
         }
         p_node = first_node->data;
         if(p_node->ops)

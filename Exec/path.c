@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:37:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/11 23:16:10 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 18:10:36 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool is_path(char * cmd)
     return (false);
 }
 
-static bool check_builtin(t_heap* heap, char * cmd)
+bool check_builtin(t_heap* heap, char * cmd)
 {
     char ** split;
     char * builtin;
@@ -33,7 +33,7 @@ static bool check_builtin(t_heap* heap, char * cmd)
     builtin = "echo,cd,pwd,export,unset,env,exit";
     split = mini_ft_split(heap, builtin, ',');
     while (split[++i])
-        if (ft_strncmp(cmd, split[i],_max_len(ft_strlen(cmd),ft_strlen(split[i]))) == 0)// FIXME issue here
+        if (ft_strncmp(cmd, split[i],_max_len(ft_strlen(cmd),ft_strlen(split[i]))) == 0)
             return (true);
     return (false);
 }
@@ -48,8 +48,6 @@ char * get_path(t_heap * heap,int * status, char * cmd)
     path = mini_ft_split(heap, getenv("PATH"), ':');
     if (!heap || !cmd)
         return(NULL);
-    if (check_builtin(heap, cmd))// put in _exec_tree
-        return(printf("%s",mini_ft_strjoin(heap->heap_allocated, heap->list, cmd, ": shell built-in command\n")),NULL);
     if (is_path(cmd) && access(cmd, F_OK) == -1)
         return (*status = 127,printf("%s",mini_ft_strjoin(heap->heap_allocated,heap->list,mini_ft_strjoin(heap->heap_allocated,heap->list,"Minicoquillage: ",cmd),": No such file or directory\n")),NULL);
     else if (is_path(cmd) && access(cmd, X_OK) == -1)
