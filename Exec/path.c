@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:37:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/01 15:25:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/11 23:16:10 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char * get_path(t_heap * heap,int * status, char * cmd)
     i = -1;
     path = mini_ft_split(heap, getenv("PATH"), ':');
     if (!heap || !cmd)
-        return(printf("Wrong use of get_path\n"),NULL);
+        return(NULL);
     if (check_builtin(heap, cmd))// put in _exec_tree
         return(printf("%s",mini_ft_strjoin(heap->heap_allocated, heap->list, cmd, ": shell built-in command\n")),NULL);
     if (is_path(cmd) && access(cmd, F_OK) == -1)

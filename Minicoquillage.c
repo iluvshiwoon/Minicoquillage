@@ -6,11 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/01 16:06:45 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 01:36:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Minicoquillage.h"
+
+int g_signal;
 
 int init_heap(t_heap_allocated * heap_allocated)
 {
@@ -25,17 +27,33 @@ int init_heap(t_heap_allocated * heap_allocated)
     return (EXIT_SUCCESS);
 }
 
+void sigint_handler(int sig)
+{
+    g_signal = sig; 
+    printf("\n");
+    close(STDIN_FILENO);
+}
+
 int	main(int argc, char **argv, char ** envp)
 {
+    struct sigaction sa;
 	t_control_dll	control;
     t_heap_allocated heap_allocated;
 
+    sa.sa_handler = sigint_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(SIGINT, &sa, NULL);
     if (MODE == INTERACTIVE && isatty(STDIN_FILENO))
     {
         while (1)
         {
             if (init_heap(&heap_allocated) == EXIT_FAILURE)
                 error_exit("init_heap failed", &heap_allocated);
+            heap_allocated.signal_status = 0;
+            if (g_signal == SIGINT)
+                heap_allocated.signal_status = 130;
+            g_signal = 0;
             control.heap_allocated = &heap_allocated;
             if(tokenizer(&control) == EXIT_SUCCESS)
                 execution(&heap_allocated,parser(&control),control.line, envp);
@@ -53,5 +71,4 @@ int	main(int argc, char **argv, char ** envp)
         free_heap(&heap_allocated);
 	}
 	return (clear_history(),EXIT_SUCCESS);
-	// return (EXIT_SUCCESS);
 }

@@ -19,6 +19,7 @@
 # include "Builtins/builtins.h"
 # include "glob/glob.h"
 
+extern int g_signal;
 enum e_mode {
     INTERACTIVE,
     TOKENIZER,

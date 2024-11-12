@@ -6,18 +6,20 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/10 18:47:26 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 01:46:23 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
-// add globbing and expand to pipeline;
-// heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
-// signal
-// managing term var (ex vim killed...)
 // Check builtins
+// managing term var (ex vim killed...)
 // TEST: script to test path / exec / expansion with echo and export / expansion in heredoc 
+//
+// BONUS
 // bonus change arrow color depending on exit status;
+// heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
+//
+// EVAL
 // edit readme to add tricky point to remember for future evaluation
 void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp);
 
@@ -25,9 +27,15 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
 {
     t_heap heap;
 
+    heap.signal_status = heap_allocated->signal_status;
     heap.heap_allocated = heap_allocated;
     heap.list = heap_allocated->exec;
     heredoc(&heap, ast->first_node);
+    if (g_signal == SIGINT)
+    {
+        clean_heredoc(&heap, ast->first_node);
+        return;
+    }
     _exec_tree(&heap, ast->first_node, envp);
     add_history(line);
     clean_heredoc(&heap, ast->first_node);
@@ -40,6 +48,7 @@ int _exec_node(t_heap * heap, t_parser_node * p_node, char ** envp, int status)
     char * path;
     char ** globbed;
 
+    wstatus = status;
     globbed = _glob_args(heap,_expand(heap, p_node->atom->args, envp, status));
     path = get_path(heap, &wstatus,globbed[0]);
     if (!path)
@@ -335,6 +344,8 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
     int og_stdout;
 
     skip = 0;
+    if (heap->signal_status)
+        status = heap->signal_status;
     while (first_node && first_node->left)
 	{
         og_stdin = dup(STDIN_FILENO);
@@ -375,7 +386,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
         p_node = first_node->data;
         if(p_node->ops)
         {
-            if (p_node->ops == AND && status)
+            if ((p_node->ops == AND && status) || (p_node->ops == OR && !status))
                 skip = 1;
             else if (p_node->ops && p_node->ops != PIPE)
                 skip = 0;

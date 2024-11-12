@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/28 16:39:19 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 01:23:52 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,26 +63,40 @@ void    listen_heredoc(t_heap * heap, int * fd, char * eof)
 {
     char * line;
     int i;
+    int _stdin;
     
     i = 0;
-    while (1)
+    _stdin = dup(STDIN_FILENO);
+    while (g_signal != SIGINT)
     {
         ++i;
         line = readline("> ");
-        if (!line)
+        if (g_signal == SIGINT)
         {
-            printf("Minicoquillage: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",i,eof);
+            dup2(_stdin, 0);
+            close(_stdin);
+            free(line);
             break;
         }
-        
-        if (strncmp(eof,line,_max_len(ft_strlen(eof),ft_strlen(line)))==EXIT_SUCCESS)
+        else if (!line)
+        {
+            printf("Minicoquillage: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",i,eof);
+            free(line);
             break;
+        }
+        if (strncmp(eof,line,_max_len(ft_strlen(eof),ft_strlen(line)))==EXIT_SUCCESS)
+        {
+            free(line);
+            break;
+        }
         if (*fd) 
         {
             mini_write(heap, *fd, line, ft_strlen(line));
             mini_write(heap, *fd, "\n", 1);
         }
+        free(line);
     }
+    close(_stdin);
 }
 
 void    run_heredoc(t_heap * heap, t_atom * atom)
@@ -92,6 +106,8 @@ void    run_heredoc(t_heap * heap, t_atom * atom)
     i = -1;
     while (atom->heredoc_eof[++i])
     {
+        if (g_signal == SIGINT)
+            break;
         if (atom->heredoc && atom->heredoc_eof[i+1] == NULL)
             open_heredoc(heap, atom);
         listen_heredoc(heap,&atom->in_fd,atom->heredoc_eof[i]);
@@ -107,6 +123,8 @@ void	heredoc(t_heap * heap,t_ast_node * first_node)
 	build_tree_type(type);
 	while (first_node && first_node->left)
 	{
+        if (g_signal == SIGINT)
+            break;
         left = first_node->left;
         p_node = left->data;
         if (is_op(p_node->ops))
@@ -138,16 +156,20 @@ void	clean_heredoc(t_heap * heap,t_ast_node * first_node)
             clean_heredoc(heap,left);
         else if (p_node->atom->heredoc) 
         {
-            close(p_node->atom->in_fd);
-            unlink(p_node->atom->file_heredoc);
+            if (p_node->atom->in_fd)
+                close(p_node->atom->in_fd);
+            if (p_node->atom->file_heredoc)
+                unlink(p_node->atom->file_heredoc);
         }
         p_node = first_node->data;
         if(p_node->ops)
         {
             if (p_node->atom && p_node->atom->heredoc)
             {
-                close(p_node->atom->in_fd);
-                unlink(p_node->atom->file_heredoc);
+                if (p_node->atom->in_fd)
+                    close(p_node->atom->in_fd);
+                if (p_node->atom->file_heredoc)
+                    unlink(p_node->atom->file_heredoc);
             }
         }
         first_node = first_node->right;

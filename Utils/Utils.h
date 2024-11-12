@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 18:39:08 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/07 15:05:53 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 01:30:20 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ typedef struct s_heap_allocated {
     t_double_link_list * ast;
     t_double_link_list * input;
     t_double_link_list * exec;
+    int signal_status;
 } t_heap_allocated;
 
 typedef struct s_heap {
     t_heap_allocated * heap_allocated;
     t_double_link_list * list;
+    int signal_status;
 } t_heap;
 
 void free_heap(t_heap_allocated * heap_allocated);

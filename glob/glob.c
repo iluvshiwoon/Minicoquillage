@@ -109,7 +109,6 @@ t_glob	*store_hidden(t_heap * heap, char **tmp, const char *pattern, bool * litt
 		i++;
 	}
 	head_glob = head_empty->next;
-	free(head_empty);
 	return head_glob;
 }
 

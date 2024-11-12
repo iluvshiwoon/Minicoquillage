@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/22 16:21:50 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 01:10:27 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	check_temp_syntax(t_heap_allocated * heap_allocated,char *line)
 
 	if (!line || !(*line))
 		return (EXIT_FAILURE);
-	control_temp.list = create_tokens(heap_allocated,line);
+        control_temp.list = create_tokens(heap_allocated,line);
 	control_temp.complete = 0;
 	populate_tokens(&control_temp);
 	r_value = check_error_tokens(&control_temp);
@@ -116,6 +116,12 @@ char	*get_line(t_heap_allocated * heap_allocated)
 	init_list(lines);
 	get_line.prompt = get_prompt(heap_allocated);
 	get_line.line = init_line(heap_allocated, lines, get_line.prompt);
+    if (g_signal == SIGINT || !get_line.line)
+        return (NULL);
+    int i = -1;
+    while (get_line.line[++i] && ft_isspace(get_line.line[i]));
+    if (get_line.line[i] == 0)
+        return (NULL);
     r_value = check_temp_syntax(heap_allocated,get_line.line);
     get_line.temp = get_line.line;
     if (check_syntax(get_line.temp) == EXIT_FAILURE)
@@ -128,11 +134,8 @@ char	*get_line(t_heap_allocated * heap_allocated)
 	{
 		if (handle_line(heap_allocated, &get_line, lines, &r_value) == EXIT_FAILURE)
             break;
-			// return (NULL);
         get_line.temp = concat_input(heap_allocated,lines);
 	}
 	get_line.line = concat_input(heap_allocated,lines);
-	// if (!lines->first_node->next)
-	// 	get_line.line = mini_ft_strdup(heap_allocated, heap_allocated->input, get_line.line);
 	return (get_line.line);
 }
