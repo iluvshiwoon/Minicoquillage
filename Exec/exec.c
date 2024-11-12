@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/12 18:12:42 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 18:23:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,12 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
     clean_heredoc(&heap, ast->first_node);
 }
 
-void _call_builtin(t_heap * heap, char ** globbed, char ** envp)
+int _call_builtin(t_heap * heap, char ** globbed, char ** envp)
 {
-    // compare globbed[0] and call the correct builtin
+    return (printf("BUILTINS\n"),42);
+    if (ft_strncmp(globbed[0], "echo", _max_len(ft_strlen(globbed[0]),ft_strlen("echo"))))
+        return (42);
+    return 42; 
 }
 
 int _exec_node(t_heap * heap, char ** globbed, char ** envp, int status)
