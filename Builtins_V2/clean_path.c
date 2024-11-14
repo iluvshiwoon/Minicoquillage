@@ -6,6 +6,7 @@ static int	is_absolute(char *vpath)
 	int		i;
 	char	**split_path;
 
+    i = 0;
 	split_path = ft_split(vpath, '/');
 	while (split_path[i])
 	{

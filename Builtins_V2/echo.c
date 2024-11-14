@@ -1,7 +1,18 @@
-#include "../Tokenizer/Tokenizer.h"
-#include "./builtins.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/14 02:25:03 by kgriset           #+#    #+#             */
+/*   Updated: 2024/11/14 02:32:43 by kgriset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	is_option(char *msg)
+#include "../Minicoquillage.h"
+
+int	_is_option(char *msg)
 {
 	int	i;
 
@@ -20,18 +31,20 @@ int	is_option(char *msg)
 int mini_echo(char **args)
 {
 	int	opt;
+    int r_value;
 
 	++args;
-	opt = is_option(*args);
+	opt = _is_option(*args);
 	if (opt)
 		++args;
 	while (args)
 	{
 		ft_putstr_fd(*args, 1); // write fail ?
 		if (args[1])
-			write(1, " ", 1); // write fail?
+			r_value = write(1, " ", 1); // write fail?
 	}
 	if (!opt)
-		write(1, "\n", 1);
+		r_value = write(1, "\n", 1);
+    r_value++; // silence compiler
     return (0);
 }

@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/14 02:23:06 by kgriset           #+#    #+#             */
+/*   Updated: 2024/11/14 02:24:42 by kgriset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./builtins.h"
 
 
-int is_quote(int in_quote, char c, char *content)
+int is_quote(char c, char *content)
 {
 	int	i;
 
@@ -34,14 +46,8 @@ void	add_expand_list(t_expand *expand_list, char *content)
 	tmp->next = new_expand;
 }
 
-void	ft_fill_noexpand(t_expand *expand_list, char *content, char **env)
-{
-
-}
-
 void	ft_fill_expand(t_expand *expand_list, char *content, char **env)
 {
-	t_expand	*new_expand;
 	char		*expanded_content;
 	int			i;
 	int			j;
@@ -104,7 +110,7 @@ t_expand	*ft_expand(char *content, char **env)
 		j = 0;
 		if (content[i] == '\'')
 		{
-			j = is_quote(j, '\'', content + i);
+			j = is_quote('\'', content + i);
 			sample_sentence = ft_substr(content, i, j);
 			add_expand_list(expand_list, sample_sentence);
 			// ft_fill_noexpand(expand_list, sample_sentence, env);
@@ -113,7 +119,7 @@ t_expand	*ft_expand(char *content, char **env)
 		}
 		else if (content[i] == '\"')
 		{
-			j = is_quote(j, '\"', content + i);
+			j = is_quote('\"', content + i);
 			sample_sentence = ft_substr(content, i, j);
 			ft_fill_expand(expand_list, sample_sentence, env);
 			free(sample_sentence);

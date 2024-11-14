@@ -69,7 +69,6 @@ t_mylist	**fill_envc(char **env, t_mylist **content)
 t_mylist	*ft_env(char **env)
 {
 	t_mylist	**envc;
-	t_mylist	*content;
 
 	if (env == NULL || *env == NULL)
 	{
@@ -86,7 +85,7 @@ char	**mini_env(char **env)
 {
 	size_t	len;
 	char	**envc;
-	int	i;
+	long long	i;
 
 	if (env == NULL || *env == NULL)
 	{
@@ -96,7 +95,7 @@ char	**mini_env(char **env)
 	i = 0;
 	len = ft_tab2len(env);
 	envc = malloc(sizeof(char *) * (len + 1));
-	while (i < len)
+	while (i < (long long)len)
 	{
 		envc[i] = ft_strdup((const char *)env[i]);
 		i++;

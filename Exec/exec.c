@@ -6,11 +6,12 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/14 02:19:14 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/14 02:52:54 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
+// issuer with dup inside exec_tree on exit
 // Check builtins
 // RETURN STATUS PROBLEM ON BUILTINS
 // manage env
@@ -45,20 +46,21 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
 
 int _call_builtin(t_heap * heap, char ** globbed, char ** envp)
 {
-    if (ft_strncmp(globbed[0], "echo", _max_len(ft_strlen(globbed[0]),ft_strlen("echo"))))
+    if (ft_strncmp(globbed[0], "echo", _max_len(ft_strlen(globbed[0]),ft_strlen("echo"))) == 0)
         return(mini_echo(globbed));
-    else if (ft_strncmp(globbed[0], "cd", _max_len(ft_strlen(globbed[0]),ft_strlen("cd"))))
+    else if (ft_strncmp(globbed[0], "cd", _max_len(ft_strlen(globbed[0]),ft_strlen("cd"))) == 0)
         return(mini_cd(globbed,envp));
-    else if (ft_strncmp(globbed[0], "pwd", _max_len(ft_strlen(globbed[0]),ft_strlen("pwd"))))
+    else if (ft_strncmp(globbed[0], "pwd", _max_len(ft_strlen(globbed[0]),ft_strlen("pwd"))) == 0)
         return(mini_pwd());
-    else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),ft_strlen("export"))))
+    else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),ft_strlen("export"))) == 0)
         return(mini_export(globbed,envp));
-    else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),ft_strlen("unset"))))
+    else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),ft_strlen("unset"))) == 0)
         return(mini_unset(globbed,envp));
-    else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),ft_strlen("env"))))
+    else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),ft_strlen("env"))) == 0)
         return(mini_env(envp),666); // ? return status de env
-    else if (ft_strncmp(globbed[0], "exit", _max_len(ft_strlen(globbed[0]),ft_strlen("exit"))))
+    else if (ft_strncmp(globbed[0], "exit", _max_len(ft_strlen(globbed[0]),ft_strlen("exit"))) == 0)
         return(mini_exit(globbed),42);
+    heap->signal_status = 666;
     return 42; 
 }
 
@@ -326,14 +328,12 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp, int og_stdout
                 {
                     path = get_path(heap,&status,globbed[0]);
                     if (path)
-                    {
                         execve(path,globbed,envp);
-                        if (p_node->atom && p_node->atom->in_fd)
-                            close(p_node->atom->in_fd);
-                        if (p_node->atom && p_node->atom->out_fd)
-                            close(p_node->atom->out_fd);
-                    }
                 }
+                if (p_node->atom && p_node->atom->in_fd)
+                    close(p_node->atom->in_fd);
+                if (p_node->atom && p_node->atom->out_fd)
+                    close(p_node->atom->out_fd);
             }   
             free_heap(heap->heap_allocated);
             exit(status);
@@ -405,13 +405,11 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
             if (check_builtin(heap, globbed[0]))
                 status = _call_builtin(heap, globbed, envp);
             else
-            {
                 status = _exec_node(heap,globbed,envp, status);
-                if (p_node->atom && p_node->atom->in_fd)
-                    close(p_node->atom->in_fd);
-                if (p_node->atom && p_node->atom->out_fd)
-                    close(p_node->atom->out_fd);
-            }
+            if (p_node->atom && p_node->atom->in_fd)
+                close(p_node->atom->in_fd);
+            if (p_node->atom && p_node->atom->out_fd)
+                close(p_node->atom->out_fd);
         }
         p_node = first_node->data;
         if(p_node->ops)

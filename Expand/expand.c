@@ -6,13 +6,14 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:32:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/09 19:07:04 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/14 02:24:44 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
 int _count(char ** envp, t_heap * heap, char * str, int status);
+
 char * var_name(t_heap * heap, char * var)
 {
     int i;

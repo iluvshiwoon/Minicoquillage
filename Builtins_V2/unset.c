@@ -47,6 +47,7 @@ void	del_var(t_mylist *envc, int position)
 	i = 0;
 	j = position - 1;
 	next = envc;
+    prev = NULL;
 	while (i <= position)
 	{
 		if (position == 0 || i == j)
@@ -107,7 +108,6 @@ int	mini_unset(char **args, char **env)
 {
 	t_mylist	*envc;
 	int			status;
-	size_t		lenenv;
 
 	status = 0;
 	while (!status || *args)
