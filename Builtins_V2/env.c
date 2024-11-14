@@ -73,7 +73,7 @@ t_mylist	*ft_env(char **env)
 
 	if (env == NULL || *env == NULL)
 	{
-		ft_putstr_fd("Environnement empty\n", 2);
+		write(2, "Environnement empty\n", 20);
 		return (NULL);
 	}
 	envc = malloc(sizeof(t_mylist *));
@@ -102,7 +102,7 @@ int	mini_env(char **env)
 
 	if (env == NULL || *env == NULL)
 	{
-		ft_putstr_fd("Environnement empty\n", 2);
+		write(2, "Environnement empty\n", 20);
 		return (1);
 	}
 	i = 0;

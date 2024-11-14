@@ -65,5 +65,9 @@ int	mini_exit(char **args)
 	char	**input;
 
 	input = ++args;
-	return ft_exit(input);
+	ft_exit(input);
+	return (0);
 }
+
+
+

@@ -10,9 +10,9 @@ int	msg_error(char *msg_origin)
 	{
 		if (!ft_isalnum(*msg) && *msg != '_')
 		{
-			ft_putstr_fd("unset: `", 2);
-			ft_putstr_fd(msg_origin, 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
+			write(2, "unset: `", 8);
+			write(2, msg_origin, ft_strlen(msg_origin));
+			write(2, "': not a valid identifier\n", 26);
 			return (1);
 		}
 		msg++;

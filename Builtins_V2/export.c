@@ -22,7 +22,7 @@ int	error_message(char *tab)
 	int	i;
 
 	i = 0;
-	ft_putstr_fd("export: `", 2);
+	write(2, "export: `", 9);
 	while (tab[i] != '\0' && tab[i] != '\n')
 	{
 		ft_putchar_fd(tab[i], 2);
@@ -30,7 +30,7 @@ int	error_message(char *tab)
 	}
 	if (has_character(tab, '=') == -1)
 		ft_putchar_fd('=', 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
+	write(2, "': not a valid identifier\n", 26);
 	return (0);
 }
 
