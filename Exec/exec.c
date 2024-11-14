@@ -6,12 +6,14 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/12 18:23:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/14 02:19:14 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 // Check builtins
+// RETURN STATUS PROBLEM ON BUILTINS
+// manage env
 // managing term var (ex vim killed...)
 // TEST: script to test path / exec / expansion with echo and export / expansion in heredoc 
 //
@@ -43,9 +45,20 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
 
 int _call_builtin(t_heap * heap, char ** globbed, char ** envp)
 {
-    return (printf("BUILTINS\n"),42);
     if (ft_strncmp(globbed[0], "echo", _max_len(ft_strlen(globbed[0]),ft_strlen("echo"))))
-        return (42);
+        return(mini_echo(globbed));
+    else if (ft_strncmp(globbed[0], "cd", _max_len(ft_strlen(globbed[0]),ft_strlen("cd"))))
+        return(mini_cd(globbed,envp));
+    else if (ft_strncmp(globbed[0], "pwd", _max_len(ft_strlen(globbed[0]),ft_strlen("pwd"))))
+        return(mini_pwd());
+    else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),ft_strlen("export"))))
+        return(mini_export(globbed,envp));
+    else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),ft_strlen("unset"))))
+        return(mini_unset(globbed,envp));
+    else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),ft_strlen("env"))))
+        return(mini_env(envp),666); // ? return status de env
+    else if (ft_strncmp(globbed[0], "exit", _max_len(ft_strlen(globbed[0]),ft_strlen("exit"))))
+        return(mini_exit(globbed),42);
     return 42; 
 }
 
@@ -308,7 +321,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char ** envp, int og_stdout
             {
                 char ** globbed = _glob_args(heap,_expand(heap, p_node->atom->args, envp, status));
                 if (check_builtin(heap, globbed[0]))
-                    _call_builtin(heap, globbed, envp);
+                    status = _call_builtin(heap, globbed, envp);
                 else
                 {
                     path = get_path(heap,&status,globbed[0]);
@@ -390,7 +403,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char ** envp)
         {
             char ** globbed = _glob_args(heap,_expand(heap, p_node->atom->args, envp, status));
             if (check_builtin(heap, globbed[0]))
-                _call_builtin(heap, globbed, envp);
+                status = _call_builtin(heap, globbed, envp);
             else
             {
                 status = _exec_node(heap,globbed,envp, status);
