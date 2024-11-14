@@ -4,14 +4,14 @@
 
 static void	msg_error(char *arg)
 {
-	ft_putstr_fd("exit: ", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd(": numeric argument required\n",2);
+	write(2, "exit: ", 6);
+	write(2, arg, ft_strlen(arg));
+	write(2, ": numeric argument required\n",28);
 }
 
 static void msg_error_too_many_args(void)
 {
-	ft_putstr_fd("exit: too many arguments\n", 2);
+	write(2, "exit: too many arguments\n", 25);
 }
 
 static int	is_number(char *av)
@@ -60,10 +60,10 @@ void	ft_exit(char **input)
 	}
 }
 
-void mini_exit(char **args)
+int	mini_exit(char **args)
 {
 	char	**input;
 
 	input = ++args;
-	ft_exit(input);
+	return ft_exit(input);
 }

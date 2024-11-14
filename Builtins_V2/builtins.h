@@ -56,12 +56,12 @@ void	*ft_free_envl(t_mylist *s);
 
 
 int		mini_echo(char **args);
-int		mini_pwd(char *args);
-char	**mini_env(char **env);
-int		mini_cd(char **args, char **env);
-int		mini_export(char **args, char **env);
-void	mini_exit(char **args);
-int		mini_unset(char **args, char **env);
+int		mini_pwd(char **args);
+int		mini_env(char **env);
+int		mini_cd(char **args, char ***env);
+int		mini_export(char **args, char ***env);
+int		mini_exit(char **args);
+int		mini_unset(char **args, char ***env);
 
 
 

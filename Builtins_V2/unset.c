@@ -103,23 +103,52 @@ int	ft_unset(t_mylist *env, char *variable)
 	return (status);
 }
 
-int	mini_unset(char **args, char **env)
+int	mini_unset(char **args, char ***envp)
 {
 	t_mylist	*envc;
 	int			status;
 	size_t		lenenv;
+	char		**env;
 
 	status = 0;
-	while (!status || *args)
+	env = envp[0];
+	while (*(++args))
 	{
 		envc = ft_env(env);
-		status += ft_unset(envc, *(++args));
-		ft_free_tab(env, ft_tab2len(env));
-		env = env_to_tab(envc);
-		ft_free_envl(envc);
+		if (args)
+		{
+			status += ft_unset(envc, *(args));
+			ft_free_tab(env, ft_tab2len(env));
+			env = env_to_tab(envc);
+			ft_free_envl(envc);
+
+		}
 	}
+	*envp = env;
 	return (status);
 }
+
+
+// int main(int ac , char **av, char **envp)
+// {
+// 	t_mylist *envlist;
+// 	char 	**envtab;
+// 	char  *to_export[] = {"export", "z=Z", "zoz=ZZ", "z_oo=name", NULL};
+// 	char  *to_unset[] = {"unset", "zoz", "z_oo", NULL};
+// 	int i = 0;
+
+// 	envlist = ft_env(envp);
+// 	envtab = env_to_tab(envlist);
+// 	mini_export(to_export, &envtab);
+// 	mini_env(envtab);
+// 	mini_unset(to_unset, &envtab);
+// 	mini_env(envtab);
+// 	return (0);
+// }
+
+
+
+
 
 // int	main(int ac, char **av, char **env)
 // {

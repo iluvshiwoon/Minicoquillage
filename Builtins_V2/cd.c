@@ -12,6 +12,8 @@ t_mylist	*put_var(t_mylist *env_origin, char *var, char *value)
 		{
 			free(env->val);
 			env->val = ft_strdup(value);
+			if (!env->val)
+				return (NULL);
 			return (env);
 		}
 		env = env->next;
@@ -42,9 +44,9 @@ int	go_home(t_mylist *env, t_mylist *oldpath, t_mylist *currentpath)
 	home = get_var(env, "HOME");
 	pwd = get_var(env, "PWD");
 	oldpwd = get_var(env, "OLDPWD");
-	if(home == NULL)
+	if (home == NULL)
 	{
-		ft_putstr_fd("cd: HOME not set\n", 2);
+		write(2, "cd: HOME not set\n", 17);
 		return (1);
 	}
 	if (chdir(home->val) != 0)
@@ -69,9 +71,9 @@ int	change_dir(t_mylist *env_origin, t_mylist *oldpath, t_mylist *currentpath, c
 	env = env_origin;
 	if (chdir((const char *) newpath) != 0)
 	{
-		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(newpath, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		write(2, "cd: ", 4);
+		write(2, newpath, ft_strlen(newpath));
+		write(2, ": No such file or directory\n", 28);
 		return (1);
 	}
 	else
@@ -151,12 +153,14 @@ int	ft_cd(char *new_path, t_mylist *env)
 }
 
 
-int	mini_cd(char **args, char **env)
+int	mini_cd(char **args, char ***envp)
 {
 	t_mylist	*envc;
 	size_t		lenenv;
 	int			status;
+	char		**env;
 
+	env = envp[0];
 	envc = ft_env(env);
 	status = ft_cd(*(++args), envc);
 	ft_free_tab(env, ft_tab2len(env));
@@ -164,6 +168,29 @@ int	mini_cd(char **args, char **env)
 	ft_free_envl(envc);
 	return (status);
 }
+
+
+
+// #include <sys/wait.h>
+// int main(int ac , char **av, char **env)
+// {
+// 	int pid;
+// 	t_mylist *env_list;
+// 	char **env_tab;
+// 	char *args[] = {"cd", ".", NULL};
+
+// 	env_list = ft_env(env);
+// 	env_tab = env_to_tab(env_list);
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		if (!(mini_cd(args, &env_tab)))
+// 			system("pwd");
+// 	}
+// 	wait(NULL);
+// 	return (0);
+// }
+
 
 // int main(int ac , char **av, char **env)
 // {

@@ -81,8 +81,20 @@ t_mylist	*ft_env(char **env)
 	return (*envc);
 }
 
+void	ft_print_envc(char **env)
+{
+	char	**envc;
 
-char	**mini_env(char **env)
+	envc = env;
+	while (*envc)
+	{
+		write(1, *envc, ft_strlen(*envc));
+		write(1, "\n", 1);
+		envc++;
+	}
+}
+
+int	mini_env(char **env)
 {
 	size_t	len;
 	char	**envc;
@@ -91,7 +103,7 @@ char	**mini_env(char **env)
 	if (env == NULL || *env == NULL)
 	{
 		ft_putstr_fd("Environnement empty\n", 2);
-		return (NULL);
+		return (1);
 	}
 	i = 0;
 	len = ft_tab2len(env);
@@ -102,7 +114,8 @@ char	**mini_env(char **env)
 		i++;
 	}
 	envc[i] = NULL;
-	return (envc);
+	ft_print_envc(envc);
+	return (0);
 }
 
 void	put_envc(t_mylist *env)
@@ -123,20 +136,21 @@ void	put_envc(t_mylist *env)
 
 // int main(int ac, char **av, char **env)
 // {
-// 	t_mylist	*envc;
-// 	char		**envp;
+// 	// t_mylist	*envc;
+// 	// char		**envp;
 
-// 	(void )		ac;
-// 	(void )		av;
-// 	envc = ft_env(env);
-// 	envp = env_to_tab(envc);
-// 	while (*envp)
-// 	{
-// 		ft_putstr_fd(*envp, 1);
-// 		ft_putstr_fd("\n", 1);
-// 		envp++;
-// 	}
-// 	return (0);
+// 	// (void )		ac;
+// 	// (void )		av;
+// 	// envc = ft_env(env);
+// 	// envp = env_to_tab(envc);
+// 	// while (*envp)
+// 	// {
+// 	// 	ft_putstr_fd(*envp, 1);
+// 	// 	ft_putstr_fd("\n", 1);
+// 	// 	envp++;
+// 	// }
+// 	// return (0);
+// 	return ( mini_env(env));
 // }
 
 
