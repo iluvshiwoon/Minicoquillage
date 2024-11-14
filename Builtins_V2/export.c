@@ -22,7 +22,7 @@ int	error_message(char *tab)
 	int	i;
 
 	i = 0;
-	ft_putstr_fd("export: `", 2);
+	write(2, "export: `", 9);
 	while (tab[i] != '\0' && tab[i] != '\n')
 	{
 		ft_putchar_fd(tab[i], 2);
@@ -30,7 +30,7 @@ int	error_message(char *tab)
 	}
 	if (has_character(tab, '=') == -1)
 		ft_putchar_fd('=', 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
+	write(2, "': not a valid identifier\n", 26);
 	return (0);
 }
 
@@ -169,6 +169,8 @@ int	ft_export(t_mylist *env, char *variable)
 	status = 0;
 	tab = ft_split(variable, ' ');
 	i = 0;
+	if(!tab[i])
+		return (1); // add handling tab
 	while (tab[i])
 	{
 		firstchar = ft_substr(tab[i], 0, 1);
@@ -188,20 +190,40 @@ int	ft_export(t_mylist *env, char *variable)
 }
 
 
-int	mini_export(char **args, char **env)
+int	mini_export(char **args, char ***envp)
 {
 	t_mylist	*envc;
 	int			status;
 	size_t		lenenv;
+	char		**env;
 
 	status = 0;
-	while (!status || *args)
+	env = envp[0];
+	while (*(++args))
 	{
 		envc = ft_env(env);
-		status += ft_export(envc, *(++args));
-		ft_free_tab(env, ft_tab2len(env));
-		env = env_to_tab(envc);
-		ft_free_envl(envc);
+		if (args)
+		{
+			status += ft_export(envc, *(args));
+			ft_free_tab(env, ft_tab2len(env));
+			env = env_to_tab(envc);
+			ft_free_envl(envc);
+		}
 	}
+	*envp = env;
 	return (status);
 }
+
+// int main(int ac , char **av, char **envp)
+// {
+// 	t_mylist *envlist;
+// 	char 	**envtab;
+// 	char  *args[] = {"export", "a=Z", "aaa=ZZ", "a_me=name", NULL};
+// 	int i = 0;
+
+// 	envlist = ft_env(envp);
+// 	envtab = env_to_tab(envlist);
+// 	mini_export(args, &envtab);
+// 	mini_env(envtab);
+// 	return (0);
+// }

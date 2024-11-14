@@ -1,6 +1,3 @@
-\n (touche entrée)
-[que des espaces]
-[que des tabulations]
 :
 !
 >
@@ -181,18 +178,6 @@ $HOMEdskjhfkdshfsd
 $HOMEdskjhfkdshfsd'
 $DONTEXIST
 $LESS$VAR
-Ctlr-C
-holaCtlr-C
-cat (faire Ctlr-C apres avoir fait plusieurs fois [ENTREE])
-cat | rev(faire Ctlr-C apres avoir fait plusieurs fois [ENTREE])
-Ctlr-D
-hola Ctlr-D
-Ctlr-\
-hola Ctlr-\
-cat (faire Ctlr-\ apres avoir fait plusieurs fois [ENTREE])
-sleep 3 | sleep 3 | sleep 3 (faire Ctlr-C une seconde apres)
-sleep 3 | sleep 3 | sleep 3 (faire Ctlr-D une seconde apres)
-sleep 3 | sleep 3 | sleep 3 (faire Ctlr-\ une seconde apres)
 env
 env hola
 env hola que tal
@@ -357,7 +342,6 @@ export hola | unset hola | echo $?
 /bin/env
 /bin/cd Desktop
 history
-[touche du haut]
 pwd
 pwd hola
 pwd ./hola
@@ -704,7 +688,6 @@ export HOLA="bonjour hello"; >$HOLA>hey; ls
 export HOLA="bonjour hello"; >hey>$HOLA; ls
 export HOLA="bonjour hello"; >hey>$HOLA>hey>hey; ls
 export A=hey; export A B=Hola D E C="Que Tal"; echo $PROUT$B$C > /tmp/a > /tmp/b > /tmp/c; cat /tmp/a; cat /tmp/b; cat /tmp/c
-!!!!! Contenu du fichier a : "Amour Tu es Horrible"; !!!!! Contenu du fichier b : "0123456789"; !!!!! Contenu du fichier c : "Prout"
 <a cat <b <c
 <a cat <b <c; cat a; cat b; cat c
 >a ls >b >>c >d; cat a; cat b; cat c; cat d
