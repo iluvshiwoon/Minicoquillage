@@ -69,6 +69,7 @@ t_mylist	**fill_envc(char **env, t_mylist **content)
 t_mylist	*ft_env(char **env)
 {
 	t_mylist	**envc;
+	t_mylist	*content;
 
 	if (env == NULL || *env == NULL)
 	{
@@ -85,7 +86,7 @@ char	**mini_env(char **env)
 {
 	size_t	len;
 	char	**envc;
-	long long	i;
+	int	i;
 
 	if (env == NULL || *env == NULL)
 	{
@@ -95,7 +96,7 @@ char	**mini_env(char **env)
 	i = 0;
 	len = ft_tab2len(env);
 	envc = malloc(sizeof(char *) * (len + 1));
-	while (i < (long long)len)
+	while (i < len)
 	{
 		envc[i] = ft_strdup((const char *)env[i]);
 		i++;
@@ -118,3 +119,89 @@ void	put_envc(t_mylist *env)
 		cursor = cursor->next;
 	}
 }
+
+
+// int main(int ac, char **av, char **env)
+// {
+// 	t_mylist	*envc;
+// 	char		**envp;
+
+// 	(void )		ac;
+// 	(void )		av;
+// 	envc = ft_env(env);
+// 	envp = env_to_tab(envc);
+// 	while (*envp)
+// 	{
+// 		ft_putstr_fd(*envp, 1);
+// 		ft_putstr_fd("\n", 1);
+// 		envp++;
+// 	}
+// 	return (0);
+// }
+
+
+// static size_t	len_tab(char **env)
+// {
+// 	size_t	i;
+
+// 	i = 0;
+// 	while (env[i])
+// 		i++;
+// 	return (i);
+// }
+
+
+// int	get_env(char **env, char *var)
+// {
+// 	int		i;
+// 	int		len;
+// 	char	*tmp;
+
+// 	len = 0;
+// 	i = 0;
+// 	len = ft_strlen(var);
+// 	while (env[i])
+// 	{
+// 		tmp = ft_substr(env[i], 0, len);
+// 		if (!ft_strncmp(tmp, var, len))
+// 			if (env[i][len] == '=')
+// 				return (1);
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
+// void	put_env(char **env)
+// {
+// 	size_t	i;
+
+// 	i = 0;
+// 	while (env[i])
+// 	{
+// 		ft_putstr_fd(env[i], 1);
+// 		ft_putchar_fd('\n', 1);
+// 		i++;
+// 	}
+// }
+
+// char	**ft_env(char **env)
+// {
+// 	char	**cpy_env;
+// 	size_t	len;
+// 	int		i;
+
+// 	i = 0;
+// 	len = len_tab(env);
+// 	cpy_env = (char **)malloc((len + 1) * sizeof(char *));
+// 	if (!cpy_env)
+// 		return (NULL);
+// 	while (i < len)
+// 	{
+// 		cpy_env[i] = ft_strdup((const char *)env[i]);
+// 		i++;
+// 	}
+// 	cpy_env[i] = NULL;
+// 	return (cpy_env);
+// }
+
+

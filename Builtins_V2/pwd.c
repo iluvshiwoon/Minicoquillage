@@ -14,7 +14,7 @@ int	ft_pwd(void)
 	return (1);
 }
 
-int	mini_pwd(void)
+int	mini_pwd(char *args)
 {
-	return(ft_pwd());
+	ft_pwd();
 }
