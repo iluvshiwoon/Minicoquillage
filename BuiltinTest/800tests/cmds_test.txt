@@ -1,4 +1,3 @@
-TEST
 \n (touche entrée)
 [que des espaces]
 [que des tabulations]
