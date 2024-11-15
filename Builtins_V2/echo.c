@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 02:25:03 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/14 16:54:14 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/14 23:40:29 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,17 @@ int mini_echo(char **args)
         {
             r_value = write(1, " ", 1);
             if (r_value != 1)
-                return 55;
+                return (1);
         }
         r_value = write(1, args[i], ft_strlen(args[i]));
         if (r_value != (long long)ft_strlen(args[i]))
-            return (55); // change error 
+            return (1);
         i++;
         first = false;
     }
     if (!opt)
         r_value = write(1, "\n", 1);
     if (r_value != 1)
-        return (55);
+        return (1);
     return (0);
 }

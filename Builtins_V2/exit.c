@@ -1,17 +1,23 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "builtins.h"
+#include "../Minicoquillage.h"
 
 static void	msg_error(char *arg)
 {
-	write(2, "exit: ", 6);
-	write(2, arg, ft_strlen(arg));
-	write(2, ": numeric argument required\n",28);
+    size_t w_bytes;
+
+    w_bytes = 0;
+	w_bytes = write(2, "exit: ", 6);
+	w_bytes = write(2, arg, ft_strlen(arg));
+	w_bytes = write(2, ": numeric argument required\n",28);
+    if (w_bytes)
+        return;
 }
 
 static void msg_error_too_many_args(void)
 {
-	write(2, "exit: too many arguments\n", 25);
+    size_t w_bytes;
+	w_bytes = write(2, "exit: too many arguments\n", 25);
+    if (w_bytes)
+        return;
 }
 
 static int	is_number(char *av)
@@ -68,6 +74,3 @@ int	mini_exit(char **args)
 	ft_exit(input);
 	return (0);
 }
-
-
-

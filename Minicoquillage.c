@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/14 16:36:20 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/14 23:17:03 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int argc, char **argv, char ** envp)
             g_signal = 0;
             control.heap_allocated = &heap_allocated;
             if(tokenizer(&control) == EXIT_SUCCESS)
-                execution(&heap_allocated,parser(&control),control.line, envp);
+                execution(&heap_allocated,parser(&control),control.line, &envp);
             free_heap(&heap_allocated);
         }
     }
