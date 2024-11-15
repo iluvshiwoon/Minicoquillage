@@ -1,6 +1,6 @@
-#include "./builtins.h"
+#include "../Minicoquillage.h"
 
-int	ft_pwd(void)
+int	mini_pwd(void)
 {
 	char	*cwd;
 
@@ -12,9 +12,4 @@ int	ft_pwd(void)
 		return (0);
 	}
 	return (1);
-}
-
-int	mini_pwd()
-{
-	return ft_pwd();
 }

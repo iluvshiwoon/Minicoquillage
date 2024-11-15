@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/15 00:29:43 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/15 00:59:04 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,21 @@ int _call_builtin(t_heap * heap, char ** globbed, char *** envp)
 {
     if (ft_strncmp(globbed[0], "echo", _max_len(ft_strlen(globbed[0]),ft_strlen("echo"))) == 0)
         return(mini_echo(globbed));
-    else if (ft_strncmp(globbed[0], "cd", _max_len(ft_strlen(globbed[0]),ft_strlen("cd"))) == 0)
-        return(mini_cd(heap, globbed,envp));
+    // else if (ft_strncmp(globbed[0], "cd", _max_len(ft_strlen(globbed[0]),ft_strlen("cd"))) == 0)
+    //     return(mini_cd(heap, globbed,envp));
     else if (ft_strncmp(globbed[0], "pwd", _max_len(ft_strlen(globbed[0]),ft_strlen("pwd"))) == 0)
         return(mini_pwd());
-    else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),ft_strlen("export"))) == 0)
-        return(mini_export(heap,globbed,envp));
-    else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),ft_strlen("unset"))) == 0)
-        return(mini_unset(heap,globbed,envp));
-    else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),ft_strlen("env"))) == 0)
-        return(mini_env(*envp)); // ? return status de env
+    // else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),ft_strlen("export"))) == 0)
+    //     return(mini_export(heap,globbed,envp));
+    // else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),ft_strlen("unset"))) == 0)
+    //     return(mini_unset(heap,globbed,envp));
+    // else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),ft_strlen("env"))) == 0)
+    //     return(mini_env(*envp)); // ? return status de env
     else if (ft_strncmp(globbed[0], "exit", _max_len(ft_strlen(globbed[0]),ft_strlen("exit"))) == 0)
         return(mini_exit(globbed));
     heap->signal_status = 666;
+    if (envp)
+        envp+= 1 -1;
     return 42; 
 }
 
