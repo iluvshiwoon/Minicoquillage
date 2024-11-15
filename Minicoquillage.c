@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/14 23:17:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/15 20:23:10 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	main(int argc, char **argv, char ** envp)
     sigaction(SIGINT, &sa, NULL);
     if (MODE == INTERACTIVE && isatty(STDIN_FILENO))
     {
+        if (init_alloc(&heap_allocated.env) == NULL)
+            return (free(heap_allocated.env),EXIT_FAILURE);
         while (1)
         {
             if (init_heap(&heap_allocated) == EXIT_FAILURE)
@@ -57,7 +59,7 @@ int	main(int argc, char **argv, char ** envp)
             control.heap_allocated = &heap_allocated;
             if(tokenizer(&control) == EXIT_SUCCESS)
                 execution(&heap_allocated,parser(&control),control.line, &envp);
-            free_heap(&heap_allocated);
+            free_heap(&heap_allocated, false);
         }
     }
     else if (MODE != INTERACTIVE)
@@ -68,7 +70,7 @@ int	main(int argc, char **argv, char ** envp)
         if (argc == 1)
             return (EXIT_FAILURE);
 		    debug(argv[1],&control);
-        free_heap(&heap_allocated);
+        free_heap(&heap_allocated, true);
 	}
-	return (clear_history(),EXIT_SUCCESS);
+	return (clear_history(),free_env(&heap_allocated),EXIT_SUCCESS);
 }

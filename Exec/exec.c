@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/15 01:09:54 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/15 19:28:37 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
     heap.signal_status = heap_allocated->signal_status;
     heap.heap_allocated = heap_allocated;
     heap.list = heap_allocated->exec;
+    heap.env = heap_allocated->env;
     heredoc(&heap, ast->first_node);
     if (g_signal == SIGINT)
     {
@@ -52,8 +53,8 @@ int _call_builtin(t_heap * heap, char ** globbed, char *** envp)
     //     return(mini_cd(heap, globbed,envp));
     else if (ft_strncmp(globbed[0], "pwd", _max_len(ft_strlen(globbed[0]),ft_strlen("pwd"))) == 0)
         return(mini_pwd());
-    // else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),ft_strlen("export"))) == 0)
-    //     return(mini_export(heap,globbed,envp));
+    else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),ft_strlen("export"))) == 0)
+        return(mini_export(heap,globbed,envp));
     // else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),ft_strlen("unset"))) == 0)
     //     return(mini_unset(heap,globbed,envp));
     else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),ft_strlen("env"))) == 0)
@@ -339,7 +340,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
                 if (p_node->atom && p_node->atom->out_fd)
                     close(p_node->atom->out_fd);
             }   
-            free_heap(heap->heap_allocated);
+            free_heap(heap->heap_allocated, true);
             exit(status);
         }
     }
