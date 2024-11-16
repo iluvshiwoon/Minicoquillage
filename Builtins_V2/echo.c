@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 02:25:03 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/14 23:40:29 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/16 05:26:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int mini_echo(char **args)
     opt = 0;
     r_value = 0;
     first = true;
-    while (_is_option(args[i]))
+    while (args[i] && _is_option(args[i]))
     {
         opt = 1;
         i++;

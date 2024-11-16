@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:46:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/12 00:21:33 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/16 06:16:06 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ char	*last_ocur(char *string, char c)
 		i++;
 	}
 	if (!last)
-		return (NULL);
+		return (string - 1);
 	return (string + last);
 }
