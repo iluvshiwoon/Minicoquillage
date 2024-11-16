@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/15 19:28:37 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/16 03:17:26 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,12 @@ int _call_builtin(t_heap * heap, char ** globbed, char *** envp)
         return(mini_pwd());
     else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),ft_strlen("export"))) == 0)
         return(mini_export(heap,globbed,envp));
-    // else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),ft_strlen("unset"))) == 0)
-    //     return(mini_unset(heap,globbed,envp));
+    else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),ft_strlen("unset"))) == 0)
+        return(mini_unset(heap,globbed,envp));
     else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),ft_strlen("env"))) == 0)
         return(mini_env(*envp));
     else if (ft_strncmp(globbed[0], "exit", _max_len(ft_strlen(globbed[0]),ft_strlen("exit"))) == 0)
         return(mini_exit(globbed));
-    heap->signal_status = 666;
-    if (envp)
-        envp+= 1 -1;
     return 42; 
 }
 
