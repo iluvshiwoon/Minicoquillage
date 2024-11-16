@@ -1,76 +1,85 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/16 20:56:10 by kgriset           #+#    #+#             */
+/*   Updated: 2024/11/16 21:53:41 by kgriset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Minicoquillage.h"
+#include <stdint.h>
 
-static void	msg_error(char *arg)
+static void	init_atoi(size_t *i, u_int64_t *value, int *l_digit, int *sign)
 {
-    size_t w_bytes;
-
-    w_bytes = 0;
-	w_bytes = write(2, "exit: ", 6);
-	w_bytes = write(2, arg, ft_strlen(arg));
-	w_bytes = write(2, ": numeric argument required\n",28);
-    if (w_bytes)
-        return;
+	*i = 0;
+	*value = 0;
+	*l_digit = 7;
+	*sign = 1;
+	return ;
 }
 
-static void msg_error_too_many_args(void)
+int64_t	atoi64_safe(char *string, int *status)
 {
-    size_t w_bytes;
-	w_bytes = write(2, "exit: too many arguments\n", 25);
-    if (w_bytes)
-        return;
-}
+	size_t			i;
+	u_int64_t	value;
+	int				l_digit;
+	int				sign;
 
-static int	is_number(char *av)
-{
-	char	*input;
-
-	input = av;
-	if ((input[0] == '-' || input[0] == '+') || (input[0] >= '0' && input[0] <= '9'))
-		input++;
-	else
-		return (0);
-	while (*input)
+	if (init_atoi(&i, &value, &l_digit, &sign), string[0] == '-')
 	{
-		if (*input < '0' || *input > '9')
-			return (0);
-		input++;
+		++i;
+		l_digit = 8;
+		sign = -1;
 	}
-	return (1);
+    else if (string[0] == '+')
+        ++i;
+    while (string[i])
+    {
+        if (ft_isdigit(string[i]) && ((value == INT64_MAX / 10 && string[i]
+                    - '0' > l_digit) || (value > INT64_MAX / 10)))
+            return (*status = ERROR, 0);
+        else if (ft_isdigit(string[i]))
+            value = value * 10 + string[i] - '0';
+        else
+            return (*status = ERROR, 0);
+        ++i;
+    }
+    return (*status = SUCCESS, (int)value * sign);
 }
 
-void	ft_exit(char **input)
+void _close_fd(int fd1, int fd2)
 {
-	int	exit_code;
-	char	*arg;
-
-	arg = input[0];
-	if (arg == NULL)
-		exit(0);
-	exit_code = ft_atoi(arg);
-	if (is_number(arg))
-	{
-		if (input[1] != NULL)
-		{
-			msg_error_too_many_args();
-			exit(1);
-		}
-		if (exit_code < 0)
-			exit(256 - ((-1 * exit_code) % 256));
-		else
-			exit(exit_code % 256);
-	}
-	else
-	{
-		msg_error(arg);
-		exit(2);
-	}
+    if (fd1)
+        close(fd1);
+    if (fd2)
+        close(fd2);
 }
 
-int	mini_exit(char **args)
+int mini_exit(t_heap * heap,char ** args, int status, int og_stdout, int og_stdin)
 {
-	char	**input;
+    int error;
+    uint8_t code;
 
-	input = ++args;
-	ft_exit(input);
-	return (0);
+    code = 0;
+    if (args[1] == NULL)
+    {
+        _close_fd(og_stdin,og_stdout);
+        free_heap(heap->heap_allocated, true);
+        printf("exit\n");
+        exit((status + 256)%256);
+    }
+    code = atoi64_safe(args[1], &error);
+    if (error == ERROR)
+        return (printf("exit\nminicoquillage: exit: %s: numeric argument \
+required\n",args[1]),_close_fd(og_stdout,og_stdin),free_heap(heap->heap_allocated,true),exit(2),2);
+    if (args[2])
+        return (printf("exit\nminicoquillage: exit: too many arguments"),1);
+    _close_fd(og_stdin,og_stdout);
+    free_heap(heap->heap_allocated,true);
+        printf("exit\n");
+    exit((code + 256)%256);
 }

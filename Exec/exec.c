@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/16 05:12:02 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/16 22:12:31 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
     clean_heredoc(&heap, ast->first_node);
 }
 
-int _call_builtin(t_heap * heap, char ** globbed, char *** envp)
+int _call_builtin(t_heap * heap, char ** globbed, char *** envp, int status, int og_stdin, int og_stdout)
 {
     if (ft_strncmp(globbed[0], "echo", _max_len(ft_strlen(globbed[0]),ft_strlen("echo"))) == 0)
         return(mini_echo(globbed));
@@ -60,7 +60,7 @@ int _call_builtin(t_heap * heap, char ** globbed, char *** envp)
     else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),ft_strlen("env"))) == 0)
         return(mini_env(*envp));
     else if (ft_strncmp(globbed[0], "exit", _max_len(ft_strlen(globbed[0]),ft_strlen("exit"))) == 0)
-        return(mini_exit(globbed));
+        return(mini_exit(heap, globbed, status, og_stdin, og_stdout));
     return 42; 
 }
 
@@ -85,6 +85,8 @@ int _exec_node(t_heap * heap, char ** globbed, char *** envp, int status)
     waitpid(pid, &wstatus,0);
     if (WIFEXITED(wstatus))
         return (WEXITSTATUS(wstatus));
+    else if (WIFSIGNALED(wstatus))
+        return (128 + WTERMSIG(wstatus));
     return (error_exit("_exec_node\n",heap->heap_allocated),42);
 }
 
@@ -325,7 +327,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
             {
                 char ** globbed = _glob_args(heap,_expand(heap, p_node->atom->args, *envp, status));
                 if (check_builtin(heap, globbed[0]))
-                    status = _call_builtin(heap, globbed, envp);
+                    status = _call_builtin(heap, globbed, envp, status, 0, 0);
                 else
                 {
                     path = get_path(heap,&status,globbed[0]);
@@ -357,6 +359,8 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
     }
     if (WIFEXITED(wstatus))
         return (WEXITSTATUS(wstatus));
+    else if (WIFSIGNALED(wstatus))
+        return (128 + WTERMSIG(wstatus));
     return (error_exit("pipeline failure\n",heap->heap_allocated),42);
 }
 
@@ -405,7 +409,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
         {
             char ** globbed = _glob_args(heap,_expand(heap, p_node->atom->args, *envp, status));
             if (check_builtin(heap, globbed[0]))
-                status = _call_builtin(heap, globbed, envp);
+                status = _call_builtin(heap, globbed, envp, status, og_stdin, og_stdout);
             else
                 status = _exec_node(heap,globbed,envp, status);
             if (p_node->atom && p_node->atom->in_fd)
