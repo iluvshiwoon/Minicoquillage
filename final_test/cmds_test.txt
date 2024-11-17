@@ -175,7 +175,7 @@ $
 $HOME
 $HOMEdskjhfkdshfsd
 "$HOMEdskjhfkdshfsd"
-$HOMEdskjhfkdshfsd'
+'$HOMEdskjhfkdshfsd'
 $DONTEXIST
 $LESS$VAR
 env
