@@ -131,18 +131,3 @@ t_glob	*glob(t_heap * heap, const char *pattern, bool * litteral)
 		head_glob = store_match(heap, tmp, pattern,litteral, head_glob);
 	return head_glob;
 }
-
-// int main (int ac, char **av)
-// {
-//
-// 	t_glob	*head;
-// 	const char *pattern;
-//
-// 	if (ac != 2)
-// 		return EXIT_FAILURE;
-// 	pattern = (const char *)av[1];
-// 	head = glob(av[1]);
-// 	put_glob(head, 1);
-//
-// 	return EXIT_SUCCESS;
-// }

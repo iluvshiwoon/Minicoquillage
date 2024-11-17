@@ -4,9 +4,8 @@ C_FLAGS = -Wall -Werror -Wextra
 NAME = Minicoquillage
 TOKENIZER = ./Tokenizer/test
 PARSER = ./Parser/test
-LEAK = $(TOKENIZER)/syntax_error_cmd.txt $(TOKENIZER)/tokens_cmd.txt $(PARSER)/parser_cmd.txt
 
-TEST = ./test
+TEST = ./final_test
 
 .PHONY: all clean fclean re syntax token
 .DEFAULT: all
@@ -23,8 +22,10 @@ parser:
 	@$(MAKE) -sC ./Parser
 
 leak: $(NAME)
-	cat $(LEAK) > $(TEST)/leak_test.csv
-	expect -f $(TEST)/expect_leak $(TEST)/leak_test.csv $(CURDIR)/$(NAME)
+	echo "Amour Tu es Horrible" > a
+	echo "0123456789" > b
+	echo "prout" > c
+	expect -f $(TEST)/expect_leak $(TEST)/cmds_test.txt $(CURDIR)/$(NAME)
 
 ml: $(NAME)
 	expect $(TEST)/expect_ml
@@ -34,6 +35,7 @@ build:
 
 clean:
 	$(MAKE) -C 42_MyLibC clean
+	rm a b c
 
 fclean: clean
 	-rm -f $(NAME)

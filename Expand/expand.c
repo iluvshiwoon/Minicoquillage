@@ -6,13 +6,15 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:32:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/14 02:24:44 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/17 02:23:21 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
 int _count(char ** envp, t_heap * heap, char * str, int status);
+int	_handle_quote(char c, t_open_quote *open);
+int _count_exp(char ** envp , t_heap * heap, char * str, int * i, int status);
 
 char * var_name(t_heap * heap, char * var)
 {
@@ -45,6 +47,27 @@ char * _getenv(t_heap * heap, char * var, char ** envp, int status)
     return (NULL);
 }
 
+bool _is_empty_quote(t_heap * heap, char ** envp, char * to_expand)
+{
+    int count;
+    int i;
+
+    count = 1;
+    i = 1;
+    if (to_expand[0] == '\'' || to_expand[0] == '"')
+    {
+        if (to_expand[1] == to_expand[0])
+            return true;
+        else if (to_expand[1] == '$')
+        {
+            count = _count_exp(envp ,heap, to_expand, &i, 0);
+            if (count == 0 && to_expand[i+1] == to_expand[0] && to_expand[i+2] == 0) 
+                return true;
+        }
+    }    
+    return false;
+}
+
 void _init_expand(char ** envp, t_heap * heap, char ** to_expand, t_expanded * expanded, int status)
 {
     int i;
@@ -53,7 +76,7 @@ void _init_expand(char ** envp, t_heap * heap, char ** to_expand, t_expanded * e
     i = -1;
     count = 0;
     while (to_expand[++i])
-        if (_count(envp, heap, to_expand[i], status))
+        if (_count(envp, heap, to_expand[i], status) || _is_empty_quote(heap, envp,to_expand[i]))
             count++;
     expanded->value = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*to_expand) * (count + 1));
     expanded->value[count] = NULL;
@@ -80,7 +103,7 @@ int	_handle_quote(char c, t_open_quote *open)
 
 int _expand_sep(char c)
 {
-    if (c == '\'' || c == '\"' || c == '$')
+    if (c == '\'' || c == '\"' || c == '$' || c == ' ')
         return (1); 
     return (0);
 }
@@ -174,7 +197,7 @@ int _count(char ** envp, t_heap * heap, char * str, int status)
     return count;
 }
 
-void _assign(char ** envp, t_heap * heap, t_expanded * expanded, char ** to_expand, int i, int status)
+void _assign(char ** envp, t_heap * heap, t_expanded * expanded, char ** to_expand, int i, int m, int status)
 {
     int j;
     int k;
@@ -201,8 +224,8 @@ void _assign(char ** envp, t_heap * heap, t_expanded * expanded, char ** to_expa
             {
                 while(r_value[++k])
                 {
-                    expanded->litteral[i][l] = litteral;
-                    expanded->value[i][l++] = r_value[k]; 
+                    expanded->litteral[m][l] = litteral;
+                    expanded->value[m][l++] = r_value[k]; 
                 }
             }
         }
@@ -218,8 +241,8 @@ void _assign(char ** envp, t_heap * heap, t_expanded * expanded, char ** to_expa
         }
         else
         {
-            expanded->litteral[i][l] = litteral;
-            expanded->value[i][l++] = to_expand[i][j];
+            expanded->litteral[m][l] = litteral;
+            expanded->value[m][l++] = to_expand[i][j];
         }
         if (!to_expand[i][j])
             break;
@@ -230,20 +253,29 @@ t_expanded * _expand(t_heap * heap, char ** to_expand, char ** envp, int status)
 {
     t_expanded * expanded;
     int i;
+    int j;
     int count;
 
     expanded = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*expanded));
     _init_expand(envp, heap, to_expand, expanded, status);
     i = -1;
+    j = -1;
     while (to_expand[++i])
     {
         count = _count(envp,heap, to_expand[i], status);
-        if (count)
+        if (!count && _is_empty_quote(heap, envp, to_expand[i]))
         {
-            expanded->litteral[i] = wrap_malloc(heap->heap_allocated, heap->list, sizeof(bool) * (count));
-            expanded->value[i] = wrap_malloc(heap->heap_allocated, heap->list, sizeof(char) * (count + 1));
-            expanded->value[i][count] = '\0';
-            _assign(envp, heap, expanded, to_expand, i, status);
+            expanded->litteral[++j] = wrap_malloc(heap->heap_allocated, heap->list, sizeof(bool));
+            expanded->value[j] = wrap_malloc(heap->heap_allocated, heap->list, sizeof(char));
+            expanded->value[j][0] = '\0';
+            expanded->litteral[j][0] = true;
+        }
+        else if (count)
+        {
+            expanded->litteral[++j] = wrap_malloc(heap->heap_allocated, heap->list, sizeof(bool) * (count));
+            expanded->value[j] = wrap_malloc(heap->heap_allocated, heap->list, sizeof(char) * (count + 1));
+            expanded->value[j][count] = '\0';
+            _assign(envp, heap, expanded, to_expand, i,j, status);
         }
     }
     return (expanded);
