@@ -1,7 +1,6 @@
 #ifndef MINICOQUILLAGE_H
 # define MINICOQUILLAGE_H
 # include <stdio.h>
-# include <termios.h>
 #include <errno.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
@@ -20,7 +19,7 @@
 # include "glob/glob.h"
 # include "Builtins_V2/builtin.h"
 
-void _close(int fd);
+void _close(int fd, bool stdin);
 
 extern int g_signal;
 enum e_mode {

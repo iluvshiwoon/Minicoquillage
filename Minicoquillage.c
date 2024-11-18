@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 20:30:00 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 20:18:59 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int g_signal;
 
-void _close(int fd)
+void _close(int fd, bool stdin)
 {
-    if (fd > 0)
+    if (fd > 0 || stdin == true)
         close(fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 20:34:54 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/12 01:23:52 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void    listen_heredoc(t_heap * heap, int * fd, char * eof)
         if (g_signal == SIGINT)
         {
             dup2(_stdin, 0);
-            _close(_stdin);
+            close(_stdin);
             free(line);
             break;
         }
@@ -96,7 +96,7 @@ void    listen_heredoc(t_heap * heap, int * fd, char * eof)
         }
         free(line);
     }
-    _close(_stdin);
+    close(_stdin);
 }
 
 void    run_heredoc(t_heap * heap, t_atom * atom)
@@ -157,7 +157,7 @@ void	clean_heredoc(t_heap * heap,t_ast_node * first_node)
         else if (p_node->atom->heredoc) 
         {
             if (p_node->atom->in_fd)
-                _close(p_node->atom->in_fd);
+                close(p_node->atom->in_fd);
             if (p_node->atom->file_heredoc)
                 unlink(p_node->atom->file_heredoc);
         }
@@ -167,7 +167,7 @@ void	clean_heredoc(t_heap * heap,t_ast_node * first_node)
             if (p_node->atom && p_node->atom->heredoc)
             {
                 if (p_node->atom->in_fd)
-                    _close(p_node->atom->in_fd);
+                    close(p_node->atom->in_fd);
                 if (p_node->atom->file_heredoc)
                     unlink(p_node->atom->file_heredoc);
             }
