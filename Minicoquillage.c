@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 20:30:00 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 21:44:35 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ int init_heap(t_heap_allocated * heap_allocated)
 
 void sigint_handler(int sig)
 {
-    g_signal = sig; 
     printf("\n");
+    if (g_signal == 999)
+        return;
+    g_signal = sig; 
     close(STDIN_FILENO);
 }
 

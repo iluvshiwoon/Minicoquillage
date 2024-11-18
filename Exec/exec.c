@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 20:48:00 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 21:43:31 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char
         clean_heredoc(&heap, ast->first_node);
         return;
     }
+    g_signal = 999;
     _exec_tree(&heap, ast->first_node, envp);
+    g_signal = 0;
     add_history(line);
     clean_heredoc(&heap, ast->first_node);
 }
