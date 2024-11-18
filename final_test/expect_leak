@@ -10,6 +10,7 @@ set fileId [open "./final_test/cmds_test.txt" r]
 set data [read $fileId]
 close $fileId
 
+sleep 1
 # Convert data into a list (split on newlines)
 set list [split $data "\n"]
 

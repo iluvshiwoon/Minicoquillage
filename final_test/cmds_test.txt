@@ -372,7 +372,7 @@ cd /e'tc'
 cd /e"tc"
 cd sr
 cd Makefile
-cd ../minishell
+cd ../minicoquillage
 cd ../../../../../../..
 cd .././../.././../bin/ls
 cd /
@@ -382,7 +382,7 @@ cd '//'; pwd
 cd ///; pwd
 cd ////////; pwd
 cd '////////'; pwd
-cd /minishell
+cd /minicoquillage
 cd /; cd ..
 cd _
 cd -
@@ -396,7 +396,7 @@ cd '$PWD/srcs'
 unset HOME; cd $HOME
 unset HOME; export HOME=; cd
 unset HOME; export HOME; cd
-cd minishell Docs crashtest.c
+cd minicoquillage Docs crashtest.c
 cd / | echo $?; pwd
 cd ~
 cd ~/
@@ -413,20 +413,20 @@ export CDPATH=/; cd $HOME/..
 export CDPATH=/; cd home/vietdu91
 export CDPATH=./; cd .
 export CDPATH=./; cd ..
-chmod 000 minishell; ./minishell
+chmod 000 minicoquillage; ./minicoquillage
 ls hola
 ./Makefile
-./minishell
-env | grep SHLVL; ./minishell; env | grep SHLVL; exit; env | grep SHLVL
+./minicoquillage
+env | grep SHLVL; ./minicoquillage; env | grep SHLVL; exit; env | grep SHLVL
 touch hola; ./hola
 env|"wc" -l
 env|"wc "-l
 expr 1 + 1
 expr $? + $?
-env -i ./minishell; env
-env -i ./minishell; export
-env -i ./minishell; cd
-env -i ./minishell; cd ~
+env -i ./minicoquillage; env
+env -i ./minicoquillage; export
+env -i ./minicoquillage; cd
+env -i ./minicoquillage; cd ~
 exit
 exit exit
 exit hola

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/16 22:13:29 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 18:19:32 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	main(int argc, char **argv, char ** envp)
 	t_control_dll	control;
     t_heap_allocated heap_allocated;
 
+    
     sa.sa_handler = sigint_handler;
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = 0;
@@ -52,6 +53,10 @@ int	main(int argc, char **argv, char ** envp)
         {
             if (init_heap(&heap_allocated) == EXIT_FAILURE)
                 error_exit("init_heap failed", &heap_allocated);
+            // envp = wrap_malloc(&heap_allocated,heap_allocated.ast,  sizeof(char *) * 3);
+            // envp[0] = "hello=world";
+            // envp[1] = "prout=pue";
+            // envp[2] = NULL;
             heap_allocated.signal_status = 0;
             if (g_signal == SIGINT)
                 heap_allocated.signal_status = 130;

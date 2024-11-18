@@ -1,7 +1,7 @@
 C_FILES = $(filter-out $(wildcard ./*/test_*.c) ,$(wildcard ./glob/*.c ./Builtins_V2/*.c ./Expand/*.c ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c ./Utils/*.c ./Exec/*.c))
 C_FLAGS = -Wall -Werror -Wextra
 
-NAME = Minicoquillage
+NAME = minicoquillage
 TOKENIZER = ./Tokenizer/test
 PARSER = ./Parser/test
 

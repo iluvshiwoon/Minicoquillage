@@ -6,15 +6,11 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/16 22:12:31 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 18:27:14 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
-// issuer with dup inside exec_tree on exit
-// Check builtins
-// RETURN STATUS PROBLEM ON BUILTINS
-// manage env
 // managing term var (ex vim killed...)
 // TEST: script to test path / exec / expansion with echo and export / expansion in heredoc 
 //
@@ -69,8 +65,11 @@ int _exec_node(t_heap * heap, char ** globbed, char *** envp, int status)
     pid_t pid;
     int wstatus;
     char * path;
+    int err;
 
     wstatus = status;
+    if (!globbed || !(globbed[0]))
+        return (0);
     path = get_path(heap, &wstatus,globbed[0]);
     if (!path)
         return(wstatus);
@@ -82,11 +81,21 @@ int _exec_node(t_heap * heap, char ** globbed, char *** envp, int status)
         execve(path,globbed,*envp);
         perror("execve");
     }
-    waitpid(pid, &wstatus,0);
-    if (WIFEXITED(wstatus))
-        return (WEXITSTATUS(wstatus));
-    else if (WIFSIGNALED(wstatus))
-        return (128 + WTERMSIG(wstatus));
+    while (1)
+    {
+        err = waitpid(pid, &wstatus,0);
+        if (err == -1)
+        {
+            if (errno == EINTR)
+                continue;
+            else
+                error_exit(strerror(errno),heap->heap_allocated);
+        }
+        else if (WIFEXITED(wstatus))
+            return (WEXITSTATUS(wstatus));
+        else if (WIFSIGNALED(wstatus))
+            return (128 + WTERMSIG(wstatus));
+    }
     return (error_exit("_exec_node\n",heap->heap_allocated),42);
 }
 
@@ -246,6 +255,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
     t_parser_node * p_node;
     char * path;
     int skip;
+    char ** globbed;
 
     i = -1;
     skip = 0;
@@ -325,7 +335,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
             }
             else if (!skip)
             {
-                char ** globbed = _glob_args(heap,_expand(heap, p_node->atom->args, *envp, status));
+                globbed = _glob_args(heap,_expand(heap, p_node->atom->args, *envp, status));
                 if (check_builtin(heap, globbed[0]))
                     status = _call_builtin(heap, globbed, envp, status, 0, 0);
                 else
@@ -372,6 +382,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
     int skip;
     int og_stdin;
     int og_stdout;
+    char ** globbed;
 
     og_stdin = dup(STDIN_FILENO);
     og_stdout = dup(STDOUT_FILENO);
@@ -407,7 +418,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
         }
         else if (!skip) 
         {
-            char ** globbed = _glob_args(heap,_expand(heap, p_node->atom->args, *envp, status));
+            globbed = _glob_args(heap,_expand(heap, p_node->atom->args, *envp, status));
             if (check_builtin(heap, globbed[0]))
                 status = _call_builtin(heap, globbed, envp, status, og_stdin, og_stdout);
             else

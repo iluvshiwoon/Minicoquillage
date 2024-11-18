@@ -6,11 +6,25 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 04:56:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/16 05:58:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 00:13:33 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
+
+char * wrap_getcwd(t_heap * heap)
+{
+    char * r_value;
+    char * temp;
+
+    r_value = getcwd(NULL, 0);
+    if (!r_value)
+        return (printf("error retrieving current directory: getcwd: cannot access parent directories: %s\n",strerror(errno)),NULL);
+    temp = r_value; 
+    r_value = mini_ft_strdup(heap->heap_allocated, heap->list, r_value);
+    free(temp);
+    return (r_value);
+}
 
 void f_export(t_heap * heap, char *** envp, char * var, char * value)
 {
@@ -26,7 +40,6 @@ void f_export(t_heap * heap, char *** envp, char * var, char * value)
 char * get_home(t_heap * heap, char ***envp)
 {
     char * home;
-    char * temp;
 
     home = _getenv(heap, "HOME", *envp, 0);
     if (!home)
@@ -34,9 +47,9 @@ char * get_home(t_heap * heap, char ***envp)
         home = _getenv(heap, "USER", *envp, 0);
         if (!home)
         {
-            temp = getcwd(NULL, 0);
-            home = mini_ft_strdup(heap->heap_allocated, heap->list, temp);
-            free(temp);
+            home = wrap_getcwd(heap);
+            if (!home)
+                return NULL;
         }
         else
             home = mini_ft_strjoin(heap->heap_allocated, heap->list, "/home/", home);
@@ -49,14 +62,21 @@ int _cd(t_heap * heap, char * path, char *** envp)
     int i;
     char * cur_dir;
 
+    if (!path)
+        return (1);
     i = chdir(path);
     if (i != 0)
         return (printf("minicoquillage: cd: %s: %s\n",path,strerror(errno)),1);
-    cur_dir = _getenv(heap, "PWD", *envp, 0);
-    f_export(heap, envp, "OLDPWD=", cur_dir);
-    cur_dir = getcwd(NULL, 0);
+    cur_dir = _getenv(heap, "OLDPWD", *envp, 0);
+    if (cur_dir)
+    {
+        cur_dir = _getenv(heap, "PWD", *envp, 0);
+        f_export(heap, envp, "OLDPWD=", cur_dir);
+    }
+    cur_dir = wrap_getcwd(heap);
+    if (!cur_dir)
+        return (1);
     f_export(heap, envp, "PWD=", mini_ft_strdup(heap->heap_allocated, heap->list, cur_dir));
-    free(cur_dir);
     return (0);
 }
 
@@ -75,7 +95,13 @@ int mini_cd(t_heap * heap, char ** args, char *** envp)
     else if (ft_strncmp(args[1],"-", _max_len(ft_strlen(args[1]),1)) == 0)
     {
         path = _getenv(heap, "OLDPWD", *envp, 0);
-        printf("%s\n",path);
+        if (!path)
+        {
+            path = NULL;
+            printf("minicoquillage: cd: OLDPWD not set\n");
+        }
+        else
+            printf("%s\n",path);
     }
     return(_cd(heap, path, envp));
 }

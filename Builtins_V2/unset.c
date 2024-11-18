@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 02:49:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/16 03:16:02 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:32:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int u_var_name_cmp(char * arg, char * env)
 {
     int i;
     i = -1;
+    if (!arg || !arg[0] || !env)
+        return (42);
     while (arg[++i] && env[i] != '=')
         if (arg[i] != env[i] && !(arg[i] == '\0' && env[i] == '='))
             return (arg[i] - env[i]);
