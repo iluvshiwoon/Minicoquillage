@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 21:44:35 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 23:03:54 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ int	main(int argc, char **argv, char ** envp)
             // envp[1] = "prout=pue";
             // envp[2] = NULL;
             heap_allocated.signal_status = 0;
-            if (g_signal == SIGINT)
-                heap_allocated.signal_status = 130;
             g_signal = 0;
             control.heap_allocated = &heap_allocated;
             if(tokenizer(&control) == EXIT_SUCCESS)
@@ -99,13 +97,20 @@ int	main(int argc, char **argv, char ** envp)
     }
     else if (MODE != INTERACTIVE)
 	{
+        if (init_alloc(&heap_allocated.env) == NULL)
+            return (free(heap_allocated.env),EXIT_FAILURE);
+        incr_shlvl(&heap_allocated,&envp);
         if (init_heap(&heap_allocated) == EXIT_FAILURE)
             error_exit("init_heap failed", &heap_allocated);
+        heap_allocated.signal_status = 0;
+        if (g_signal == SIGINT)
+                heap_allocated.signal_status = 130;
+        g_signal = 0;
         control.heap_allocated = &heap_allocated;
         if (argc == 1)
             return (EXIT_FAILURE);
-		debug(argv[1],&control);
-        free_heap(&heap_allocated, true);
+		debug(argv[1],&control,&envp);
+        free_heap(&heap_allocated, false);
 	}
 	return (clear_history(),free_env(&heap_allocated),0);
 }

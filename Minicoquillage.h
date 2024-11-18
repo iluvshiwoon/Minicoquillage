@@ -25,8 +25,7 @@ void _close(int fd);
 extern int g_signal;
 enum e_mode {
     INTERACTIVE,
-    TOKENIZER,
-    PARSER,
+    TEST
 };
 
 #ifndef MODE

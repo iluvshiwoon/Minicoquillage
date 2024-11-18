@@ -15,11 +15,14 @@ all: $(NAME)
 $(NAME): $(C_FILES) | build
 	cc -g $(C_FLAGS) $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 
-tokenizer:
-	@$(MAKE) -sC ./Tokenizer
+# tokenizer:
+# 	@$(MAKE) -sC ./Tokenizer
 
-parser:
-	@$(MAKE) -sC ./Parser
+# parser:
+# 	@$(MAKE) -sC ./Parser
+
+test: $(C_FILES) | build
+	cc -g $(C_FLAGS) -D MODE=TEST $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
 
 leak: $(NAME)
 	echo "Amour Tu es Horrible" > a
