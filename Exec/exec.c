@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 18:27:14 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 20:48:00 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int _exec_node(t_heap * heap, char ** globbed, char *** envp, int status)
     int wstatus;
     char * path;
     int err;
+    struct termios ogi_term;
 
     wstatus = status;
     if (!globbed || !(globbed[0]))
@@ -73,6 +74,7 @@ int _exec_node(t_heap * heap, char ** globbed, char *** envp, int status)
     path = get_path(heap, &wstatus,globbed[0]);
     if (!path)
         return(wstatus);
+    tcgetattr(STDIN_FILENO, &ogi_term);
     pid = fork();
     if (pid < 0)
         return(perror("pid"),error_exit("fork failed\n",heap->heap_allocated),4);
@@ -94,7 +96,7 @@ int _exec_node(t_heap * heap, char ** globbed, char *** envp, int status)
         else if (WIFEXITED(wstatus))
             return (WEXITSTATUS(wstatus));
         else if (WIFSIGNALED(wstatus))
-            return (128 + WTERMSIG(wstatus));
+            return (tcsetattr(STDIN_FILENO,TCSANOW,&ogi_term),128 + WTERMSIG(wstatus));
     }
     return (error_exit("_exec_node\n",heap->heap_allocated),42);
 }
@@ -134,7 +136,7 @@ int     _stdin(t_heap * heap, int * skip, int * status, t_atom * atom, char ** e
     }
     if (atom->heredoc)
     {
-        close(atom->in_fd);
+        _close(atom->in_fd);
         atom->in_fd = open(atom->file_heredoc, O_RDONLY);
     }
     if (atom->in_fd)
@@ -167,7 +169,7 @@ int     _stdout(t_heap * heap, int * skip, int * status, t_atom * atom, char ** 
         else if (stat(globbed, &sb) == -1 && errno == ENOENT)
         {
             atom->out_fd = open(globbed, O_EXCL | O_CREAT , S_IRUSR | S_IWUSR | S_IROTH | S_IRGRP);
-            close(atom->out_fd);
+            _close(atom->out_fd);
         }
         else if (access(globbed,W_OK))
             return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: Permission denied\n",skip,status,globbed, 1),1);
@@ -176,7 +178,7 @@ int     _stdout(t_heap * heap, int * skip, int * status, t_atom * atom, char ** 
         else if (access(globbed,W_OK) == 0 && atom->append[i] == false)
         {
             atom->out_fd = open(globbed, O_WRONLY | O_TRUNC);
-            close(atom->out_fd);
+            _close(atom->out_fd);
         }
         if (!expanded->value[i+1])
         {
@@ -260,7 +262,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
     i = -1;
     skip = 0;
     _count_pipe(heap,&pipefd,&pipe_nb,first_node);
-    close(og_stdin);
+    _close(og_stdin);
     while (++i < pipe_nb + 1)
     {
         pid = fork();// same as for open wrapper for failure; 
@@ -275,11 +277,11 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
                     if (j == 0)
                     {
                         dup2(pipefd[j][1],STDOUT_FILENO);
-                        close(pipefd[j][1]);
+                        _close(pipefd[j][1]);
                     }
                     else
-                        close(pipefd[j][1]);
-                    close(pipefd[j][0]);
+                        _close(pipefd[j][1]);
+                    _close(pipefd[j][0]);
                 }
             }
             else if (i == pipe_nb)
@@ -289,11 +291,11 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
                     if (j == i - 1)
                     {
                         dup2(pipefd[i-1][0], STDIN_FILENO);
-                        close(pipefd[i-1][0]);
+                        _close(pipefd[i-1][0]);
                     }
                     else
-                        close(pipefd[j][0]);
-                    close(pipefd[j][1]);
+                        _close(pipefd[j][0]);
+                    _close(pipefd[j][1]);
                 }
             }
             else 
@@ -303,17 +305,17 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
                     if (j == i - 1)
                     {
                         dup2(pipefd[i-1][0],STDIN_FILENO);
-                        close(pipefd[i-1][0]);
+                        _close(pipefd[i-1][0]);
                     }
                     else
-                        close(pipefd[j][0]);
+                        _close(pipefd[j][0]);
                     if (j == i)
                     {
                         dup2(pipefd[i][1],STDOUT_FILENO);
-                        close(pipefd[i][1]);
+                        _close(pipefd[i][1]);
                     }
                     else
-                        close(pipefd[j][1]);
+                        _close(pipefd[j][1]);
                 }
             }
             j = -1;
@@ -322,15 +324,15 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
             left = first_node->left;
             p_node = left->data;
             redirect(heap, &skip, &status, first_node, *envp, og_stdout);
-            close(og_stdout);
+            _close(og_stdout);
             if (is_op(p_node->ops) && !skip)
             {
                 _exec_tree(heap,left, envp);
                 p_node = first_node->data;
                 if (p_node->atom && p_node->atom->in_fd)
-                    close(p_node->atom->in_fd);
+                    _close(p_node->atom->in_fd);
                 if (p_node->atom && p_node->atom->out_fd)
-                    close(p_node->atom->out_fd);
+                    _close(p_node->atom->out_fd);
                 p_node = left->data;
             }
             else if (!skip)
@@ -345,9 +347,9 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
                         execve(path,globbed,*envp);
                 }
                 if (p_node->atom && p_node->atom->in_fd)
-                    close(p_node->atom->in_fd);
+                    _close(p_node->atom->in_fd);
                 if (p_node->atom && p_node->atom->out_fd)
-                    close(p_node->atom->out_fd);
+                    _close(p_node->atom->out_fd);
             }   
             free_heap(heap->heap_allocated, true);
             exit(status);
@@ -356,15 +358,27 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
     i = -1;
     while (++i < pipe_nb + 1)
     {
-        waitpid(-1, &wstatus,0);
+        while (1)
+        {
+            int err = waitpid(-1, &wstatus,0);
+            if (err == -1)
+            {
+                if (errno == EINTR)
+                    continue;
+                else
+                    error_exit(strerror(errno),heap->heap_allocated);
+            }
+            else if (WIFEXITED(wstatus) || WIFSIGNALED(wstatus))
+                break;
+        }
         if (i == 0)
-            close(pipefd[i][1]);
+            _close(pipefd[i][1]);
         else if (i == pipe_nb)
-            close (pipefd[i - 1][0]);
+            _close (pipefd[i - 1][0]);
         else
         {
-            close (pipefd[i - 1][0]);
-            close (pipefd[i][1]);
+            _close (pipefd[i - 1][0]);
+            _close (pipefd[i][1]);
         }
     }
     if (WIFEXITED(wstatus))
@@ -411,9 +425,9 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
             _exec_tree(heap,left, envp);
             p_node = first_node->data;
             if (p_node->atom && p_node->atom->in_fd)
-                close(p_node->atom->in_fd);
+                _close(p_node->atom->in_fd);
             if (p_node->atom && p_node->atom->out_fd)
-                close(p_node->atom->out_fd);
+                _close(p_node->atom->out_fd);
             p_node = left->data;
         }
         else if (!skip) 
@@ -424,9 +438,9 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
             else
                 status = _exec_node(heap,globbed,envp, status);
             if (p_node->atom && p_node->atom->in_fd)
-                close(p_node->atom->in_fd);
+                _close(p_node->atom->in_fd);
             if (p_node->atom && p_node->atom->out_fd)
-                close(p_node->atom->out_fd);
+                _close(p_node->atom->out_fd);
         }
         p_node = first_node->data;
         if(p_node->ops)
@@ -439,6 +453,6 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
         _reset_fd(og_stdin, og_stdout);
         first_node = first_node->right;
 	}
-    close(og_stdin);
-    close(og_stdout);
+    _close(og_stdin);
+    _close(og_stdout);
 }

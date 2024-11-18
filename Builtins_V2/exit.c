@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 20:56:10 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/16 21:53:41 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 20:34:51 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int64_t	atoi64_safe(char *string, int *status)
 void _close_fd(int fd1, int fd2)
 {
     if (fd1)
-        close(fd1);
+        _close(fd1);
     if (fd2)
-        close(fd2);
+        _close(fd2);
 }
 
 int mini_exit(t_heap * heap,char ** args, int status, int og_stdout, int og_stdin)
