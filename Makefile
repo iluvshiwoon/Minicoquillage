@@ -35,7 +35,7 @@ build:
 
 clean:
 	$(MAKE) -C 42_MyLibC clean
-	rm a b c
+	rm -f a b c
 
 fclean: clean
 	-rm -f $(NAME)
