@@ -11,5 +11,6 @@ int mini_exit(t_heap * heap,char ** args, int status, int og_stdout, int og_stdi
 int mini_export(t_heap * heap, char ** args, char *** envp);
 int mini_unset(t_heap * heap, char ** args, char *** envp);
 int mini_cd(t_heap * heap, char ** args, char *** envp);
+void f_export(t_heap * heap, char *** envp, char * var, char * value);
 
 #endif

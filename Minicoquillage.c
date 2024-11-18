@@ -6,13 +6,19 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 18:19:32 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/18 20:18:59 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Minicoquillage.h"
 
 int g_signal;
+
+void _close(int fd, bool stdin)
+{
+    if (fd > 0 || stdin == true)
+        close(fd);
+}
 
 int init_heap(t_heap_allocated * heap_allocated)
 {
@@ -34,6 +40,27 @@ void sigint_handler(int sig)
     close(STDIN_FILENO);
 }
 
+void incr_shlvl(t_heap_allocated * heap_allocated, char *** envp)
+{
+    t_heap heap;
+    char * shlvl;
+    int value;
+    int error;
+
+    heap.heap_allocated = heap_allocated;
+    heap.list = heap_allocated->env;
+    heap.env = heap_allocated->env;
+    shlvl = _getenv(&heap, "SHLVL", *envp, 0);
+    if (shlvl)
+    {
+        value = ft_atoi_safe(shlvl,&error);
+        if (error == ERROR) 
+            return;
+        shlvl = mini_ft_itoa(&heap,value + 1);
+        f_export(&heap,envp, "SHLVL=", shlvl);
+    }
+}
+
 int	main(int argc, char **argv, char ** envp)
 {
     struct sigaction sa;
@@ -49,6 +76,7 @@ int	main(int argc, char **argv, char ** envp)
     {
         if (init_alloc(&heap_allocated.env) == NULL)
             return (free(heap_allocated.env),EXIT_FAILURE);
+        incr_shlvl(&heap_allocated,&envp);
         while (1)
         {
             if (init_heap(&heap_allocated) == EXIT_FAILURE)
@@ -74,7 +102,7 @@ int	main(int argc, char **argv, char ** envp)
         control.heap_allocated = &heap_allocated;
         if (argc == 1)
             return (EXIT_FAILURE);
-		    debug(argv[1],&control);
+		debug(argv[1],&control);
         free_heap(&heap_allocated, true);
 	}
 	return (clear_history(),free_env(&heap_allocated),0);

@@ -4,7 +4,7 @@ set timeaout -1
 log_user 0
 spawn valgrind --quiet --track-origins=yes --leak-check=full\
 --show-leak-kinds=all --suppressions=readline.supp\
---error-exitcode=1 --exit-on-first-error=yes ./Minicoquillage
+--error-exitcode=1 --exit-on-first-error=yes ./minicoquillage
 # Read lines from a file into a list
 set fileId [open "./final_test/cmds_test.txt" r]
 set data [read $fileId]

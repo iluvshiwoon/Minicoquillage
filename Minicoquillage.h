@@ -19,6 +19,8 @@
 # include "glob/glob.h"
 # include "Builtins_V2/builtin.h"
 
+void _close(int fd, bool stdin);
+
 extern int g_signal;
 enum e_mode {
     INTERACTIVE,
