@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 23:03:54 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 22:09:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,7 @@ void incr_shlvl(t_heap_allocated * heap_allocated, char *** envp)
 int	main(int argc, char **argv, char ** envp)
 {
     struct sigaction sa;
-	t_control_dll	control;
-    t_heap_allocated heap_allocated;
-
+    t_mini mini;
     
     sa.sa_handler = sigint_handler;
     sigemptyset(&sa.sa_mask);
@@ -76,41 +74,46 @@ int	main(int argc, char **argv, char ** envp)
     sigaction(SIGINT, &sa, NULL);
     if (MODE == INTERACTIVE && isatty(STDIN_FILENO))
     {
-        if (init_alloc(&heap_allocated.env) == NULL)
-            return (free(heap_allocated.env),EXIT_FAILURE);
-        incr_shlvl(&heap_allocated,&envp);
+        if (init_alloc(&mini.heap_allocated.env) == NULL)
+            return (free(mini.heap_allocated.env),EXIT_FAILURE);
+        // envp = wrap_malloc(&mini.heap_allocated,heap_allocated.env,  sizeof(char *) * 3);
+        // envp[0] = "hello=world";
+        // envp[1] = "prout=pue";
+        // envp[2] = NULL;
+        incr_shlvl(&mini.heap_allocated,&envp);
         while (1)
         {
-            if (init_heap(&heap_allocated) == EXIT_FAILURE)
-                error_exit("init_heap failed", &heap_allocated);
-            // envp = wrap_malloc(&heap_allocated,heap_allocated.ast,  sizeof(char *) * 3);
-            // envp[0] = "hello=world";
-            // envp[1] = "prout=pue";
-            // envp[2] = NULL;
-            heap_allocated.signal_status = 0;
+            if (init_heap(&mini.heap_allocated) == EXIT_FAILURE)
+                error_exit("init_heap failed", &mini.heap_allocated);
+            mini.heap_allocated.signal_status = 0;
             g_signal = 0;
-            control.heap_allocated = &heap_allocated;
+            control.mini.heap_allocated = &heap_allocated;
             if(tokenizer(&control) == EXIT_SUCCESS)
-                execution(&heap_allocated,parser(&control),control.line, &envp);
-            free_heap(&heap_allocated, false);
+                execution(&mini.heap_allocated,parser(&control),control.line, &envp);
+            free_heap(&mini.heap_allocated, false);
         }
     }
     else if (MODE != INTERACTIVE)
 	{
-        if (init_alloc(&heap_allocated.env) == NULL)
-            return (free(heap_allocated.env),EXIT_FAILURE);
-        incr_shlvl(&heap_allocated,&envp);
-        if (init_heap(&heap_allocated) == EXIT_FAILURE)
-            error_exit("init_heap failed", &heap_allocated);
-        heap_allocated.signal_status = 0;
-        if (g_signal == SIGINT)
-                heap_allocated.signal_status = 130;
+        setvbuf(stdout, NULL, _IONBF, 0); // FIXME not allowed function
+        // argc = 2;
+        // argv[1]= "export HOLA=bon;jour; env | grep HOLA";
+        if (init_alloc(&mini.heap_allocated.env) == NULL)
+            return (free(mini.heap_allocated.env),EXIT_FAILURE);
+        incr_shlvl(&mini.heap_allocated,&envp);
+        if (init_heap(&mini.heap_allocated) == EXIT_FAILURE)
+            error_exit("init_heap failed", &mini.heap_allocated);
+        mini.heap_allocated.signal_status = 0;
         g_signal = 0;
-        control.heap_allocated = &heap_allocated;
+        // envp = wrap_malloc(&mini.heap_allocated,heap_allocated.ast,  sizeof(char *) * 3);
+        // envp[0] = "hello=world";
+        // envp[1] = "prout=pue";
+        // envp[2] = NULL;
+        control.mini.heap_allocated = &heap_allocated;
         if (argc == 1)
             return (EXIT_FAILURE);
 		debug(argv[1],&control,&envp);
-        free_heap(&heap_allocated, false);
+        free_heap(&mini.heap_allocated, false);
 	}
-	return (clear_history(),free_env(&heap_allocated),0);
+	return (clear_history(),free_env(&mini.heap_allocated),0);
 }

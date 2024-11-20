@@ -22,6 +22,12 @@
 
 void _close(int fd);
 
+typedef struct s_mini {
+    static int status;
+    t_control_dll control;
+    t_heap_allocated heap_allocated;
+} t_mini;
+
 extern int g_signal;
 enum e_mode {
     INTERACTIVE,

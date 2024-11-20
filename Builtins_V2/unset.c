@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 02:49:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 17:32:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 19:51:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ size_t _count_unset(t_heap * heap,char ** args, char *** envp, char *** new_env)
     if (count != 0)
     {
         count = i - count + 1;
+        // printf("%zu\n",count);
         *new_env = wrap_malloc(heap->heap_allocated, heap->env, sizeof(**new_env)*count);
         (*new_env)[count - 1] = NULL;
     }

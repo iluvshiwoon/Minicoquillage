@@ -1,4 +1,4 @@
-C_FILES = $(filter-out $(wildcard ./*/test_*.c) ,$(wildcard ./glob/*.c ./Builtins_V2/*.c ./Expand/*.c ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c ./Utils/*.c ./Exec/*.c))
+C_FILES = $(filter-out $(wildcard ./*/test_*.c) ,$(wildcard ./42_MyLibC/libft/ft_strchr.c ./glob/*.c ./Builtins_V2/*.c ./Expand/*.c ./Tokenizer/*.c ./Tokenizer/*/*.c ./*.c ./Parser/*.c ./Utils/*.c ./Exec/*.c))
 C_FLAGS = -Wall -Werror -Wextra
 
 NAME = minicoquillage
@@ -22,13 +22,18 @@ $(NAME): $(C_FILES) | build
 # 	@$(MAKE) -sC ./Parser
 
 test: $(C_FILES) | build
-	cc -g $(C_FLAGS) -D MODE=TEST $^ -o $(NAME) -L ./42_MyLibC -lft -lreadline
+	@cc -g $(C_FLAGS) -D MODE=TEST $^ -o m_test -L ./42_MyLibC -lft -lreadline
+	@echo "Amour Tu es Horrible" > a
+	@echo "0123456789" > b
+	@echo "prout" > c
+	bash $(TEST)/final.sh $(TEST)/cmds_test.txt
+
 
 leak: $(NAME)
 	echo "Amour Tu es Horrible" > a
 	echo "0123456789" > b
 	echo "prout" > c
-	expect -f $(TEST)/expect_leak $(TEST)/cmds_test.txt $(CURDIR)/$(NAME)
+	expect -f $(TEST)/expect_leak $(TEST)/cmds_leak.txt $(CURDIR)/$(NAME)
 
 ml: $(NAME)
 	expect $(TEST)/expect_ml

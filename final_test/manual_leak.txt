@@ -1,0 +1,33 @@
+unset PWD; env | grep PWD; pwd
+pwd; unset PWD; env | grep PWD; cd $PWD; pwd
+unset OLDPWD; env | grep OLDPWD
+unset PATH; echo $PATH
+unset PATH; cat Makefile
+unset HOME; cd $HOME
+unset HOME; export HOME=; cd
+unset HOME; export HOME; cd
+chmod 000 minicoquillage; ./minicoquillage
+cat << hola
+cat << 'hola'
+cat << "hola"
+cat << ho"la"
+cat << $HOME
+cat << hola > bonjour; cat bonjour
+cat << hola | rev
+<< hola
+<<hola
+cat <<
+cat << prout << lol << koala
+prout << lol << cat << koala
+<< $hola
+<< $"hola"$"b"
+<< $"$hola"$$"b"
+<< ho$la$"$a"$$"b"
+echo hola <<< bonjour
+echo hola <<<< bonjour
+echo hola <<<<< bonjour
+echo 'yo
+cat <<a >>>out | <<b
+unset PATH; echo $PATH
+unset PATH; ls
+

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/14 23:17:30 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/19 06:23:03 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../Minicoquillage.h"
 #endif
 
-char * get_path(t_heap * heap,int * status, char * cmd);
+char * get_path(t_heap * heap,char ** envp,int * status, char * cmd);
 bool check_builtin(t_heap* heap, char * cmd);
 void execution(t_heap_allocated * heap_allocated, t_ast * tree, char * line, char *** envp);
 void	print_tree(t_heap * heap,t_ast_node * first_node);

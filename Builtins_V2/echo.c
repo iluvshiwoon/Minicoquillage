@@ -6,28 +6,41 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 02:25:03 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/17 01:47:22 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/19 08:25:20 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
-int	_is_option(char *msg)
+int	_is_option(char *msg, int * j)
 {
     int	i;
+    bool option;
 
     i = 0;
+    *j = 0;
+    option = false;
     if (msg[i] == '-')
         i++;
     while (msg[i])
     {
-        if (msg[i] != 'n')
-            return (0);
+        if (msg[i] == 'n')
+            option = true;
+        else if (!ft_isspace(msg[i]))
+        {
+            option = false;
+            break;
+        }
+        if (i > 1 && ft_isspace(msg[i]))
+        {
+            i++;
+            break;
+        }
         i++;
     }
-    if (i == 0)
-        return 0;
-    return (1);
+    if (option)
+        *j = i;
+    return (option);
 }
 
 int mini_echo(char **args)
@@ -35,27 +48,36 @@ int mini_echo(char **args)
 	int	opt;
     long long r_value;
     int i;
+    int j;
     bool first;
 
     i = 1;
+    j = 0;
     opt = 0;
     r_value = 0;
     first = true;
-    while (args[i] && _is_option(args[i]))
-    {
-        opt = 1;
-        i++;
+    while (args[i])
+    { 
+        opt = _is_option(args[i],&j);
+        if (!opt)
+            break;
+        if (args[i][j] == '\0')
+            i++;
+        else 
+            break;
     }
     while (args[i])
     {
+        if (first)
+            _is_option(args[i],&j);
         if (!first)
         {
             r_value = write(1, " ", 1);
             if (r_value != 1)
                 return (1);
         }
-        r_value = write(1, args[i], ft_strlen(args[i]));
-        if (r_value != (long long)ft_strlen(args[i]))
+        r_value = write(1, args[i]+j, ft_strlen(args[i])-j);
+        if (r_value != (long long)ft_strlen(args[i])-j)
             return (1);
         i++;
         first = false;

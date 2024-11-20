@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 04:56:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 00:13:33 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 20:01:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,15 @@ int _cd(t_heap * heap, char * path, char *** envp)
     if (cur_dir)
     {
         cur_dir = _getenv(heap, "PWD", *envp, 0);
-        f_export(heap, envp, "OLDPWD=", cur_dir);
+        if (cur_dir)
+            f_export(heap, envp, "OLDPWD=", cur_dir);
     }
-    cur_dir = wrap_getcwd(heap);
-    if (!cur_dir)
-        return (1);
-    f_export(heap, envp, "PWD=", mini_ft_strdup(heap->heap_allocated, heap->list, cur_dir));
+    cur_dir = _getenv(heap, "PWD", *envp, 0);
+    if (cur_dir)
+    {
+        cur_dir = wrap_getcwd(heap);
+        f_export(heap, envp, "PWD=", mini_ft_strdup(heap->heap_allocated, heap->list, cur_dir));
+    }
     return (0);
 }
 
@@ -84,14 +87,21 @@ int mini_cd(t_heap * heap, char ** args, char *** envp)
 {
     int i;
     char * path;
+    char * home;
 
     i = 0;
     path = args[1];
     while (args[++i]);
     if (i > 2)
         return (printf("minicoquillage: cd: too many arguments\n"),1);
-    if (args[1] == NULL || ft_strncmp(args[1], "~", _max_len(ft_strlen(args[1]),1)) == 0)
+    if (args[1] == NULL)
         path = get_home(heap, envp);
+    else if (args[1][0] == '~')
+    {
+        home = get_home(heap, envp);
+        if (home)
+            path = mini_ft_strjoin(heap->heap_allocated,heap->list,home,path+1);
+    }
     else if (ft_strncmp(args[1],"-", _max_len(ft_strlen(args[1]),1)) == 0)
     {
         path = _getenv(heap, "OLDPWD", *envp, 0);

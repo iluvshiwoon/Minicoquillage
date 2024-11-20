@@ -53,7 +53,8 @@ dkms.conf
 .ccls*
 .vscode*
 
-Minicoquillage
+minicoquillage
+m_test
 .devcontainer
 a
 b

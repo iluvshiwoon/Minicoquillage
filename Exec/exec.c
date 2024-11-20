@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 21:43:31 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 18:46:26 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int _exec_node(t_heap * heap, char ** globbed, char *** envp, int status)
     wstatus = status;
     if (!globbed || !(globbed[0]))
         return (0);
-    path = get_path(heap, &wstatus,globbed[0]);
+    path = get_path(heap,*envp, &wstatus,globbed[0]);
     if (!path)
         return(wstatus);
     tcgetattr(STDIN_FILENO, &ogi_term);
@@ -344,7 +344,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
                     status = _call_builtin(heap, globbed, envp, status, 0, 0);
                 else
                 {
-                    path = get_path(heap,&status,globbed[0]);
+                    path = get_path(heap,*envp,&status,globbed[0]);
                     if (path)
                         execve(path,globbed,*envp);
                 }

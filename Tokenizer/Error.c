@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:54:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/15 15:36:05 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/19 01:42:00 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	check_error1(t_control_dll *control, t_token *next)
 {
 	char	*error;
 
-	error = "Minicoquillage: syntax error near unexpected token `%s'\n";
+	error = "minicoquillage: syntax error near unexpected token `%s'\n";
 	if (control->token->type >= REDIRECTION && control->token->type <= HERE_DOC
 		&& next->type >= REDIRECTION && next->type <= HERE_DOC)
 		return (print_error(error, next), EXIT_FAILURE);
@@ -51,8 +51,8 @@ int	check_error(t_control_dll *control, t_token *next)
 	char	*error;
 	char	*newline;
 
-	error = "Minicoquillage: syntax error near unexpected token `%s'\n";
-	newline = "Minicoquillage: syntax error near unexpected token `newline'\n";
+	error = "minicoquillage: syntax error near unexpected token `%s'\n";
+	newline = "minicoquillage: syntax error near unexpected token `newline'\n";
 	if (!next || !control->token)
 	{
 		if (!next && control->token->type >= PIPE && control->token->type <= OR)
@@ -76,7 +76,7 @@ int	check_parenthesis(t_control_dll *control)
 	int		parenthesis;
 	char	*error;
 
-	error = "Minicoquillage: syntax error near unexpected token `%s'\n";
+	error = "minicoquillage: syntax error near unexpected token `%s'\n";
 	parenthesis = 0;
 	control->node = control->list->first_node;
 	while (control->node && control->complete)
