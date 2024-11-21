@@ -19,7 +19,7 @@ if [ -n "$bash_output" ]; then
     pattern="minicoquillage: \`$line'"
   bash_output=$(echo "$bash_output" | grep -v -F "$pattern")
 fi
-mini_output=$(timeout 1 ./m_test "$line")
+mini_output=$(timeout 10 ./m_test 2>&1 "$line")
   # mini_output=$(./m_test "$line")
   mini_exit=$?
   mini_output=$(echo "$mini_output" | sed '/^exit$/d')

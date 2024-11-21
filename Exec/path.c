@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:37:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/21 01:02:05 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 21:53:07 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool is_dir(char * cmd)
     if (stat(cmd, &statbuf) != 0)
         return 0;
     if (S_ISDIR(statbuf.st_mode))
-        return (printf("minicoquillage: %s: Is a directory\n",cmd),1);
+        return (ft_printf_fd(STDERR_FILENO,"minicoquillage: %s: Is a directory\n",cmd),1);
     return 0;
 }
 
@@ -60,16 +60,16 @@ char * get_path(t_heap * heap,char ** envp,int * status, char * cmd)
     i = -1; 
     r_value = _getenv(heap, "PATH", envp, *status);
     if (!r_value)
-        return (*status = 127,printf("%s",mini_ft_strjoin(heap->heap_allocated,heap->list,mini_ft_strjoin(heap->heap_allocated,heap->list,"minicoquillage: ",cmd),": No such file or directory\n")),NULL);
+        return (*status = 127,ft_printf_fd(STDERR_FILENO,"%s",mini_ft_strjoin(heap->heap_allocated,heap->list,mini_ft_strjoin(heap->heap_allocated,heap->list,"minicoquillage: ",cmd),": No such file or directory\n")),NULL);
     path = mini_ft_split(heap,r_value, ':');
     if (!cmd)
         return (NULL);
     if (!(cmd[0]))
-        return(*status = 127,printf("minicoquillage: %s",mini_ft_strjoin(heap->heap_allocated,heap->list,cmd,": command not found\n")),NULL);
+        return(*status = 127,ft_printf_fd(STDERR_FILENO,"minicoquillage: %s",mini_ft_strjoin(heap->heap_allocated,heap->list,cmd,": command not found\n")),NULL);
     if (is_path(cmd) && access(cmd, F_OK) == -1)
-        return (*status = 127,printf("%s",mini_ft_strjoin(heap->heap_allocated,heap->list,mini_ft_strjoin(heap->heap_allocated,heap->list,"minicoquillage: ",cmd),": No such file or directory\n")),NULL);
+        return (*status = 127,ft_printf_fd(STDERR_FILENO,"%s",mini_ft_strjoin(heap->heap_allocated,heap->list,mini_ft_strjoin(heap->heap_allocated,heap->list,"minicoquillage: ",cmd),": No such file or directory\n")),NULL);
     else if (is_path(cmd) && access(cmd, X_OK) == -1)
-        return(*status = 126,printf("minicoquillage: %s: Permission denied\n",cmd),NULL);
+        return(*status = 126,ft_printf_fd(STDERR_FILENO,"minicoquillage: %s: Permission denied\n",cmd),NULL);
     else if (is_path(cmd) && is_dir(cmd))
         return (*status = 126,NULL);
     else if (is_path(cmd) && access(cmd, X_OK) == 0)
@@ -81,7 +81,7 @@ char * get_path(t_heap * heap,char ** envp,int * status, char * cmd)
         {
             if (access(path[i], X_OK) == 0)
                 return (path[i]);
-            return(*status = 126,printf("minicoquillage: %s: Permission denied\n",path[i]),NULL);
+            return(*status = 126,ft_printf_fd(STDERR_FILENO,"minicoquillage: %s: Permission denied\n",path[i]),NULL);
         }
     }
     i = -1;
@@ -95,9 +95,9 @@ char * get_path(t_heap * heap,char ** envp,int * status, char * cmd)
                 return (*status = 126,NULL);
             else if (access(r_value, X_OK) == 0)
                 return (*status = 126, r_value);
-            return(*status = 126,printf("minicoquillage: %s: Permission denied\n",r_value),NULL);
+            return(*status = 126,ft_printf_fd(STDERR_FILENO,"minicoquillage: %s: Permission denied\n",r_value),NULL);
         }
     }
-    return(*status = 127,printf("minicoquillage: %s",mini_ft_strjoin(heap->heap_allocated,heap->list,cmd,": command not found\n")),NULL);
+    return(*status = 127,ft_printf_fd(STDERR_FILENO,"minicoquillage: %s",mini_ft_strjoin(heap->heap_allocated,heap->list,cmd,": command not found\n")),NULL);
     // return(*status = 127,ft_putstr_fd("command not found\n",STDERR_FILENO),NULL);
 }

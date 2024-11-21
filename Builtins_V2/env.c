@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:06:14 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 18:31:16 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 20:43:34 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int mini_env(char ** envp)
 {
     int i;
     size_t w_bytes;
+
     i = -1;
     while(envp[++i]) 
     {

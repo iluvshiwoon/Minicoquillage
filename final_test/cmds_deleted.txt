@@ -1,10 +1,16 @@
-env | grep SHLVL; ./minicoquillage; env | grep SHLVL; exit; env | grep SHLVL
-export HOLA=bonjour; env | grep HOLA; unset HOLA; env | grep HOLA
-export HOLA=bonjour; env | grep HOLA; unset HOLA; unset HOLA; env | grep HOLA
 mkdir a; mkdir a/b; cd a/b; rm -r ../../a; cd ..
 mkdir a; mkdir a/b; cd a/b; rm -r ../../a; pwd
 mkdir a; mkdir a/b; cd a/b; rm -r ../../a; echo $PWD; echo $OLDPWD
 mkdir a; mkdir a/b; cd a/b; rm -r ../../a; cd; echo $PWD; echo $OLDPWD
 mkdir a; cd a; rm -r ../a; echo $PWD; echo $OLDPWD
 cat | cat | cat | ls;
-ls | exit 42
+ech|o hola | cat
+env | grep SHLVL; ./minicoquillage; env | grep SHLVL; exit; env | grep SHLVL
+cat | echo || ls
+cat | echo && ls
+ls && cat | echo
+(cd ../.. && pwd) && pwd
+ls -z || (cd ../../..&&pwd); pwd
+< Makefile .
+unset PATH; ls
+

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/21 01:16:47 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 21:57:12 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void    _error(char * error, int * skip, int * status, char * filename, int err_
 {
     *skip = 1;
     *status = err_status;
-    printf(error,filename);
+    ft_printf_fd(STDERR_FILENO,error,filename);
 }
 
 int     _stdin(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp, int og_stdout)
@@ -188,7 +188,11 @@ int     _stdout(t_heap * heap, int * skip, int * status, t_atom * atom, char ** 
                 atom->out_fd = open(globbed, O_WRONLY);
         }
         if (atom->out_fd == -1)
+        {
+            if (errno == ENOENT)
+                return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: No such file or directory\n",skip,status,globbed, 1),1);
             perror("open"); // FIXME redirection fail ? skip ?
+        }
     }
     if (atom->out_fd)
         dup2(atom->out_fd,STDOUT_FILENO);
@@ -197,8 +201,9 @@ int     _stdout(t_heap * heap, int * skip, int * status, t_atom * atom, char ** 
 
 void    _redirect(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp, int og_stdout)
 {
-    _stdin(heap, skip, status, atom, envp, og_stdout); 
     _stdout(heap, skip, status, atom, envp, og_stdout);
+    if (!*skip)
+        _stdin(heap, skip, status, atom, envp, og_stdout); 
 }
 
 void    redirect(t_heap * heap, int * skip, int * status, t_ast_node * first_node, char ** envp, int og_stdout)
@@ -249,10 +254,10 @@ void    _count_pipe(t_heap * heap, int (**pipefd)[2], int * pipe_nb, t_ast_node 
 int	_pipeline(t_mini * mini,t_ast_node * first_node, int og_stdin, int og_stdout)
 {
     int i;
-    int wstatus;
-    pid_t pid;
+    // int wstatus;
+    pid_t * pid;
     int (*pipefd)[2];
-    int pipe_nb;
+    int  pipe_nb;
     t_ast_node * left;
     t_parser_node * p_node;
     char * path;
@@ -262,12 +267,13 @@ int	_pipeline(t_mini * mini,t_ast_node * first_node, int og_stdin, int og_stdout
     i = -1;
     skip = 0;
     _count_pipe(&mini->heap,&pipefd,&pipe_nb,first_node);
-    _close(og_stdin);
+    pid = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.exec,sizeof(pid_t)*(pipe_nb + 1));
     while (++i < pipe_nb + 1)
     {
-        pid = fork();// same as for open wrapper for failure; 
-        if (pid == 0)
+        pid[i] = fork();// same as for open wrapper for failure; 
+        if (pid[i] == 0)
         {
+            _close(og_stdin);
             int j; 
             j = -1;
             if (i == 0)
@@ -352,7 +358,19 @@ int	_pipeline(t_mini * mini,t_ast_node * first_node, int og_stdin, int og_stdout
                     _close(p_node->atom->out_fd);
             }   
             free_heap(&mini->heap_allocated, true);
-            exit(mini->status);
+            exit((mini->status + 256)%256);
+        }
+        else
+        {
+            if (i == 0)
+                _close(pipefd[i][1]);
+            else if (i == pipe_nb)
+                _close (pipefd[i - 1][0]);
+            else
+            {
+                _close (pipefd[i - 1][0]);
+                _close (pipefd[i][1]);
+            }
         }
     }
     i = -1;
@@ -360,7 +378,7 @@ int	_pipeline(t_mini * mini,t_ast_node * first_node, int og_stdin, int og_stdout
     {
         while (1)
         {
-            int err = waitpid(-1, &wstatus,0);
+            int err = waitpid(pid[i], &mini->status,0);
             if (err == -1)
             {
                 if (errno == EINTR)
@@ -368,24 +386,15 @@ int	_pipeline(t_mini * mini,t_ast_node * first_node, int og_stdin, int og_stdout
                 else
                     error_exit(strerror(errno),&mini->heap_allocated);
             }
-            else if (WIFEXITED(wstatus) || WIFSIGNALED(wstatus))
+            else if (WIFEXITED(mini->status) || WIFSIGNALED(mini->status))
                 break;
         }
-        if (i == 0)
-            _close(pipefd[i][1]);
-        else if (i == pipe_nb)
-            _close (pipefd[i - 1][0]);
-        else
-        {
-            _close (pipefd[i - 1][0]);
-            _close (pipefd[i][1]);
-        }
     }
-    if (WIFEXITED(wstatus))
-        return (WEXITSTATUS(wstatus));
-    else if (WIFSIGNALED(wstatus))
-        return (128 + WTERMSIG(wstatus));
-    return (error_exit("pipeline failure\n",&mini->heap_allocated),42);
+    if (WIFEXITED(mini->status))
+        return (WEXITSTATUS(mini->status));
+    else if (WIFSIGNALED(mini->status))
+        return (128 + WTERMSIG(mini->status));
+    return (error_exit("pipeline failure\n",&mini->heap_allocated),999);
 }
 
 void	_exec_tree(t_mini * mini, t_ast_node * first_node)
@@ -406,7 +415,7 @@ void	_exec_tree(t_mini * mini, t_ast_node * first_node)
 	{
         left = first_node->left;
         p_node = first_node->data;
-        if (p_node->ops && p_node->ops == PIPE)
+        if (p_node->ops && p_node->ops == PIPE && !skip)
         {
             skip = 1;
             mini->status = _pipeline(mini,first_node, og_stdin, og_stdout);

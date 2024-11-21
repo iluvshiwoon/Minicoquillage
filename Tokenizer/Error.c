@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:54:01 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 23:58:59 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 20:14:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	print_error(char *error, t_token *token, int complete)
     if (!complete)
         return;
     if (token)
-        printf(error, token->value);
+        ft_printf_fd(STDERR_FILENO,error, token->value);
     else if (!token)
-        printf(error, NULL);
+        ft_printf_fd(STDERR_FILENO,error, NULL);
 }
 
 int	check_error1(t_control_dll *control, t_token *next)

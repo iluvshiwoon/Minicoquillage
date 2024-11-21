@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 17:59:54 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/21 00:38:21 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 20:14:29 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int _check_var(char * var, bool print)
     else if (var[i] == '=' && i == 0)
         r_value = 1;
     if (r_value && print)
-        return(printf("minicoquillage: export: `%s': not a valid identifier\n",var),2);
+        return(ft_printf_fd(STDERR_FILENO,"minicoquillage: export: `%s': not a valid identifier\n",var),2);
     return (r_value);
 }
 

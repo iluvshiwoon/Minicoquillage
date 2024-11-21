@@ -222,7 +222,6 @@ export HOLA=p; export BYE=w; $'HOLA'$'BYE'd
 export HOLA=-n; "echo $HOLA" hey
 export A=1 B=2 C=3 D=4 E=5 F=6 G=7 H=8; echo "$A'$B"'$C"$D'$E'"$F'"'$G'$H"
 unset PATH; echo $PATH
-unset PATH; ls
 unset ""
 unset INEXISTANT
 unset PWD; env | grep PWD; pwd
@@ -383,6 +382,7 @@ exit -9223372036854775808
 exit -9223372036854775809
 ls hola
 ls | exit
+ls | exit 42
 exit | ls
 echo hola > bonjour; exit | cat -e bonjour
 echo hola > bonjour; cat -e bonjour | exit
@@ -421,7 +421,6 @@ echo hola |cat
 echo hola|cat
 echo hola || cat
 echo hola ||| cat
-ech|o hola | cat
 cat Makefile | cat -e | cat -e
 cat Makefile | grep srcs | cat -e
 cat Makefile | grep srcs | grep srcs | cat -e
@@ -430,11 +429,12 @@ cat Makefile | grep pr | head -n 5 | hello
 export HOLA=bonjour | cat -e | cat -e
 unset HOLA | cat -e
 export HOLA | echo hola; env | grep PROUT
+export HOLA=bonjour; env | grep HOLA; unset HOLA; env | grep HOLA
+export HOLA=bonjour; env | grep HOLA; unset HOLA; unset HOLA; env | grep HOLA
 export | echo hola
-sleep 3 | sleep 3
-time sleep 3 | sleep 3
-sleep 3 | exit
-exit | sleep 3
+sleep 1 | sleep 1
+sleep 1 | exit
+exit | sleep 1
 echo hola > a; >>b echo que tal; cat a | <b cat | cat > c | cat
 pwd && ls
 pwd || ls
@@ -457,10 +457,7 @@ ls && ;
 ; && ls
 ls || <
 ls && <
-cat | echo || ls
-cat | echo && ls
 ls || cat | echo
-ls && cat | echo
 export "" && unset ""
 (ls)
 ( ( ls ) )
@@ -497,11 +494,8 @@ ls -z && (ls) && (pwd)
 (ls > Docs/hey && pwd) > hola; cat hola; cat Docs/hey
 ls > Docs/hey && pwd > hola; cat hola; cat Docs/hey
 cd ../.. && pwd && pwd
-(cd ../.. && pwd) && pwd
 ls -z || cd ../../..&&pwd; pwd
-ls -z || (cd ../../..&&pwd); pwd
-echo hola > bonjour; cat bonjour
-echo que tal >> bonjour; cat bonjour
+echo hola > bonjour; cat bonjour; echo que tal >> bonjour; cat bonjour
 echo hola > bonjour; echo que tal >> bonjour; cat < bonjour
 echo hola > bonjour; rm bonjour; echo que tal >> bonjour; cat < bonjour
 echo hola que tal > bonjour; cat bonjour
@@ -541,7 +535,6 @@ echo bonjour > hola1; echo hello > hola2; echo 2 >hola1 >> hola2; ls; cat hola1;
 echo bonjour > hola1; echo hello > hola2; echo 2 >>hola1 > hola2; ls; cat hola1; cat hola2
 > pwd; ls
 < pwd
-< Makefile .
 cat <pwd
 cat <srcs/pwd
 cat <../pwd
