@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/19 06:23:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 22:39:44 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 char * get_path(t_heap * heap,char ** envp,int * status, char * cmd);
 bool check_builtin(t_heap* heap, char * cmd);
-void execution(t_heap_allocated * heap_allocated, t_ast * tree, char * line, char *** envp);
+void execution(t_mini * mini, t_ast * ast);
 void	print_tree(t_heap * heap,t_ast_node * first_node);
 
 // print_utils.c 

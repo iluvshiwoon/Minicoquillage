@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/12 01:10:27 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 23:14:43 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,14 @@ char	*concat_input(t_heap_allocated * heap_allocated,t_double_link_list *list)
 	return (string.dst);
 }
 
-int	check_temp_syntax(t_heap_allocated * heap_allocated,char *line)
+int	check_temp_syntax(t_mini * mini,char *line)
 {
 	t_control_dll	control_temp;
 	int				r_value;
 
 	if (!line || !(*line))
 		return (EXIT_FAILURE);
-        control_temp.list = create_tokens(heap_allocated,line);
+        control_temp.list = create_tokens(mini,line);
 	control_temp.complete = 0;
 	populate_tokens(&control_temp);
 	r_value = check_error_tokens(&control_temp);
@@ -86,7 +86,7 @@ int	check_temp_syntax(t_heap_allocated * heap_allocated,char *line)
 	return (EXIT_SUCCESS);
 }
 
-int	handle_line(t_heap_allocated * heap_allocated, t_get_line *get_line, t_double_link_list * lines, int *r_value)
+int	handle_line(t_mini * mini, t_get_line *get_line, t_double_link_list * lines, int *r_value)
 {
 	if (*r_value == EXIT_FAILURE)
 	{
@@ -94,48 +94,48 @@ int	handle_line(t_heap_allocated * heap_allocated, t_get_line *get_line, t_doubl
 		    add_history(get_line->line);
 		return(EXIT_FAILURE);
 	}
-	get_line->line = update_node(heap_allocated,lines);
+	get_line->line = update_node(&mini->heap_allocated,lines);
     if (!get_line->line)
         return (EXIT_FAILURE);
     free(get_line->line);
-	get_line->line = concat_input(heap_allocated,lines);
-	*r_value = check_temp_syntax(heap_allocated,get_line->line);
+	get_line->line = concat_input(&mini->heap_allocated,lines);
+	*r_value = check_temp_syntax(mini,get_line->line);
 	return (EXIT_SUCCESS);
 }
 
-char	*get_line(t_heap_allocated * heap_allocated)
+char	*get_line(t_mini * mini)
 {
 	int				r_value;
 	t_get_line		get_line;
     t_double_link_list * lines;
     t_double_link_node * node;
 
-    node = wrap_malloc(heap_allocated, heap_allocated->input, sizeof(*node));
-	lines = wrap_malloc(heap_allocated,heap_allocated->input,sizeof(*lines));
+    node = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.input, sizeof(*node));
+	lines = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.input,sizeof(*lines));
     *lines = (t_double_link_list){};
 	init_list(lines);
-	get_line.prompt = get_prompt(heap_allocated);
-	get_line.line = init_line(heap_allocated, lines, get_line.prompt);
+	get_line.prompt = get_prompt(&mini->heap_allocated);
+	get_line.line = init_line(&mini->heap_allocated, lines, get_line.prompt);
     if (g_signal == SIGINT || !get_line.line)
         return (NULL);
     int i = -1;
     while (get_line.line[++i] && ft_isspace(get_line.line[i]));
     if (get_line.line[i] == 0)
         return (NULL);
-    r_value = check_temp_syntax(heap_allocated,get_line.line);
+    r_value = check_temp_syntax(mini,get_line.line);
     get_line.temp = get_line.line;
     if (check_syntax(get_line.temp) == EXIT_FAILURE)
     {
-        node->data = mini_ft_strdup(heap_allocated, heap_allocated->input,"\n");
+        node->data = mini_ft_strdup(&mini->heap_allocated, mini->heap_allocated.input,"\n");
         lines->pf_insert_end(lines,node);
     }
     while (check_syntax(get_line.temp) == EXIT_FAILURE
         || r_value == EXIT_FAILURE || r_value == CONTINUE)
 	{
-		if (handle_line(heap_allocated, &get_line, lines, &r_value) == EXIT_FAILURE)
+		if (handle_line(mini, &get_line, lines, &r_value) == EXIT_FAILURE)
             break;
-        get_line.temp = concat_input(heap_allocated,lines);
+        get_line.temp = concat_input(&mini->heap_allocated,lines);
 	}
-	get_line.line = concat_input(heap_allocated,lines);
+	get_line.line = concat_input(&mini->heap_allocated,lines);
 	return (get_line.line);
 }

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 02:25:03 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/19 08:25:20 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 00:04:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int mini_echo(char **args)
     }
     if (!opt)
         r_value = write(1, "\n", 1);
-    if (r_value != 1)
+    if (r_value != 1 && !opt)
         return (1);
     return (0);
 }

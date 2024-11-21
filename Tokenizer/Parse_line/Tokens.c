@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/06 16:35:27 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 23:15:03 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
@@ -59,7 +59,7 @@ int	shenanigans(char *line, size_t *i, size_t *j, size_t *k)
 	return (EXIT_SUCCESS);
 }
 
-int	is_sep(char *line, size_t *i, size_t *j, t_control_dll *control)
+int	is_sep(char *line, size_t *i, size_t *j, t_mini * mini)
 {
 	size_t	k;
 
@@ -69,7 +69,7 @@ int	is_sep(char *line, size_t *i, size_t *j, t_control_dll *control)
 	{
 		if (*j && !ft_isspace(line[*j - 1]) && !ft_sep(line[*j - 1]))
 		{
-			add_token(*i, *j, line, control);
+			add_token(*i, *j, line, mini);
 			*i = *j;
 		}
 		k = 2 + (*j == *i);
@@ -95,27 +95,25 @@ void	skip_space_wrapper(size_t j, size_t *i, char *line, t_open_quote *open)
 	}
 }
 
-t_double_link_list	*create_tokens(t_heap_allocated * heap_allocated,char *line)
+t_double_link_list	*create_tokens(t_mini * mini,char *line)
 {
-	t_control_dll	control;
 	t_open_quote	open;
 	size_t			i;
 	size_t			j;
 
-    control.heap_allocated = heap_allocated;
-	i = init_create_tokens(&open, &control, line, &j);
+	i = init_create_tokens(&open, mini, line, &j);
 	while (line[j])
 	{
 		if (!check_quote(line[j], &open) && (!open.single_quote
 				&& !open.double_quote) && (ft_isspace(line[j]) || is_sep(line,
-					&i, &j, &control)))
+					&i, &j, mini)))
 		{
-			add_token(i, j, line, &control);
+			add_token(i, j, line,mini);
 			j = skip_space(line, j);
 			skip_space_wrapper(j, &i, line, &open);
 		}
 		if (line[j])
 			++j;
 	}
-	return (expand_nodes(i, j, &control, line));
+	return (expand_nodes(i, j, mini, line));
 }

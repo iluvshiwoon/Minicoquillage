@@ -19,9 +19,10 @@ if [ -n "$bash_output" ]; then
     pattern="minicoquillage: \`$line'"
   bash_output=$(echo "$bash_output" | grep -v -F "$pattern")
 fi
-  mini_output=$(./m_test "$line")
+mini_output=$(timeout 1 ./m_test "$line")
+  # mini_output=$(./m_test "$line")
   mini_exit=$?
-
+  mini_output=$(echo "$mini_output" | sed '/^exit$/d')
   # Compare the outputs
   if [ "$mini_output" != "$bash_output" ]; then
     printf "%sTest %d: Failed: '%s'%s\n" "$RED" "$TEST_COUNT" "$line" "$RESET"
@@ -44,11 +45,11 @@ fi
     printf "  Expected: %s\n" "$bash_exit"
     printf "  Got:      %s\n" "$mini_exit"
     ((FAILED_TESTS++))
+    return 1
   fi 
-
-
   # Increment the test count
   ((TEST_COUNT++))
+  return 0
 }
 
 # Define a function to print the test summary
@@ -72,18 +73,25 @@ if [ ! -f "$1" ] || [ ! -r "$1" ]; then
   printf "Error: Input file '%s' does not exist or cannot be read\n" "$1"
   exit 1
 fi
-
 # Initialize test counters
 TEST_COUNT=0
 FAILED_TESTS=0
 
+mapfile -t lines < "$1"
+for line in "${lines[@]}"; do
+    run_test "$line"
+    if [ $FAILED_TESTS -gt 0 ]; then
+        break
+    fi
+done
+
 # Run the test cases
-while IFS= read -r line; do
-  run_test "$line"
-  if [ $FAILED_TESTS -gt 0 ]; then
-    break
-  fi
-done < "$1"
+# while IFS= read -r line; do
+#   run_test "$line"
+#   if [ $FAILED_TESTS -gt 0 ]; then
+#     break
+#   fi
+# done < "$1"
 
 # Print the test summary
 print_summary

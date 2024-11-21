@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 17:59:54 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/19 23:11:19 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 00:38:21 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int _var_name_cmp(char * s1, char * s2)
     while (s1[++i] != '=' && s2[i] != '=')
         if (s1[i] != s2[i])
             return (s1[i] - s2[i]);
-    return (0);
+    return (s1[i] - s2[i]);
 }
 
 int _search_var(t_heap * heap, char * arg, char ** env)
@@ -63,7 +63,7 @@ int _check_var(char * var, bool print)
     else if (var[i] == '=' && i == 0)
         r_value = 1;
     if (r_value && print)
-        printf("minicoquillage: export: `%s': not a valid identifier\n",var);
+        return(printf("minicoquillage: export: `%s': not a valid identifier\n",var),2);
     return (r_value);
 }
 
@@ -101,7 +101,7 @@ int mini_export(t_heap * heap, char ** args, char *** envp)
     count = 0;
     new_env = NULL;
     while (args[++i])
-        if (_check_var(args[i], true))
+        if (_check_var(args[i], true) == 2)
             r_value = 1;
     count = _count_export(heap, args, envp, &new_env);
     if (count)
@@ -115,5 +115,5 @@ int mini_export(t_heap * heap, char ** args, char *** envp)
                 new_env[i++] = mini_ft_strdup(heap->heap_allocated, heap->env,args[count]);
         *envp = new_env;
     }
-    return (r_value);
+    return(r_value);
 }

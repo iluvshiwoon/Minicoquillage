@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:26:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/28 15:31:40 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 22:22:02 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_token_count{
     int std_in;
 }t_token_count;
 
-t_ast * parser(t_control_dll * control);
+t_ast * parser(t_mini * mini);
 bool is_op(int type);
 
 #endif

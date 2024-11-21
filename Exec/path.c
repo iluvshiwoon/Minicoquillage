@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:37:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 20:07:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 01:02:05 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,12 @@ char * get_path(t_heap * heap,char ** envp,int * status, char * cmd)
         if (access(r_value, F_OK) == 0)
         {
             if (is_dir(r_value))
-                return (NULL);
+                return (*status = 126,NULL);
             else if (access(r_value, X_OK) == 0)
                 return (*status = 126, r_value);
             return(*status = 126,printf("minicoquillage: %s: Permission denied\n",r_value),NULL);
         }
     }
     return(*status = 127,printf("minicoquillage: %s",mini_ft_strjoin(heap->heap_allocated,heap->list,cmd,": command not found\n")),NULL);
+    // return(*status = 127,ft_putstr_fd("command not found\n",STDERR_FILENO),NULL);
 }

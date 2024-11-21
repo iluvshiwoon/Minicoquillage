@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 22:09:09 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 23:29:26 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,24 @@ void sigint_handler(int sig)
     close(STDIN_FILENO);
 }
 
-void incr_shlvl(t_heap_allocated * heap_allocated, char *** envp)
+void incr_shlvl(t_mini * mini)
 {
     t_heap heap;
     char * shlvl;
     int value;
     int error;
 
-    heap.heap_allocated = heap_allocated;
-    heap.list = heap_allocated->env;
-    heap.env = heap_allocated->env;
-    shlvl = _getenv(&heap, "SHLVL", *envp, 0);
+    heap.heap_allocated = &mini->heap_allocated;
+    heap.list = mini->heap_allocated.env;
+    heap.env = mini->heap_allocated.env;
+    shlvl = _getenv(&heap, "SHLVL", mini->envp, 0);
     if (shlvl)
     {
         value = ft_atoi_safe(shlvl,&error);
         if (error == ERROR) 
             return;
         shlvl = mini_ft_itoa(&heap,value + 1);
-        f_export(&heap,envp, "SHLVL=", shlvl);
+        f_export(&heap,&mini->envp, "SHLVL=", shlvl);
     }
 }
 
@@ -72,6 +72,7 @@ int	main(int argc, char **argv, char ** envp)
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = 0;
     sigaction(SIGINT, &sa, NULL);
+    mini.envp = envp;
     if (MODE == INTERACTIVE && isatty(STDIN_FILENO))
     {
         if (init_alloc(&mini.heap_allocated.env) == NULL)
@@ -80,16 +81,15 @@ int	main(int argc, char **argv, char ** envp)
         // envp[0] = "hello=world";
         // envp[1] = "prout=pue";
         // envp[2] = NULL;
-        incr_shlvl(&mini.heap_allocated,&envp);
+        incr_shlvl(&mini);
         while (1)
         {
             if (init_heap(&mini.heap_allocated) == EXIT_FAILURE)
                 error_exit("init_heap failed", &mini.heap_allocated);
-            mini.heap_allocated.signal_status = 0;
             g_signal = 0;
-            control.mini.heap_allocated = &heap_allocated;
-            if(tokenizer(&control) == EXIT_SUCCESS)
-                execution(&mini.heap_allocated,parser(&control),control.line, &envp);
+            // control.mini.heap_allocated = &heap_allocated;
+            if(tokenizer(&mini) == EXIT_SUCCESS)
+                execution(&mini,parser(&mini));
             free_heap(&mini.heap_allocated, false);
         }
     }
@@ -100,20 +100,19 @@ int	main(int argc, char **argv, char ** envp)
         // argv[1]= "export HOLA=bon;jour; env | grep HOLA";
         if (init_alloc(&mini.heap_allocated.env) == NULL)
             return (free(mini.heap_allocated.env),EXIT_FAILURE);
-        incr_shlvl(&mini.heap_allocated,&envp);
+        incr_shlvl(&mini);
         if (init_heap(&mini.heap_allocated) == EXIT_FAILURE)
             error_exit("init_heap failed", &mini.heap_allocated);
-        mini.heap_allocated.signal_status = 0;
         g_signal = 0;
         // envp = wrap_malloc(&mini.heap_allocated,heap_allocated.ast,  sizeof(char *) * 3);
         // envp[0] = "hello=world";
         // envp[1] = "prout=pue";
         // envp[2] = NULL;
-        control.mini.heap_allocated = &heap_allocated;
+        // control.mini.heap_allocated = &heap_allocated;
         if (argc == 1)
             return (EXIT_FAILURE);
-		debug(argv[1],&control,&envp);
-        free_heap(&mini.heap_allocated, false);
+		debug(argv[1],&mini);
+        return(free_heap(&mini.heap_allocated, true),mini.status);
 	}
 	return (clear_history(),free_env(&mini.heap_allocated),0);
 }

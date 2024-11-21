@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 21:45:11 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 22:59:01 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void	toggle_quote(int *open_double, int *open_single, char c)
 // 	return (r_value);
 // }
 
-void	init_control(t_control_dll *control, t_control_dll * gl_control)
+void	init_control(t_mini * mini, t_control_dll * gl_control)
 {
-	gl_control->list = wrap_malloc(control->heap_allocated,control->heap_allocated->input,sizeof(*control->list));
-	gl_control->node = wrap_malloc(control->heap_allocated,control->heap_allocated->input,sizeof(*control->node));
+	gl_control->list = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.input,sizeof(*mini->control.list));
+	gl_control->node = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.input,sizeof(*mini->control.node));
     *gl_control->node = (t_double_link_node){};
     *gl_control->list = (t_double_link_list){};
 	init_list(gl_control->list);

@@ -6,23 +6,23 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 23:03:35 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 23:45:44 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
-int tokenizer(t_control_dll * control)
+int tokenizer(t_mini * mini)
 {
-	control->line = get_line(control->heap_allocated);
-	if (!control->line || !*control->line)
+	mini->control.line = get_line(mini);
+	if (!mini->control.line || !*mini->control.line)
 		return (EXIT_FAILURE);
-	control->list = create_tokens(control->heap_allocated,control->line);
-	control->complete = 1;
-	populate_tokens(control);
-	if (check_error_tokens(control) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	// print_list(control->list);
+	mini->control.list = create_tokens(mini,mini->control.line);
+	mini->control.complete = 1;
+	populate_tokens(&mini->control);
+	if (check_error_tokens(&mini->control) == EXIT_FAILURE)
+		return (mini->status = 2,EXIT_FAILURE);
+	// print_list(mini->control->list);
 	return (EXIT_SUCCESS);
 }
 
@@ -35,12 +35,15 @@ void print_first_token (t_control_dll * control)
     return;
 }
 
-void	debug(char *line, t_control_dll * control, char *** envp)
+void	debug(char *line, t_mini * mini)
 {
-	control->list = create_tokens(control->heap_allocated,line);
-	control->complete = 1;
-	populate_tokens(control);
-	if (check_error_tokens(control) == EXIT_FAILURE)
+	mini->control.list = create_tokens(mini,line);
+	mini->control.complete = 1;
+	populate_tokens(&mini->control);
+	if (check_error_tokens(&mini->control) == EXIT_FAILURE)
+    {
+        mini->status = 2;
 		return;
-    execution(control->heap_allocated,parser(control),line, envp);
+    }
+    execution(mini,parser(mini));
 }

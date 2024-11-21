@@ -327,9 +327,9 @@ export CDPATH=/; cd home/vietdu91
 export CDPATH=./; cd .
 export CDPATH=./; cd ..
 chmod 000 minicoquillage; ./minicoquillage
-ls hola
 ./Makefile
 ./minicoquillage
+chmod 777 minicoquillage
 touch hola; ./hola
 env|"wc" -l
 env|"wc "-l
@@ -381,9 +381,8 @@ exit 9223372036854775807
 exit 9223372036854775808
 exit -9223372036854775808
 exit -9223372036854775809
-cat | cat | cat | ls
+ls hola
 ls | exit
-ls | exit 42
 exit | ls
 echo hola > bonjour; exit | cat -e bonjour
 echo hola > bonjour; cat -e bonjour | exit

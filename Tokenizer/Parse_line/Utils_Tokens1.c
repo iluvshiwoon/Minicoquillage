@@ -6,25 +6,25 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:41:09 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/06 16:34:15 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 23:05:29 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
 
-void	add_token(size_t i, size_t j, char *line, t_control_dll *control)
+void	add_token(size_t i, size_t j, char *line, t_mini * mini)
 {
 	char	*temp;
 
-	control->node = wrap_malloc(control->heap_allocated,control->heap_allocated->tokens,sizeof(*control->node));
-    *control->node = (t_double_link_node){};
-	control->token = wrap_malloc(control->heap_allocated,control->heap_allocated->tokens,sizeof(*control->token));
-    *control->token = (t_token){};
-	control->token->type = COMMAND;
-	temp = wrap_malloc(control->heap_allocated,control->heap_allocated->tokens,sizeof(char) * (j - i + 1));
+	mini->control.node = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.tokens,sizeof(*mini->control.node));
+    *mini->control.node = (t_double_link_node){};
+	mini->control.token = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.tokens,sizeof(*mini->control.token));
+    *mini->control.token = (t_token){};
+	mini->control.token->type = COMMAND;
+	temp = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.tokens,sizeof(char) * (j - i + 1));
 	ft_strlcpy(temp, line + i, j - i + 1);
-	control->token->value = temp;
-	control->node->data = control->token;
-	control->list->pf_insert_end(control->list, control->node);
+	mini->control.token->value = temp;
+	mini->control.node->data = mini->control.token;
+	mini->control.list->pf_insert_end(mini->control.list, mini->control.node);
 }
 
 int	check_quote(char c, t_open_quote *open)
@@ -42,32 +42,32 @@ int	check_quote(char c, t_open_quote *open)
 	return (1);
 }
 
-size_t	init_create_tokens(t_open_quote *open, t_control_dll *control,
+size_t	init_create_tokens(t_open_quote *open, t_mini * mini,
 		char *line, size_t *j)
 {
 	*j = 0;
 	open->double_quote = 0;
 	open->single_quote = 0;
-	control->list = wrap_malloc(control->heap_allocated,control->heap_allocated->tokens,sizeof(*control->list));
-    *control->list = (t_double_link_list){};
+	mini->control.list = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.tokens,sizeof(*mini->control.list));
+    *mini->control.list = (t_double_link_list){};
 	*j = skip_space(line, *j);
 	if (ft_isspace(line[*j]))
 		*j += 1;
-	init_list(control->list);
+	init_list(mini->control.list);
 	return (*j);
 }
 
-t_double_link_list	*expand_nodes(size_t i, size_t j, t_control_dll *control,
+t_double_link_list	*expand_nodes(size_t i, size_t j, t_mini * mini,
 		char *line)
 {
 	if (i != j && j <= ft_strlen(line))
-		add_token(i, j, line, control);
-	control->node = control->list->first_node;
-	while (control->node)
+		add_token(i, j, line, mini);
+	mini->control.node = mini->control.list->first_node;
+	while (mini->control.node)
 	{
 		// expand_tokens(control->node);
         // assign_quote(control->node);
-		control->node = control->node->next;
+		mini->control.node = mini->control.node->next;
 	}
     // control->token = malloc(sizeof(*(control->token)));
     // control->node = malloc(sizeof(*control->node));
@@ -75,5 +75,5 @@ t_double_link_list	*expand_nodes(size_t i, size_t j, t_control_dll *control,
     // control->token->type = EOE;
     // control->node->data = control->token;
     // control->list->pf_insert_end(control->list,control->node);
-	return (control->list);
+	return (mini->control.list);
 }

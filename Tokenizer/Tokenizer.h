@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 22:59:04 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/20 23:54:39 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,66 +16,6 @@
 #ifndef MINICOQUILLAGE_H
 # include "../Minicoquillage.h"
 #endif
-
-typedef enum e_token_type
-{
-	R_FILE = 0,
-	OPTION,
-	ARG,
-	OPEN_PARENTHESIS,
-	COMMAND,
-	CLOSE_PARENTHESIS,
-	CMD_SEP,
-	PIPE,
-	AND,
-	OR,
-	REDIRECTION,
-	HERE_DOC,
-    EOE
-}						t_token_type;
-
-typedef enum e_quote_type
-{
-	NONE = 0,
-	DOUBLE,
-	SINGLE,
-}						t_quote_type;
-
-typedef struct s_get_line
-{
-	char				*prompt;
-	char				*temp;
-	char				*line;
-}						t_get_line;
-
-typedef struct s_token
-{
-	int					type;
-	int					quote;
-	char				*value;
-}						t_token;
-
-typedef struct s_control_dll
-{
-	t_double_link_list	*list;
-	t_double_link_node	*node;
-    t_heap_allocated * heap_allocated;
-	t_token				*token;
-	int					complete;
-    char * line;
-}						t_control_dll;
-
-typedef struct s_open_quote
-{
-	int					single_quote;
-	int					double_quote;
-}						t_open_quote;
-
-typedef struct s_string
-{
-	char				*dst;
-	char				*temp;
-}						t_string;
 
 // assign_token.c
 void					populate_first_token(t_control_dll *control);
@@ -99,14 +39,14 @@ void					add_type(t_control_dll *control, int type, int *cmd);
 // check_syntax.c
 int						check_syntax(char *line);
 char	*concat_input(t_heap_allocated * heap_allocated,t_double_link_list *list);
-int	check_temp_syntax(t_heap_allocated * heap_allocated,char *line);
-int	handle_line(t_heap_allocated * heap_allocated, t_get_line *get_line, t_double_link_list * lines, int *r_value);
-char	*get_line(t_heap_allocated * heap_allocated);
+int	check_temp_syntax(t_mini * mini,char *line);
+int	handle_line(t_mini * mini, t_get_line *get_line, t_double_link_list * lines, int *r_value);
+char	*get_line(t_mini * mini);
 
 // check_syntax_utils.c
 void	toggle_quote(int *open_double, int *open_single, char c);
 char	*wrapper_strjoin_concat(t_heap_allocated * heap_allocated,char *s1, char *s2, t_string *string);
-void	init_control(t_control_dll *control, t_control_dll * gl_control);
+void	init_control(t_mini * mini, t_control_dll * gl_control);
 char	*init_line(t_heap_allocated * heap_allocated,t_double_link_list * lines, char *prompt);
 char * update_node(t_heap_allocated * heap_allocated,t_double_link_list *lines);
 
@@ -117,7 +57,7 @@ size_t					count_node(t_double_link_list *list);
 int						ft_sep(int c);
 
 // Error.c
-void	print_error(char *error, t_token *token);
+void	print_error(char *error, t_token *token, int complete);
 int						check_error(t_control_dll *control, t_token *next);
 int						check_error1(t_control_dll *control, t_token *next);
 int						check_parenthesis(t_control_dll *control);
@@ -138,18 +78,17 @@ void					print_list(t_double_link_list *tokens_lists);
 void					print_csv(t_double_link_list *tokens_lists);
 
 // Tokenizer.c
-int		tokenizer(t_control_dll * control);
-void	debug(char *line, t_control_dll * control, char *** envp);
+int tokenizer(t_mini * mini);
+void	debug(char *line, t_mini * mini);
 
 // Tokens.c
 void					expand_tokens(t_double_link_node *node);
 int						shenanigans(char *line, size_t *i, size_t *j,
 							size_t *k);
-int						is_sep(char *line, size_t *i, size_t *j,
-							t_control_dll *control);
+int	is_sep(char *line, size_t *i, size_t *j, t_mini * mini);
 void					skip_space_wrapper(size_t j, size_t *i, char *line,
 							t_open_quote *open);
-t_double_link_list	*create_tokens(t_heap_allocated * heap_allocated,char *line);
+t_double_link_list	*create_tokens(t_mini * mini,char *line);
 
 // Utils_Tokens.c
 size_t					skip_space(char *line, size_t index);
@@ -161,13 +100,14 @@ int						expand_double_quote(size_t *j, char **value,
 							char **temp, t_double_link_node **node);
 
 // Utils_Tokens1.c
-void					add_token(size_t i, size_t j, char *line,
-							t_control_dll *control);
+void	add_token(size_t i, size_t j, char *line, t_mini * mini);
 int						check_quote(char c, t_open_quote *open);
-size_t					init_create_tokens(t_open_quote *open,
-							t_control_dll *control, char *line, size_t *j);
-t_double_link_list		*expand_nodes(size_t i, size_t j,
-							t_control_dll *control, char *line);
+size_t	init_create_tokens(t_open_quote *open, t_mini * mini,
+		char *line, size_t *j);
+
+t_double_link_list	*expand_nodes(size_t i, size_t j, t_mini * mini,
+		char *line);
+
 
 // Utils_Tokens2.c
 void					init_expand(t_open_quote *open, t_control_dll *control,

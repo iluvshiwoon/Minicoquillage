@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 18:46:26 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/21 01:16:47 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,25 @@
 //
 // EVAL
 // edit readme to add tricky point to remember for future evaluation
-void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp);
+void	_exec_tree(t_mini * mini, t_ast_node * first_node);
 
-void execution(t_heap_allocated * heap_allocated, t_ast * ast, char * line, char *** envp)
+void execution(t_mini * mini, t_ast * ast)
 {
-    t_heap heap;
-
-    heap.signal_status = heap_allocated->signal_status;
-    heap.heap_allocated = heap_allocated;
-    heap.list = heap_allocated->exec;
-    heap.env = heap_allocated->env;
-    heredoc(&heap, ast->first_node);
+    mini->heap.heap_allocated = &mini->heap_allocated;
+    mini->heap.list = mini->heap_allocated.exec;
+    mini->heap.env = mini->heap_allocated.env;
+    heredoc(&mini->heap, ast->first_node);
     if (g_signal == SIGINT)
     {
-        clean_heredoc(&heap, ast->first_node);
+        clean_heredoc(&mini->heap, ast->first_node);
         return;
     }
     g_signal = 999;
-    _exec_tree(&heap, ast->first_node, envp);
+    _exec_tree(mini, ast->first_node);
     g_signal = 0;
-    add_history(line);
-    clean_heredoc(&heap, ast->first_node);
+    if (MODE == INTERACTIVE)
+        add_history(mini->control.line);
+    clean_heredoc(&mini->heap, ast->first_node);
 }
 
 int _call_builtin(t_heap * heap, char ** globbed, char *** envp, int status, int og_stdin, int og_stdout)
@@ -248,7 +246,7 @@ void    _count_pipe(t_heap * heap, int (**pipefd)[2], int * pipe_nb, t_ast_node 
     }
 }
 
-int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin, int og_stdout, int status)
+int	_pipeline(t_mini * mini,t_ast_node * first_node, int og_stdin, int og_stdout)
 {
     int i;
     int wstatus;
@@ -263,7 +261,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
 
     i = -1;
     skip = 0;
-    _count_pipe(heap,&pipefd,&pipe_nb,first_node);
+    _count_pipe(&mini->heap,&pipefd,&pipe_nb,first_node);
     _close(og_stdin);
     while (++i < pipe_nb + 1)
     {
@@ -325,11 +323,11 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
                 first_node = first_node->right; 
             left = first_node->left;
             p_node = left->data;
-            redirect(heap, &skip, &status, first_node, *envp, og_stdout);
+            redirect(&mini->heap, &skip, &mini->status, first_node, mini->envp, og_stdout);
             _close(og_stdout);
             if (is_op(p_node->ops) && !skip)
             {
-                _exec_tree(heap,left, envp);
+                _exec_tree(mini,left);
                 p_node = first_node->data;
                 if (p_node->atom && p_node->atom->in_fd)
                     _close(p_node->atom->in_fd);
@@ -339,22 +337,22 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
             }
             else if (!skip)
             {
-                globbed = _glob_args(heap,_expand(heap, p_node->atom->args, *envp, status));
-                if (check_builtin(heap, globbed[0]))
-                    status = _call_builtin(heap, globbed, envp, status, 0, 0);
+                globbed = _glob_args(&mini->heap,_expand(&mini->heap, p_node->atom->args, mini->envp, mini->status));
+                if (check_builtin(&mini->heap, globbed[0]))
+                    mini->status = _call_builtin(&mini->heap, globbed, &mini->envp, mini->status, 0, 0);
                 else
                 {
-                    path = get_path(heap,*envp,&status,globbed[0]);
+                    path = get_path(&mini->heap,mini->envp,&mini->status,globbed[0]);
                     if (path)
-                        execve(path,globbed,*envp);
+                        execve(path,globbed,mini->envp);
                 }
                 if (p_node->atom && p_node->atom->in_fd)
                     _close(p_node->atom->in_fd);
                 if (p_node->atom && p_node->atom->out_fd)
                     _close(p_node->atom->out_fd);
             }   
-            free_heap(heap->heap_allocated, true);
-            exit(status);
+            free_heap(&mini->heap_allocated, true);
+            exit(mini->status);
         }
     }
     i = -1;
@@ -368,7 +366,7 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
                 if (errno == EINTR)
                     continue;
                 else
-                    error_exit(strerror(errno),heap->heap_allocated);
+                    error_exit(strerror(errno),&mini->heap_allocated);
             }
             else if (WIFEXITED(wstatus) || WIFSIGNALED(wstatus))
                 break;
@@ -387,14 +385,13 @@ int	_pipeline(t_heap * heap,t_ast_node * first_node, char *** envp,int og_stdin,
         return (WEXITSTATUS(wstatus));
     else if (WIFSIGNALED(wstatus))
         return (128 + WTERMSIG(wstatus));
-    return (error_exit("pipeline failure\n",heap->heap_allocated),42);
+    return (error_exit("pipeline failure\n",&mini->heap_allocated),42);
 }
 
-void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
+void	_exec_tree(t_mini * mini, t_ast_node * first_node)
 {
     t_ast_node * left;
     t_parser_node * p_node;
-    static int status;
     int skip;
     int og_stdin;
     int og_stdout;
@@ -403,8 +400,8 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
     og_stdin = dup(STDIN_FILENO);
     og_stdout = dup(STDOUT_FILENO);
     skip = 0;
-    if (heap->signal_status)
-        status = heap->signal_status;
+    // if (heap->signal_mini->status)
+    //     mini->status = heap->signal_mini->status;
     while (first_node && first_node->left)
 	{
         left = first_node->left;
@@ -412,7 +409,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
         if (p_node->ops && p_node->ops == PIPE)
         {
             skip = 1;
-            status = _pipeline(heap,first_node, envp, og_stdin, og_stdout, status);
+            mini->status = _pipeline(mini,first_node, og_stdin, og_stdout);
             while(p_node->ops && p_node->ops == PIPE)
             {
                 first_node = first_node->right;
@@ -421,10 +418,10 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
         }
         p_node = left->data;
         if (!skip)
-            redirect(heap, &skip, &status, first_node, *envp, og_stdout);
+            redirect(&mini->heap, &skip, &mini->status, first_node, mini->envp, og_stdout);
         if (is_op(p_node->ops) && !skip)
         {
-            _exec_tree(heap,left, envp);
+            _exec_tree(mini,left);
             p_node = first_node->data;
             if (p_node->atom && p_node->atom->in_fd)
                 _close(p_node->atom->in_fd);
@@ -434,11 +431,11 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
         }
         else if (!skip) 
         {
-            globbed = _glob_args(heap,_expand(heap, p_node->atom->args, *envp, status));
-            if (check_builtin(heap, globbed[0]))
-                status = _call_builtin(heap, globbed, envp, status, og_stdin, og_stdout);
+            globbed = _glob_args(&mini->heap,_expand(&mini->heap, p_node->atom->args, mini->envp, mini->status));
+            if (check_builtin(&mini->heap, globbed[0]))
+                mini->status = _call_builtin(&mini->heap, globbed, &mini->envp, mini->status, og_stdin, og_stdout);
             else
-                status = _exec_node(heap,globbed,envp, status);
+                mini->status = _exec_node(&mini->heap,globbed,&mini->envp, mini->status);
             if (p_node->atom && p_node->atom->in_fd)
                 _close(p_node->atom->in_fd);
             if (p_node->atom && p_node->atom->out_fd)
@@ -447,7 +444,7 @@ void	_exec_tree(t_heap * heap,t_ast_node * first_node, char *** envp)
         p_node = first_node->data;
         if(p_node->ops)
         {
-            if ((p_node->ops == AND && status) || (p_node->ops == OR && !status))
+            if ((p_node->ops == AND && mini->status) || (p_node->ops == OR && !mini->status))
                 skip = 1;
             else if (p_node->ops && p_node->ops != PIPE)
                 skip = 0;
