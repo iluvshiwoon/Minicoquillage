@@ -392,7 +392,6 @@ cd ~/Minicoquillage; ./minicoquillage; exit 9223372036854775807
 cd ~/Minicoquillage; ./minicoquillage; exit 9223372036854775808
 cd ~/Minicoquillage; ./minicoquillage; exit -9223372036854775808
 cd ~/Minicoquillage; ./minicoquillage; exit -9223372036854775809
-cat | cat | cat | ls
 ls | exit
 ls | exit 42
 exit | ls

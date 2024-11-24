@@ -27,6 +27,7 @@ test: $(C_FILES) | build
 	@echo "0123456789" > b
 	@echo "prout" > c
 	bash $(TEST)/final.sh $(TEST)/cmds_test.txt
+	$(MAKE) clean
 
 
 leak: $(NAME)
@@ -34,6 +35,7 @@ leak: $(NAME)
 	echo "0123456789" > b
 	echo "prout" > c
 	expect -f $(TEST)/expect_leak $(TEST)/cmds_leak.txt $(CURDIR)/$(NAME)
+	$(MAKE) clean
 
 ml: $(NAME)
 	expect $(TEST)/expect_ml
@@ -43,7 +45,7 @@ build:
 
 clean:
 	$(MAKE) -C 42_MyLibC clean
-	rm -f a b c
+	-rm -f HOLA bonjour hello d e hey hola1 hola2 pwd a b c
 
 fclean: clean
 	-rm -f $(NAME)

@@ -596,27 +596,6 @@ mkdir dir; ls -la > dir/bonjour; cat dir/bonjour
 <a; cat a
 >d cat <a >>e; cat a; cat d; cat e
 < a > b cat > hey >> d; cat d; ls
-cat << hola
-cat << 'hola'
-cat << "hola"
-cat << ho"la"
-cat << $HOME
-cat << hola > bonjour; cat bonjour
-cat << hola | rev
-<< hola
-<<hola
-cat <<
-cat << prout << lol << koala
-prout << lol << cat << koala
-<< $hola
-<< $"hola"$"b"
-<< $"$hola"$$"b"
-<< ho$la$"$a"$$"b"
-echo hola <<< bonjour
-echo hola <<<< bonjour
-echo hola <<<<< bonjour
-echo 'yo
-cat <<a >>>out | <<b
 ls *
 ls *.*
 ls *.hola

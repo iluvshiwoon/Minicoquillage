@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 02:49:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 19:51:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/24 23:43:44 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,16 @@ int u_var_name_cmp(char * arg, char * env)
     i = -1;
     if (!arg || !arg[0] || !env)
         return (42);
-    while (arg[++i] && env[i] != '=')
-        if (arg[i] != env[i] && !(arg[i] == '\0' && env[i] == '='))
-            return (arg[i] - env[i]);
-    return (0);
+    while (env[++i] != '=');
+    if (ft_strncmp(arg,env,_max_len(ft_strlen(arg),i)) == 0)
+        return (0);
+    return (1);
+    // while (arg[++i] && env[i] != '=')
+    //     if (arg[i] != env[i] && !(arg[i] == '\0' && env[i] == '='))
+    //         return (arg[i] - env[i]);
+    // if (i)
+    //     i--;
+    // return (arg[i] - env[i]);
 }
 
 int unset_search_var(char * arg, char ** env)
@@ -52,10 +58,9 @@ size_t _count_unset(t_heap * heap,char ** args, char *** envp, char *** new_env)
             count++;
     if (count != 0)
     {
-        count = i - count + 1;
-        // printf("%zu\n",count);
-        *new_env = wrap_malloc(heap->heap_allocated, heap->env, sizeof(**new_env)*count);
-        (*new_env)[count - 1] = NULL;
+        count = i - count;
+        *new_env = wrap_malloc(heap->heap_allocated, heap->env, sizeof(**new_env)*(count + 1));
+        (*new_env)[count] = NULL;
     }
     return (count);
 }

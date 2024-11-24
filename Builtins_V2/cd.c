@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 04:56:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 20:01:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/24 23:28:43 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int _cd(t_heap * heap, char * path, char *** envp)
     if (cur_dir)
     {
         cur_dir = wrap_getcwd(heap);
-        f_export(heap, envp, "PWD=", mini_ft_strdup(heap->heap_allocated, heap->list, cur_dir));
+        if (cur_dir)
+            f_export(heap, envp, "PWD=", mini_ft_strdup(heap->heap_allocated, heap->list, cur_dir));
     }
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/21 20:14:24 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/24 20:18:27 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void    listen_heredoc(t_heap * heap, int * fd, char * eof)
         }
         else if (!line)
         {
-            ft_printf_fd(STDERR_FILENO,"Minicoquillage: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",i,eof);
+            ft_printf_fd(STDERR_FILENO,"minicoquillage: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",i,eof);
             free(line);
             break;
         }

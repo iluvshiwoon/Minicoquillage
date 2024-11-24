@@ -30,4 +30,5 @@ echo 'yo
 cat <<a >>>out | <<b
 unset PATH; echo $PATH
 unset PATH; ls
+cat | cat | cat | ls
 

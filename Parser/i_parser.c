@@ -72,6 +72,8 @@ void alloc_atom(t_mini * mini,t_token_count count, t_atom * atom)
     atom->std_in[count.std_in] = NULL;
     atom->std_out = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.ast,sizeof(*atom->std_out)*(count.std_out + 1));
     atom->std_out[count.std_out] = NULL;
+    atom->std_order = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.ast,sizeof(char)*(count.std_out + count.std_in + 1));
+    atom->std_order[count.std_in + count.std_out] = '\0';
     atom->append = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.ast,sizeof(*atom->append)*(count.std_out));
     atom->args = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.ast,sizeof(*atom->args)*(count.args + count.cmd + 1));
     atom->args[count.args + count.cmd] = NULL;
@@ -112,12 +114,14 @@ void fill_in(t_atom * atom, t_double_link_node * beg, t_double_link_node * end)
                 else 
                     atom->append[count.std_out] = false;
                 token = beg->next->data;
+                atom->std_order[count.std_out + count.std_in] = 'o';
                 atom->std_out[count.std_out++] = token->value;
             }
             else
             {
                 atom->heredoc = false;
                 token = beg->next->data;
+                atom->std_order[count.std_out + count.std_in] = 'i';
                 atom->std_in[count.std_in++] = token->value;
             }
         }

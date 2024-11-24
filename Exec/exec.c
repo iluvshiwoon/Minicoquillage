@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/21 21:57:12 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/24 20:16:01 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,12 @@ void    _error(char * error, int * skip, int * status, char * filename, int err_
     ft_printf_fd(STDERR_FILENO,error,filename);
 }
 
-int     _stdin(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp, int og_stdout)
+int     _stdin(t_heap * heap, int * skip, int * status, t_expanded * expanded, int i,t_atom * atom, int og_stdout)
 {
-    int i = -1;
-    t_expanded * expanded;
     char * globbed;
     t_glob * _globbed;
 
-    expanded = _expand(heap, atom->std_in, envp, *status);
-    while (expanded->value[++i])
+    if (expanded->value[i])
     {
         if (_count_glob(heap, expanded->value[i],expanded->litteral[i]) > 1)
             return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: ambiguous redirect\n",skip,status,expanded->value[i], 1),1);
@@ -134,65 +131,52 @@ int     _stdin(t_heap * heap, int * skip, int * status, t_atom * atom, char ** e
         else if (!atom->std_in[i+1] && atom->heredoc == false)
             atom->in_fd = open(globbed, O_RDONLY);
     }
-    if (atom->heredoc)
-    {
-        _close(atom->in_fd);
-        atom->in_fd = open(atom->file_heredoc, O_RDONLY);
-    }
-    if (atom->in_fd)
-        dup2(atom->in_fd,STDIN_FILENO);
     return (0);
 }
 
-int     _stdout(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp, int og_stdout)
+int     _stdout(t_heap * heap, int * skip, int * status, t_expanded * expanded, int i, t_atom * atom, int og_stdout)
 {
-    int i = -1;
-    t_expanded * expanded;
     char * globbed;
     t_glob * _globbed;
     struct stat sb;
 
-    expanded = _expand(heap, atom->std_out, envp, *status);
-    while (expanded->value[++i])
+    if (_count_glob(heap, expanded->value[i],expanded->litteral[i]) > 1)
+        return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: ambiguous redirect\n",skip,status,expanded->value[i], 1),1);
+    else
     {
-        if (_count_glob(heap, expanded->value[i],expanded->litteral[i]) > 1)
-            return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: ambiguous redirect\n",skip,status,expanded->value[i], 1),1);
+        _globbed = glob(heap, expanded->value[i], expanded->litteral[i]); 
+        globbed = expanded->value[i];
+        if (_globbed)
+            globbed = _globbed->file;
+    }
+    if (stat(globbed, &sb) == -1 && errno == EACCES)
+        return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: Permission denied\n",skip,status,globbed, 1),1);
+    else if (stat(globbed, &sb) == -1 && errno == ENOENT)
+    {
+        atom->out_fd = open(globbed, O_EXCL | O_CREAT , S_IRUSR | S_IWUSR | S_IROTH | S_IRGRP);
+        _close(atom->out_fd);
+    }
+    else if (access(globbed,W_OK))
+        return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: Permission denied\n",skip,status,globbed, 1),1);
+    else if (S_ISDIR(sb.st_mode))
+        return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: Is a directory\n",skip,status,globbed, 1),1);
+    else if (access(globbed,W_OK) == 0 && atom->append[i] == false)
+    {
+        atom->out_fd = open(globbed, O_WRONLY | O_TRUNC);
+        _close(atom->out_fd);
+    }
+    if (!expanded->value[i+1])
+    {
+        if (atom->append[i])
+            atom->out_fd = open(globbed, O_WRONLY | O_APPEND);
         else
-        {
-            _globbed = glob(heap, expanded->value[i], expanded->litteral[i]); 
-            globbed = expanded->value[i];
-            if (_globbed)
-                globbed = _globbed->file;
-        }
-        if (stat(globbed, &sb) == -1 && errno == EACCES)
-            return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: Permission denied\n",skip,status,globbed, 1),1);
-        else if (stat(globbed, &sb) == -1 && errno == ENOENT)
-        {
-            atom->out_fd = open(globbed, O_EXCL | O_CREAT , S_IRUSR | S_IWUSR | S_IROTH | S_IRGRP);
-            _close(atom->out_fd);
-        }
-        else if (access(globbed,W_OK))
-            return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: Permission denied\n",skip,status,globbed, 1),1);
-        else if (S_ISDIR(sb.st_mode))
-            return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: Is a directory\n",skip,status,globbed, 1),1);
-        else if (access(globbed,W_OK) == 0 && atom->append[i] == false)
-        {
-            atom->out_fd = open(globbed, O_WRONLY | O_TRUNC);
-            _close(atom->out_fd);
-        }
-        if (!expanded->value[i+1])
-        {
-            if (atom->append[i])
-                atom->out_fd = open(globbed, O_WRONLY | O_APPEND);
-            else
-                atom->out_fd = open(globbed, O_WRONLY);
-        }
-        if (atom->out_fd == -1)
-        {
-            if (errno == ENOENT)
-                return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: No such file or directory\n",skip,status,globbed, 1),1);
-            perror("open"); // FIXME redirection fail ? skip ?
-        }
+            atom->out_fd = open(globbed, O_WRONLY);
+    }
+    if (atom->out_fd == -1)
+    {
+        if (errno == ENOENT)
+            return(dup2(og_stdout,STDOUT_FILENO),_error("minicoquillage: %s: No such file or directory\n",skip,status,globbed, 1),1);
+        perror("open"); // FIXME redirection fail ? skip ?
     }
     if (atom->out_fd)
         dup2(atom->out_fd,STDOUT_FILENO);
@@ -201,9 +185,32 @@ int     _stdout(t_heap * heap, int * skip, int * status, t_atom * atom, char ** 
 
 void    _redirect(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp, int og_stdout)
 {
-    _stdout(heap, skip, status, atom, envp, og_stdout);
-    if (!*skip)
-        _stdin(heap, skip, status, atom, envp, og_stdout); 
+    int i;
+    int j;
+    int k;
+    t_expanded * exp_stdin;
+    t_expanded * exp_stdout;
+
+    i = -1;
+    j = -1;
+    k = -1;
+    exp_stdout = _expand(heap, atom->std_out, envp, *status);
+    exp_stdin = _expand(heap, atom->std_in, envp, *status);
+
+    while (atom->std_order[++i] && !(*skip))
+    {
+        if (atom->std_order[i] == 'o' && !(*skip))
+            _stdout(heap, skip, status,exp_stdout,++j,atom, og_stdout);
+        else if (atom->std_order[i] == 'i' && !(*skip))
+            _stdin(heap, skip, status, exp_stdin,++k,atom, og_stdout);
+    }
+    if (atom->heredoc)
+    {
+        _close(atom->in_fd);
+        atom->in_fd = open(atom->file_heredoc, O_RDONLY);
+    }
+    if (atom->in_fd)
+        dup2(atom->in_fd,STDIN_FILENO);
 }
 
 void    redirect(t_heap * heap, int * skip, int * status, t_ast_node * first_node, char ** envp, int og_stdout)
