@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 23:14:43 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/25 20:11:40 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,7 @@ char	*get_line(t_mini * mini)
     t_double_link_list * lines;
     t_double_link_node * node;
 
-    node = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.input, sizeof(*node));
-	lines = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.input,sizeof(*lines));
-    *lines = (t_double_link_list){};
-	init_list(lines);
-	get_line.prompt = get_prompt(&mini->heap_allocated);
-	get_line.line = init_line(&mini->heap_allocated, lines, get_line.prompt);
+    _init_get(mini,&lines, &node,&get_line);
     if (g_signal == SIGINT || !get_line.line)
         return (NULL);
     int i = -1;
@@ -129,13 +124,7 @@ char	*get_line(t_mini * mini)
         node->data = mini_ft_strdup(&mini->heap_allocated, mini->heap_allocated.input,"\n");
         lines->pf_insert_end(lines,node);
     }
-    while (check_syntax(get_line.temp) == EXIT_FAILURE
-        || r_value == EXIT_FAILURE || r_value == CONTINUE)
-	{
-		if (handle_line(mini, &get_line, lines, &r_value) == EXIT_FAILURE)
-            break;
-        get_line.temp = concat_input(&mini->heap_allocated,lines);
-	}
+    _check(mini, &get_line, lines, &r_value);
 	get_line.line = concat_input(&mini->heap_allocated,lines);
 	return (get_line.line);
 }

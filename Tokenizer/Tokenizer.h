@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 23:54:39 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/25 20:12:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ char * update_node(t_heap_allocated * heap_allocated,t_double_link_list *lines);
 
 // check_syntax_utils1.c
 size_t					count_node(t_double_link_list *list);
+void    _init_get(t_mini * mini, t_double_link_list ** lines,\
+                  t_double_link_node ** node, t_get_line * get_line);
+void    _check(t_mini * mini, t_get_line * get_line, t_double_link_list * lines\
+               , int * r_value);
 
 // Utils.c
 int						ft_sep(int c);
