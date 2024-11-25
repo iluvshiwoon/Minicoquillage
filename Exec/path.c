@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:37:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/21 21:53:07 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/25 11:57:24 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char * get_path(t_heap * heap,char ** envp,int * status, char * cmd)
             if (is_dir(r_value))
                 return (*status = 126,NULL);
             else if (access(r_value, X_OK) == 0)
-                return (*status = 126, r_value);
+                return (/* *status = 126,  */r_value);
             return(*status = 126,ft_printf_fd(STDERR_FILENO,"minicoquillage: %s: Permission denied\n",r_value),NULL);
         }
     }
