@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 16:41:18 by kgriset           #+#    #+#             */
-/*   Updated: 2024/10/21 18:17:25 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/25 17:57:13 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ static char	**mini_make_split(t_heap * heap,char **split, char *s_trimmed, char 
 		start = i;
 		while (s_trimmed[i] != c && s_trimmed[i])
 			i++;
-		// split[j] = ft_substr(s_trimmed, start, i - start);
 		split[j] = mini_ft_substr(heap,s_trimmed, start, i -start);
 		if (!split[j])
 		{
@@ -76,7 +75,6 @@ static char	**mini_make_split(t_heap * heap,char **split, char *s_trimmed, char 
 			i++;
 	}
 	split[j] = NULL;
-	// free(s_trimmed);
 	return (split);
 }
 

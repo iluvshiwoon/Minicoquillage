@@ -1,4 +1,5 @@
 env | grep SHLVL; ./minicoquillage; env | grep SHLVL; exit; env | grep SHLVL
+ech|o hola | cat
 cat | cat | cat | ls;
 cat | echo || ls
 cat | echo && ls
@@ -28,4 +29,3 @@ echo hola <<<< bonjour
 echo hola <<<<< bonjour
 echo 'yo
 cat <<a >>>out | <<b
-

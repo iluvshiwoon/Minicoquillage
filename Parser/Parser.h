@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:26:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/24 18:46:05 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/25 18:37:41 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,27 @@ typedef struct s_token_count{
     int std_in;
 }t_token_count;
 
-t_ast * parser(t_mini * mini);
+// parser_utils.c
 bool is_op(int type);
+t_double_link_node * get_next_op(t_mini * mini, t_double_link_node * beg\
+,t_double_link_node * end);
+void count_token(t_double_link_node * beg,t_double_link_node * end,\
+t_token_count * count);
+void alloc_atom(t_mini * mini,t_token_count count, t_atom * atom);
+int fill_atom(t_mini * mini,t_ast_node ** current_node,\
+t_double_link_node * beg, t_double_link_node * end);
+
+// atom.c
+void fill_in(t_atom * atom, t_double_link_node * beg, t_double_link_node * end);
+int compute_atom(t_mini * mini, t_double_link_node * beg,\
+                 t_double_link_node * end, t_ast_node ** current_node);
+
+// parser.c
+t_ast * parser(t_mini * mini);
+void skip_through(t_mini * mini,t_parser_node * p_node, t_double_link_node * next_op);
+t_double_link_node * get_next_op(t_mini * mini, t_double_link_node * beg\
+                                 ,t_double_link_node * end);
+int compute_expr(t_mini * mini,\
+                 t_double_link_node * beg, t_double_link_node * end, t_ast_node * current_node);
 
 #endif
