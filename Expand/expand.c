@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:32:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 18:34:20 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/25 01:29:02 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ char * _getenv(t_heap * heap, char * var, char ** envp, int status)
     char * name;
 
     i = -1;
+    if (!envp)
+        return (NULL);
     if (!ft_strncmp("?",var,_max_len(ft_strlen(var), 1)))
         return (mini_ft_itoa(heap, status));
     while (envp[++i])

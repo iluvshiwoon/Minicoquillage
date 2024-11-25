@@ -1,12 +1,3 @@
-unset PWD; env | grep PWD; pwd
-pwd; unset PWD; env | grep PWD; cd $PWD; pwd
-unset OLDPWD; env | grep OLDPWD
-unset PATH; echo $PATH
-unset PATH; cat Makefile
-unset HOME; cd $HOME
-unset HOME; export HOME=; cd
-unset HOME; export HOME; cd
-chmod 000 minicoquillage; ./minicoquillage
 cat << hola
 cat << 'hola'
 cat << "hola"

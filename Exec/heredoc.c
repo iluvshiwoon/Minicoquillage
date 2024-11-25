@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/24 20:18:27 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/25 01:31:58 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,10 @@ void    listen_heredoc(t_heap * heap, int * fd, char * eof)
     
     i = 0;
     _stdin = dup(STDIN_FILENO);
+    // if (eof[0] == '\"')
+    //     eof = mini_ft_strtrim(heap,eof,"\"");
+    // else if (eof[0] == '\'')
+    //     eof = mini_ft_strtrim(heap,eof,"\'");
     while (g_signal != SIGINT)
     {
         ++i;
@@ -102,15 +106,17 @@ void    listen_heredoc(t_heap * heap, int * fd, char * eof)
 void    run_heredoc(t_heap * heap, t_atom * atom)
 {
     int i;
+    t_expanded * expanded;
 
     i = -1;
-    while (atom->heredoc_eof[++i])
+    expanded = _expand(heap, atom->heredoc_eof, NULL, 0);
+    while (expanded->value[++i])
     {
         if (g_signal == SIGINT)
             break;
-        if (atom->heredoc && atom->heredoc_eof[i+1] == NULL)
+        if (atom->heredoc && expanded->value[i+1] == NULL)
             open_heredoc(heap, atom);
-        listen_heredoc(heap,&atom->in_fd,atom->heredoc_eof[i]);
+        listen_heredoc(heap,&atom->in_fd,expanded->value[i]);
     }
 }
 
