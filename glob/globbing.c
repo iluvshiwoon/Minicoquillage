@@ -1,153 +1,64 @@
 #include "../Minicoquillage.h"
 
-int match( const char *str, const char *glob, bool * litteral) 
+void    _init_match(t_match * match)
 {
-	long long	gx;
-	long long	sx;
-	long long	lastgx;
-	long long	nextsx;
-
-	gx = 0;
-	sx = 0;
-	lastgx = -1;
-	nextsx = 0;
-	while (gx < (long long)ft_strlen(glob) || sx < (long long)ft_strlen(str))
-	{
-		if (gx < (long long)ft_strlen(glob))
-		{
-			char c = glob[gx];
-            char lit = litteral[gx];
-			if (c == '*' && lit == false)
-			{
-				lastgx = gx;
-				nextsx = sx + 1;
-				gx++;
-				continue;
-			}
-			else
-			{
-				if (sx < (long long)ft_strlen(str) && str[sx] == c)
-				{
-					gx++;
-					sx++;
-					continue;
-				}
-			}
-		}
-		if (nextsx > 0 && nextsx <= (long long)ft_strlen(str))
-		{
-			gx = lastgx;
-			sx = nextsx;
-			continue;
-		}
-		return (0);
-	}
-	return (1);
+    match->gx = 0;
+	match->sx = 0;
+	match->lastgx = -1;
+	match->nextsx = 0;
 }
 
+bool    _change_last(const char * str, const char * glob, bool * litteral,\
+t_match * m)
+{
+    char c;
+    bool lit;
 
-// int	main(int ac, char **av)
-// {
-// 	printf("%d\n", match(av[1], av[2]));
-// 	return match(av[1], av[2]);
-// }
+    c = glob[m->gx];
+    lit = litteral[m->gx];
+    if (c == '*' && lit == false)
+    {
+        m->lastgx = m->gx;
+        m->nextsx = m->sx + 1;
+        m->gx++;
+        return (true);
+    }
+    else
+{
+        if (m->sx < (long long)ft_strlen(str) && str[m->sx] == c)
+        {
+            m->gx++;
+            m->sx++;
+            return (true);
+        }
+    }
+    return(false);
+}
 
-// int	position_pattern(const char *str, const char *pattern)
-// {
-// 	int		p;
-// 	int		i;
-// 	char	*substr;
+int _match(const char *str, const char *glob, bool * litteral,t_match * m) 
+{
+    while (m->gx < (long long)ft_strlen(glob) || m->sx < (long long)ft_strlen(str))
+    {
+        if (m->gx < (long long)ft_strlen(glob))
+        {
+            if(_change_last(str, glob, litteral, m) == true)
+                continue;
+        }
+        if (m->nextsx > 0 && m->nextsx <= (long long)ft_strlen(str))
+        {
+            m->gx = m->lastgx;
+            m->sx = m->nextsx;
+            continue;
+        }
+        return (0);
+    }
+    return (1);
+}
 
-// 	p = ft_strlen(pattern);
-// 	i = 0;
-// 	while (i <= (ft_strlen(str) - p))
-// 	{
-// 		substr = ft_substr(str, i, p);
-// 		if (substr && !ft_strncmp(substr, pattern, p))
-// 		{
-// 			free(substr);
-// 			return (i);
-// 		}
-// 		else
-// 		{
-// 		free(substr);
-// 		i++;
+int match(const char *str, const char *glob, bool * litteral) 
+{
+    t_match m;
 
-// 		}
-// 	}
-// 	return (-1);
-// }
-
-// int	single_case(char **patterns)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (patterns[i])
-// 		i++;
-
-// 	if (i == 1 && ft_strlen(patterns[0]) == 1)
-// 		return (1);
-// 	return (0);
-// }
-
-
-// int	result(char **patterns, const char *glob, const char *str, int i)
-// {
-// 	int	a;
-
-// 	a = ft_strlen(patterns[i - 1]);
-// 	if (glob[ft_strlen(glob) - 1] != '*'
-// 		&& patterns[i - 1][a - 1] != str[ft_strlen(str) - 1])
-// 		return (0);
-// 	return (1);
-// }
-
-// /**
-//  *glob - function that compare a string with a pattern
-//  *@glob: *str* exemple of pattern acceped
-//  *@str:  -str1 exemple a string to compare
-//  *Return: 0 if the string is not accepted by the pattern,  else 1
-//  *To Free:
-//  *		-none
-//  */
-// int	globbing(const char *str, const char *glob)
-// {
-// 	int		i;
-// 	int		sx;
-// 	int		pp;
-// 	char	**patterns;
-
-// 	i = 0;
-// 	sx = 0;
-// 	pp = 0;
-// 	if (ft_strlen(glob) == 1 && glob[0] == '*')
-// 		return (1);
-// 	patterns = ft_split(glob, '*');
-// 	if (single_case(patterns))
-// 		return (0);
-// 	while (patterns[i])
-// 	{
-// 		pp = position_pattern(&str[sx], patterns[i]);
-// 		if (pp >= 0)
-// 		{
-// 			sx = pp + ft_strlen(patterns[i]);
-// 			i++;
-// 		}
-// 		else
-// 			return (0);
-// 	}
-// 	return (result(patterns, glob, str, i));
-// }
-
-
-
-// int	main(int ac, char **av)
-// {
-// 	printf("%d\n", globbing(av[1], av[2]));
-// 	return globbing(av[1], av[2]);
-// }
-
-
-
-
+    _init_match(&m);
+    return (_match(str,glob,litteral,&m));
+}
