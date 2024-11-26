@@ -45,11 +45,11 @@ build:
 
 clean:
 	$(MAKE) -C 42_MyLibC clean
-	-rm -f HOLA bonjour hello d e hey hola1 hola2 pwd a b c
+	-rm -f HOLA 'bonjour hello' d e hey hola* pwd a b c ls1
+	-rm -rf dir/
 
 fclean: clean
 	-rm -f $(NAME)
 	$(MAKE) -C 42_MyLibC fclean
-
 
 re: fclean all
