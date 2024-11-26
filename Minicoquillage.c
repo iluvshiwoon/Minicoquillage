@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/21 02:36:59 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 10:32:12 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,14 @@ int	main(int argc, char **argv, char ** envp)
     struct sigaction sa;
     t_mini mini;
     
+    mini = (t_mini){};
     sa.sa_handler = sigint_handler;
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = 0;
     sigaction(SIGINT, &sa, NULL);
     mini.envp = envp;
+    if (!envp)
+        return(1);
     if (MODE == INTERACTIVE && isatty(STDIN_FILENO))
     {
         if (init_alloc(&mini.heap_allocated.env) == NULL)
