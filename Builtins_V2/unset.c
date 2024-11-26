@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 02:49:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/24 23:43:44 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 00:27:14 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,6 @@ int u_var_name_cmp(char * arg, char * env)
     if (ft_strncmp(arg,env,_max_len(ft_strlen(arg),i)) == 0)
         return (0);
     return (1);
-    // while (arg[++i] && env[i] != '=')
-    //     if (arg[i] != env[i] && !(arg[i] == '\0' && env[i] == '='))
-    //         return (arg[i] - env[i]);
-    // if (i)
-    //     i--;
-    // return (arg[i] - env[i]);
 }
 
 int unset_search_var(char * arg, char ** env)
@@ -67,29 +61,27 @@ size_t _count_unset(t_heap * heap,char ** args, char *** envp, char *** new_env)
 
 int mini_unset(t_heap * heap, char ** args, char *** envp)
 {
-    int i; 
-    int j;
-    size_t count;
+    t_index index;
     char ** new_env;
     bool matched;
 
-    i = 0;
-    count = 0;
+    index.i = 0;
+    index.count = 0;
     new_env = NULL;
-    count = _count_unset(heap, args, envp, &new_env);
-    if (count)
+    index.count = _count_unset(heap, args, envp, &new_env);
+    if (index.count)
     {
-        i = -1;
-        j = -1;
-        while((*envp)[++i])
+        index.i = -1;
+        index.j = -1;
+        while((*envp)[++index.i])
         {
             matched = false; 
-            count = 0;
-            while(args[++count])
-                if (u_var_name_cmp(args[count],(*envp)[i]) == 0)
+            index.count = 0;
+            while(args[++index.count])
+                if (u_var_name_cmp(args[index.count],(*envp)[index.i]) == 0)
                     matched = true;
             if (matched == false)
-                new_env[++j] = mini_ft_strdup(heap->heap_allocated, heap->env, (*envp)[i]);
+                new_env[++index.j] = mini_ft_strdup(heap->heap_allocated, heap->env, (*envp)[index.i]);
         }
         *envp = new_env;
     }

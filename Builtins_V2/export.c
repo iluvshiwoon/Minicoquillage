@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 17:59:54 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/24 23:25:22 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 00:44:21 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,9 @@ size_t _count_export(t_heap * heap,char ** args, char *** envp, char *** new_env
     j = 0;
     count = 0;
     while ((*envp)[++i]);
-    // printf("count env: %d\n", i);
     while (args[++j])
         if (_check_var(args[j], false) == 0 && _search_var(heap,args[j],*envp))
             count++;
-    // printf("count args: %zu\n",count);
     if (count != 0)
     {
         count += i;
@@ -92,6 +90,14 @@ size_t _count_export(t_heap * heap,char ** args, char *** envp, char *** new_env
     return (count);
 }
 
+void __export_init(int * i, int * r_value, size_t * count, char *** new_env)
+{
+    *i = 0;
+    *r_value = 0;
+    *count = 0;
+    *new_env = NULL;
+}
+
 int mini_export(t_heap * heap, char ** args, char *** envp)
 {
     int i; 
@@ -99,10 +105,7 @@ int mini_export(t_heap * heap, char ** args, char *** envp)
     size_t count;
     char ** new_env;
 
-    i = 0;
-    r_value = 0;
-    count = 0;
-    new_env = NULL;
+    __export_init(&i, &r_value, &count, &new_env);
     while (args[++i])
         if (_check_var(args[i], true) == 2)
             r_value = 1;
@@ -112,12 +115,10 @@ int mini_export(t_heap * heap, char ** args, char *** envp)
         i = -1;
         while((*envp)[++i])
             new_env[i] = mini_ft_strdup(heap->heap_allocated, heap->env,(*envp)[i]); 
-        // printf("env: %d\n", i);
         count = 0;
         while(args[++count])
             if (_check_var(args[count], false) == 0 && _search_var(heap,args[count],*envp))
             {
-                // printf("args: %d\n", i);
                 new_env[i++] = mini_ft_strdup(heap->heap_allocated, heap->env,args[count]);
             }
         *envp = new_env;

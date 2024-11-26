@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 04:56:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/24 23:28:43 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 00:23:41 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,18 @@ int _cd(t_heap * heap, char * path, char *** envp)
     return (0);
 }
 
+void __print_cd(char ** path, t_heap * heap, char ** envp)
+{
+    (*path) = _getenv(heap, "OLDPWD", envp, 0);
+    if (!(*path))
+    {
+        (*path) = NULL;
+        printf("minicoquillage: cd: OLDPWD not set\n");
+    }
+    else
+    printf("%s\n",(*path));
+}
+
 int mini_cd(t_heap * heap, char ** args, char *** envp)
 {
     int i;
@@ -104,15 +116,6 @@ int mini_cd(t_heap * heap, char ** args, char *** envp)
             path = mini_ft_strjoin(heap->heap_allocated,heap->list,home,path+1);
     }
     else if (ft_strncmp(args[1],"-", _max_len(ft_strlen(args[1]),1)) == 0)
-    {
-        path = _getenv(heap, "OLDPWD", *envp, 0);
-        if (!path)
-        {
-            path = NULL;
-            printf("minicoquillage: cd: OLDPWD not set\n");
-        }
-        else
-            printf("%s\n",path);
-    }
+        __print_cd(&path,heap,*envp);
     return(_cd(heap, path, envp));
 }
