@@ -46,7 +46,6 @@ build:
 clean:
 	$(MAKE) -C 42_MyLibC clean
 	-rm -f HOLA 'bonjour hello' d e hey hola* pwd a b c ls1
-	-rm -rf dir/
 
 fclean: clean
 	-rm -f $(NAME)

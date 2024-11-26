@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 16:17:20 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 16:43:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,66 @@ void    _count_pipe(t_heap * heap, int (**pipefd)[2], int * pipe_nb, t_ast_node 
     }
 }
 
+void    _close_pipe(int pipe_nb, int (*pipefd)[2])
+{
+    int j;
+
+    j = -1;
+    while (++j < pipe_nb)
+    {
+        if (j == 0)
+        {
+            dup2(pipefd[j][1],STDOUT_FILENO);
+            _close(pipefd[j][1]);
+        }
+        else
+        _close(pipefd[j][1]);
+        _close(pipefd[j][0]);
+    }
+}
+
+void    _close_pipe1(int pipe_nb, int (*pipefd)[2], int i)
+{
+    int j;
+
+    j = -1;
+    while (++j < pipe_nb)
+    {
+        if (j == i - 1)
+        {
+            dup2(pipefd[i-1][0], STDIN_FILENO);
+            _close(pipefd[i-1][0]);
+        }
+        else
+        _close(pipefd[j][0]);
+        _close(pipefd[j][1]);
+    }
+}
+
+void    _close_pipe2(int pipe_nb, int (*pipefd)[2], int i)
+{
+    int j;
+
+    j = -1;
+    while (++j < pipe_nb)
+    {
+        if (j == i - 1)
+        {
+            dup2(pipefd[i-1][0],STDIN_FILENO);
+            _close(pipefd[i-1][0]);
+        }
+        else
+        _close(pipefd[j][0]);
+        if (j == i)
+        {
+            dup2(pipefd[i][1],STDOUT_FILENO);
+            _close(pipefd[i][1]);
+        }
+        else
+        _close(pipefd[j][1]);
+    }
+}
+
 int	_pipeline(t_mini * mini,t_ast_node * first_node,t_exec exec)
 {
     int i;
@@ -60,53 +120,11 @@ int	_pipeline(t_mini * mini,t_ast_node * first_node,t_exec exec)
             int j; 
             j = -1;
             if (i == 0)
-            {
-                while (++j < pipe_nb)
-                {
-                    if (j == 0)
-                    {
-                        dup2(pipefd[j][1],STDOUT_FILENO);
-                        _close(pipefd[j][1]);
-                    }
-                    else
-                        _close(pipefd[j][1]);
-                    _close(pipefd[j][0]);
-                }
-            }
+                _close_pipe(pipe_nb,pipefd);
             else if (i == pipe_nb)
-            {
-                while (++j < pipe_nb)
-                {
-                    if (j == i - 1)
-                    {
-                        dup2(pipefd[i-1][0], STDIN_FILENO);
-                        _close(pipefd[i-1][0]);
-                    }
-                    else
-                        _close(pipefd[j][0]);
-                    _close(pipefd[j][1]);
-                }
-            }
+                _close_pipe1(pipe_nb,pipefd,i);
             else 
-            {
-                while (++j < pipe_nb)
-                {
-                    if (j == i - 1)
-                    {
-                        dup2(pipefd[i-1][0],STDIN_FILENO);
-                        _close(pipefd[i-1][0]);
-                    }
-                    else
-                        _close(pipefd[j][0]);
-                    if (j == i)
-                    {
-                        dup2(pipefd[i][1],STDOUT_FILENO);
-                        _close(pipefd[i][1]);
-                    }
-                    else
-                        _close(pipefd[j][1]);
-                }
-            }
+                _close_pipe2(pipe_nb,pipefd,i);
             j = -1;
             while (++j < i)
                 first_node = first_node->right; 
