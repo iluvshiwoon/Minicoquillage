@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 15:53:04 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 16:16:57 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ typedef struct s_exec {
     int og_stdin;
     int skip;
 } t_exec;
-
-void execution(t_mini * mini, t_ast * ast);
 
 // heredoc.c
 void	heredoc(t_heap * heap,t_ast_node * first_node);
@@ -48,13 +46,19 @@ bool check_builtin(t_heap* heap, char * cmd);
 bool is_dir(char * cmd);
 bool is_path(char * cmd);
 
+// pipeline.c
+void    _count_pipe(t_heap * heap, int (**pipefd)[2], int * pipe_nb, t_ast_node * first_node);
+int	_pipeline(t_mini * mini,t_ast_node * first_node,t_exec exec);
+
 // exec.c
 int	_pipeline(t_mini * mini,t_ast_node * first_node,t_exec exec);
 int _call_builtin(t_mini * mini, char ** globbed, t_exec exec);
 int _exec_node(t_mini * mini, char ** globbed);
+void execution(t_mini * mini, t_ast * ast);
 
 // exec_utils.c
 void _reset_fd(t_exec exec);
+int _call_builtin(t_mini * mini, char ** globbed, t_exec exec);
 
 // exec_tree.c
 void	_exec_tree(t_mini * mini, t_ast_node * first_node);
