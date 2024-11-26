@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/24 20:16:01 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/25 23:04:59 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ int     _stdout(t_heap * heap, int * skip, int * status, t_expanded * expanded, 
     return (0);
 }
 
-void    _redirect(t_heap * heap, int * skip, int * status, t_atom * atom, char ** envp, int og_stdout)
+void    _redirect(t_mini * mini, int * skip, int * status, t_atom * atom , int og_stdout)
 {
     int i;
     int j;
@@ -194,15 +194,15 @@ void    _redirect(t_heap * heap, int * skip, int * status, t_atom * atom, char *
     i = -1;
     j = -1;
     k = -1;
-    exp_stdout = _expand(heap, atom->std_out, envp, *status);
-    exp_stdin = _expand(heap, atom->std_in, envp, *status);
+    exp_stdout = _expand(mini, atom->std_out, *status);
+    exp_stdin = _expand(mini, atom->std_in, *status);
 
     while (atom->std_order[++i] && !(*skip))
     {
         if (atom->std_order[i] == 'o' && !(*skip))
-            _stdout(heap, skip, status,exp_stdout,++j,atom, og_stdout);
+            _stdout(&mini->heap, skip, status,exp_stdout,++j,atom, og_stdout);
         else if (atom->std_order[i] == 'i' && !(*skip))
-            _stdin(heap, skip, status, exp_stdin,++k,atom, og_stdout);
+            _stdin(&mini->heap, skip, status, exp_stdin,++k,atom, og_stdout);
     }
     if (atom->heredoc)
     {
@@ -213,7 +213,7 @@ void    _redirect(t_heap * heap, int * skip, int * status, t_atom * atom, char *
         dup2(atom->in_fd,STDIN_FILENO);
 }
 
-void    redirect(t_heap * heap, int * skip, int * status, t_ast_node * first_node, char ** envp, int og_stdout)
+void    redirect(t_mini * mini, int * skip, int * status, t_ast_node * first_node, int og_stdout)
 {
     t_parser_node * p_node;
 
@@ -222,10 +222,10 @@ void    redirect(t_heap * heap, int * skip, int * status, t_ast_node * first_nod
     {
         p_node = first_node->data;
         if (p_node->atom)
-            _redirect(heap, skip, status, p_node->atom, envp, og_stdout);    
+            _redirect(mini, skip, status, p_node->atom, og_stdout);    
     }
     else if (p_node->atom)
-        _redirect(heap, skip, status, p_node->atom, envp, og_stdout);
+        _redirect(mini, skip, status, p_node->atom, og_stdout);
 }
 
 void _reset_fd(int og_stdin, int og_stdout)
@@ -336,7 +336,7 @@ int	_pipeline(t_mini * mini,t_ast_node * first_node, int og_stdin, int og_stdout
                 first_node = first_node->right; 
             left = first_node->left;
             p_node = left->data;
-            redirect(&mini->heap, &skip, &mini->status, first_node, mini->envp, og_stdout);
+            redirect(mini, &skip, &mini->status, first_node, og_stdout);
             _close(og_stdout);
             if (is_op(p_node->ops) && !skip)
             {
@@ -350,7 +350,7 @@ int	_pipeline(t_mini * mini,t_ast_node * first_node, int og_stdin, int og_stdout
             }
             else if (!skip)
             {
-                globbed = _glob_args(&mini->heap,_expand(&mini->heap, p_node->atom->args, mini->envp, mini->status));
+                globbed = _glob_args(&mini->heap,_expand(mini, p_node->atom->args, mini->status));
                 if (check_builtin(&mini->heap, globbed[0]))
                     mini->status = _call_builtin(&mini->heap, globbed, &mini->envp, mini->status, 0, 0);
                 else
@@ -434,7 +434,7 @@ void	_exec_tree(t_mini * mini, t_ast_node * first_node)
         }
         p_node = left->data;
         if (!skip)
-            redirect(&mini->heap, &skip, &mini->status, first_node, mini->envp, og_stdout);
+            redirect(mini, &skip, &mini->status, first_node, og_stdout);
         if (is_op(p_node->ops) && !skip)
         {
             _exec_tree(mini,left);
@@ -447,7 +447,7 @@ void	_exec_tree(t_mini * mini, t_ast_node * first_node)
         }
         else if (!skip) 
         {
-            globbed = _glob_args(&mini->heap,_expand(&mini->heap, p_node->atom->args, mini->envp, mini->status));
+            globbed = _glob_args(&mini->heap,_expand(mini, p_node->atom->args, mini->status));
             if (check_builtin(&mini->heap, globbed[0]))
                 mini->status = _call_builtin(&mini->heap, globbed, &mini->envp, mini->status, og_stdin, og_stdout);
             else
