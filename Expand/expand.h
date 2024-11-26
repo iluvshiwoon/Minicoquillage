@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:29:12 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 00:10:58 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 14:56:21 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool _is_valid_exp(char c);
 
 // expand.c
 void _assign(t_mini * mini, char * to_expand, t_to_expand * _expand);
-t_expanded * _expand(t_mini * mini, char ** to_expand, int status);
+t_expanded * _expand(t_mini * mini, char ** to_expand);
 int _count(t_mini * mini, char * str, int status);
 
 #endif

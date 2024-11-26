@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 11:42:46 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 15:53:04 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 #ifndef MINICOQUILLAGE_H
 # include "../Minicoquillage.h"
 #endif
+
+typedef struct s_exec {
+    int og_stdout;
+    int og_stdin;
+    int skip;
+} t_exec;
 
 void execution(t_mini * mini, t_ast * ast);
 
@@ -41,4 +47,24 @@ char * get_path(t_heap * heap,char ** envp,int * status, char * cmd);
 bool check_builtin(t_heap* heap, char * cmd);
 bool is_dir(char * cmd);
 bool is_path(char * cmd);
+
+// exec.c
+int	_pipeline(t_mini * mini,t_ast_node * first_node,t_exec exec);
+int _call_builtin(t_mini * mini, char ** globbed, t_exec exec);
+int _exec_node(t_mini * mini, char ** globbed);
+
+// exec_utils.c
+void _reset_fd(t_exec exec);
+
+// exec_tree.c
+void	_exec_tree(t_mini * mini, t_ast_node * first_node);
+
+// redirect.c
+void    _redirect(t_mini * mini, int * skip, t_atom * atom , int og_stdout);
+void    redirect(t_mini * mini, t_exec * exec, t_ast_node * first_node);
+
+// redirect_utils.c
+void    _error(char * error, int * skip, int * status, char * filename, int err_status);
+int     _stdin(t_heap * heap, int * skip, int * status, t_expanded * expanded, int i,t_atom * atom, int og_stdout);
+int     _stdout(t_heap * heap, int * skip, int * status, t_expanded * expanded, int i, t_atom * atom, int og_stdout);
 #endif

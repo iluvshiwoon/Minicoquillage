@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:32:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 00:13:34 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/26 14:58:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,19 +67,19 @@ void    __assign_expand1(t_mini * mini, t_expanded * expanded, t_index * index)
 
 }
 
-t_expanded * _expand(t_mini * mini, char ** to_expand, int status)
+t_expanded * _expand(t_mini * mini, char ** to_expand)
 {
     t_expanded * expanded;
     t_to_expand  _expand;
     t_index index;
 
     expanded = wrap_malloc(mini->heap.heap_allocated, mini->heap.list, sizeof(*expanded));
-    _init_expand(mini, to_expand, expanded, status);
+    _init_expand(mini, to_expand, expanded, mini->status);
     index.i = -1;
     index.j = -1;
     while (to_expand[++index.i])
     {
-        index.count = _count(mini, to_expand[index.i], status);
+        index.count = _count(mini, to_expand[index.i], mini->status);
         if (!index.count && _is_empty_quote(mini, to_expand[index.i]))
             __assign_expand0(&mini->heap, expanded, &index);
         else if (index.count)
@@ -87,7 +87,7 @@ t_expanded * _expand(t_mini * mini, char ** to_expand, int status)
             __assign_expand1(mini, expanded, &index);
             _expand.str = expanded->value[index.j]; 
             _expand.litteral = expanded->litteral[index.j]; 
-            _expand.status = status;
+            _expand.status = mini->status;
             _assign(mini, to_expand[index.i],&_expand);
         }
     }
