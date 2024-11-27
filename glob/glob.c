@@ -6,7 +6,7 @@
 /*   By: kgriset <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:31:24 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 15:35:48 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 15:46:07 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ char	**store_tmp(t_heap *heap, int size)
 	return (tmp - size);
 }
 
-t_glob	*store_match(t_heap *heap, char **tmp, const char *pattern,
-		bool *litteral, t_glob *head_glob)
+t_glob	*store_match(t_heap *heap, char **tmp,t_to_expand exp, t_glob *head_glob)
 {
 	t_glob	*new;
 	t_glob	*head_empty;
@@ -88,7 +87,7 @@ t_glob	*store_match(t_heap *heap, char **tmp, const char *pattern,
 	head_empty = head_glob;
 	while (tmp[i] != NULL)
 	{
-		if (match(tmp[i], pattern, litteral) && ft_strncmp(tmp[i], ".",
+		if (match(tmp[i], exp.str, exp.litteral) && ft_strncmp(tmp[i], ".",
 				ft_strlen(tmp[i]) + 1) != 0 && ft_strncmp(tmp[i], "..",
 				ft_strlen(tmp[i]) + 1) != 0 && tmp[i][0] != '.')
 		{
@@ -106,8 +105,7 @@ t_glob	*store_match(t_heap *heap, char **tmp, const char *pattern,
 	return (head_glob);
 }
 
-t_glob	*store_hidden(t_heap *heap, char **tmp, const char *pattern,
-		bool *litteral, t_glob *head_glob)
+t_glob	*store_hidden(t_heap *heap, char **tmp,t_to_expand exp, t_glob *head_glob)
 {
 	t_glob	*new;
 	t_glob	*head_empty;
@@ -117,7 +115,7 @@ t_glob	*store_hidden(t_heap *heap, char **tmp, const char *pattern,
 	head_empty = head_glob;
 	while (tmp[i] != NULL)
 	{
-		if (match(tmp[i], pattern, litteral) && ft_strncmp(tmp[i], ".",
+		if (match(tmp[i], exp.str, exp.litteral) && ft_strncmp(tmp[i], ".",
 				ft_strlen(tmp[i]) + 1) != 0 && ft_strncmp(tmp[i], "..",
 				ft_strlen(tmp[i]) + 1) != 0 && tmp[i][0] == '.')
 		{
@@ -140,7 +138,10 @@ t_glob	*glob(t_heap *heap, const char *pattern, bool *litteral)
 	t_glob	*head_glob;
 	char	**tmp;
 	int		size;
+    t_to_expand exp;
 
+    exp.str = (char *)pattern;
+    exp.litteral = litteral;
 	size = max_file();
 	tmp = store_tmp(heap, size);
 	head_glob = wrap_malloc(heap->heap_allocated, heap->list, sizeof(t_glob));
@@ -149,8 +150,8 @@ t_glob	*glob(t_heap *heap, const char *pattern, bool *litteral)
 	head_glob->file = NULL;
 	head_glob->next = NULL;
 	if (pattern[0] == '.')
-		head_glob = store_hidden(heap, tmp, pattern, litteral, head_glob);
+		head_glob = store_hidden(heap, tmp,exp, head_glob);
 	else
-		head_glob = store_match(heap, tmp, pattern, litteral, head_glob);
+		head_glob = store_match(heap, tmp,exp, head_glob);
 	return (head_glob);
 }
