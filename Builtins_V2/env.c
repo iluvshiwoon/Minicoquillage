@@ -12,20 +12,20 @@
 
 #include "../Minicoquillage.h"
 
-int mini_env(char ** envp)
+int	mini_env(char **envp)
 {
-    int i;
-    size_t w_bytes;
+	int		i;
+	size_t	w_bytes;
 
-    i = -1;
-    while(envp[++i]) 
-    {
-        w_bytes = write(STDOUT_FILENO, envp[i], ft_strlen(envp[i]));
-        if (w_bytes != ft_strlen(envp[i]))
-            return (125);
-        w_bytes = write(STDOUT_FILENO, "\n", 1);
-        if (w_bytes != 1)
-            return (125);
-    }
-    return (0);
+	i = -1;
+	while (envp[++i])
+	{
+		w_bytes = write(STDOUT_FILENO, envp[i], ft_strlen(envp[i]));
+		if (w_bytes != ft_strlen(envp[i]))
+			return (125);
+		w_bytes = write(STDOUT_FILENO, "\n", 1);
+		if (w_bytes != 1)
+			return (125);
+	}
+	return (0);
 }

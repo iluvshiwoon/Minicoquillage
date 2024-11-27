@@ -12,14 +12,14 @@
 
 #include "../Minicoquillage.h"
 
-void __print_cd(char ** path, t_heap * heap, char ** envp)
+void	__print_cd(char **path, t_heap *heap, char **envp)
 {
-    (*path) = _getenv(heap, "OLDPWD", envp, 0);
-    if (!(*path))
-    {
-        (*path) = NULL;
-        printf("minicoquillage: cd: OLDPWD not set\n");
-    }
-    else
-    printf("%s\n",(*path));
+	(*path) = _getenv(heap, "OLDPWD", envp, 0);
+	if (!(*path))
+	{
+		(*path) = NULL;
+		printf("minicoquillage: cd: OLDPWD not set\n");
+	}
+	else
+		printf("%s\n", (*path));
 }

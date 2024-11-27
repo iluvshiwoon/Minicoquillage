@@ -12,28 +12,29 @@
 
 #include "../Minicoquillage.h"
 
-int _var_name_cmp(char * s1, char * s2)
+int	_var_name_cmp(char *s1, char *s2)
 {
-    int i;
-    i = -1;
-    while (s1[++i] != '=' && s2[i] != '=')
-        if (s1[i] != s2[i])
-            return (s1[i] - s2[i]);
-    return (s1[i] - s2[i]);
+	int	i;
+
+	i = -1;
+	while (s1[++i] != '=' && s2[i] != '=')
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+	return (s1[i] - s2[i]);
 }
 
-int _search_var(t_heap * heap, char * arg, char ** env)
+int	_search_var(t_heap *heap, char *arg, char **env)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while (env[++i])
-    {
-        if (_var_name_cmp(env[i], arg) == 0)
-        {
-            env[i] = mini_ft_strdup(heap->heap_allocated,heap->env,arg);
-            return (0);
-        }
-    }
-    return (1);
+	i = -1;
+	while (env[++i])
+	{
+		if (_var_name_cmp(env[i], arg) == 0)
+		{
+			env[i] = mini_ft_strdup(heap->heap_allocated, heap->env, arg);
+			return (0);
+		}
+	}
+	return (1);
 }
