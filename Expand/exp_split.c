@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 21:34:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 18:24:05 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:26:52 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,30 +49,30 @@ void __init(t_heap * heap, t_to_expand* to_expand, t_expanded ** expanded, t_ind
     index->count = 0;
 }
 
-t_expanded * _do_split(t_heap * heap, t_to_expand * to_expand)
+t_expanded * _do_split(t_heap * heap, t_to_expand * t)
 {
     t_index index;
     t_expanded * expanded;
 
-    __init(heap, to_expand, &expanded, &index);
-    while (to_expand->str[index.i])
+    __init(heap, t, &expanded, &index);
+    while (t->str[index.i])
     {
         index.k = index.i;
-        if (to_expand->str[index.i] && (!ft_isspace(to_expand->str[index.i])
-            || to_expand->litteral[index.i]))
+        if (t->str[index.i] && (!ft_isspace(t->str[index.i])
+            || t->litteral[index.i]))
         {
-            while(to_expand->str[index.i] && (!ft_isspace(to_expand->str[index.i])
-                || to_expand->litteral[index.i]))
+            while(t->str[index.i] && (!ft_isspace(t->str[index.i])
+                || t->litteral[index.i]))
                 __do(&index);
         }
         else
         {
-            while(to_expand->str[index.i] && ft_isspace(to_expand->str[index.i])
-                && !to_expand->litteral[index.i])
+            while(t->str[index.i] && ft_isspace(t->str[index.i])
+                && !t->litteral[index.i])
                 index.i++;
         }
-        _assign_value(heap, &expanded, &index,to_expand);
-        if (!to_expand->str[index.i])
+        _assign_value(heap, &expanded, &index,t);
+        if (!t->str[index.i])
             break;
     }
     return expanded;
