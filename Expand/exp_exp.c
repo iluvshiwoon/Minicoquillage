@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 21:36:36 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 00:18:21 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:12:26 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ bool _is_valid_exp(char c)
     return (false);
 }
 
-void    __init_count_exp(int * k ,int i, int * count, char ** var)
+char *    __init_count_exp(int * k ,int i, int * count, char ** var)
 {
     *k = i;
     *count = 0;
     *var = NULL;
+    return (NULL);
 }
 
 int _count_exp(t_mini * mini, char * str, int * i,t_to_expand _expand)
@@ -34,11 +35,11 @@ int _count_exp(t_mini * mini, char * str, int * i,t_to_expand _expand)
     char * r_value;
     char * var;
 
-    __init_count_exp(&k,*i,&count,&var);
-    r_value = NULL;
+    r_value = __init_count_exp(&k,*i,&count,&var);
     while(str[++k] && _is_valid_exp(str[k]) == true)
     {
-        var = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*var) * (k-*i + 1));
+        var = wrap_malloc(&mini->heap_allocated, mini->heap.list,
+                          sizeof(*var) * (k-*i + 1));
         ft_strlcpy(var, str+*i+1,(k-*i + 1));
         r_value = _getenv(&mini->heap,var, mini->envp, _expand.status);
         if (!ft_strncmp("?",var,_max_len(ft_strlen(var), 1)))
@@ -69,12 +70,11 @@ char * _assign_exp(t_mini * mini, char * str, int * i,t_to_expand _expand)
     char * r_value;
     char * var;
 
-    k = *i;
-    r_value = NULL;
-    var = NULL;
+    init_ass(&k,*i,&r_value,&var);
     while(str[++k] && _is_valid_exp(str[k]) == true)
     {
-        var = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*var) * (k-*i + 1));
+        var = wrap_malloc(&mini->heap_allocated, mini->heap.list,
+                          sizeof(*var) * (k-*i + 1));
         ft_strlcpy(var, str+*i+1,(k-*i + 1));
         r_value = _getenv(&mini->heap, var, mini->envp, _expand.status);
         if (!ft_strncmp("?",var,_max_len(ft_strlen(var), 1)))

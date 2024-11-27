@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:32:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 14:58:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:55:59 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ int _count(t_mini * mini, char * str, int status)
         if (_handle_quote(str[i], &open) == EXIT_SUCCESS);
         else if (str[i] == '$' && !open.single_quote)
         {
-            _expand.status = status;
-            _expand.open = open;
+            mod_expand(&_expand, status, open);
             count += _count_exp(mini, str, &i,_expand);
         }
         else if (str[i] == '"' && open.double_quote)

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 21:34:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/25 22:22:57 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:02:55 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,31 @@
 
 t_expanded *    _init_dosplit(t_heap * heap, char * str, bool * litteral)
 {
-    t_expanded * expanded;
+    t_expanded * exp;
     int count;
-    int i;
-    int j;
+    t_index ind;
 
-    expanded = wrap_malloc(heap->heap_allocated, heap->list,sizeof(*expanded));
+    exp = wrap_malloc(heap->heap_allocated, heap->list,sizeof(*exp));
     count = _count_split(str, litteral);
     if (!count)
         count = 1;
-    expanded->value = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*expanded->value) * (count + 1));
-    expanded->litteral = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*expanded->litteral) * count);
-    expanded->value[count] = NULL;
-    i= 0;
-    j = -1;
-    if (!str[i])
+    exp->value = wrap_malloc(heap->heap_allocated, heap->list,
+                             sizeof(*exp->value) * (count + 1));
+    exp->litteral = wrap_malloc(heap->heap_allocated, heap->list,
+                                sizeof(*exp->litteral) * count);
+    exp->value[count] = NULL;
+    ind.i = 0;
+    ind.j = -1;
+    if (!str[ind.i])
     { 
-        expanded->value[++j] = wrap_malloc(heap->heap_allocated, heap->list, sizeof(char));
-        expanded->litteral[j] = wrap_malloc(heap->heap_allocated, heap->list, sizeof(bool));
-        expanded->value[j][0] = '\0';
-        expanded->litteral[j][0] = true;
+        exp->value[++ind.j] = wrap_malloc(heap->heap_allocated,
+                                      heap->list, sizeof(char));
+        exp->litteral[ind.j] = wrap_malloc(heap->heap_allocated,
+                                       heap->list, sizeof(bool));
+        exp->value[ind.j][0] = '\0';
+        exp->litteral[ind.j][0] = true;
     }
-    return (expanded);
+    return (exp);
 }
 
 void __init(t_heap * heap, t_to_expand* to_expand, t_expanded ** expanded, t_index * index)
@@ -75,17 +78,17 @@ t_expanded * _do_split(t_heap * heap, t_to_expand * to_expand)
     return expanded;
 }
 
-t_expanded * _assign_split(t_heap * heap, t_expanded * expanded, int count)
+t_expanded * _assign_split(t_heap * h, t_expanded * expanded, int c)
 {
-    t_expanded * r_value;
+    t_expanded * r;
     t_expanded * splitted;
     t_to_expand to_expand;
     t_index index;
 
-    r_value = wrap_malloc(heap->heap_allocated, heap->list,sizeof(*expanded));
-    r_value->value = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*r_value->value) * (count + 1));
-    r_value->litteral = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*r_value->litteral) * (count));
-    r_value->value[count] = NULL;
+    r = wrap_malloc(h->heap_allocated, h->list,sizeof(*expanded));
+    r->value = wrap_malloc(h->heap_allocated, h->list, sizeof(*r->value) * (c + 1));
+    r->litteral = wrap_malloc(h->heap_allocated, h->list, sizeof(*r->litteral) * (c));
+    r->value[c] = NULL;
     index.i = -1;
     index.j = -1;
     while (expanded->value[++index.i])
@@ -93,14 +96,14 @@ t_expanded * _assign_split(t_heap * heap, t_expanded * expanded, int count)
         index.k = -1;
         to_expand.litteral = expanded->litteral[index.i];
         to_expand.str = expanded->value[index.i];
-        splitted = _do_split(heap,&to_expand);
+        splitted = _do_split(h,&to_expand);
         while (splitted->value[++index.k])
         {
-            r_value->value[++index.j] = splitted->value[index.k];
-            r_value->litteral[index.j] = splitted->litteral[index.k];
+            r->value[++index.j] = splitted->value[index.k];
+            r->litteral[index.j] = splitted->litteral[index.k];
         }
     }
-    return (r_value);
+    return (r);
 }
 
 t_expanded * _split_arg(t_heap * heap, t_expanded * expanded)
