@@ -12,8 +12,8 @@
 
 #include "../Minicoquillage.h"
 
-void mod_expand(t_to_expand * expand, int status, t_open_quote open)
+void	mod_expand(t_to_expand *expand, int status, t_open_quote open)
 {
-    expand->status = status;
-    expand->open = open;
+	expand->status = status;
+	expand->open = open;
 }

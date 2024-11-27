@@ -12,9 +12,9 @@
 
 #include "../Minicoquillage.h"
 
-void init_ass(int * k, int i, char ** r_value, char **var)
+void	init_ass(int *k, int i, char **r_value, char **var)
 {
-    *k = i;
-    *r_value = NULL;
-    *var = NULL;
+	*k = i;
+	*r_value = NULL;
+	*var = NULL;
 }
