@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 20:56:10 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/18 20:34:51 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:36:15 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void _close_fd(int fd1, int fd2)
         _close(fd2);
 }
 
-int mini_exit(t_heap * heap,char ** args, int status, int og_stdout, int og_stdin)
+int mini_exit(t_mini * mini,char ** args, t_exec exec)
 {
     int error;
     uint8_t code;
@@ -67,19 +67,20 @@ int mini_exit(t_heap * heap,char ** args, int status, int og_stdout, int og_stdi
     code = 0;
     if (args[1] == NULL)
     {
-        _close_fd(og_stdin,og_stdout);
-        free_heap(heap->heap_allocated, true);
+        _close_fd(exec.og_stdin,exec.og_stdout);
+        free_heap(&mini->heap_allocated, true);
         printf("exit\n");
-        exit((status + 256)%256);
+        exit((mini->status + 256)%256);
     }
     code = atoi64_safe(args[1], &error);
     if (error == ERROR)
         return (printf("exit\nminicoquillage: exit: %s: numeric argument \
-required\n",args[1]),_close_fd(og_stdout,og_stdin),free_heap(heap->heap_allocated,true),exit(2),2);
+required\n",args[1]),_close_fd(exec.og_stdout,exec.og_stdin),
+        free_heap(&mini->heap_allocated,true),exit(2),2);
     if (args[2])
         return (printf("exit\nminicoquillage: exit: too many arguments"),1);
-    _close_fd(og_stdin,og_stdout);
-    free_heap(heap->heap_allocated,true);
+    _close_fd(exec.og_stdin,exec.og_stdout);
+    free_heap(&mini->heap_allocated,true);
         printf("exit\n");
     exit((code + 256)%256);
 }

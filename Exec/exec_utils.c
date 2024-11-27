@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:40:29 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 16:13:10 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:46:46 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	_call_builtin(t_mini *mini, char **globbed, t_exec exec)
 		return (mini_env(mini->envp));
 	else if (ft_strncmp(globbed[0], "exit", _max_len(ft_strlen(globbed[0]),
 				ft_strlen("exit"))) == 0)
-		return (mini_exit(&mini->heap, globbed, mini->status, exec.og_stdin,
-				exec.og_stdout));
+		return (mini_exit(mini, globbed, exec));
 	return (42);
 }

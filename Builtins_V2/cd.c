@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 04:56:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 00:23:41 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:38:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,6 @@ int _cd(t_heap * heap, char * path, char *** envp)
             f_export(heap, envp, "PWD=", mini_ft_strdup(heap->heap_allocated, heap->list, cur_dir));
     }
     return (0);
-}
-
-void __print_cd(char ** path, t_heap * heap, char ** envp)
-{
-    (*path) = _getenv(heap, "OLDPWD", envp, 0);
-    if (!(*path))
-    {
-        (*path) = NULL;
-        printf("minicoquillage: cd: OLDPWD not set\n");
-    }
-    else
-    printf("%s\n",(*path));
 }
 
 int mini_cd(t_heap * heap, char ** args, char *** envp)

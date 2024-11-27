@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 02:49:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 00:27:14 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:40:04 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ size_t _count_unset(t_heap * heap,char ** args, char *** envp, char *** new_env)
     return (count);
 }
 
+void __index(t_index * index)
+{
+    index->i = -1;
+        index->j = -1;
+}
+
 int mini_unset(t_heap * heap, char ** args, char *** envp)
 {
     t_index index;
@@ -71,8 +77,7 @@ int mini_unset(t_heap * heap, char ** args, char *** envp)
     index.count = _count_unset(heap, args, envp, &new_env);
     if (index.count)
     {
-        index.i = -1;
-        index.j = -1;
+        __index(&index);
         while((*envp)[++index.i])
         {
             matched = false; 

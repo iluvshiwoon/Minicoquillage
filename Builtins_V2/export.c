@@ -6,36 +6,16 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 17:59:54 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 00:44:21 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:44:01 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
-int _var_name_cmp(char * s1, char * s2)
+void    _init_check_var(int * i, int * r_value)
 {
-    int i;
-    i = -1;
-    while (s1[++i] != '=' && s2[i] != '=')
-        if (s1[i] != s2[i])
-            return (s1[i] - s2[i]);
-    return (s1[i] - s2[i]);
-}
-
-int _search_var(t_heap * heap, char * arg, char ** env)
-{
-    int i;
-
-    i = -1;
-    while (env[++i])
-    {
-        if (_var_name_cmp(env[i], arg) == 0)
-        {
-            env[i] = mini_ft_strdup(heap->heap_allocated,heap->env,arg);
-            return (0);
-        }
-    }
-    return (1);
+    *i = -1;
+    *r_value = 0;
 }
 
 int _check_var(char * var, bool print)
@@ -43,8 +23,7 @@ int _check_var(char * var, bool print)
     int i;
     int r_value;
 
-    i = -1;
-    r_value = 0;
+    _init_check_var(&i, &r_value);
     while (var[++i])
     {
         if (var[i] == '=')
@@ -118,9 +97,7 @@ int mini_export(t_heap * heap, char ** args, char *** envp)
         count = 0;
         while(args[++count])
             if (_check_var(args[count], false) == 0 && _search_var(heap,args[count],*envp))
-            {
                 new_env[i++] = mini_ft_strdup(heap->heap_allocated, heap->env,args[count]);
-            }
         *envp = new_env;
     }
     return(r_value);
