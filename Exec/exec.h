@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 16:16:57 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 00:34:42 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ typedef struct s_exec {
     int og_stdin;
     int skip;
 } t_exec;
+
+typedef struct s_pipeline {
+    int i;
+    pid_t * pid;
+    int (*pipefd)[2];
+    int pipe_nb;
+    t_parser_node * p_node;
+} t_pipeline;
 
 // heredoc.c
 void	heredoc(t_heap * heap,t_ast_node * first_node);
