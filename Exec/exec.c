@@ -12,7 +12,7 @@
 
 #include "../Minicoquillage.h"
 
-void execution(t_mini *mini, t_ast *ast)
+void	execution(t_mini *mini, t_ast *ast)
 {
 	mini->heap.heap_allocated = &mini->heap_allocated;
 	mini->heap.list = mini->heap_allocated.exec;

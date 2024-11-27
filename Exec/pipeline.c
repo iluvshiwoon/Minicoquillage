@@ -32,7 +32,7 @@ void	_run_pipeline(t_mini *mini, t_ast_node *first_node, t_exec exec,
 		else
 			_close_pipe3(pipeline->pipe_nb, pipeline->pipefd, pipeline->i);
 	}
-    pipeline->i = -1;
+	pipeline->i = -1;
 }
 
 int	_pipeline(t_mini *mini, t_ast_node *first_node, t_exec exec)

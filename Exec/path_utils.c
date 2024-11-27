@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:39:13 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 15:53:35 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:22:43 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ bool	is_dir(char *cmd)
 	if (stat(cmd, &statbuf) != 0)
 		return (0);
 	if (S_ISDIR(statbuf.st_mode))
-		return (ft_printf_fd(STDERR_FILENO, "minicoquillage: %s: Is a directory\n", cmd), 1);
+		return (ft_printf_fd(STDERR_FILENO, "minicoquillage: \
+%s: Is a directory\n", cmd), 1);
 	return (0);
 }
 

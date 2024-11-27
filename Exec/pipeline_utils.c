@@ -34,7 +34,7 @@ void	_count_pipe(t_heap *heap, int (**pipefd)[2], int *pipe_nb,
 	while (++i < *pipe_nb)
 	{
 		if (pipe((*pipefd)[i]) == -1)
-			error_exit(strerror(errno),heap->heap_allocated);
+			error_exit(strerror(errno), heap->heap_allocated);
 	}
 }
 

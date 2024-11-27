@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 17:18:39 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:24:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ int	listen_heredoc(t_heap *heap, int *fd, char *eof)
 		_close(_stdin);
 		if (!line)
 			return (ft_printf_fd(STDERR_FILENO, "minicoquillage: warning: \
-here-document at line %d delimited by end-of-file (wanted `%s')\n", i, eof),
-					free(line), 0);
+here-document at line %d delimited by \
+end-of-file (wanted `%s')\n", i, eof), free(line), 0);
 		else if (strncmp(eof, line, _max_len(ft_strlen(eof),
-                                       ft_strlen(line))) == EXIT_SUCCESS)
+					ft_strlen(line))) == EXIT_SUCCESS)
 			return (free(line), 0);
 		else if (*fd)
 			_write_listen(heap, *fd, line);
 		free(line);
 	}
-	return (_close(_stdin),0);
+	return (_close(_stdin), 0);
 }
 
 void	run_heredoc(t_heap *heap, t_atom *atom)

@@ -12,9 +12,9 @@
 
 #include "../Minicoquillage.h"
 
-void    __redirect(t_atom * atom)
+void	__redirect(t_atom *atom)
 {
-    if (atom->heredoc)
+	if (atom->heredoc)
 	{
 		_close(atom->in_fd);
 		atom->in_fd = open(atom->file_heredoc, O_RDONLY);
@@ -23,31 +23,31 @@ void    __redirect(t_atom * atom)
 		dup2(atom->in_fd, STDIN_FILENO);
 }
 
-void	_redirect(t_mini *mini, t_atom *atom, t_exec * exec)
+void	_redirect(t_mini *mini, t_atom *atom, t_exec *exec)
 {
 	int			i;
 	t_expanded	*exp_stdin;
 	t_expanded	*exp_stdout;
 
 	i = -1;
-    exec->i = -1;
-    exec->j = -1;
+	exec->i = -1;
+	exec->j = -1;
 	exp_stdout = _expand(mini, atom->std_out);
 	exp_stdin = _expand(mini, atom->std_in);
 	while (atom->std_order[++i] && !(exec->skip))
 	{
 		if (atom->std_order[i] == 'o' && !(exec->skip))
-        {
-            ++(exec->i);
+		{
+			++(exec->i);
 			_stdout(mini, exp_stdout, atom, exec);
-        }
+		}
 		else if (atom->std_order[i] == 'i' && !(exec->skip))
-        {
-            ++(exec->j);
+		{
+			++(exec->j);
 			_stdin(mini, exp_stdin, atom, exec);
-        }
+		}
 	}
-    __redirect(atom);
+	__redirect(atom);
 }
 
 void	redirect(t_mini *mini, t_exec *exec, t_ast_node *first_node)

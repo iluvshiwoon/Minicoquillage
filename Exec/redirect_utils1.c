@@ -19,10 +19,10 @@ void	_error(char *error, int *skip, int *status, char *filename)
 	ft_printf_fd(STDERR_FILENO, error, filename);
 }
 
-void __red(char * globbed, t_atom * atom, t_exec * exec)
+void	__red(char *globbed, t_atom *atom, t_exec *exec)
 {
-        if (atom->append[exec->i])
-                atom->out_fd = open(globbed, O_WRONLY | O_APPEND);
-            else
-                atom->out_fd = open(globbed, O_WRONLY);
+	if (atom->append[exec->i])
+		atom->out_fd = open(globbed, O_WRONLY | O_APPEND);
+	else
+		atom->out_fd = open(globbed, O_WRONLY);
 }
