@@ -1,42 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/27 18:59:59 by kgriset           #+#    #+#             */
+/*   Created: 2024/11/26 10:45:11 by kgriset           #+#    #+#             */
 /*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	sigint_handler(int sig)
+void	mini_write(t_heap *heap, int fd, char *str, ssize_t bytes)
 {
-	printf("\n");
-	if (g_signal == 999)
-		return ;
-	g_signal = sig;
-	close(STDIN_FILENO);
+	ssize_t	written;
+	size_t	offset;
+
+	written = 0;
+	offset = 0;
+	while (1)
+	{
+		written = write(fd, str + offset, bytes - offset);
+		if (written == -1)
+			return (perror(NULL), error_exit("write failed\n",
+					heap->heap_allocated));
+		if (written == bytes)
+			break ;
+		offset = written;
+	}
 }
 
-void	sigquit_handler(int sig)
+size_t	_max_len(size_t len1, size_t len2)
 {
-	g_signal = sig;
+	if (len1 >= len2)
+		return (len1);
+	return (len2);
 }
 
-void	handle_sig(void)
+void	_write_listen(t_heap *heap, int fd, char *line)
 {
-	struct sigaction	sa;
-	struct sigaction	sb;
-
-	sa.sa_handler = sigint_handler;
-	sb.sa_handler = sigquit_handler;
-	sigemptyset(&sa.sa_mask);
-	sigemptyset(&sb.sa_mask);
-	sa.sa_flags = 0;
-	sb.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sb, NULL);
+	mini_write(heap, fd, line, ft_strlen(line));
+	mini_write(heap, fd, "\n", 1);
 }

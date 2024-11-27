@@ -1,42 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   mini_ft_strdup.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/27 18:59:59 by kgriset           #+#    #+#             */
+/*   Created: 2024/10/15 15:47:55 by kgriset           #+#    #+#             */
 /*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	sigint_handler(int sig)
+char	*mini_ft_strdup(t_heap_allocated *heap_allocated,
+		t_double_link_list *list, const char *s)
 {
-	printf("\n");
-	if (g_signal == 999)
-		return ;
-	g_signal = sig;
-	close(STDIN_FILENO);
-}
+	char			*s_dupe;
+	unsigned int	i;
 
-void	sigquit_handler(int sig)
-{
-	g_signal = sig;
-}
-
-void	handle_sig(void)
-{
-	struct sigaction	sa;
-	struct sigaction	sb;
-
-	sa.sa_handler = sigint_handler;
-	sb.sa_handler = sigquit_handler;
-	sigemptyset(&sa.sa_mask);
-	sigemptyset(&sb.sa_mask);
-	sa.sa_flags = 0;
-	sb.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sb, NULL);
+	i = 0;
+	while (s[i])
+		i++;
+	s_dupe = wrap_malloc(heap_allocated, list, (i + 1) * sizeof(char));
+	if (!s_dupe)
+		return (0);
+	i = 0;
+	while (s[i])
+	{
+		s_dupe[i] = s[i];
+		i++;
+	}
+	s_dupe[i] = s[i];
+	return (s_dupe);
 }

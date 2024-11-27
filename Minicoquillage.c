@@ -6,11 +6,11 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 20:35:38 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Minicoquillage.h"
+#include "minicoquillage.h"
 
 int		g_signal;
 

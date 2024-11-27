@@ -1,42 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/27 18:59:59 by kgriset           #+#    #+#             */
+/*   Created: 2024/11/15 01:06:14 by kgriset           #+#    #+#             */
 /*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	sigint_handler(int sig)
+int	mini_env(char **envp)
 {
-	printf("\n");
-	if (g_signal == 999)
-		return ;
-	g_signal = sig;
-	close(STDIN_FILENO);
-}
+	int		i;
+	size_t	w_bytes;
 
-void	sigquit_handler(int sig)
-{
-	g_signal = sig;
-}
-
-void	handle_sig(void)
-{
-	struct sigaction	sa;
-	struct sigaction	sb;
-
-	sa.sa_handler = sigint_handler;
-	sb.sa_handler = sigquit_handler;
-	sigemptyset(&sa.sa_mask);
-	sigemptyset(&sb.sa_mask);
-	sa.sa_flags = 0;
-	sb.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sb, NULL);
+	i = -1;
+	while (envp[++i])
+	{
+		w_bytes = write(STDOUT_FILENO, envp[i], ft_strlen(envp[i]));
+		if (w_bytes != ft_strlen(envp[i]))
+			return (125);
+		w_bytes = write(STDOUT_FILENO, "\n", 1);
+		if (w_bytes != 1)
+			return (125);
+	}
+	return (0);
 }

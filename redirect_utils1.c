@@ -1,42 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   redirect_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/27 18:59:59 by kgriset           #+#    #+#             */
+/*   Created: 2024/11/27 17:07:05 by kgriset           #+#    #+#             */
 /*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	sigint_handler(int sig)
+void	_error(char *error, int *skip, int *status, char *filename)
 {
-	printf("\n");
-	if (g_signal == 999)
-		return ;
-	g_signal = sig;
-	close(STDIN_FILENO);
+	*skip = 1;
+	*status = 1;
+	ft_printf_fd(STDERR_FILENO, error, filename);
 }
 
-void	sigquit_handler(int sig)
+void	__red(char *globbed, t_atom *atom, t_exec *exec)
 {
-	g_signal = sig;
-}
-
-void	handle_sig(void)
-{
-	struct sigaction	sa;
-	struct sigaction	sb;
-
-	sa.sa_handler = sigint_handler;
-	sb.sa_handler = sigquit_handler;
-	sigemptyset(&sa.sa_mask);
-	sigemptyset(&sb.sa_mask);
-	sa.sa_flags = 0;
-	sb.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sb, NULL);
+	if (atom->append[exec->i])
+		atom->out_fd = open(globbed, O_WRONLY | O_APPEND);
+	else
+		atom->out_fd = open(globbed, O_WRONLY);
 }

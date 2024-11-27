@@ -1,42 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/27 18:59:59 by kgriset           #+#    #+#             */
+/*   Created: 2024/11/27 18:42:53 by kgriset           #+#    #+#             */
 /*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	sigint_handler(int sig)
+int	_var_name_cmp(char *s1, char *s2)
 {
-	printf("\n");
-	if (g_signal == 999)
-		return ;
-	g_signal = sig;
-	close(STDIN_FILENO);
+	int	i;
+
+	i = -1;
+	while (s1[++i] != '=' && s2[i] != '=')
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+	return (s1[i] - s2[i]);
 }
 
-void	sigquit_handler(int sig)
+int	_search_var(t_heap *heap, char *arg, char **env)
 {
-	g_signal = sig;
-}
+	int	i;
 
-void	handle_sig(void)
-{
-	struct sigaction	sa;
-	struct sigaction	sb;
-
-	sa.sa_handler = sigint_handler;
-	sb.sa_handler = sigquit_handler;
-	sigemptyset(&sa.sa_mask);
-	sigemptyset(&sb.sa_mask);
-	sa.sa_flags = 0;
-	sb.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sb, NULL);
+	i = -1;
+	while (env[++i])
+	{
+		if (_var_name_cmp(env[i], arg) == 0)
+		{
+			env[i] = mini_ft_strdup(heap->heap_allocated, heap->env, arg);
+			return (0);
+		}
+	}
+	return (1);
 }
