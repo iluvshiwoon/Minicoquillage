@@ -12,71 +12,84 @@
 
 #ifndef EXEC_H
 # define EXEC_H
-#ifndef MINICOQUILLAGE_H
-# include "../Minicoquillage.h"
-#endif
+# ifndef MINICOQUILLAGE_H
+#  include "../Minicoquillage.h"
+# endif
 
-typedef struct s_exec {
-    int og_stdout;
-    int og_stdin;
-    int skip;
-} t_exec;
+typedef struct s_exec
+{
+	int				og_stdout;
+	int				og_stdin;
+	int				skip;
+}					t_exec;
 
-typedef struct s_pipeline {
-    int i;
-    pid_t * pid;
-    int (*pipefd)[2];
-    int pipe_nb;
-    t_parser_node * p_node;
-} t_pipeline;
+typedef struct s_pipeline
+{
+	int				i;
+	pid_t			*pid;
+	int (*pipefd)[2];
+	int				pipe_nb;
+	t_parser_node	*p_node;
+}					t_pipeline;
 
 // heredoc.c
-void	heredoc(t_heap * heap,t_ast_node * first_node);
-size_t _max_len(size_t len1, size_t len2);
-void	clean_heredoc(t_heap * heap,t_ast_node * first_node);
+void				heredoc(t_heap *heap, t_ast_node *first_node);
+size_t				_max_len(size_t len1, size_t len2);
+void				clean_heredoc(t_heap *heap, t_ast_node *first_node);
 
 // heredoc_quote.c
-char * _quote(t_heap * heap, char * to_expand);
+char				*_quote(t_heap *heap, char *to_expand);
 
 // heredoc_clean.c
-void	clean_heredoc(t_heap * heap,t_ast_node * first_node);
+void				clean_heredoc(t_heap *heap, t_ast_node *first_node);
 
 // heredoc_utils.c
-void mini_write(t_heap * heap,int fd, char * str, ssize_t bytes);
-size_t _max_len(size_t len1, size_t len2);
-void    _write_listen(t_heap * heap, int fd, char * line);
+void				mini_write(t_heap *heap, int fd, char *str, ssize_t bytes);
+size_t				_max_len(size_t len1, size_t len2);
+void				_write_listen(t_heap *heap, int fd, char *line);
 
 // path.c
-char * get_path(t_heap * heap,char ** envp,int * status, char * cmd);
+char				*get_path(t_heap *heap, char **envp, int *status,
+						char *cmd);
 
 // path_utils.c
-bool check_builtin(t_heap* heap, char * cmd);
-bool is_dir(char * cmd);
-bool is_path(char * cmd);
+bool				check_builtin(t_heap *heap, char *cmd);
+bool				is_dir(char *cmd);
+bool				is_path(char *cmd);
 
 // pipeline.c
-void    _count_pipe(t_heap * heap, int (**pipefd)[2], int * pipe_nb, t_ast_node * first_node);
-int	_pipeline(t_mini * mini,t_ast_node * first_node,t_exec exec);
+void				_count_pipe(t_heap *heap, int (**pipefd)[2], int *pipe_nb,
+						t_ast_node *first_node);
+int					_pipeline(t_mini *mini, t_ast_node *first_node,
+						t_exec exec);
 
 // exec.c
-int	_pipeline(t_mini * mini,t_ast_node * first_node,t_exec exec);
-int _call_builtin(t_mini * mini, char ** globbed, t_exec exec);
-int _exec_node(t_mini * mini, char ** globbed);
-void execution(t_mini * mini, t_ast * ast);
+int					_pipeline(t_mini *mini, t_ast_node *first_node,
+						t_exec exec);
+int					_call_builtin(t_mini *mini, char **globbed, t_exec exec);
+int					_exec_node(t_mini *mini, char **globbed);
+void				execution(t_mini *mini, t_ast *ast);
 
 // exec_utils.c
-void _reset_fd(t_exec exec);
-int _call_builtin(t_mini * mini, char ** globbed, t_exec exec);
+void				_reset_fd(t_exec exec);
+int					_call_builtin(t_mini *mini, char **globbed, t_exec exec);
 
 // exec_tree.c
-void	_exec_tree(t_mini * mini, t_ast_node * first_node);
+void				_exec_tree(t_mini *mini, t_ast_node *first_node);
 
 // redirect.c
-void    _redirect(t_mini * mini, int * skip, t_atom * atom , int og_stdout);
-void    redirect(t_mini * mini, t_exec * exec, t_ast_node * first_node);
+void				_redirect(t_mini *mini, int *skip, t_atom *atom,
+						int og_stdout);
+void				redirect(t_mini *mini, t_exec *exec,
+						t_ast_node *first_node);
 
 // redirect_utils.c
-void    _error(char * error, int * skip, int * status, char * filename, int err_status);
-int     _stdin(t_heap * heap, int * skip, int * status, t_expanded * expanded, int i,t_atom * atom, int og_stdout);
-int     _stdout(t_heap * heap, int * skip, int * status, t_expanded * expanded, int i, t_atom * atom, int og_stdout);
+void				_error(char *error, int *skip, int *status, char *filename,
+						int err_status);
+int					_stdin(t_heap *heap, int *skip, int *status,
+						t_expanded *expanded, int i, t_atom *atom,
+						int og_stdout);
+int					_stdout(t_heap *heap, int *skip, int *status,
+						t_expanded *expanded, int i, t_atom *atom,
+						int og_stdout);
 #endif

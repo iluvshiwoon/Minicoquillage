@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   glob.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kgriset <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/27 15:50:52 by kgriset           #+#    #+#             */
+/*   Updated: 2024/11/27 15:50:52 by kgriset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GLOB_H
 # define GLOB_H
 # ifndef MINICOQUILLAGE_H
@@ -21,4 +33,5 @@ typedef struct s_match
 int					globbing(const char *str, const char *glob);
 t_glob				*glob(t_heap *heap, const char *pattern, bool *litteral);
 int					match(const char *str, const char *glob, bool *litteral);
+int					max_file(void);
 #endif
