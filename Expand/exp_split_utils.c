@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:21:25 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/25 22:22:22 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:24:02 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,16 @@ void    _assign_value(t_heap * heap, t_expanded ** expanded, t_index * index,t_t
         }
         index->count = 0;
     }
+}
+
+void    __do(t_index * index)
+{
+   index->i++; 
+    index->count++;
+}
+
+void    __ass_split(t_expanded * r, t_expanded * splitted, t_index * index)
+{
+    r->value[++(index->j)] = splitted->value[index->k];
+    r->litteral[index->j] = splitted->litteral[index->k];
 }

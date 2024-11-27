@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:29:12 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 18:12:21 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:24:32 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ t_expanded * _split_arg(t_heap * heap, t_expanded * expanded);
 // exp_split_utils.c
 int _count_split(char * str, bool * litteral);
 void    _assign_value(t_heap * heap, t_expanded ** expanded, t_index * index,t_to_expand * to_expand);
+void    __ass_split(t_expanded * r, t_expanded * splitted, t_index * index);
+void    __do(t_index * index);
 
 // exp_exp.c
 char * _assign_exp(t_mini * mini, char * str, int * i,t_to_expand _expand);

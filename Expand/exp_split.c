@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 21:34:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 18:02:55 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 18:24:05 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,17 @@ t_expanded * _do_split(t_heap * heap, t_to_expand * to_expand)
     while (to_expand->str[index.i])
     {
         index.k = index.i;
-        if (to_expand->str[index.i] && (!ft_isspace(to_expand->str[index.i]) || to_expand->litteral[index.i]))
+        if (to_expand->str[index.i] && (!ft_isspace(to_expand->str[index.i])
+            || to_expand->litteral[index.i]))
         {
-            while(to_expand->str[index.i] && (!ft_isspace(to_expand->str[index.i]) || to_expand->litteral[index.i]))
-            {
-                index.i++;
-                index.count++;
-            }
+            while(to_expand->str[index.i] && (!ft_isspace(to_expand->str[index.i])
+                || to_expand->litteral[index.i]))
+                __do(&index);
         }
         else
         {
-            while(to_expand->str[index.i] && ft_isspace(to_expand->str[index.i]) && !to_expand->litteral[index.i])
+            while(to_expand->str[index.i] && ft_isspace(to_expand->str[index.i])
+                && !to_expand->litteral[index.i])
                 index.i++;
         }
         _assign_value(heap, &expanded, &index,to_expand);
@@ -98,10 +98,7 @@ t_expanded * _assign_split(t_heap * h, t_expanded * expanded, int c)
         to_expand.str = expanded->value[index.i];
         splitted = _do_split(h,&to_expand);
         while (splitted->value[++index.k])
-        {
-            r->value[++index.j] = splitted->value[index.k];
-            r->litteral[index.j] = splitted->litteral[index.k];
-        }
+            __ass_split(r,splitted,&index);
     }
     return (r);
 }
