@@ -14,9 +14,9 @@
 
 int	tokenizer(t_mini *mini)
 {
-    mini->heap.heap_allocated = &mini->heap_allocated;
-    mini->heap.list = mini->heap_allocated.tokens;
-    mini->heap.env = mini->heap_allocated.env;
+	mini->heap.heap_allocated = &mini->heap_allocated;
+	mini->heap.list = mini->heap_allocated.tokens;
+	mini->heap.env = mini->heap_allocated.env;
 	mini->control.line = get_line(mini);
 	if (!mini->control.line || !*mini->control.line)
 		return (EXIT_FAILURE);

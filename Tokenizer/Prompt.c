@@ -12,7 +12,7 @@
 
 #include "../Minicoquillage.h"
 
-char	*get_prompt(t_mini * mini, t_heap_allocated *heap_allocated)
+char	*get_prompt(t_mini *mini, t_heap_allocated *heap_allocated)
 {
 	char	*prompt;
 
@@ -20,33 +20,34 @@ char	*get_prompt(t_mini * mini, t_heap_allocated *heap_allocated)
 	return (prompt);
 }
 
-char * r_prompt(t_mini * mini, char * temp)
+char	*r_prompt(t_mini *mini, char *temp)
 {
-    char * r_value;
-    t_heap_allocated * heap_allocated;
+	char				*r_value;
+	t_heap_allocated	*heap_allocated;
 
-    heap_allocated = &mini->heap_allocated;
-    if (mini->status)
-    {
-        r_value = mini_ft_strjoin(heap_allocated, heap_allocated->input, temp,
-			mini_ft_strjoin(heap_allocated, heap_allocated->input,
+	heap_allocated = &mini->heap_allocated;
+	if (mini->status)
+	{
+		r_value = mini_ft_strjoin(heap_allocated, heap_allocated->input, temp,
 				mini_ft_strjoin(heap_allocated, heap_allocated->input,
-					" via \1\033[1;34m\2", last_ocur(_getenv(&mini->heap,
-                                              "SHELL",mini->envp,0), '/') + 1),
-				"\1\n🦪\2 \1\033[31m→\2 \1\033[0m\2"));
-    }
-    else
-    {
-         r_value = mini_ft_strjoin(heap_allocated, heap_allocated->input, temp,
-			mini_ft_strjoin(heap_allocated, heap_allocated->input,
+					mini_ft_strjoin(heap_allocated, heap_allocated->input,
+						" via \1\033[1;34m\2", last_ocur(_getenv(&mini->heap,
+								"SHELL", mini->envp, 0), '/') + 1),
+					"\1\n🦪\2 \1\033[31m→\2 \1\033[0m\2"));
+	}
+	else
+	{
+		r_value = mini_ft_strjoin(heap_allocated, heap_allocated->input, temp,
 				mini_ft_strjoin(heap_allocated, heap_allocated->input,
-					" via \1\033[1;34m\2", last_ocur(_getenv(&mini->heap,"SHELL",mini->envp,0), '/') + 1),
-				"\1\n🦪\2 \1\033[32m→\2 \1\033[0m\2"));
-    }
-    return (r_value);
+					mini_ft_strjoin(heap_allocated, heap_allocated->input,
+						" via \1\033[1;34m\2", last_ocur(_getenv(&mini->heap,
+								"SHELL", mini->envp, 0), '/') + 1),
+					"\1\n🦪\2 \1\033[32m→\2 \1\033[0m\2"));
+	}
+	return (r_value);
 }
 
-char	*build_prompt(t_mini * mini,t_heap_allocated *heap_allocated)
+char	*build_prompt(t_mini *mini, t_heap_allocated *heap_allocated)
 {
 	char	*buffer;
 	char	*prompt;
@@ -67,7 +68,7 @@ char	*build_prompt(t_mini * mini,t_heap_allocated *heap_allocated)
 	temp = mini_ft_strjoin(heap_allocated, heap_allocated->input, prompt,
 			"\1\033[0m\2");
 	prompt = r_prompt(mini, temp);
-    return (prompt);
+	return (prompt);
 }
 
 char	*last_ocur(char *string, char c)

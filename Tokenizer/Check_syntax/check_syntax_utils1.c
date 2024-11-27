@@ -36,7 +36,7 @@ void	_init_get(t_mini *mini, t_double_link_list **lines,
 			sizeof(**lines));
 	**lines = (t_double_link_list){};
 	init_list(*lines);
-	get_line->prompt = get_prompt(mini,&mini->heap_allocated);
+	get_line->prompt = get_prompt(mini, &mini->heap_allocated);
 	get_line->line = init_line(&mini->heap_allocated, *lines, get_line->prompt);
 }
 

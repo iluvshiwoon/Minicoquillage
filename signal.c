@@ -26,10 +26,10 @@ void	sigquit_handler(int sig)
 	g_signal = sig;
 }
 
-void    handle_sig(void)
+void	handle_sig(void)
 {
 	struct sigaction	sa;
-    struct sigaction    sb;
+	struct sigaction	sb;
 
 	sa.sa_handler = sigint_handler;
 	sb.sa_handler = sigquit_handler;

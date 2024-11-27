@@ -70,8 +70,9 @@ int					check_parenthesis(t_control_dll *control);
 int					check_error_tokens(t_control_dll *control);
 
 // Prompt.c
-char				*get_prompt(t_mini * mini, t_heap_allocated *heap_allocated);
-char				*build_prompt(t_mini * mini, t_heap_allocated *heap_allocated);
+char				*get_prompt(t_mini *mini, t_heap_allocated *heap_allocated);
+char				*build_prompt(t_mini *mini,
+						t_heap_allocated *heap_allocated);
 char				*last_ocur(char *string, char c);
 
 // Free.c
