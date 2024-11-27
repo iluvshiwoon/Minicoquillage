@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 15:37:21 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 11:40:46 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 16:11:57 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ char	*__get_path(t_heap *heap, char **path, int *status, char *cmd)
 				return (*status = 126, NULL);
 			else if (access(r_value, X_OK) == 0)
 				return (/* *status = 126,  */ r_value);
-			return (*status = 126, ft_printf_fd(STDERR_FILENO, "minicoquillage:
-					%s: Permission denied\n", r_value), NULL);
+			return (*status = 126, ft_printf_fd(STDERR_FILENO, "minicoquillage:\
+ %s: Permission denied\n", r_value), NULL);
 		}
 	}
 	return (*status = 127, ft_printf_fd(STDERR_FILENO, "minicoquillage: %s",
@@ -61,8 +61,8 @@ char	*_get_path(t_heap *heap, char **envp, int *status, char *cmd)
 		{
 			if (access(path[i], X_OK) == 0)
 				return (path[i]);
-			return (*status = 126, ft_printf_fd(STDERR_FILENO, "minicoquillage:
-					%s: Permission denied\n", path[i]), NULL);
+			return (*status = 126, ft_printf_fd(STDERR_FILENO, "minicoquillage:\
+ %s: Permission denied\n", path[i]), NULL);
 		}
 	}
 	return (__get_path(heap, path, status, cmd));
@@ -83,8 +83,8 @@ char	*get_path(t_heap *heap, char **envp, int *status, char *cmd)
 						"minicoquillage: ", cmd),
 					": No such file or directory\n")), NULL);
 	else if (is_path(cmd) && access(cmd, X_OK) == -1)
-		return (*status = 126, ft_printf_fd(STDERR_FILENO, "minicoquillage:
-				%s: Permission denied\n", cmd), NULL);
+		return (*status = 126, ft_printf_fd(STDERR_FILENO, "minicoquillage:\
+ %s: Permission denied\n", cmd), NULL);
 	else if (is_path(cmd) && is_dir(cmd))
 		return (*status = 126, NULL);
 	else if (is_path(cmd) && access(cmd, X_OK) == 0)

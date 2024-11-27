@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 00:34:42 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 17:08:59 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ typedef struct s_exec
 	int				og_stdout;
 	int				og_stdin;
 	int				skip;
+    int i;
+    int j;
 }					t_exec;
 
 typedef struct s_pipeline
@@ -57,6 +59,21 @@ bool				check_builtin(t_heap *heap, char *cmd);
 bool				is_dir(char *cmd);
 bool				is_path(char *cmd);
 
+// close_pipe.c
+void	_close_pipes(int pipe_nb, int (*pipefd)[2], int i);
+void	_close_pipe3(int pipe_nb, int (*pipefd)[2], int i);
+
+// pipeline_utils.c
+void	_count_pipe(t_heap *heap, int (**pipefd)[2], int *pipe_nb,
+		t_ast_node *first_node);
+void	_pipeline_exec_tree(t_mini *mini, t_parser_node **p_node,
+		t_ast_node *first_node);
+void	_pipeline_skip(int i, t_ast_node **first_node, t_parser_node **p_node);
+void	_pipeline_exec(t_mini *mini, t_parser_node *p_node);
+void	__exec_pipe(t_mini *mini, t_parser_node **p_node,
+		t_ast_node *first_node, t_exec *exec);
+
+
 // pipeline.c
 void				_count_pipe(t_heap *heap, int (**pipefd)[2], int *pipe_nb,
 						t_ast_node *first_node);
@@ -78,18 +95,16 @@ int					_call_builtin(t_mini *mini, char **globbed, t_exec exec);
 void				_exec_tree(t_mini *mini, t_ast_node *first_node);
 
 // redirect.c
-void				_redirect(t_mini *mini, int *skip, t_atom *atom,
-						int og_stdout);
+void	_redirect(t_mini *mini, t_atom *atom, t_exec * exec);
 void				redirect(t_mini *mini, t_exec *exec,
 						t_ast_node *first_node);
 
 // redirect_utils.c
-void				_error(char *error, int *skip, int *status, char *filename,
-						int err_status);
-int					_stdin(t_heap *heap, int *skip, int *status,
-						t_expanded *expanded, int i, t_atom *atom,
-						int og_stdout);
-int					_stdout(t_heap *heap, int *skip, int *status,
-						t_expanded *expanded, int i, t_atom *atom,
-						int og_stdout);
+int	_stdin(t_mini *mini, t_expanded *expanded, t_atom *atom, t_exec * exec);
+int	_stdout(t_mini *mini, t_expanded *expanded, t_atom *atom, t_exec *exec);
+
+// redirect_utils1.c
+void	_error(char *error, int *skip, int *status, char *filename);
+void __red(char * globbed, t_atom * atom, t_exec * exec);
+
 #endif

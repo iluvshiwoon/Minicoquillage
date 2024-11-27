@@ -6,26 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/26 16:27:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 15:55:55 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
-// managing term var (ex vim killed...)
-// TEST: script to test path / exec / expansion with echo and export
-/
-	expansion in heredoc
-	//
-	// BONUS
-	// bonus change arrow color depending on exit status;
-	// heredoc handle expansion (logic & link list for env for ez edit from export unset ...)
-	//
-	// EVAL
-	// edit readme to add tricky point to remember for future evaluation
-
-	void
-	execution(t_mini *mini, t_ast *ast)
+void execution(t_mini *mini, t_ast *ast)
 {
 	mini->heap.heap_allocated = &mini->heap_allocated;
 	mini->heap.list = mini->heap_allocated.exec;
