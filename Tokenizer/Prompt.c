@@ -6,21 +6,47 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:46:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 15:23:35 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 20:23:24 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Minicoquillage.h"
 
-char	*get_prompt(t_heap_allocated *heap_allocated)
+char	*get_prompt(t_mini * mini, t_heap_allocated *heap_allocated)
 {
 	char	*prompt;
 
-	prompt = build_prompt(heap_allocated);
+	prompt = build_prompt(mini, heap_allocated);
 	return (prompt);
 }
 
-char	*build_prompt(t_heap_allocated *heap_allocated)
+char * r_prompt(t_mini * mini, char * temp)
+{
+    char * r_value;
+    t_heap_allocated * heap_allocated;
+
+    heap_allocated = &mini->heap_allocated;
+    if (mini->status)
+    {
+        r_value = mini_ft_strjoin(heap_allocated, heap_allocated->input, temp,
+			mini_ft_strjoin(heap_allocated, heap_allocated->input,
+				mini_ft_strjoin(heap_allocated, heap_allocated->input,
+					" via \1\033[1;34m\2", last_ocur(_getenv(&mini->heap,
+                                              "SHELL",mini->envp,0), '/') + 1),
+				"\1\n🦪\2 \1\033[31m→\2 \1\033[0m\2"));
+    }
+    else
+    {
+         r_value = mini_ft_strjoin(heap_allocated, heap_allocated->input, temp,
+			mini_ft_strjoin(heap_allocated, heap_allocated->input,
+				mini_ft_strjoin(heap_allocated, heap_allocated->input,
+					" via \1\033[1;34m\2", last_ocur(_getenv(&mini->heap,"SHELL",mini->envp,0), '/') + 1),
+				"\1\n🦪\2 \1\033[32m→\2 \1\033[0m\2"));
+    }
+    return (r_value);
+}
+
+char	*build_prompt(t_mini * mini,t_heap_allocated *heap_allocated)
 {
 	char	*buffer;
 	char	*prompt;
@@ -40,12 +66,8 @@ char	*build_prompt(t_heap_allocated *heap_allocated)
 			"\1\033[1;34m\2", prompt + 1);
 	temp = mini_ft_strjoin(heap_allocated, heap_allocated->input, prompt,
 			"\1\033[0m\2");
-	prompt = mini_ft_strjoin(heap_allocated, heap_allocated->input, temp,
-			mini_ft_strjoin(heap_allocated, heap_allocated->input,
-				mini_ft_strjoin(heap_allocated, heap_allocated->input,
-					" via \1\033[1;34m\2", last_ocur(getenv("SHELL"), '/') + 1),
-				"\1\n🦪\2 \1→\2 \1\033[0m\2"));
-	return (prompt);
+	prompt = r_prompt(mini, temp);
+    return (prompt);
 }
 
 char	*last_ocur(char *string, char c)

@@ -21,6 +21,7 @@
 # include "Builtins_V2/builtin.h"
 
 void _close(int fd);
+void    handle_sig(void);
 
 extern int g_signal;
 enum e_mode {

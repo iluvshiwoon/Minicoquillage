@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 15:23:58 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 20:22:35 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 int	tokenizer(t_mini *mini)
 {
+    mini->heap.heap_allocated = &mini->heap_allocated;
+    mini->heap.list = mini->heap_allocated.tokens;
+    mini->heap.env = mini->heap_allocated.env;
 	mini->control.line = get_line(mini);
 	if (!mini->control.line || !*mini->control.line)
 		return (EXIT_FAILURE);
