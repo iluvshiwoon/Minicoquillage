@@ -12,7 +12,8 @@
 
 #include "../Minicoquillage.h"
 
-char	*mini_ft_strdup(t_heap_allocated * heap_allocated, t_double_link_list * list,const char *s)
+char	*mini_ft_strdup(t_heap_allocated *heap_allocated,
+		t_double_link_list *list, const char *s)
 {
 	char			*s_dupe;
 	unsigned int	i;
@@ -20,7 +21,7 @@ char	*mini_ft_strdup(t_heap_allocated * heap_allocated, t_double_link_list * lis
 	i = 0;
 	while (s[i])
 		i++;
-	s_dupe = wrap_malloc(heap_allocated,list,(i + 1) * sizeof(char));
+	s_dupe = wrap_malloc(heap_allocated, list, (i + 1) * sizeof(char));
 	if (!s_dupe)
 		return (0);
 	i = 0;

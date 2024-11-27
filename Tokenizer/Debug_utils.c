@@ -26,7 +26,7 @@ void	build_type(char **type)
 	type[CLOSE_PARENTHESIS] = "CLOSE PARENTHESIS";
 	type[CMD_SEP] = "COMMAND SEPARATOR";
 	type[R_FILE] = "FILE";
-    type[EOE] = "EOE";
+	type[EOE] = "EOE";
 }
 
 void	print_list(t_double_link_list *tokens_lists)

@@ -15,12 +15,12 @@
 
 void	print_error(char *error, t_token *token, int complete)
 {
-    if (!complete)
-        return;
-    if (token)
-        ft_printf_fd(STDERR_FILENO,error, token->value);
-    else if (!token)
-        ft_printf_fd(STDERR_FILENO,error, NULL);
+	if (!complete)
+		return ;
+	if (token)
+		ft_printf_fd(STDERR_FILENO, error, token->value);
+	else if (!token)
+		ft_printf_fd(STDERR_FILENO, error, NULL);
 }
 
 int	check_error1(t_control_dll *control, t_token *next)
@@ -31,7 +31,8 @@ int	check_error1(t_control_dll *control, t_token *next)
 	if (control->token->type >= REDIRECTION && control->token->type <= HERE_DOC
 		&& next->type >= REDIRECTION && next->type <= HERE_DOC)
 		return (print_error(error, next, control->complete), EXIT_FAILURE);
-	else if ((control->token->type == REDIRECTION || control->token->type == HERE_DOC)&& next->type != R_FILE)
+	else if ((control->token->type == REDIRECTION
+			|| control->token->type == HERE_DOC) && next->type != R_FILE)
 		return (print_error(error, next, control->complete), EXIT_FAILURE);
 	else if (control->token->type >= CMD_SEP && control->token->type <= OR
 		&& next->type >= CMD_SEP && next->type <= OR)
@@ -42,8 +43,9 @@ int	check_error1(t_control_dll *control, t_token *next)
 	else if (control->token->type == CLOSE_PARENTHESIS
 		&& !(next->type >= CLOSE_PARENTHESIS && next->type <= HERE_DOC))
 		return (print_error(error, next, control->complete), EXIT_FAILURE);
-    else if (next->type == OPEN_PARENTHESIS &&\
-            !((control->token->type >= CMD_SEP && control->token->type <= OR)||control->token->type == OPEN_PARENTHESIS))
+	else if (next->type == OPEN_PARENTHESIS
+		&& !((control->token->type >= CMD_SEP && control->token->type <= OR)
+			|| control->token->type == OPEN_PARENTHESIS))
 		return (print_error(error, next, control->complete), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -61,7 +63,8 @@ int	check_error(t_control_dll *control, t_token *next)
 			return (CONTINUE);
 		else if (!next && control->token->type >= REDIRECTION
 			&& control->token->type <= HERE_DOC)
-			return (print_error(newline, NULL, control->complete), EXIT_FAILURE);
+			return (print_error(newline, NULL, control->complete),
+				EXIT_FAILURE);
 		else if (!control->token && next->type >= CMD_SEP && next->type <= OR)
 			return (print_error(error, next, control->complete), EXIT_FAILURE);
 		return (EXIT_SUCCESS);
@@ -91,7 +94,8 @@ int	check_parenthesis(t_control_dll *control)
 		control->node = control->node->next;
 	}
 	if (parenthesis < 0)
-		return (print_error(error, control->token, control->complete), EXIT_FAILURE);
+		return (print_error(error, control->token, control->complete),
+			EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -102,7 +106,7 @@ int	check_error_tokens(t_control_dll *control)
 
 	control->node = control->list->first_node;
 	control->token = NULL;
-    next = NULL;
+	next = NULL;
 	if (check_error(control, control->list->first_node->data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	while (control->node)

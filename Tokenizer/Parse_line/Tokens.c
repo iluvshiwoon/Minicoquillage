@@ -6,42 +6,10 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 16:29:26 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/20 23:15:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 15:20:34 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../Minicoquillage.h"
-
-// void	expand_tokens(t_double_link_node *node)
-// {
-// 	t_control_dll	control;
-// 	t_open_quote	open;
-// 	char			*temp;
-// 	size_t			j;
-//
-// 	init_expand(&open, &control, &j, node);
-// 	while (control.token->value[j])
-// 	{
-//         if (handle_quote(&control, &open, j) == EXIT_SUCCESS);
-//         else if (control.token->value[j] == '$' && !open.double_quote && !open.single_quote)
-//         {
-//             expand(&j, &control.token->value,
-// 					&temp, &node);
-//         }
-//         else if (control.token->value[j] == '"' && open.double_quote)
-// 		{
-// 			open.double_quote = expand_double_quote(&j, &control.token->value,
-// 					&temp, &node);
-// 			control.token->quote = DOUBLE;
-// 		}
-//         else if (control.token->value[j] == '\'' && open.single_quote)
-// 		{
-// 			open.single_quote = expand_single_quote(&j, &control.token->value,
-// 					&temp, &node);
-// 			control.token->quote = SINGLE;
-// 		}
-// 		++j;
-// 	}
-// }
 
 int	shenanigans(char *line, size_t *i, size_t *j, size_t *k)
 {
@@ -59,7 +27,7 @@ int	shenanigans(char *line, size_t *i, size_t *j, size_t *k)
 	return (EXIT_SUCCESS);
 }
 
-int	is_sep(char *line, size_t *i, size_t *j, t_mini * mini)
+int	is_sep(char *line, size_t *i, size_t *j, t_mini *mini)
 {
 	size_t	k;
 
@@ -95,7 +63,7 @@ void	skip_space_wrapper(size_t j, size_t *i, char *line, t_open_quote *open)
 	}
 }
 
-t_double_link_list	*create_tokens(t_mini * mini,char *line)
+t_double_link_list	*create_tokens(t_mini *mini, char *line)
 {
 	t_open_quote	open;
 	size_t			i;
@@ -108,7 +76,7 @@ t_double_link_list	*create_tokens(t_mini * mini,char *line)
 				&& !open.double_quote) && (ft_isspace(line[j]) || is_sep(line,
 					&i, &j, mini)))
 		{
-			add_token(i, j, line,mini);
+			add_token(i, j, line, mini);
 			j = skip_space(line, j);
 			skip_space_wrapper(j, &i, line, &open);
 		}

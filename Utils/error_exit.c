@@ -12,10 +12,10 @@
 
 #include "../Minicoquillage.h"
 
-void error_exit(char * msg, t_heap_allocated * heap_allocated)
+void	error_exit(char *msg, t_heap_allocated *heap_allocated)
 {
-    if (msg)
-        printf("%s",msg);
-    free_heap(heap_allocated,true);
-    exit(EXIT_FAILURE);
+	if (msg)
+		printf("%s", msg);
+	free_heap(heap_allocated, true);
+	exit(EXIT_FAILURE);
 }

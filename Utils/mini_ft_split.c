@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 16:41:18 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/25 17:57:13 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/27 15:11:29 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static void	mini_free_split(char **split, char *s_trimmed, size_t size)
 	free(split);
 }
 
-static char	*mini_count_split(t_heap * heap, const char *s, char c, size_t *sub_str_count)
+static char	*mini_count_split(t_heap *heap, const char *s, char c,
+		size_t *sub_str_count)
 {
 	char	set[2];
 	char	*s_trimmed;
@@ -36,7 +37,7 @@ static char	*mini_count_split(t_heap * heap, const char *s, char c, size_t *sub_
 	*sub_str_count = 1;
 	set[0] = c;
 	set[1] = '\0';
-	s_trimmed = mini_ft_strtrim(heap,s, set);
+	s_trimmed = mini_ft_strtrim(heap, s, set);
 	if (!s_trimmed)
 		return (NULL);
 	if (*s_trimmed == 0)
@@ -50,7 +51,8 @@ static char	*mini_count_split(t_heap * heap, const char *s, char c, size_t *sub_
 	return (s_trimmed);
 }
 
-static char	**mini_make_split(t_heap * heap,char **split, char *s_trimmed, char c)
+static char	**mini_make_split(t_heap *heap, char **split, char *s_trimmed,
+		char c)
 {
 	size_t	i;
 	size_t	j;
@@ -64,7 +66,7 @@ static char	**mini_make_split(t_heap * heap,char **split, char *s_trimmed, char 
 		start = i;
 		while (s_trimmed[i] != c && s_trimmed[i])
 			i++;
-		split[j] = mini_ft_substr(heap,s_trimmed, start, i -start);
+		split[j] = mini_ft_substr(heap, s_trimmed, start, i - start);
 		if (!split[j])
 		{
 			mini_free_split(split, s_trimmed, j + 1);
@@ -78,19 +80,19 @@ static char	**mini_make_split(t_heap * heap,char **split, char *s_trimmed, char 
 	return (split);
 }
 
-char	**mini_ft_split(t_heap * heap,char const *s, char c)
+char	**mini_ft_split(t_heap *heap, char const *s, char c)
 {
 	size_t	sub_str_count;
 	char	**split;
 	char	*s_trimmed;
 
-	s_trimmed = mini_count_split(heap,s, c, &sub_str_count);
-	// split = malloc(sizeof(char *) * (sub_str_count + 1));
-	split = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*split) * (sub_str_count + 1));
+	s_trimmed = mini_count_split(heap, s, c, &sub_str_count);
+	split = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*split)
+			* (sub_str_count + 1));
 	if (!split)
 	{
 		free(s_trimmed);
 		return (NULL);
 	}
-	return (mini_make_split(heap,split, s_trimmed, c));
+	return (mini_make_split(heap, split, s_trimmed, c));
 }

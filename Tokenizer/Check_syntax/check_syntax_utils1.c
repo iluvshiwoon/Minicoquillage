@@ -27,25 +27,27 @@ size_t	count_node(t_double_link_list *list)
 	return (i);
 }
 
-void    _init_get(t_mini * mini, t_double_link_list ** lines,\
-                  t_double_link_node ** node, t_get_line * get_line)
+void	_init_get(t_mini *mini, t_double_link_list **lines,
+		t_double_link_node **node, t_get_line *get_line)
 {
-    *node = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.input, sizeof(**node));
-    *lines = wrap_malloc(&mini->heap_allocated,mini->heap_allocated.input,sizeof(**lines));
-    **lines = (t_double_link_list){};
-    init_list(*lines);
-    get_line->prompt = get_prompt(&mini->heap_allocated);
-    get_line->line = init_line(&mini->heap_allocated, *lines, get_line->prompt);
+	*node = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.input,
+			sizeof(**node));
+	*lines = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.input,
+			sizeof(**lines));
+	**lines = (t_double_link_list){};
+	init_list(*lines);
+	get_line->prompt = get_prompt(&mini->heap_allocated);
+	get_line->line = init_line(&mini->heap_allocated, *lines, get_line->prompt);
 }
 
-void    _check(t_mini * mini, t_get_line * get_line, t_double_link_list * lines\
-               , int * r_value)
+void	_check(t_mini *mini, t_get_line *get_line, t_double_link_list *lines,
+		int *r_value)
 {
-    while (check_syntax(get_line->temp) == EXIT_FAILURE
-        || *r_value == EXIT_FAILURE || *r_value == CONTINUE)
-    {
-        if (handle_line(mini, get_line, lines, r_value) == EXIT_FAILURE)
-            break;
-        get_line->temp = concat_input(&mini->heap_allocated,lines);
-    }
+	while (check_syntax(get_line->temp) == EXIT_FAILURE
+		|| *r_value == EXIT_FAILURE || *r_value == CONTINUE)
+	{
+		if (handle_line(mini, get_line, lines, r_value) == EXIT_FAILURE)
+			break ;
+		get_line->temp = concat_input(&mini->heap_allocated, lines);
+	}
 }

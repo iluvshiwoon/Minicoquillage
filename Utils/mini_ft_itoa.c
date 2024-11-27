@@ -28,7 +28,7 @@ static unsigned int	c_size(int n, unsigned int *p_n, int *sign)
 	return (size);
 }
 
-char	*mini_ft_itoa(t_heap * heap, int n)
+char	*mini_ft_itoa(t_heap *heap, int n)
 {
 	unsigned int	p_n;
 	int				sign;
@@ -36,7 +36,8 @@ char	*mini_ft_itoa(t_heap * heap, int n)
 	char			*a;
 
 	size = c_size(n, &p_n, &sign);
-	a = wrap_malloc(heap->heap_allocated, heap->list, sizeof(char) * (size + 1));
+	a = wrap_malloc(heap->heap_allocated, heap->list, sizeof(char) * (size
+				+ 1));
 	if (!a)
 		return (NULL);
 	a[size] = '\0';

@@ -53,14 +53,15 @@ static size_t	mini_find_l_trimmed(char const *s1, char const *set,
 	return (l_trimmed);
 }
 
-char	*mini_ft_strtrim(t_heap * heap, char const *s1, char const *set)
+char	*mini_ft_strtrim(t_heap *heap, char const *s1, char const *set)
 {
 	char	*trimmed;
 	size_t	l_trimmed;
 	size_t	l_trim_beg;
 
 	l_trimmed = mini_find_l_trimmed(s1, set, &l_trim_beg);
-	trimmed = wrap_malloc(heap->heap_allocated, heap->list,sizeof(*trimmed)*l_trimmed + sizeof(*trimmed));
+	trimmed = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*trimmed)
+			* l_trimmed + sizeof(*trimmed));
 	if (!trimmed)
 		return (NULL);
 	ft_strlcpy(trimmed, s1 + l_trim_beg, l_trimmed + 1);
