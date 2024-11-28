@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:40:29 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:39:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,24 @@ int	_call_builtin(t_mini *mini, char **globbed, t_exec exec)
 				ft_strlen("exit"))) == 0)
 		return (mini_exit(mini, globbed, exec));
 	return (42);
+}
+
+void    __dup(t_mini * mini, t_exec * exec)
+{
+    t_double_link_node * node;
+    int * fd;
+
+    node = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*node));
+    fd = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*fd));
+    node->data = fd;    
+    *fd = dup(STDIN_FILENO);
+    exec->fds->pf_insert_end(exec->fds,node);
+    exec->og_stdin = *fd;
+
+    node = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*node));
+    fd = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*fd));
+    node->data = fd;    
+    *fd = dup(STDOUT_FILENO);
+    exec->fds->pf_insert_end(exec->fds,node);
+    exec->og_stdout = *fd;
 }

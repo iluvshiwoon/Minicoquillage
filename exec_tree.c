@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:36:42 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:40:34 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	_exec_exec(t_mini *mini, t_parser_node **p_node,
 
 	if (is_op((*p_node)->ops) && !exec->skip)
 	{
-		_exec_tree(mini, (*first_node)->left);
+		_exec_tree(mini, (*first_node)->left, (*exec).fds);
 		(*p_node) = (*first_node)->data;
 		if ((*p_node)->atom && (*p_node)->atom->in_fd)
 			_close((*p_node)->atom->in_fd);
@@ -67,13 +67,13 @@ void	_exec_exec(t_mini *mini, t_parser_node **p_node,
 	(*p_node) = (*first_node)->data;
 }
 
-void	_exec_tree(t_mini *mini, t_ast_node *first_node)
+void	_exec_tree(t_mini *mini, t_ast_node *first_node, t_double_link_list * fds)
 {
 	t_parser_node	*p_node;
 	t_exec			exec;
 
-	exec.og_stdin = dup(STDIN_FILENO);
-	exec.og_stdout = dup(STDOUT_FILENO);
+    exec.fds = fds;
+    __dup(mini, &exec);
 	exec.skip = 0;
 	while (first_node && first_node->left)
 	{
@@ -90,6 +90,4 @@ void	_exec_tree(t_mini *mini, t_ast_node *first_node)
 		_reset_fd(exec);
 		first_node = first_node->right;
 	}
-	_close(exec.og_stdin);
-	_close(exec.og_stdout);
 }

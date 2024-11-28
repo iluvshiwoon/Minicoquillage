@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:01:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:49:02 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ void	_count_pipe(t_heap *heap, int (**pipefd)[2], int *pipe_nb,
 }
 
 void	_pipeline_exec_tree(t_mini *mini, t_parser_node **p_node,
-		t_ast_node *first_node)
+		t_ast_node *first_node, t_exec exec)
 {
 	t_ast_node	*left;
 
 	left = first_node->left;
-	_exec_tree(mini, left);
+	_exec_tree(mini, left, exec.fds);
 	(*p_node) = first_node->data;
 	if ((*p_node)->atom && (*p_node)->atom->in_fd)
 		_close((*p_node)->atom->in_fd);
@@ -90,12 +90,11 @@ void	__exec_pipe(t_mini *mini, t_parser_node **p_node,
 		t_ast_node *first_node, t_exec *exec)
 {
 	redirect(mini, exec, first_node);
-	_close(exec->og_stdin);
-	_close(exec->og_stdout);
-	if (is_op((*p_node)->ops) && !exec->skip)
-		_pipeline_exec_tree(mini, p_node, first_node);
+    if (is_op((*p_node)->ops) && !exec->skip)
+        _pipeline_exec_tree(mini, p_node, first_node, *exec);
 	else if (!exec->skip)
 		_pipeline_exec(mini, (*p_node));
+    close_fds(exec->fds);
 	free_heap(&mini->heap_allocated, true);
 	exit((mini->status + 256) % 256);
 }

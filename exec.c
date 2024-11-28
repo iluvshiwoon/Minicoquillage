@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:51:47 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 void	execution(t_mini *mini, t_ast *ast)
 {
+    t_double_link_list * fds;
+    
+    fds = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.exec, sizeof(*fds));
+    init_list(fds);
 	mini->heap.heap_allocated = &mini->heap_allocated;
 	mini->heap.list = mini->heap_allocated.exec;
 	mini->heap.env = mini->heap_allocated.env;
@@ -24,11 +28,12 @@ void	execution(t_mini *mini, t_ast *ast)
 		return ;
 	}
 	g_signal = 999;
-	_exec_tree(mini, ast->first_node);
+	_exec_tree(mini, ast->first_node, fds);
 	g_signal = 0;
 	if (MODE == INTERACTIVE)
 		add_history(mini->control.line);
 	clean_heredoc(&mini->heap, ast->first_node);
+    close_fds(fds);
 }
 
 int	__exec_node(t_mini *mini, pid_t pid, struct termios ogi_term)

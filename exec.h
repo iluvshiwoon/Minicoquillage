@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:48:18 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_exec
 	int				skip;
 	int				i;
 	int				j;
+    t_double_link_list * fds;
 }					t_exec;
 
 typedef struct s_pipeline
@@ -66,8 +67,8 @@ void				_close_pipe3(int pipe_nb, int (*pipefd)[2], int i);
 // pipeline_utils.c
 void				_count_pipe(t_heap *heap, int (**pipefd)[2], int *pipe_nb,
 						t_ast_node *first_node);
-void				_pipeline_exec_tree(t_mini *mini, t_parser_node **p_node,
-						t_ast_node *first_node);
+void	_pipeline_exec_tree(t_mini *mini, t_parser_node **p_node,
+		t_ast_node *first_node, t_exec exec);
 void				_pipeline_skip(int i, t_ast_node **first_node,
 						t_parser_node **p_node);
 void				_pipeline_exec(t_mini *mini, t_parser_node *p_node);
@@ -90,9 +91,10 @@ void				execution(t_mini *mini, t_ast *ast);
 // exec_utils.c
 void				_reset_fd(t_exec exec);
 int					_call_builtin(t_mini *mini, char **globbed, t_exec exec);
+void    __dup(t_mini * mini, t_exec * exec);
 
 // exec_tree.c
-void				_exec_tree(t_mini *mini, t_ast_node *first_node);
+void				_exec_tree(t_mini *mini, t_ast_node *first_node, t_double_link_list * fds);
 
 // redirect.c
 void				_redirect(t_mini *mini, t_atom *atom, t_exec *exec);
@@ -109,4 +111,5 @@ int					_stdout(t_mini *mini, t_expanded *expanded, t_atom *atom,
 void				_error(char *error, int *skip, int *status, char *filename);
 void				__red(char *globbed, t_atom *atom, t_exec *exec);
 
+void    close_fds(t_double_link_list * fds);
 #endif
