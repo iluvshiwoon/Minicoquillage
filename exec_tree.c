@@ -67,13 +67,14 @@ void	_exec_exec(t_mini *mini, t_parser_node **p_node,
 	(*p_node) = (*first_node)->data;
 }
 
-void	_exec_tree(t_mini *mini, t_ast_node *first_node, t_double_link_list * fds)
+void	_exec_tree(t_mini *mini, t_ast_node *first_node,
+		t_double_link_list *fds)
 {
 	t_parser_node	*p_node;
 	t_exec			exec;
 
-    exec.fds = fds;
-    __dup(mini, &exec);
+	exec.fds = fds;
+	__dup(mini, &exec);
 	exec.skip = 0;
 	while (first_node && first_node->left)
 	{

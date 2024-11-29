@@ -63,14 +63,17 @@ char	*update_node(t_heap_allocated *heap_allocated,
 {
 	t_double_link_node	*node;
 	char				*line;
+	char				*dup_line;
 
 	node = wrap_malloc(heap_allocated, heap_allocated->input, sizeof(*node));
 	*node = (t_double_link_node){};
 	line = readline("· ");
 	if (!line)
 		return (NULL);
-	node->data = mini_ft_strjoin(heap_allocated, heap_allocated->input, line,
-			"\n");
+	dup_line = mini_ft_strdup(heap_allocated, heap_allocated->input, line);
+	free(line);
+	node->data = mini_ft_strjoin(heap_allocated, heap_allocated->input,
+			dup_line, "\n");
 	lines->pf_insert_end(lines, node);
-	return (line);
+	return (dup_line);
 }

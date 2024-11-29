@@ -44,22 +44,21 @@ int	_call_builtin(t_mini *mini, char **globbed, t_exec exec)
 	return (42);
 }
 
-void    __dup(t_mini * mini, t_exec * exec)
+void	__dup(t_mini *mini, t_exec *exec)
 {
-    t_double_link_node * node;
-    int * fd;
+	t_double_link_node	*node;
+	int					*fd;
 
-    node = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*node));
-    fd = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*fd));
-    node->data = fd;    
-    *fd = dup(STDIN_FILENO);
-    exec->fds->pf_insert_end(exec->fds,node);
-    exec->og_stdin = *fd;
-
-    node = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*node));
-    fd = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*fd));
-    node->data = fd;    
-    *fd = dup(STDOUT_FILENO);
-    exec->fds->pf_insert_end(exec->fds,node);
-    exec->og_stdout = *fd;
+	node = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*node));
+	fd = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*fd));
+	node->data = fd;
+	*fd = dup(STDIN_FILENO);
+	exec->fds->pf_insert_end(exec->fds, node);
+	exec->og_stdin = *fd;
+	node = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*node));
+	fd = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*fd));
+	node->data = fd;
+	*fd = dup(STDOUT_FILENO);
+	exec->fds->pf_insert_end(exec->fds, node);
+	exec->og_stdout = *fd;
 }

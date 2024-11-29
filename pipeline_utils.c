@@ -90,11 +90,11 @@ void	__exec_pipe(t_mini *mini, t_parser_node **p_node,
 		t_ast_node *first_node, t_exec *exec)
 {
 	redirect(mini, exec, first_node);
-    if (is_op((*p_node)->ops) && !exec->skip)
-        _pipeline_exec_tree(mini, p_node, first_node, *exec);
+	if (is_op((*p_node)->ops) && !exec->skip)
+		_pipeline_exec_tree(mini, p_node, first_node, *exec);
 	else if (!exec->skip)
 		_pipeline_exec(mini, (*p_node));
-    close_fds(exec->fds);
+	close_fds(exec->fds);
 	free_heap(&mini->heap_allocated, true);
 	exit((mini->status + 256) % 256);
 }

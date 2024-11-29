@@ -52,21 +52,21 @@ char	*build_prompt(t_mini *mini, t_heap_allocated *heap_allocated)
 	char	*buf;
 	char	*prompt;
 	char	*temp;
-    bool    to_free;
+	bool	to_free;
 
-    to_free = false;
-    buf = _getenv(&mini->heap,"PWD", mini->envp, 0);
-    if (!buf)
-    {
-        buf = getcwd(NULL, 0);
-        to_free = true;
-    }
+	to_free = false;
+	buf = _getenv(&mini->heap, "PWD", mini->envp, 0);
+	if (!buf)
+	{
+		buf = getcwd(NULL, 0);
+		to_free = true;
+	}
 	temp = buf;
 	if (!buf)
 		buf = mini_ft_strdup(heap_allocated, heap_allocated->tokens, ".");
-	buf = mini_ft_strdup(heap_allocated,heap_allocated->tokens, buf);
-    if (to_free == true)
-	    free(temp);
+	buf = mini_ft_strdup(heap_allocated, heap_allocated->tokens, buf);
+	if (to_free == true)
+		free(temp);
 	prompt = last_ocur(buf, '/');
 	prompt = mini_ft_strjoin(heap_allocated, heap_allocated->input,
 			"\1\033[1;34m\2", prompt + 1);

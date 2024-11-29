@@ -12,16 +12,16 @@
 
 #include "minicoquillage.h"
 
-void    close_fds(t_double_link_list * fds)
+void	close_fds(t_double_link_list *fds)
 {
-    t_double_link_node	*node;
-    int * fd;
+	t_double_link_node	*node;
+	int					*fd;
 
 	node = fds->first_node;
 	while (node)
 	{
-        fd = node->data;
-        _close(*fd);
+		fd = node->data;
+		_close(*fd);
 		node = node->next;
 	}
 }
