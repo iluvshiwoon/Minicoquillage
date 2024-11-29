@@ -98,7 +98,6 @@ int	handle_line(t_mini *mini, t_get_line *get_line, t_double_link_list *lines,
 	get_line->line = update_node(&mini->heap_allocated, lines);
 	if (!get_line->line)
 		return (EXIT_FAILURE);
-	free(get_line->line);
 	get_line->line = concat_input(&mini->heap_allocated, lines);
 	*r_value = check_temp_syntax(mini, get_line->line);
 	return (EXIT_SUCCESS);
