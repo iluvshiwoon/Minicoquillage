@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:46:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/11/29 00:09:26 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,25 @@ char	*r_prompt(t_mini *mini, char *temp)
 
 char	*build_prompt(t_mini *mini, t_heap_allocated *heap_allocated)
 {
-	char	*buffer;
+	char	*buf;
 	char	*prompt;
 	char	*temp;
-	t_heap	heap;
+    bool    to_free;
 
-	heap.heap_allocated = heap_allocated;
-	heap.list = heap_allocated->tokens;
-	buffer = getcwd(NULL, 0);
-	temp = buffer;
-	if (!buffer)
-		buffer = mini_ft_strdup(heap_allocated, heap.list, "FIXME");
-	buffer = mini_ft_strdup(heap_allocated, heap.list, buffer);
-	free(temp);
-	prompt = last_ocur(buffer, '/');
+    to_free = false;
+    buf = _getenv(&mini->heap,"PWD", mini->envp, 0);
+    if (!buf)
+    {
+        buf = getcwd(NULL, 0);
+        to_free = true;
+    }
+	temp = buf;
+	if (!buf)
+		buf = mini_ft_strdup(heap_allocated, heap_allocated->tokens, ".");
+	buf = mini_ft_strdup(heap_allocated,heap_allocated->tokens, buf);
+    if (to_free == true)
+	    free(temp);
+	prompt = last_ocur(buf, '/');
 	prompt = mini_ft_strjoin(heap_allocated, heap_allocated->input,
 			"\1\033[1;34m\2", prompt + 1);
 	temp = mini_ft_strjoin(heap_allocated, heap_allocated->input, prompt,
