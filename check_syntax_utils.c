@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:41:40 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	init_control(t_mini *mini, t_control_dll *gl_control)
 }
 
 char	*init_line(t_heap_allocated *heap_allocated, t_double_link_list *lines,
-		char *prompt)
+		char *prompt, t_mini * mini)
 {
 	char				*line;
 	char				*dup_line;
@@ -48,7 +48,7 @@ char	*init_line(t_heap_allocated *heap_allocated, t_double_link_list *lines,
 	if (g_signal == SIGINT)
 		return (dup2(_stdin, STDIN_FILENO), close(_stdin), line);
 	if (!line)
-		return (_close(_stdin), free_heap(heap_allocated, true), exit(0), NULL);
+		return (_close(_stdin), free_heap(heap_allocated, true), exit(mini->status), NULL);
 	node = wrap_malloc(heap_allocated, heap_allocated->input, sizeof(*node));
 	dup_line = mini_ft_strdup(heap_allocated, heap_allocated->input, line);
 	free(line);

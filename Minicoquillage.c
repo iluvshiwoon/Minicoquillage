@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:17:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/01 17:11:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (init_heap(&mini.heap_allocated) == EXIT_FAILURE)
 				error_exit("init_heap failed", &mini.heap_allocated);
+            if (g_signal == SIGINT)
+                mini.status = 130;
 			g_signal = 0;
 			if (tokenizer(&mini) == EXIT_SUCCESS)
 				execution(&mini, parser(&mini));
@@ -112,5 +114,5 @@ int	main(int argc, char **argv, char **envp)
 		debug(argv[1], &mini);
 		return (free_heap(&mini.heap_allocated, true), mini.status);
 	}
-	return (clear_history(), free_env(&mini.heap_allocated), 0);
+	return (clear_history(), free_env(&mini.heap_allocated), mini.status);
 }

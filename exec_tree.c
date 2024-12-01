@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:36:42 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/28 23:40:34 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/01 17:24:15 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ void	_exec_pipe(t_mini *mini, t_parser_node **p_node,
 			(*p_node) = (*first_node)->data;
 		}
 	}
-	(*p_node) = left->data;
-	if (!exec->skip)
-		redirect(mini, exec, (*first_node));
 	(*p_node) = left->data;
 	if (!exec->skip)
 		redirect(mini, exec, *first_node);

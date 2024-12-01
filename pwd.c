@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 18:38:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:54:49 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ int	mini_pwd(void)
 		w_bytes = write(1, cwd, ft_strlen(cwd));
 		w_bytes += write(1, "\n", 1);
 		if (w_bytes != ft_strlen(cwd) + 1)
+        {
+            ft_printf_fd(STDERR_FILENO, "minicoquillage: pwd: write error: No space left on device\n");
 			r_value = 1;
+        }
 		free(cwd);
 	}
 	return (r_value);

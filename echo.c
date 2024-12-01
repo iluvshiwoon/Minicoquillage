@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 18:45:44 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:54:46 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	r_echo(int opt)
 	if (!opt)
 		r_value = write(1, "\n", 1);
 	if (r_value != 1 && !opt)
-		return (1);
+		return (ft_printf_fd(STDERR_FILENO, "minicoquillage: echo: write error: No space left on device\n"), 1);
 	return (0);
 }
 
@@ -98,12 +98,12 @@ int	mini_echo(char **args)
 		{
 			r_value = write(1, " ", 1);
 			if (r_value != 1)
-				return (1);
+				return (ft_printf_fd(STDERR_FILENO, "minicoquillage: echo: write error: No space left on device\n"),1);
 		}
 		r_value = write(1, args[index.i] + index.j, ft_strlen(args[index.i])
 				- index.j);
 		if (r_value != (long long)ft_strlen(args[index.i]) - index.j)
-			return (1);
+			return (ft_printf_fd(STDERR_FILENO, "minicoquillage: echo: write error: No space left on device\n"), 1);
 		index.i++;
 		first = false;
 	}

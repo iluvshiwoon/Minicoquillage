@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:26:51 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:41:24 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	_init_get(t_mini *mini, t_double_link_list **lines,
 	**lines = (t_double_link_list){};
 	init_list(*lines);
 	get_line->prompt = get_prompt(mini, &mini->heap_allocated);
-	get_line->line = init_line(&mini->heap_allocated, *lines, get_line->prompt);
+	get_line->line = init_line(&mini->heap_allocated, *lines, get_line->prompt, mini);
 }
 
 void	_check(t_mini *mini, t_get_line *get_line, t_double_link_list *lines,
