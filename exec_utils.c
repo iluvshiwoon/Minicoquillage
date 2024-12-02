@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:40:29 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 04:13:10 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:25:00 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	_reset_fd(t_exec exec)
 	dup2(exec.og_stdout, STDOUT_FILENO);
 }
 
-int	_call_builtin(t_mini *mini, char **globbed, t_exec exec)
+int	_call_builtin(t_mini *mini, char **globbed)
 {
 	if (ft_strncmp(globbed[0], "echo", _max_len(ft_strlen(globbed[0]),
 				ft_strlen("echo"))) == 0)
@@ -40,7 +40,7 @@ int	_call_builtin(t_mini *mini, char **globbed, t_exec exec)
 		return (mini_env(mini->envp));
 	else if (ft_strncmp(globbed[0], "exit", _max_len(ft_strlen(globbed[0]),
 				ft_strlen("exit"))) == 0)
-		return (mini_exit(mini, globbed, exec));
+		return (mini_exit(mini, globbed));
 	return (42);
 }
 

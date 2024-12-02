@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:55:41 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:25:20 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,12 @@ int						_pipeline(t_mini *mini, t_ast_node *first_node,
 // exec.c
 int						_pipeline(t_mini *mini, t_ast_node *first_node,
 							t_exec exec);
-int						_call_builtin(t_mini *mini, char **globbed,
-							t_exec exec);
+int	_call_builtin(t_mini *mini, char **globbed);
 int						_exec_node(t_mini *mini, char **globbed);
 void					execution(t_mini *mini, t_ast *ast);
 
 // exec_utils.c
 void					_reset_fd(t_exec exec);
-int						_call_builtin(t_mini *mini, char **globbed,
-							t_exec exec);
 void					__dup(t_mini *mini, t_exec *exec);
 
 // exec_tree.c

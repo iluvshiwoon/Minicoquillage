@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:01:20 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 04:21:29 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:26:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,13 @@ void	_pipeline_skip(int i, t_ast_node **first_node, t_parser_node **p_node)
 
 void	_pipeline_exec(t_mini *mini, t_parser_node *p_node)
 {
-	t_exec	exec;
 	char	**globbed;
 	char	*path;
 
-	exec.og_stdin = 0;
-	exec.og_stdout = 0;
 	globbed = _glob_args(mini, _expand(mini, p_node->atom->args));
 	if (check_builtin(mini, globbed[0]))
     {
-		mini->status = _call_builtin(mini, globbed, exec);
+		mini->status = _call_builtin(mini, globbed);
         mini->list = mini->heap_allocated.exec;
     }
 	else

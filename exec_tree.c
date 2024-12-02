@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:36:42 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 04:22:01 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:25:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	_exec_exec(t_mini *mini, t_parser_node **p_node,
 		globbed = _glob_args(mini, _expand(mini, (*p_node)->atom->args));
 		if (check_builtin(mini, globbed[0]))
         {
-			mini->status = _call_builtin(mini, globbed, *exec);
+			mini->status = _call_builtin(mini, globbed);
             mini->list = mini->heap_allocated.env;
         }
 		else

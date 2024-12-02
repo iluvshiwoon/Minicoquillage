@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:48:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:45:05 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:20:27 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,6 @@ int	tokenizer(t_mini *mini)
 	if (check_error_tokens(&mini->control) == EXIT_FAILURE)
 		return (mini->status = 2, EXIT_FAILURE);
 	return (EXIT_SUCCESS);
-}
-
-void	print_first_token(t_control_dll *control)
-{
-	t_token	*first_token;
-
-	first_token = control->list->first_node->data;
-	printf("%s", first_token->value);
-	return ;
 }
 
 void	debug(char *line, t_mini *mini)

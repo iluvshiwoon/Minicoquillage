@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:19:31 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:52:50 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:13:55 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	skip_through(t_mini *mini, t_parser_node *p_node,
 	t_token_count		count;
 	t_double_link_node	*og_next_op;
 
-    mini->list = mini->heap_allocated.ast;
 	count = (t_token_count){};
 	token = NULL;
 	og_next_op = next_op;
@@ -118,6 +117,7 @@ t_ast	*parser(t_mini *mini)
 	t_double_link_node	*end;
 	t_ast				*ast;
 
+    mini->list = mini->heap_allocated.ast;
 	ast = wrap_malloc(mini, 
 			sizeof(*ast));
 	*ast = (t_ast){};

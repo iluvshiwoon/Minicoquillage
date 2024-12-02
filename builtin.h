@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 18:33:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:28:21 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:24:41 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 int		mini_pwd(void);
 int		mini_echo(char **args);
 int		mini_env(char **envp);
-int		mini_exit(t_mini *mini, char **args, t_exec exec);
+int	mini_exit(t_mini *mini, char **args);
 int	mini_export(t_mini *mini, char **args);
 int	mini_unset(t_mini *mini, char **args);
 int	mini_cd(t_mini *mini, char **args);

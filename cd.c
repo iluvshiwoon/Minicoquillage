@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 04:56:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:20:53 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*wrap_getcwd(t_mini *mini)
 
 	r_value = getcwd(NULL, 0);
 	if (!r_value)
-		return (printf("error retrieving current directory: getcwd: can\
+		return (ft_printf_fd(STDERR_FILENO,"error retrieving current directory: getcwd: can\
 not access parent directories: %s\n", strerror(errno)), NULL);
 	temp = r_value;
 	r_value = mini_ft_strdup(mini, r_value);
@@ -67,7 +67,7 @@ int	_cd(t_mini *mini, char *path)
 		return (1);
 	i = chdir(path);
 	if (i != 0)
-		return (printf("minicoquillage: cd: %s: %s\n", path, strerror(errno)),
+		return (ft_printf_fd(STDERR_FILENO,"minicoquillage: cd: %s: %s\n", path, strerror(errno)),
 			1);
 	cur_dir = _getenv(mini, "OLDPWD");
 	if (cur_dir)
@@ -97,7 +97,7 @@ int	mini_cd(t_mini *mini, char **args)
 	while (args[++i])
 		;
 	if (i > 2)
-		return (printf("minicoquillage: cd: too many arguments\n"), 1);
+		return (ft_printf_fd(STDERR_FILENO,"minicoquillage: cd: too many arguments\n"), 1);
 	if (args[1] == NULL)
 		path = get_home(mini);
 	else if (args[1][0] == '~')

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 20:56:10 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:05:31 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:24:20 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,7 @@ int64_t	atoi64_safe(char *string, int *status)
 	return (*status = SUCCESS, (int)value * sign);
 }
 
-void	_close_fd(int fd1, int fd2)
-{
-	if (fd1)
-		_close(fd1);
-	if (fd2)
-		_close(fd2);
-}
-
-int	mini_exit(t_mini *mini, char **args, t_exec exec)
+int	mini_exit(t_mini *mini, char **args)
 {
 	int		error;
 	uint8_t	code;
@@ -67,20 +59,19 @@ int	mini_exit(t_mini *mini, char **args, t_exec exec)
 	code = 0;
 	if (args[1] == NULL)
 	{
-		_close_fd(exec.og_stdin, exec.og_stdout);
+        close_fds(mini->fds);
 		free_heap(mini, true);
-		printf("exit\n");
+		ft_printf_fd(STDOUT_FILENO,"exit\n");
 		exit((mini->status + 256) % 256);
 	}
 	code = atoi64_safe(args[1], &error);
 	if (error == ERROR)
-		return (printf("exit\nminicoquillage: exit: %s: numeric argument re\
-quired\n", args[1]), _close_fd(exec.og_stdout, exec.og_stdin),
-			free_heap(mini, true), exit(2), 2);
+		return (ft_printf_fd(STDERR_FILENO,"exit\nminicoquillage: exit: %s: numeric argument re\
+quired\n", args[1]), close_fds(mini->fds), free_heap(mini, true), exit(2), 2);
 	if (args[2])
-		return (printf("exit\nminicoquillage: exit: too many arguments"), 1);
-	_close_fd(exec.og_stdin, exec.og_stdout);
+		return (ft_printf_fd(STDERR_FILENO,"exit\nminicoquillage: exit: too many arguments"), 1);
+    close_fds(mini->fds);
 	free_heap(mini, true);
-	printf("exit\n");
+	ft_printf_fd(STDOUT_FILENO,"exit\n");
 	exit((code + 256) % 256);
 }
