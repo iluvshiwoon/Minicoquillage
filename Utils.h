@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 18:39:08 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:50:07 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:29:23 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,12 @@ typedef struct s_mini
 	t_double_link_list	*list;
     t_double_link_list *fds;
 }						t_mini;
+
+// lib.c
+void m_pipe(t_mini *mini, int (**pipefd)[2], int i);
+int m_open(t_mini *mini, const char *pathname, int flags, mode_t mode);
+void    m_dup2(t_mini * mini, int fd1, int std);
+int m_dup(t_mini * mini, int std);
 
 void	free_heap(t_mini *mini, bool all);
 void	free_all(t_mini *mini);

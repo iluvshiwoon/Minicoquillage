@@ -6,16 +6,16 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:40:29 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 21:25:00 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:52:27 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	_reset_fd(t_exec exec)
+void	_reset_fd(t_mini * mini, t_exec exec)
 {
-	dup2(exec.og_stdin, STDIN_FILENO);
-	dup2(exec.og_stdout, STDOUT_FILENO);
+	m_dup2(mini,exec.og_stdin, STDIN_FILENO);
+	m_dup2(mini,exec.og_stdout, STDOUT_FILENO);
 }
 
 int	_call_builtin(t_mini *mini, char **globbed)
@@ -46,19 +46,6 @@ int	_call_builtin(t_mini *mini, char **globbed)
 
 void	__dup(t_mini *mini, t_exec * exec)
 {
-	t_double_link_node	*node;
-	int					*fd;
-
-	node = wrap_malloc(mini,  sizeof(*node));
-	fd = wrap_malloc(mini,  sizeof(*fd));
-	node->data = fd;
-	*fd = dup(STDIN_FILENO);
-	mini->fds->pf_insert_end(mini->fds, node);
-	exec->og_stdin = *fd;
-	node = wrap_malloc(mini,  sizeof(*node));
-	fd = wrap_malloc(mini,  sizeof(*fd));
-	node->data = fd;
-	*fd = dup(STDOUT_FILENO);
-	mini->fds->pf_insert_end(mini->fds, node);
-	exec->og_stdout = *fd;
+    exec->og_stdin = m_dup(mini,STDIN_FILENO);
+	exec->og_stdout = m_dup(mini, STDOUT_FILENO);
 }

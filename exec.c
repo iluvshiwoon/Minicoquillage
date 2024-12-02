@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:48:19 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:53:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:05:37 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	_exec_node(t_mini *mini, char **globbed)
 		return (perror("pid"), error_exit("fork failed\n", mini), 4);
 	if (pid == 0)
 	{
+        close_fds(mini->fds);
 		execve(path, globbed, mini->envp);
 		perror("execve");
 	}

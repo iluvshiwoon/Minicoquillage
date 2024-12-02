@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 18:13:18 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 21:08:53 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:04:38 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,21 @@
 
 void m_pipe(t_mini *mini, int (**pipefd)[2], int i)
 {
-    int *fd;
-    t_double_link_node * node;
+    // int *fd;
+    // t_double_link_node * node;
 
 	if (pipe((*pipefd)[i]) == -1)
         return(close_fds(mini->fds),free_heap(mini,true),ft_printf_fd(STDERR_FILENO,"minicoquillage: pipe: %s\n",strerror(errno)),exit(42));
-    node = wrap_malloc(mini,  sizeof(*node));
-    fd = wrap_malloc(mini,  sizeof(*fd));
-    node->data = fd;
-    *fd = (*pipefd)[i][0];
-    mini->fds->pf_insert_end(mini->fds,node);
-    node = wrap_malloc(mini,  sizeof(*node));
-    fd = wrap_malloc(mini,  sizeof(*fd));
-    node->data = fd;
-    *fd = (*pipefd)[i][1];
-    mini->fds->pf_insert_end(mini->fds,node);
+    // node = wrap_malloc(mini,  sizeof(*node));
+    // fd = wrap_malloc(mini,  sizeof(*fd));
+    // node->data = fd;
+    // *fd = (*pipefd)[i][0];
+    // mini->fds->pf_insert_end(mini->fds,node);
+    // node = wrap_malloc(mini,  sizeof(*node));
+    // fd = wrap_malloc(mini,  sizeof(*fd));
+    // node->data = fd;
+    // *fd = (*pipefd)[i][1];
+    // mini->fds->pf_insert_end(mini->fds,node);
 }
 
 int m_open(t_mini *mini, const char *pathname, int flags, mode_t mode)
@@ -59,10 +59,15 @@ void    m_dup2(t_mini * mini, int fd1, int std)
 
 int m_dup(t_mini * mini, int std)
 {
-    int r;
+    int *fd;
+    t_double_link_node *node;
 
-    r = dup(std);
-    if (r == -1)
+    node = wrap_malloc(mini,  sizeof(*node));
+    fd = wrap_malloc(mini,  sizeof(*fd));
+    node->data = fd;
+    *fd = dup(std);
+    if (*fd == -1)
         return(close_fds(mini->fds), free_heap(mini, true),ft_printf_fd(STDERR_FILENO, "minicoquillage: dup: %s\n", strerror(errno)),close(std),exit(42),0);
-    return (r);
+    mini->fds->pf_insert_end(mini->fds, node);
+    return (*fd);
 }

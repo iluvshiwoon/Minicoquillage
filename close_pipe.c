@@ -6,13 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:58:35 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:48:29 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	_close_pipe(int pipe_nb, int (*pipefd)[2])
+void	_close_pipe(t_mini * mini, int pipe_nb, int (*pipefd)[2])
 {
 	int	j;
 
@@ -21,7 +21,7 @@ void	_close_pipe(int pipe_nb, int (*pipefd)[2])
 	{
 		if (j == 0)
 		{
-			dup2(pipefd[j][1], STDOUT_FILENO);
+			m_dup2(mini,pipefd[j][1], STDOUT_FILENO);
 			_close(pipefd[j][1]);
 		}
 		else
@@ -30,7 +30,7 @@ void	_close_pipe(int pipe_nb, int (*pipefd)[2])
 	}
 }
 
-void	_close_pipe1(int pipe_nb, int (*pipefd)[2], int i)
+void	_close_pipe1(t_mini * mini, int pipe_nb, int (*pipefd)[2], int i)
 {
 	int	j;
 
@@ -39,7 +39,7 @@ void	_close_pipe1(int pipe_nb, int (*pipefd)[2], int i)
 	{
 		if (j == i - 1)
 		{
-			dup2(pipefd[i - 1][0], STDIN_FILENO);
+			m_dup2(mini,pipefd[i - 1][0], STDIN_FILENO);
 			_close(pipefd[i - 1][0]);
 		}
 		else
@@ -48,7 +48,7 @@ void	_close_pipe1(int pipe_nb, int (*pipefd)[2], int i)
 	}
 }
 
-void	_close_pipe2(int pipe_nb, int (*pipefd)[2], int i)
+void	_close_pipe2(t_mini * mini,int pipe_nb, int (*pipefd)[2], int i)
 {
 	int	j;
 
@@ -57,14 +57,14 @@ void	_close_pipe2(int pipe_nb, int (*pipefd)[2], int i)
 	{
 		if (j == i - 1)
 		{
-			dup2(pipefd[i - 1][0], STDIN_FILENO);
+			m_dup2(mini,pipefd[i - 1][0], STDIN_FILENO);
 			_close(pipefd[i - 1][0]);
 		}
 		else
 			_close(pipefd[j][0]);
 		if (j == i)
 		{
-			dup2(pipefd[i][1], STDOUT_FILENO);
+			m_dup2(mini,pipefd[i][1], STDOUT_FILENO);
 			_close(pipefd[i][1]);
 		}
 		else
@@ -85,12 +85,12 @@ void	_close_pipe3(int pipe_nb, int (*pipefd)[2], int i)
 	}
 }
 
-void	_close_pipes(int pipe_nb, int (*pipefd)[2], int i)
+void	_close_pipes(t_mini * mini,int pipe_nb, int (*pipefd)[2], int i)
 {
 	if (i == 0)
-		_close_pipe(pipe_nb, pipefd);
+		_close_pipe(mini,pipe_nb, pipefd);
 	else if (i == pipe_nb)
-		_close_pipe1(pipe_nb, pipefd, i);
+		_close_pipe1(mini,pipe_nb, pipefd, i);
 	else
-		_close_pipe2(pipe_nb, pipefd, i);
+		_close_pipe2(mini,pipe_nb, pipefd, i);
 }

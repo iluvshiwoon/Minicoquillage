@@ -6,21 +6,18 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:39:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:43:59 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	__redirect(t_atom *atom)
+void	__redirect(t_mini * mini, t_atom *atom)
 {
 	if (atom->heredoc)
-	{
-		_close(atom->in_fd);
-		atom->in_fd = open(atom->file_heredoc, O_RDONLY);
-	}
+		atom->in_fd = m_open(mini, atom->file_heredoc, O_RDONLY, 0);
 	if (atom->in_fd)
-		dup2(atom->in_fd, STDIN_FILENO);
+		m_dup2(mini,atom->in_fd, STDIN_FILENO);
 }
 
 void	_redirect(t_mini *mini, t_atom *atom, t_exec *exec)
@@ -47,7 +44,7 @@ void	_redirect(t_mini *mini, t_atom *atom, t_exec *exec)
 			_stdin(mini, exp_stdin, atom, exec);
 		}
 	}
-	__redirect(atom);
+	__redirect(mini, atom);
 }
 
 void	redirect(t_mini *mini, t_exec *exec, t_ast_node *first_node)

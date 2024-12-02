@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:59:13 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,15 @@ char	*init_line(t_double_link_list *lines, char *prompt, t_mini * mini)
 	t_double_link_node	*node;
 	int					_stdin;
 
-	_stdin = dup(STDIN_FILENO);
+	_stdin = m_dup(mini,STDIN_FILENO);
 	line = readline(prompt);
 	if (g_signal == SIGINT)
-		return (dup2(_stdin, STDIN_FILENO), close(_stdin), line);
+		return (m_dup2(mini,_stdin, STDIN_FILENO), close(_stdin), line);
 	if (!line)
-		return (_close(_stdin), free_heap(mini, true), exit(mini->status), NULL);
+		return (close_fds(mini->fds), free_heap(mini, true), exit(mini->status), NULL);
 	node = wrap_malloc(mini,  sizeof(*node));
 	dup_line = mini_ft_strdup(mini, line);
 	free(line);
-	_close(_stdin);
 	node->data = dup_line;
 	lines->pf_insert_end(lines, node);
 	return (dup_line);

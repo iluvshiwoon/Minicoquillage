@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:19:02 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:40:48 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:00:36 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,14 @@ void	_clean(t_mini *mini, t_ast_node *first_node)
 	if (is_op(p_node->ops))
 		clean_heredoc(mini, left);
 	else if (p_node->atom->heredoc)
-	{
-		if (p_node->atom->in_fd)
-			_close(p_node->atom->in_fd);
 		if (p_node->atom->file_heredoc)
 			unlink(p_node->atom->file_heredoc);
-	}
 	p_node = first_node->data;
 	if (p_node->ops)
 	{
 		if (p_node->atom && p_node->atom->heredoc)
-		{
-			if (p_node->atom->in_fd)
-				_close(p_node->atom->in_fd);
 			if (p_node->atom->file_heredoc)
 				unlink(p_node->atom->file_heredoc);
-		}
 	}
 }
 

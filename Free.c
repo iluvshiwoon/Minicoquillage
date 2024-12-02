@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:45:59 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/28 23:47:47 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:08:01 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	close_fds(t_double_link_list *fds)
 	while (node)
 	{
 		fd = node->data;
-		_close(*fd);
+        if (*fd != STDIN_FILENO && *fd != STDOUT_FILENO && *fd != STDERR_FILENO)
+		    close(*fd);
 		node = node->next;
 	}
 }

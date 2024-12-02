@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 21:25:20 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:48:16 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ bool					is_dir(char *cmd);
 bool					is_path(char *cmd);
 
 // close_pipe.c
-void					_close_pipes(int pipe_nb, int (*pipefd)[2], int i);
+void	_close_pipes(t_mini * mini,int pipe_nb, int (*pipefd)[2], int i);
 void					_close_pipe3(int pipe_nb, int (*pipefd)[2], int i);
 
 // pipeline_utils.c
@@ -84,7 +84,7 @@ int						_exec_node(t_mini *mini, char **globbed);
 void					execution(t_mini *mini, t_ast *ast);
 
 // exec_utils.c
-void					_reset_fd(t_exec exec);
+void	_reset_fd(t_mini * mini, t_exec exec);
 void					__dup(t_mini *mini, t_exec *exec);
 
 // exec_tree.c
@@ -104,7 +104,7 @@ int						_stdout(t_mini *mini, t_expanded *expanded,
 // redirect_utils1.c
 void					_error(char *error, int *skip, int *status,
 							char *filename);
-void					__red(char *globbed, t_atom *atom, t_exec *exec);
+void	__red(t_mini * mini, char *globbed, t_atom *atom, t_exec *exec);
 
 void					close_fds(t_double_link_list *fds);
 #endif

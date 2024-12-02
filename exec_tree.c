@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:36:42 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 21:25:48 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:57:43 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,6 @@ void	_exec_exec(t_mini *mini, t_parser_node **p_node,
 	if (is_op((*p_node)->ops) && !exec->skip)
 	{
 		_exec_tree(mini, (*first_node)->left);
-		(*p_node) = (*first_node)->data;
-		if ((*p_node)->atom && (*p_node)->atom->in_fd)
-			_close((*p_node)->atom->in_fd);
-		if ((*p_node)->atom && (*p_node)->atom->out_fd)
-			_close((*p_node)->atom->out_fd);
 		(*p_node) = (*first_node)->left->data;
 	}
 	else if (!exec->skip)
@@ -59,10 +54,6 @@ void	_exec_exec(t_mini *mini, t_parser_node **p_node,
         }
 		else
 			mini->status = _exec_node(mini, globbed);
-		if ((*p_node)->atom && (*p_node)->atom->in_fd)
-			_close((*p_node)->atom->in_fd);
-		if ((*p_node)->atom && (*p_node)->atom->out_fd)
-			_close((*p_node)->atom->out_fd);
 	}
 	(*p_node) = (*first_node)->data;
 }
@@ -86,7 +77,7 @@ void	_exec_tree(t_mini *mini, t_ast_node *first_node)
 			else if (p_node->ops && p_node->ops != PIPE)
 				exec.skip = 0;
 		}
-		_reset_fd(exec);
+		_reset_fd(mini,exec);
 		first_node = first_node->right;
 	}
 }

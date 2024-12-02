@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:32:48 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 21:56:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ void	open_heredoc(t_mini *mini, t_atom *atom)
 	free(nb);
 	if (access(tmp, F_OK) == EXIT_SUCCESS)
 		unlink(tmp);
-	atom->in_fd = open(tmp, O_RDWR | O_EXCL | O_CREAT, S_IRUSR | S_IWUSR);
-	if (atom->in_fd == -1)
-		return (perror(NULL), error_exit("open failed\n", mini));
+	atom->in_fd = m_open(mini, tmp, O_RDWR | O_EXCL | O_CREAT, S_IRUSR | S_IWUSR);
 	atom->file_heredoc = tmp;
 }
 
@@ -41,14 +39,13 @@ int	listen_heredoc(t_mini *mini, int *fd, char *eof)
 	int		_stdin;
 
 	i = 0;
-	_stdin = dup(STDIN_FILENO);
+	_stdin = m_dup(mini,STDIN_FILENO);
 	eof = _quote(mini, eof);
 	while (g_signal != SIGINT && ++i)
 	{
 		line = readline("> ");
 		if (g_signal == SIGINT)
-			return (dup2(_stdin, 0), _close(_stdin), free(line), 0);
-		_close(_stdin);
+			return (m_dup2(mini,_stdin, STDIN_FILENO), free(line), 0);
 		if (!line)
 			return (ft_printf_fd(STDERR_FILENO, "minicoquillage: warning: \
 here-document at line %d delimited by \
@@ -60,7 +57,7 @@ end-of-file (wanted `%s')\n", i, eof), free(line), 0);
 			_write_listen(mini, *fd, line);
 		free(line);
 	}
-	return (_close(_stdin), 0);
+	return (0);
 }
 
 void	run_heredoc(t_mini *mini, t_atom *atom)
