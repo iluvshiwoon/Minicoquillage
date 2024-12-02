@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 18:39:08 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 21:29:23 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:36:21 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_heap_allocated
 
 typedef struct s_mini
 {
+    bool                pipe;    
 	int					status;
 	char				**envp;
 	t_control_dll		control;

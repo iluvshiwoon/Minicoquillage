@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 21:49:10 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:43:45 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	_run_pipeline(t_mini *mini, t_ast_node *first_node, t_exec exec,
 		pipeline->pid[pipeline->i] = fork();
 		if (pipeline->pid[pipeline->i] == 0)
 		{
+            mini->pipe = true;
 			_close_pipes(mini,pipeline->pipe_nb, pipeline->pipefd, pipeline->i);
 			_pipeline_skip(pipeline->i, &first_node, &pipeline->p_node);
 			__exec_pipe(mini, &pipeline->p_node, first_node, &exec);
