@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 20:56:10 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:05:31 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	mini_exit(t_mini *mini, char **args, t_exec exec)
 	if (args[1] == NULL)
 	{
 		_close_fd(exec.og_stdin, exec.og_stdout);
-		free_heap(&mini->heap_allocated, true);
+		free_heap(mini, true);
 		printf("exit\n");
 		exit((mini->status + 256) % 256);
 	}
@@ -76,11 +76,11 @@ int	mini_exit(t_mini *mini, char **args, t_exec exec)
 	if (error == ERROR)
 		return (printf("exit\nminicoquillage: exit: %s: numeric argument re\
 quired\n", args[1]), _close_fd(exec.og_stdout, exec.og_stdin),
-			free_heap(&mini->heap_allocated, true), exit(2), 2);
+			free_heap(mini, true), exit(2), 2);
 	if (args[2])
 		return (printf("exit\nminicoquillage: exit: too many arguments"), 1);
 	_close_fd(exec.og_stdin, exec.og_stdout);
-	free_heap(&mini->heap_allocated, true);
+	free_heap(mini, true);
 	printf("exit\n");
 	exit((code + 256) % 256);
 }

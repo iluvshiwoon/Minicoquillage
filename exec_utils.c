@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:40:29 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/28 23:39:48 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:13:10 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ int	_call_builtin(t_mini *mini, char **globbed, t_exec exec)
 		return (mini_echo(globbed));
 	else if (ft_strncmp(globbed[0], "cd", _max_len(ft_strlen(globbed[0]),
 				ft_strlen("cd"))) == 0)
-		return (mini_cd(&mini->heap, globbed, &mini->envp));
+		return (mini_cd(mini, globbed));
 	else if (ft_strncmp(globbed[0], "pwd", _max_len(ft_strlen(globbed[0]),
 				ft_strlen("pwd"))) == 0)
 		return (mini_pwd());
 	else if (ft_strncmp(globbed[0], "export", _max_len(ft_strlen(globbed[0]),
 				ft_strlen("export"))) == 0)
-		return (mini_export(&mini->heap, globbed, &mini->envp));
+		return (mini_export(mini, globbed));
 	else if (ft_strncmp(globbed[0], "unset", _max_len(ft_strlen(globbed[0]),
 				ft_strlen("unset"))) == 0)
-		return (mini_unset(&mini->heap, globbed, &mini->envp));
+		return (mini_unset(mini, globbed));
 	else if (ft_strncmp(globbed[0], "env", _max_len(ft_strlen(globbed[0]),
 				ft_strlen("env"))) == 0)
 		return (mini_env(mini->envp));
@@ -44,21 +44,21 @@ int	_call_builtin(t_mini *mini, char **globbed, t_exec exec)
 	return (42);
 }
 
-void	__dup(t_mini *mini, t_exec *exec)
+void	__dup(t_mini *mini, t_exec * exec)
 {
 	t_double_link_node	*node;
 	int					*fd;
 
-	node = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*node));
-	fd = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*fd));
+	node = wrap_malloc(mini,  sizeof(*node));
+	fd = wrap_malloc(mini,  sizeof(*fd));
 	node->data = fd;
 	*fd = dup(STDIN_FILENO);
-	exec->fds->pf_insert_end(exec->fds, node);
+	mini->fds->pf_insert_end(mini->fds, node);
 	exec->og_stdin = *fd;
-	node = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*node));
-	fd = wrap_malloc(&mini->heap_allocated, mini->heap.list, sizeof(*fd));
+	node = wrap_malloc(mini,  sizeof(*node));
+	fd = wrap_malloc(mini,  sizeof(*fd));
 	node->data = fd;
 	*fd = dup(STDOUT_FILENO);
-	exec->fds->pf_insert_end(exec->fds, node);
+	mini->fds->pf_insert_end(mini->fds, node);
 	exec->og_stdout = *fd;
 }

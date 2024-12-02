@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:00:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	_run_pipeline(t_mini *mini, t_ast_node *first_node, t_exec exec,
 {
 	pipeline->i = -1;
 	exec.skip = 0;
-	_count_pipe(&mini->heap, &pipeline->pipefd, &pipeline->pipe_nb, first_node);
-	pipeline->pid = wrap_malloc(&mini->heap_allocated,
-			mini->heap_allocated.exec, sizeof(pid_t) * (pipeline->pipe_nb + 1));
+	_count_pipe(mini, &pipeline->pipefd, &pipeline->pipe_nb, first_node);
+	pipeline->pid = wrap_malloc(mini,
+			 sizeof(pid_t) * (pipeline->pipe_nb + 1));
 	while (++pipeline->i < pipeline->pipe_nb + 1)
 	{
 		pipeline->pid[pipeline->i] = fork();
@@ -51,7 +51,7 @@ int	_pipeline(t_mini *mini, t_ast_node *first_node, t_exec exec)
 				if (errno == EINTR)
 					continue ;
 				else
-					error_exit(strerror(errno), &mini->heap_allocated);
+					error_exit(strerror(errno), mini);
 			}
 			else if (WIFEXITED(mini->status) || WIFSIGNALED(mini->status))
 				break ;
@@ -61,5 +61,5 @@ int	_pipeline(t_mini *mini, t_ast_node *first_node, t_exec exec)
 		return (WEXITSTATUS(mini->status));
 	else if (WIFSIGNALED(mini->status))
 		return (128 + WTERMSIG(mini->status));
-	return (error_exit("pipeline failure\n", &mini->heap_allocated), 999);
+	return (error_exit("pipeline failure\n", mini), 999);
 }

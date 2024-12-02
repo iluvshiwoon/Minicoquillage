@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:39:13 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:16:41 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	is_path(char *cmd)
 	return (false);
 }
 
-bool	check_builtin(t_heap *heap, char *cmd)
+bool	check_builtin(t_mini *mini, char *cmd)
 {
 	char	**split;
 	char	*builtin;
@@ -45,7 +45,7 @@ bool	check_builtin(t_heap *heap, char *cmd)
 	builtin = "echo,cd,pwd,export,unset,env,exit";
 	if (!cmd)
 		return (false);
-	split = mini_ft_split(heap, builtin, ',');
+	split = mini_ft_split(mini, builtin, ',');
 	while (split[++i])
 		if (ft_strncmp(cmd, split[i], _max_len(ft_strlen(cmd),
 					ft_strlen(split[i]))) == 0)

@@ -6,14 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:47:55 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-char	*mini_ft_strdup(t_heap_allocated *heap_allocated,
-		t_double_link_list *list, const char *s)
+char	*mini_ft_strdup(t_mini *mini, const char *s)
 {
 	char			*s_dupe;
 	unsigned int	i;
@@ -21,7 +20,7 @@ char	*mini_ft_strdup(t_heap_allocated *heap_allocated,
 	i = 0;
 	while (s[i])
 		i++;
-	s_dupe = wrap_malloc(heap_allocated, list, (i + 1) * sizeof(char));
+	s_dupe = wrap_malloc(mini,  (i + 1) * sizeof(char));
 	if (!s_dupe)
 		return (0);
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:32:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:22:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	__init_count(int *i, int *count, t_open_quote *open)
 	open->single_quote = 0;
 }
 
-int	_count(t_mini *mini, char *str, int status)
+int	_count(t_mini *mini, char *str)
 {
 	int				i;
 	int				count;
@@ -34,7 +34,7 @@ int	_count(t_mini *mini, char *str, int status)
 			;
 		else if (str[i] == '$' && !open.single_quote)
 		{
-			mod_expand(&_expand, status, open);
+			mod_expand(&_expand, mini->status, open);
 			count += _count_exp(mini, str, &i, _expand);
 		}
 		else if (str[i] == '"' && open.double_quote)
@@ -49,11 +49,11 @@ int	_count(t_mini *mini, char *str, int status)
 	return (count);
 }
 
-void	__assign_expand0(t_heap *heap, t_expanded *expanded, t_index *index)
+void	__assign_expand0(t_mini *mini, t_expanded *expanded, t_index *index)
 {
-	expanded->litteral[++index->j] = wrap_malloc(heap->heap_allocated,
-			heap->list, sizeof(bool));
-	expanded->value[index->j] = wrap_malloc(heap->heap_allocated, heap->list,
+	expanded->litteral[++index->j] = wrap_malloc(mini,
+			 sizeof(bool));
+	expanded->value[index->j] = wrap_malloc(mini, 
 			sizeof(char));
 	expanded->value[index->j][0] = '\0';
 	expanded->litteral[index->j][0] = true;
@@ -61,10 +61,10 @@ void	__assign_expand0(t_heap *heap, t_expanded *expanded, t_index *index)
 
 void	__assign_expand1(t_mini *mini, t_expanded *expanded, t_index *index)
 {
-	expanded->litteral[++index->j] = wrap_malloc(&mini->heap_allocated,
-			mini->heap.list, sizeof(bool) * (index->count));
-	expanded->value[index->j] = wrap_malloc(&mini->heap_allocated,
-			mini->heap.list, sizeof(char) * (index->count + 1));
+	expanded->litteral[++index->j] = wrap_malloc(mini,
+			 sizeof(bool) * (index->count));
+	expanded->value[index->j] = wrap_malloc(mini,
+			 sizeof(char) * (index->count + 1));
 	expanded->value[index->j][index->count] = '\0';
 }
 
@@ -74,16 +74,15 @@ t_expanded	*_expand(t_mini *mini, char **to_expand)
 	t_to_expand	_expand;
 	t_index		index;
 
-	expanded = wrap_malloc(mini->heap.heap_allocated, mini->heap.list,
-			sizeof(*expanded));
-	_init_expand(mini, to_expand, expanded, mini->status);
+	expanded = wrap_malloc(mini,  sizeof(*expanded));
+	_init_expand(mini, to_expand, expanded);
 	index.i = -1;
 	index.j = -1;
 	while (to_expand[++index.i])
 	{
-		index.count = _count(mini, to_expand[index.i], mini->status);
+		index.count = _count(mini, to_expand[index.i]);
 		if (!index.count && _is_empty_quote(mini, to_expand[index.i]))
-			__assign_expand0(&mini->heap, expanded, &index);
+			__assign_expand0(mini, expanded, &index);
 		else if (index.count)
 		{
 			__assign_expand1(mini, expanded, &index);

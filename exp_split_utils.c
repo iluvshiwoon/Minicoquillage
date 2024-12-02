@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:21:25 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ int	_count_split(char *str, bool *litteral)
 	return (count);
 }
 
-void	_assign_value(t_heap *heap, t_expanded **expanded, t_index *index,
+void	_assign_value(t_mini *mini, t_expanded **expanded, t_index *index,
 		t_to_expand *to_expand)
 {
 	int	m;
 
 	if (index->count)
 	{
-		(*expanded)->value[++index->j] = wrap_malloc(heap->heap_allocated,
-				heap->list, sizeof(*(*expanded)->value) * (index->count + 1));
-		(*expanded)->litteral[index->j] = wrap_malloc(heap->heap_allocated,
-				heap->list, sizeof(*(*expanded)->litteral) * (index->count));
+		(*expanded)->value[++index->j] = wrap_malloc(mini,
+				 sizeof(*(*expanded)->value) * (index->count + 1));
+		(*expanded)->litteral[index->j] = wrap_malloc(mini,
+				 sizeof(*(*expanded)->litteral) * (index->count));
 		(*expanded)->value[index->j][index->count] = '\0';
 		ft_strlcpy((*expanded)->value[index->j], to_expand->str + index->i
 			- index->count, index->count + 1);

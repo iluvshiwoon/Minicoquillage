@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:41:30 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:31:10 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ int	_stdin(t_mini *mini, t_expanded *expanded, t_atom *atom, t_exec *exec)
 
 	if (expanded->value[exec->j])
 	{
-		if (_count_glob(&mini->heap, expanded->value[exec->j],
+		if (_count_glob(mini, expanded->value[exec->j],
 				expanded->litteral[exec->j]) > 1)
 			return (dup2(exec->og_stdout, STDOUT_FILENO),
 				_error("minicoquillage: % s : ambiguous redirect\n ",
 					&exec->skip, &mini->status, expanded->value[exec->j]), 1);
 		else
 		{
-			_globbed = glob(&mini->heap, expanded->value[exec->j],
+			_globbed = glob(mini, expanded->value[exec->j],
 					expanded->litteral[exec->j]);
 			globbed = expanded->value[exec->j];
 			if (_globbed)
@@ -87,7 +87,7 @@ int	__stdout1(t_mini *mini, t_atom *atom, t_exec *exec, char *globbed)
 			return (dup2(exec->og_stdout, STDOUT_FILENO), _error("minicoquil\
 lage: %s: No such file or directory\n", &exec->skip,
 					&mini->status, globbed), 1);
-		error_exit(strerror(errno), &mini->heap_allocated);
+		error_exit(strerror(errno), mini);
 	}
 	if (atom->out_fd)
 		dup2(atom->out_fd, STDOUT_FILENO);
@@ -99,14 +99,14 @@ int	_stdout(t_mini *mini, t_expanded *expanded, t_atom *atom, t_exec *exec)
 	char	*globbed;
 	t_glob	*_globbed;
 
-	if (_count_glob(&mini->heap, expanded->value[exec->i],
+	if (_count_glob(mini, expanded->value[exec->i],
 			expanded->litteral[exec->i]) > 1)
 		return (dup2(exec->og_stdout, STDOUT_FILENO), _error("minicoquil\
 lage: %s: ambiguous redirect\n", &exec->skip,
 				&mini->status, expanded->value[exec->i]), 1);
 	else
 	{
-		_globbed = glob(&mini->heap, expanded->value[exec->i],
+		_globbed = glob(mini, expanded->value[exec->i],
 				expanded->litteral[exec->i]);
 		globbed = expanded->value[exec->i];
 		if (_globbed)

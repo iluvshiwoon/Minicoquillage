@@ -6,13 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 04:56:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:52:55 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-char	*wrap_getcwd(t_heap *heap)
+char	*wrap_getcwd(t_mini *mini)
 {
 	char	*r_value;
 	char	*temp;
@@ -22,44 +22,43 @@ char	*wrap_getcwd(t_heap *heap)
 		return (printf("error retrieving current directory: getcwd: can\
 not access parent directories: %s\n", strerror(errno)), NULL);
 	temp = r_value;
-	r_value = mini_ft_strdup(heap->heap_allocated, heap->list, r_value);
+	r_value = mini_ft_strdup(mini, r_value);
 	free(temp);
 	return (r_value);
 }
 
-void	f_export(t_heap *heap, char ***envp, char *var, char *value)
+void	f_export(t_mini * mini, char *var, char *value)
 {
 	char	**f_args;
 
-	f_args = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*f_args) * 3);
+	f_args = wrap_malloc(mini,  sizeof(*f_args) * 3);
 	f_args[0] = "prout";
-	f_args[1] = mini_ft_strjoin(heap->heap_allocated, heap->list, var, value);
+	f_args[1] = mini_ft_strjoin(mini, var, value);
 	f_args[2] = NULL;
-	mini_export(heap, f_args, envp);
+	mini_export(mini, f_args);
 }
 
-char	*get_home(t_heap *heap, char ***envp)
+char	*get_home(t_mini * mini)
 {
 	char	*home;
 
-	home = _getenv(heap, "HOME", *envp, 0);
+	home = _getenv(mini, "HOME");
 	if (!home)
 	{
-		home = _getenv(heap, "USER", *envp, 0);
+		home = _getenv(mini, "USER");
 		if (!home)
 		{
-			home = wrap_getcwd(heap);
+			home = wrap_getcwd(mini);
 			if (!home)
 				return (NULL);
 		}
 		else
-			home = mini_ft_strjoin(heap->heap_allocated, heap->list, "/home/",
-					home);
+			home = mini_ft_strjoin(mini, "/home/", home);
 	}
 	return (home);
 }
 
-int	_cd(t_heap *heap, char *path, char ***envp)
+int	_cd(t_mini *mini, char *path)
 {
 	int		i;
 	char	*cur_dir;
@@ -70,25 +69,24 @@ int	_cd(t_heap *heap, char *path, char ***envp)
 	if (i != 0)
 		return (printf("minicoquillage: cd: %s: %s\n", path, strerror(errno)),
 			1);
-	cur_dir = _getenv(heap, "OLDPWD", *envp, 0);
+	cur_dir = _getenv(mini, "OLDPWD");
 	if (cur_dir)
 	{
-		cur_dir = _getenv(heap, "PWD", *envp, 0);
+		cur_dir = _getenv(mini, "PWD");
 		if (cur_dir)
-			f_export(heap, envp, "OLDPWD=", cur_dir);
+			f_export(mini, "OLDPWD=", cur_dir);
 	}
-	cur_dir = _getenv(heap, "PWD", *envp, 0);
+	cur_dir = _getenv(mini, "PWD");
 	if (cur_dir)
 	{
-		cur_dir = wrap_getcwd(heap);
+		cur_dir = wrap_getcwd(mini);
 		if (cur_dir)
-			f_export(heap, envp, "PWD=", mini_ft_strdup(heap->heap_allocated,
-					heap->list, cur_dir));
+			f_export(mini, "PWD=", mini_ft_strdup(mini, cur_dir));
 	}
 	return (0);
 }
 
-int	mini_cd(t_heap *heap, char **args, char ***envp)
+int	mini_cd(t_mini *mini, char **args)
 {
 	int		i;
 	char	*path;
@@ -101,15 +99,15 @@ int	mini_cd(t_heap *heap, char **args, char ***envp)
 	if (i > 2)
 		return (printf("minicoquillage: cd: too many arguments\n"), 1);
 	if (args[1] == NULL)
-		path = get_home(heap, envp);
+		path = get_home(mini);
 	else if (args[1][0] == '~')
 	{
-		home = get_home(heap, envp);
+		home = get_home(mini);
 		if (home)
-			path = mini_ft_strjoin(heap->heap_allocated, heap->list, home, path
+			path = mini_ft_strjoin(mini, home, path
 					+ 1);
 	}
 	else if (ft_strncmp(args[1], "-", _max_len(ft_strlen(args[1]), 1)) == 0)
-		__print_cd(&path, heap, *envp);
-	return (_cd(heap, path, envp));
+		__print_cd(mini,&path);
+	return (_cd(mini, path));
 }

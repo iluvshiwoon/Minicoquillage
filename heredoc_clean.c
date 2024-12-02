@@ -6,13 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:19:02 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:40:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	_clean(t_heap *heap, t_ast_node *first_node)
+void	_clean(t_mini *mini, t_ast_node *first_node)
 {
 	t_ast_node		*left;
 	t_parser_node	*p_node;
@@ -20,7 +20,7 @@ void	_clean(t_heap *heap, t_ast_node *first_node)
 	left = first_node->left;
 	p_node = left->data;
 	if (is_op(p_node->ops))
-		clean_heredoc(heap, left);
+		clean_heredoc(mini, left);
 	else if (p_node->atom->heredoc)
 	{
 		if (p_node->atom->in_fd)
@@ -41,11 +41,11 @@ void	_clean(t_heap *heap, t_ast_node *first_node)
 	}
 }
 
-void	clean_heredoc(t_heap *heap, t_ast_node *first_node)
+void	clean_heredoc(t_mini *mini, t_ast_node *first_node)
 {
 	while (first_node && first_node->left)
 	{
-		_clean(heap, first_node);
+		_clean(mini, first_node);
 		first_node = first_node->right;
 	}
 }

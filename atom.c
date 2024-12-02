@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 18:35:08 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ void	_compute_skip(t_double_link_node *beg, t_mini *mini)
 
 void	_alloc_atom(t_mini *mini, t_ast_node **current_node)
 {
-	(*current_node)->left = wrap_malloc(&mini->heap_allocated,
-			mini->heap_allocated.ast, sizeof(*(*current_node)->left));
+	(*current_node)->left = wrap_malloc(mini,  sizeof(*(*current_node)->left));
 	*(*current_node)->left = (t_ast_node){};
 	(*current_node)->left->previous = *current_node;
 }
@@ -103,8 +102,7 @@ int	compute_atom(t_mini *mini, t_double_link_node *beg, t_double_link_node *end,
 		_compute_skip(beg, mini);
 		compute_expr(mini, beg->next, mini->control.node->previous,
 			(*current_node)->left);
-		(*current_node)->right = wrap_malloc(&mini->heap_allocated,
-				mini->heap_allocated.ast, sizeof(*(*current_node)->right));
+		(*current_node)->right = wrap_malloc(mini,  sizeof(*(*current_node)->right));
 		*(*current_node)->right = (t_ast_node){};
 		(*current_node)->right->previous = (*current_node);
 		return (exit_status);
@@ -113,8 +111,7 @@ int	compute_atom(t_mini *mini, t_double_link_node *beg, t_double_link_node *end,
 	mini->control.token = end->data;
 	if (!is_op(mini->control.token->type))
 		return (exit_status);
-	(*current_node)->right = wrap_malloc(&mini->heap_allocated,
-			mini->heap_allocated.ast, sizeof(*(*current_node)->right));
+	(*current_node)->right = wrap_malloc(mini,  sizeof(*(*current_node)->right));
 	*(*current_node)->right = (t_ast_node){};
 	(*current_node)->right->previous = (*current_node);
 	return (exit_status);

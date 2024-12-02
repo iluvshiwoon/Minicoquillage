@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:02:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:35:54 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int	check_syntax(char *line)
 	return (EXIT_SUCCESS);
 }
 
-char	*concat_input(t_heap_allocated *heap_allocated,
-		t_double_link_list *list)
+char	*concat_input(t_mini *mini, t_double_link_list *list)
 {
 	t_double_link_node	*node;
 	size_t				i;
@@ -54,14 +53,12 @@ char	*concat_input(t_heap_allocated *heap_allocated,
 		string.dst = node->data;
 	else if (i-- >= 2)
 	{
-		string.dst = mini_ft_strjoin(heap_allocated, heap_allocated->input,
-				node->data, node->next->data);
+		string.dst = mini_ft_strjoin(mini, node->data, node->next->data);
 		node = node->next->next;
 	}
 	while (i-- != 1)
 	{
-		string.temp = mini_ft_strjoin(heap_allocated, heap_allocated->input,
-				string.dst, node->data);
+		string.temp = mini_ft_strjoin(mini, string.dst, node->data);
 		string.dst = string.temp;
 		node = node->next;
 	}
@@ -95,10 +92,10 @@ int	handle_line(t_mini *mini, t_get_line *get_line, t_double_link_list *lines,
 			add_history(get_line->line);
 		return (EXIT_FAILURE);
 	}
-	get_line->line = update_node(&mini->heap_allocated, lines);
+	get_line->line = update_node(mini, lines);
 	if (!get_line->line)
 		return (EXIT_FAILURE);
-	get_line->line = concat_input(&mini->heap_allocated, lines);
+	get_line->line = concat_input(mini, lines);
 	*r_value = check_temp_syntax(mini, get_line->line);
 	return (EXIT_SUCCESS);
 }
@@ -123,11 +120,10 @@ char	*get_line(t_mini *mini)
 	get_line.temp = get_line.line;
 	if (check_syntax(get_line.temp) == EXIT_FAILURE)
 	{
-		node->data = mini_ft_strdup(&mini->heap_allocated,
-				mini->heap_allocated.input, "\n");
+		node->data = mini_ft_strdup(mini, "\n");
 		lines->pf_insert_end(lines, node);
 	}
 	_check(mini, &get_line, lines, &r_value);
-	get_line.line = concat_input(&mini->heap_allocated, lines);
+	get_line.line = concat_input(mini, lines);
 	return (get_line.line);
 }

@@ -6,13 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 21:31:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:01 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-char	*var_name(t_heap *heap, char *var)
+char	*var_name(t_mini *mini, char *var)
 {
 	int		i;
 	char	*name;
@@ -20,8 +20,7 @@ char	*var_name(t_heap *heap, char *var)
 	i = -1;
 	while (var[++i] != '=')
 		;
-	name = wrap_malloc(heap->heap_allocated, heap->list, sizeof(*name) * (i
-				+ 1));
+	name = wrap_malloc(mini,  sizeof(*name) * (i + 1));
 	name[i] = '\0';
 	i = -1;
 	while (var[++i] != '=')
@@ -29,21 +28,21 @@ char	*var_name(t_heap *heap, char *var)
 	return (name);
 }
 
-char	*_getenv(t_heap *heap, char *var, char **envp, int status)
+char	*_getenv(t_mini *mini, char *var)
 {
 	int		i;
 	char	*name;
 
 	i = -1;
-	if (!envp)
+	if (!mini->envp)
 		return (NULL);
 	if (!ft_strncmp("?", var, _max_len(ft_strlen(var), 1)))
-		return (mini_ft_itoa(heap, status));
-	while (envp[++i])
+		return (mini_ft_itoa(mini, mini->status));
+	while (mini->envp[++i])
 	{
-		name = var_name(heap, envp[i]);
+		name = var_name(mini, mini->envp[i]);
 		if (!ft_strncmp(name, var, _max_len(ft_strlen(name), ft_strlen(var))))
-			return (envp[i] + ft_strlen(name) + 1);
+			return (mini->envp[i] + ft_strlen(name) + 1);
 	}
 	return (NULL);
 }
@@ -73,8 +72,7 @@ bool	_is_empty_quote(t_mini *mini, char *to_expand)
 	return (false);
 }
 
-void	_init_expand(t_mini *mini, char **to_expand, t_expanded *expanded,
-		int status)
+void	_init_expand(t_mini *mini, char **to_expand, t_expanded *expanded)
 {
 	int	i;
 	int	count;
@@ -82,14 +80,12 @@ void	_init_expand(t_mini *mini, char **to_expand, t_expanded *expanded,
 	i = -1;
 	count = 0;
 	while (to_expand[++i])
-		if (_count(mini, to_expand[i], status) || _is_empty_quote(mini,
+		if (_count(mini, to_expand[i]) || _is_empty_quote(mini,
 				to_expand[i]))
 			count++;
-	expanded->value = wrap_malloc(&mini->heap_allocated, mini->heap.list,
-			sizeof(*to_expand) * (count + 1));
+	expanded->value = wrap_malloc(mini,  sizeof(*to_expand) * (count + 1));
 	expanded->value[count] = NULL;
-	expanded->litteral = wrap_malloc(&mini->heap_allocated, mini->heap.list,
-			sizeof(bool *) * (count + 1));
+	expanded->litteral = wrap_malloc(mini,  sizeof(bool *) * (count + 1));
 	expanded->litteral[count] = NULL;
 }
 

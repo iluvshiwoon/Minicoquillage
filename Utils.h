@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 18:39:08 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:50:07 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,38 +84,25 @@ typedef struct s_heap_allocated
 	t_double_link_list	*env;
 }						t_heap_allocated;
 
-typedef struct s_heap
-{
-	t_heap_allocated	*heap_allocated;
-	t_double_link_list	*list;
-	t_double_link_list	*env;
-}						t_heap;
-
 typedef struct s_mini
 {
 	int					status;
 	char				**envp;
 	t_control_dll		control;
 	t_heap_allocated	heap_allocated;
-	t_heap				heap;
+	t_double_link_list	*list;
+    t_double_link_list *fds;
 }						t_mini;
 
-void					free_heap(t_heap_allocated *heap_allocated, bool all);
-void					free_env(t_heap_allocated *heap_allocated);
-void					error_exit(char *msg, t_heap_allocated *heap_allocated);
+void	free_heap(t_mini *mini, bool all);
+void	free_all(t_mini *mini);
+void	error_exit(char *msg, t_mini *mini);
 t_double_link_list		*init_alloc(t_double_link_list **list);
-void					*wrap_malloc(t_heap_allocated *heap_allocated,
-							t_double_link_list *list, size_t size);
-char					*mini_ft_strjoin(t_heap_allocated *heap_allocated,
-							t_double_link_list *list, char const *s1,
-							char const *s2);
-char					*mini_ft_strdup(t_heap_allocated *heap_allocated,
-							t_double_link_list *list, const char *s);
-
-char					**mini_ft_split(t_heap *heap, char const *s, char c);
-char					*mini_ft_strtrim(t_heap *heap, char const *s1,
-							char const *set);
-char					*mini_ft_substr(t_heap *heap, char const *s,
-							unsigned int start, size_t len);
-char					*mini_ft_itoa(t_heap *heap, int n);
+void	*wrap_malloc(t_mini *mini, size_t size);
+char	*mini_ft_strjoin(t_mini *mini, char const *s1, char const *s2);
+char	*mini_ft_strdup(t_mini *mini, const char *s);
+char	**mini_ft_split(t_mini *mini, char const *s, char c);
+char	*mini_ft_strtrim(t_mini *mini, char const *s1, char const *set);
+char	*mini_ft_substr(t_mini *mini, char const *s, unsigned int start, size_t len);
+char					*mini_ft_itoa(t_mini *mini, int n);
 #endif

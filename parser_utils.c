@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 18:29:56 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,23 +70,23 @@ void	count_token(t_double_link_node *beg, t_double_link_node *end,
 
 void	alloc_atom(t_mini *mini, t_token_count count, t_atom *atom)
 {
-	atom->std_in = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.ast,
+	atom->std_in = wrap_malloc(mini, 
 			sizeof(*atom->std_in) * (count.std_in + 1));
 	atom->std_in[count.std_in] = NULL;
-	atom->std_out = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.ast,
+	atom->std_out = wrap_malloc(mini, 
 			sizeof(*atom->std_out) * (count.std_out + 1));
 	atom->std_out[count.std_out] = NULL;
-	atom->std_order = wrap_malloc(&mini->heap_allocated,
-			mini->heap_allocated.ast, sizeof(char) * (count.std_out
+	atom->std_order = wrap_malloc(mini,
+			 sizeof(char) * (count.std_out
 				+ count.std_in + 1));
 	atom->std_order[count.std_in + count.std_out] = '\0';
-	atom->append = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.ast,
+	atom->append = wrap_malloc(mini, 
 			sizeof(*atom->append) * (count.std_out));
-	atom->args = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.ast,
+	atom->args = wrap_malloc(mini, 
 			sizeof(*atom->args) * (count.args + count.cmd + 1));
 	atom->args[count.args + count.cmd] = NULL;
-	atom->heredoc_eof = wrap_malloc(&mini->heap_allocated,
-			mini->heap_allocated.ast, sizeof(*atom->heredoc_eof)
+	atom->heredoc_eof = wrap_malloc(mini,
+			 sizeof(*atom->heredoc_eof)
 			* (count.heredoc_eof + 1));
 	atom->heredoc_eof[count.heredoc_eof] = NULL;
 }
@@ -98,10 +98,10 @@ int	fill_atom(t_mini *mini, t_ast_node **current_node, t_double_link_node *beg,
 	t_token_count	count;
 
 	count = (t_token_count){};
-	p_node = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.ast,
+	p_node = wrap_malloc(mini, 
 			sizeof(*p_node));
 	*p_node = (t_parser_node){};
-	p_node->atom = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.ast,
+	p_node->atom = wrap_malloc(mini, 
 			sizeof(*p_node->atom));
 	*p_node->atom = (t_atom){};
 	(*current_node)->left->data = p_node;

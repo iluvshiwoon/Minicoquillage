@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 02:49:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 04:20:15 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	unset_search_var(char *arg, char **env)
 	return (1);
 }
 
-size_t	_count_unset(t_heap *heap, char **args, char ***envp, char ***new_env)
+size_t	_count_unset(t_mini *mini, char **args, char ***new_env)
 {
 	int		i;
 	int		j;
@@ -48,16 +48,15 @@ size_t	_count_unset(t_heap *heap, char **args, char ***envp, char ***new_env)
 	i = -1;
 	j = 0;
 	count = 0;
-	while ((*envp)[++i])
+	while (mini->envp[++i])
 		;
 	while (args[++j])
-		if (unset_search_var(args[j], *envp) == 0)
+		if (unset_search_var(args[j], mini->envp) == 0)
 			count++;
 	if (count != 0)
 	{
 		count = i - count;
-		*new_env = wrap_malloc(heap->heap_allocated, heap->env,
-				sizeof(**new_env) * (count + 1));
+		*new_env = wrap_malloc(mini,  sizeof(**new_env) * (count + 1));
 		(*new_env)[count] = NULL;
 	}
 	return (count);
@@ -69,31 +68,31 @@ void	__index(t_index *index)
 	index->j = -1;
 }
 
-int	mini_unset(t_heap *heap, char **args, char ***envp)
+int	mini_unset(t_mini *mini, char **args)
 {
 	t_index	index;
 	char	**new_env;
 	bool	matched;
 
+    mini->list = mini->heap_allocated.env;
 	index.i = 0;
 	index.count = 0;
 	new_env = NULL;
-	index.count = _count_unset(heap, args, envp, &new_env);
+	index.count = _count_unset(mini, args, &new_env);
 	if (index.count)
 	{
 		__index(&index);
-		while ((*envp)[++index.i])
+		while (mini->envp[++index.i])
 		{
 			matched = false;
 			index.count = 0;
 			while (args[++index.count])
-				if (u_var_name_cmp(args[index.count], (*envp)[index.i]) == 0)
+				if (u_var_name_cmp(args[index.count], mini->envp[index.i]) == 0)
 					matched = true;
 			if (matched == false)
-				new_env[++index.j] = mini_ft_strdup(heap->heap_allocated,
-						heap->env, (*envp)[index.i]);
+				new_env[++index.j] = mini_ft_strdup(mini, mini->envp[index.i]);
 		}
-		*envp = new_env;
+		mini->envp = new_env;
 	}
 	return (0);
 }

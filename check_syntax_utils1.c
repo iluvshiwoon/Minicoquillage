@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:26:51 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/01 16:41:24 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,12 @@ size_t	count_node(t_double_link_list *list)
 void	_init_get(t_mini *mini, t_double_link_list **lines,
 		t_double_link_node **node, t_get_line *get_line)
 {
-	*node = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.input,
-			sizeof(**node));
-	*lines = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.input,
-			sizeof(**lines));
+	*node = wrap_malloc(mini,  sizeof(**node));
+	*lines = wrap_malloc(mini,  sizeof(**lines));
 	**lines = (t_double_link_list){};
 	init_list(*lines);
-	get_line->prompt = get_prompt(mini, &mini->heap_allocated);
-	get_line->line = init_line(&mini->heap_allocated, *lines, get_line->prompt, mini);
+	get_line->prompt = get_prompt(mini);
+	get_line->line = init_line(*lines, get_line->prompt, mini);
 }
 
 void	_check(t_mini *mini, t_get_line *get_line, t_double_link_list *lines,
@@ -48,6 +46,6 @@ void	_check(t_mini *mini, t_get_line *get_line, t_double_link_list *lines,
 	{
 		if (handle_line(mini, get_line, lines, r_value) == EXIT_FAILURE)
 			break ;
-		get_line->temp = concat_input(&mini->heap_allocated, lines);
+		get_line->temp = concat_input(mini, lines);
 	}
 }

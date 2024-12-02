@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 11:17:44 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ bool	here_is_empty_quote(char *to_expand)
 	return (false);
 }
 
-char	*_quote(t_heap *heap, char *to_expand)
+char	*_quote(t_mini *mini, char *to_expand)
 {
 	char	*expanded;
 	int		i;
@@ -86,13 +86,12 @@ char	*_quote(t_heap *heap, char *to_expand)
 		count = here_count(to_expand);
 		if (!count && here_is_empty_quote(to_expand))
 		{
-			expanded = wrap_malloc(heap->heap_allocated, heap->list,
-					sizeof(char));
+			expanded = wrap_malloc(mini,  sizeof(char));
 			expanded[0] = '\0';
 		}
 		else if (count)
 		{
-			expanded = wrap_malloc(heap->heap_allocated, heap->list,
+			expanded = wrap_malloc(mini, 
 					sizeof(char) * (count + 1));
 			expanded[count] = '\0';
 			here_assign(to_expand, expanded);

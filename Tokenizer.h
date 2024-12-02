@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 17:27:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/01 16:41:03 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:24:10 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ void				add_type(t_control_dll *control, int type, int *cmd);
 
 // check_syntax.c
 int					check_syntax(char *line);
-char				*concat_input(t_heap_allocated *heap_allocated,
-						t_double_link_list *list);
+char	*concat_input(t_mini *mini, t_double_link_list *list);
 int					check_temp_syntax(t_mini *mini, char *line);
 int					handle_line(t_mini *mini, t_get_line *get_line,
 						t_double_link_list *lines, int *r_value);
@@ -47,10 +46,8 @@ void				toggle_quote(int *open_double, int *open_single, char c);
 char				*wrapper_strjoin_concat(t_heap_allocated *heap_allocated,
 						char *s1, char *s2, t_string *string);
 void				init_control(t_mini *mini, t_control_dll *gl_control);
-char				*init_line(t_heap_allocated *heap_allocated,
-						t_double_link_list *lines, char *prompt, t_mini * mini);
-char				*update_node(t_heap_allocated *heap_allocated,
-						t_double_link_list *lines);
+char	*init_line(t_double_link_list *lines, char *prompt, t_mini * mini);
+char	*update_node(t_mini *mini, t_double_link_list *lines);
 
 // check_syntax_utils1.c
 size_t				count_node(t_double_link_list *list);
@@ -70,9 +67,8 @@ int					check_parenthesis(t_control_dll *control);
 int					check_error_tokens(t_control_dll *control);
 
 // Prompt.c
-char				*get_prompt(t_mini *mini, t_heap_allocated *heap_allocated);
-char				*build_prompt(t_mini *mini,
-						t_heap_allocated *heap_allocated);
+char				*get_prompt(t_mini *mini);
+char	*build_prompt(t_mini *mini);
 char				*last_ocur(char *string, char c);
 
 // Free.c

@@ -6,13 +6,13 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:32:48 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	open_heredoc(t_heap *heap, t_atom *atom)
+void	open_heredoc(t_mini *mini, t_atom *atom)
 {
 	static int	i;
 	char		*tmp;
@@ -20,23 +20,21 @@ void	open_heredoc(t_heap *heap, t_atom *atom)
 
 	tmp = "/tmp/tmp_file";
 	if (access("/tmp", F_OK) != EXIT_SUCCESS)
-		error_exit("/tmp directory doesn't exist!\n", heap->heap_allocated);
+		error_exit("/tmp directory doesn't exist!\n",mini);
 	else if (access("/tmp", R_OK | W_OK) != EXIT_SUCCESS)
-		error_exit("Wrong permission for /tmp directory\n",
-			heap->heap_allocated);
+		error_exit("Wrong permission for /tmp directory\n", mini);
 	nb = ft_itoa(i++);
-	tmp = mini_ft_strjoin(heap->heap_allocated, heap->list, tmp, nb);
+	tmp = mini_ft_strjoin(mini, tmp, nb);
 	free(nb);
 	if (access(tmp, F_OK) == EXIT_SUCCESS)
 		unlink(tmp);
 	atom->in_fd = open(tmp, O_RDWR | O_EXCL | O_CREAT, S_IRUSR | S_IWUSR);
 	if (atom->in_fd == -1)
-		return (perror(NULL), error_exit("open failed\n",
-				heap->heap_allocated));
+		return (perror(NULL), error_exit("open failed\n", mini));
 	atom->file_heredoc = tmp;
 }
 
-int	listen_heredoc(t_heap *heap, int *fd, char *eof)
+int	listen_heredoc(t_mini *mini, int *fd, char *eof)
 {
 	char	*line;
 	int		i;
@@ -44,7 +42,7 @@ int	listen_heredoc(t_heap *heap, int *fd, char *eof)
 
 	i = 0;
 	_stdin = dup(STDIN_FILENO);
-	eof = _quote(heap, eof);
+	eof = _quote(mini, eof);
 	while (g_signal != SIGINT && ++i)
 	{
 		line = readline("> ");
@@ -59,13 +57,13 @@ end-of-file (wanted `%s')\n", i, eof), free(line), 0);
 					ft_strlen(line))) == EXIT_SUCCESS)
 			return (free(line), 0);
 		else if (*fd)
-			_write_listen(heap, *fd, line);
+			_write_listen(mini, *fd, line);
 		free(line);
 	}
 	return (_close(_stdin), 0);
 }
 
-void	run_heredoc(t_heap *heap, t_atom *atom)
+void	run_heredoc(t_mini *mini, t_atom *atom)
 {
 	int	i;
 
@@ -75,12 +73,12 @@ void	run_heredoc(t_heap *heap, t_atom *atom)
 		if (g_signal == SIGINT)
 			break ;
 		if (atom->heredoc && atom->heredoc_eof[i + 1] == NULL)
-			open_heredoc(heap, atom);
-		listen_heredoc(heap, &atom->in_fd, atom->heredoc_eof[i]);
+			open_heredoc(mini, atom);
+		listen_heredoc(mini, &atom->in_fd, atom->heredoc_eof[i]);
 	}
 }
 
-void	heredoc(t_heap *heap, t_ast_node *first_node)
+void	heredoc(t_mini *mini, t_ast_node *first_node)
 {
 	t_ast_node		*left;
 	t_parser_node	*p_node;
@@ -92,14 +90,14 @@ void	heredoc(t_heap *heap, t_ast_node *first_node)
 		left = first_node->left;
 		p_node = left->data;
 		if (is_op(p_node->ops))
-			heredoc(heap, left);
+			heredoc(mini, left);
 		else
-			run_heredoc(heap, p_node->atom);
+			run_heredoc(mini, p_node->atom);
 		p_node = first_node->data;
 		if (p_node->ops)
 		{
 			if (p_node->atom)
-				run_heredoc(heap, p_node->atom);
+				run_heredoc(mini, p_node->atom);
 		}
 		first_node = first_node->right;
 	}

@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:10:16 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/01 16:41:40 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,14 @@ void	toggle_quote(int *open_double, int *open_single, char c)
 
 void	init_control(t_mini *mini, t_control_dll *gl_control)
 {
-	gl_control->list = wrap_malloc(&mini->heap_allocated,
-			mini->heap_allocated.input, sizeof(*mini->control.list));
-	gl_control->node = wrap_malloc(&mini->heap_allocated,
-			mini->heap_allocated.input, sizeof(*mini->control.node));
+	gl_control->list = wrap_malloc(mini,  sizeof(*mini->control.list));
+	gl_control->node = wrap_malloc(mini,  sizeof(*mini->control.node));
 	*gl_control->node = (t_double_link_node){};
 	*gl_control->list = (t_double_link_list){};
 	init_list(gl_control->list);
 }
 
-char	*init_line(t_heap_allocated *heap_allocated, t_double_link_list *lines,
-		char *prompt, t_mini * mini)
+char	*init_line(t_double_link_list *lines, char *prompt, t_mini * mini)
 {
 	char				*line;
 	char				*dup_line;
@@ -48,9 +45,9 @@ char	*init_line(t_heap_allocated *heap_allocated, t_double_link_list *lines,
 	if (g_signal == SIGINT)
 		return (dup2(_stdin, STDIN_FILENO), close(_stdin), line);
 	if (!line)
-		return (_close(_stdin), free_heap(heap_allocated, true), exit(mini->status), NULL);
-	node = wrap_malloc(heap_allocated, heap_allocated->input, sizeof(*node));
-	dup_line = mini_ft_strdup(heap_allocated, heap_allocated->input, line);
+		return (_close(_stdin), free_heap(mini, true), exit(mini->status), NULL);
+	node = wrap_malloc(mini,  sizeof(*node));
+	dup_line = mini_ft_strdup(mini, line);
 	free(line);
 	_close(_stdin);
 	node->data = dup_line;
@@ -58,22 +55,20 @@ char	*init_line(t_heap_allocated *heap_allocated, t_double_link_list *lines,
 	return (dup_line);
 }
 
-char	*update_node(t_heap_allocated *heap_allocated,
-		t_double_link_list *lines)
+char	*update_node(t_mini *mini, t_double_link_list *lines)
 {
 	t_double_link_node	*node;
 	char				*line;
 	char				*dup_line;
 
-	node = wrap_malloc(heap_allocated, heap_allocated->input, sizeof(*node));
+	node = wrap_malloc(mini,  sizeof(*node));
 	*node = (t_double_link_node){};
 	line = readline("· ");
 	if (!line)
 		return (NULL);
-	dup_line = mini_ft_strdup(heap_allocated, heap_allocated->input, line);
+	dup_line = mini_ft_strdup(mini, line);
 	free(line);
-	node->data = mini_ft_strjoin(heap_allocated, heap_allocated->input,
-			dup_line, "\n");
+	node->data = mini_ft_strjoin(mini, dup_line, "\n");
 	lines->pf_insert_end(lines, node);
 	return (dup_line);
 }

@@ -6,7 +6,7 @@
 /*   By: kgriset <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:50:52 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 02:39:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_match
 }					t_match;
 
 int					globbing(const char *str, const char *glob);
-t_glob				*glob(t_heap *heap, const char *pattern, bool *litteral);
+t_glob	*glob(t_mini *mini, const char *pattern, bool *litteral);
 int					match(const char *str, const char *glob, bool *litteral);
 int					max_file(void);
 #endif

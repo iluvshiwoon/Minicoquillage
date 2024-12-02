@@ -6,30 +6,11 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 10:45:11 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:33:41 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
-
-void	mini_write(t_heap *heap, int fd, char *str, ssize_t bytes)
-{
-	ssize_t	written;
-	size_t	offset;
-
-	written = 0;
-	offset = 0;
-	while (1)
-	{
-		written = write(fd, str + offset, bytes - offset);
-		if (written == -1)
-			return (perror(NULL), error_exit("write failed\n",
-					heap->heap_allocated));
-		if (written == bytes)
-			break ;
-		offset = written;
-	}
-}
 
 size_t	_max_len(size_t len1, size_t len2)
 {
@@ -38,8 +19,16 @@ size_t	_max_len(size_t len1, size_t len2)
 	return (len2);
 }
 
-void	_write_listen(t_heap *heap, int fd, char *line)
+void	_write_listen(t_mini *mini, int fd, char *line)
 {
-	mini_write(heap, fd, line, ft_strlen(line));
-	mini_write(heap, fd, "\n", 1);
+	size_t r_value;
+
+	r_value = write(fd, line, ft_strlen(line));
+	r_value += write(fd, "\n", 1);
+	if (r_value != ft_strlen(line) + 1)
+	{
+		ft_printf_fd(STDERR_FILENO,"minicoquillage: heredoc: %s\n", strerror(errno));
+		close_fds(mini->fds);
+		free_heap(mini, true);
+	}
 }

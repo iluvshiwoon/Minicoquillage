@@ -6,15 +6,15 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 18:36:51 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 02:27:13 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-void	__print_cd(char **path, t_heap *heap, char **envp)
+void	__print_cd(t_mini * mini, char **path)
 {
-	(*path) = _getenv(heap, "OLDPWD", envp, 0);
+	(*path) = _getenv(mini, "OLDPWD");
 	if (!(*path))
 	{
 		(*path) = NULL;

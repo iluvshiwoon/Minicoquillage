@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:19:31 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:52:50 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	skip_through(t_mini *mini, t_parser_node *p_node,
 	t_token_count		count;
 	t_double_link_node	*og_next_op;
 
+    mini->list = mini->heap_allocated.ast;
 	count = (t_token_count){};
 	token = NULL;
 	og_next_op = next_op;
@@ -33,7 +34,7 @@ void	skip_through(t_mini *mini, t_parser_node *p_node,
 	}
 	if (token && token->type != CLOSE_PARENTHESIS)
 		return ;
-	p_node->atom = malloc(sizeof(*p_node->atom));
+	p_node->atom = wrap_malloc(mini,sizeof(*p_node->atom));
 	*p_node->atom = (t_atom){};
 	count_token(next_op, og_next_op, &count);
 	alloc_atom(mini, count, p_node->atom);
@@ -73,8 +74,8 @@ void	skip_through_parenthesis(t_mini *mini, t_parser_node *p_node,
 		_skip_skip(&count, &i, &token);
 		if (i && i->next && i->next != next_op)
 		{
-			p_node->atom = wrap_malloc(&mini->heap_allocated,
-					mini->heap_allocated.ast, sizeof(*p_node->atom));
+			p_node->atom = wrap_malloc(mini,
+					 sizeof(*p_node->atom));
 			*p_node->atom = (t_atom){};
 			count_token(i->next, next_op, &t_count);
 			alloc_atom(mini, t_count, p_node->atom);
@@ -91,7 +92,7 @@ void	compute_expr(t_mini *mini, t_double_link_node *beg,
 
 	while (1)
 	{
-		p_node = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.ast,
+		p_node = wrap_malloc(mini, 
 				sizeof(*p_node));
 		*p_node = (t_parser_node){};
 		next_op = get_next_op(mini, beg, end);
@@ -117,11 +118,11 @@ t_ast	*parser(t_mini *mini)
 	t_double_link_node	*end;
 	t_ast				*ast;
 
-	ast = wrap_malloc(&mini->heap_allocated, mini->heap_allocated.ast,
+	ast = wrap_malloc(mini, 
 			sizeof(*ast));
 	*ast = (t_ast){};
-	ast->first_node = wrap_malloc(&mini->heap_allocated,
-			mini->heap_allocated.ast, sizeof(*ast->first_node));
+	ast->first_node = wrap_malloc(mini,
+			 sizeof(*ast->first_node));
 	*ast->first_node = (t_ast_node){};
 	beg = mini->control.list->first_node;
 	end = mini->control.list->last_node;

@@ -6,18 +6,18 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 21:32:49 by kgriset           #+#    #+#             */
-/*   Updated: 2024/11/27 21:37:28 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minicoquillage.h"
 
-int	_count_glob(t_heap *heap, char *str, bool *litteral)
+int	_count_glob(t_mini *mini, char *str, bool *litteral)
 {
 	int		count;
 	t_glob	*globbed;
 
-	globbed = glob(heap, str, litteral);
+	globbed = glob(mini, str, litteral);
 	count = 0;
 	while (globbed)
 	{
@@ -27,26 +27,25 @@ int	_count_glob(t_heap *heap, char *str, bool *litteral)
 	return (count);
 }
 
-void	__init_assign_glob(t_heap *heap, int count, t_index *index,
+void	__init_assign_glob(t_mini *mini, int count, t_index *index,
 		char ***r_value)
 {
-	(*r_value) = wrap_malloc(heap->heap_allocated, heap->list,
-			sizeof(*(*r_value)) * (count + 1));
+	(*r_value) = wrap_malloc(mini,  sizeof(*(*r_value)) * (count + 1));
 	(*r_value)[count] = NULL;
 	index->i = -1;
 	index->j = -1;
 }
 
-char	**_assign_glob(t_heap *heap, t_expanded *expanded, int count)
+char	**_assign_glob(t_mini *mini, t_expanded *expanded, int count)
 {
 	t_glob	*globbed;
 	char	**r_value;
 	t_index	index;
 
-	__init_assign_glob(heap, count, &index, &r_value);
+	__init_assign_glob(mini, count, &index, &r_value);
 	while (expanded->value[++index.i])
 	{
-		globbed = glob(heap, expanded->value[index.i],
+		globbed = glob(mini, expanded->value[index.i],
 				expanded->litteral[index.i]);
 		if (globbed)
 		{
@@ -65,7 +64,7 @@ char	**_assign_glob(t_heap *heap, t_expanded *expanded, int count)
 	return (r_value);
 }
 
-char	**_glob_args(t_heap *heap, t_expanded *expanded)
+char	**_glob_args(t_mini *mini, t_expanded *expanded)
 {
 	int	i;
 	int	j;
@@ -73,14 +72,14 @@ char	**_glob_args(t_heap *heap, t_expanded *expanded)
 
 	i = -1;
 	count = 0;
-	expanded = _split_arg(heap, expanded);
+	expanded = _split_arg(mini, expanded);
 	while (expanded->value[++i])
 	{
-		j = _count_glob(heap, expanded->value[i], expanded->litteral[i]);
+		j = _count_glob(mini, expanded->value[i], expanded->litteral[i]);
 		if (j)
 			count += j;
 		else
 			count++;
 	}
-	return (_assign_glob(heap, expanded, count));
+	return (_assign_glob(mini, expanded, count));
 }
