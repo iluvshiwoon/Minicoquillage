@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:27:50 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 21:48:16 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:57:09 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void					clean_heredoc(t_mini *mini, t_ast_node *first_node);
 
 // heredoc_utils.c
 size_t					_max_len(size_t len1, size_t len2);
-void	_write_listen(t_mini *mini, int fd, char *line);
+void	_write_listen(int fd, char *line);
 
 // path.c
 char	*get_path(t_mini *mini, char *cmd);

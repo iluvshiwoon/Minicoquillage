@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 21:56:48 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:56:51 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ end-of-file (wanted `%s')\n", i, eof), free(line), 0);
 					ft_strlen(line))) == EXIT_SUCCESS)
 			return (free(line), 0);
 		else if (*fd)
-			_write_listen(mini, *fd, line);
+			_write_listen(*fd, line);
 		free(line);
 	}
 	return (0);

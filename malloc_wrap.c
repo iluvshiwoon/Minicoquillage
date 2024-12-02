@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 18:37:44 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 04:13:47 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 22:57:56 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ void	*wrap_malloc(t_mini *mini, size_t size)
 		return (NULL);
 	new_node = malloc(sizeof(*new_node));
 	if (!new_node)
-		return (free_heap(mini, true), exit(EXIT_FAILURE), NULL);
+		return (close_fds(mini->fds),free_heap(mini, true), exit(EXIT_FAILURE), NULL);
 	*new_node = (t_double_link_node){};
 	new_node->data = malloc(size);
 	if (!new_node->data)
-		return (free(new_node), free_heap(mini, true),
+		return (close_fds(mini->fds),free(new_node), free_heap(mini, true),
 			exit(EXIT_FAILURE), NULL);
 	mini->list->pf_insert_end(mini->list, new_node);
 	return (new_node->data);
