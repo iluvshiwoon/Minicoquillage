@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 20:56:10 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 22:46:22 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/02 23:15:18 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int64_t	atoi64_safe(char *string, int *status)
 void p_exit(t_mini * mini)
 {
     if (!mini->pipe)
-	    ft_printf_fd(STDOUT_FILENO,"exit\n");
+	    ft_printf_fd(STDERR_FILENO,"exit\n");
 }
 
 int	mini_exit(t_mini *mini, char **args)
