@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 13:46:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:24:02 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/03 16:44:58 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,23 @@ char	*get_prompt(t_mini *mini)
 char	*r_prompt(t_mini *mini, char *temp)
 {
 	char				*r_value;
+	char				*shell;
 
+	shell = _getenv(mini, "SHELL");
+	if (!shell)
+		shell = ".";
 	if (mini->status)
 	{
 		r_value = mini_ft_strjoin(mini, temp,
 				mini_ft_strjoin(mini, mini_ft_strjoin(mini,
-						" via \1\033[1;34m\2", last_ocur(_getenv(mini,
-								"SHELL"), '/') + 1),
+						" via \1\033[1;34m\2", last_ocur(shell, '/') + 1),
 					"\1\n🦪\2 \1\033[31m→\2 \1\033[0m\2"));
 	}
 	else
 	{
 		r_value = mini_ft_strjoin(mini, temp, mini_ft_strjoin(mini,
 					mini_ft_strjoin(mini,
-						" via \1\033[1;34m\2", last_ocur(_getenv(mini,
-								"SHELL"), '/') + 1),
+						" via \1\033[1;34m\2", last_ocur(shell, '/') + 1),
 					"\1\n🦪\2 \1\033[32m→\2 \1\033[0m\2"));
 	}
 	return (r_value);
