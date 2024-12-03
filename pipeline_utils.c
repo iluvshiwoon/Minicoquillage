@@ -29,12 +29,13 @@ void	_count_pipe(t_mini *mini, int (**pipefd)[2], int *pipe_nb,
 			break ;
 		first_node = first_node->right;
 	}
-	*pipefd = wrap_malloc(mini,  sizeof(**pipefd) * *pipe_nb);
+	*pipefd = wrap_malloc(mini, sizeof(**pipefd) * *pipe_nb);
 	while (++i < *pipe_nb)
-        m_pipe(mini, pipefd, i);
+		m_pipe(mini, pipefd, i);
 }
 
-void	_pipeline_exec_tree(t_mini *mini, t_parser_node **p_node, t_ast_node *first_node)
+void	_pipeline_exec_tree(t_mini *mini, t_parser_node **p_node,
+		t_ast_node *first_node)
 {
 	t_ast_node	*left;
 
@@ -60,13 +61,13 @@ void	_pipeline_exec(t_mini *mini, t_parser_node *p_node)
 
 	globbed = _glob_args(mini, _expand(mini, p_node->atom->args));
 	if (check_builtin(mini, globbed[0]))
-    {
+	{
 		mini->status = _call_builtin(mini, globbed);
-        mini->list = mini->heap_allocated.exec;
-    }
+		mini->list = mini->heap_allocated.exec;
+	}
 	else
 	{
-	    close_fds(mini->fds);
+		close_fds(mini->fds);
 		path = get_path(mini, globbed[0]);
 		if (path)
 			execve(path, globbed, mini->envp);
@@ -77,11 +78,11 @@ void	__exec_pipe(t_mini *mini, t_parser_node **p_node,
 		t_ast_node *first_node, t_exec *exec)
 {
 	redirect(mini, exec, first_node);
-    if (is_op((*p_node)->ops) && !exec->skip)
-        _pipeline_exec_tree(mini, p_node, first_node);
-    else if (!exec->skip)
-        _pipeline_exec(mini, (*p_node));
-    close_fds(mini->fds);
-    free_heap(mini, true);
+	if (is_op((*p_node)->ops) && !exec->skip)
+		_pipeline_exec_tree(mini, p_node, first_node);
+	else if (!exec->skip)
+		_pipeline_exec(mini, (*p_node));
+	close_fds(mini->fds);
+	free_heap(mini, true);
 	exit((mini->status + 256) % 256);
 }

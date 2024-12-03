@@ -19,7 +19,7 @@ void	_error(char *error, int *skip, int *status, char *filename)
 	ft_printf_fd(STDERR_FILENO, error, filename);
 }
 
-void	__red(t_mini * mini, char *globbed, t_atom *atom, t_exec *exec)
+void	__red(t_mini *mini, char *globbed, t_atom *atom, t_exec *exec)
 {
 	if (atom->append[exec->i])
 		atom->out_fd = m_open(mini, globbed, O_WRONLY | O_APPEND, 0);

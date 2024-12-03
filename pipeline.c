@@ -18,15 +18,15 @@ void	_run_pipeline(t_mini *mini, t_ast_node *first_node, t_exec exec,
 	pipeline->i = -1;
 	exec.skip = 0;
 	_count_pipe(mini, &pipeline->pipefd, &pipeline->pipe_nb, first_node);
-	pipeline->pid = wrap_malloc(mini,
-			 sizeof(pid_t) * (pipeline->pipe_nb + 1));
+	pipeline->pid = wrap_malloc(mini, sizeof(pid_t) * (pipeline->pipe_nb + 1));
 	while (++pipeline->i < pipeline->pipe_nb + 1)
 	{
 		pipeline->pid[pipeline->i] = fork();
 		if (pipeline->pid[pipeline->i] == 0)
 		{
-            mini->pipe = true;
-			_close_pipes(mini,pipeline->pipe_nb, pipeline->pipefd, pipeline->i);
+			mini->pipe = true;
+			_close_pipes(mini, pipeline->pipe_nb, pipeline->pipefd,
+				pipeline->i);
 			_pipeline_skip(pipeline->i, &first_node, &pipeline->p_node);
 			__exec_pipe(mini, &pipeline->p_node, first_node, &exec);
 		}

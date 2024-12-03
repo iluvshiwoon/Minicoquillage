@@ -87,8 +87,7 @@ char	**mini_ft_split(t_mini *mini, char const *s, char c)
 	char	*s_trimmed;
 
 	s_trimmed = mini_count_split(mini, s, c, &sub_str_count);
-	split = wrap_malloc(mini,  sizeof(*split)
-			* (sub_str_count + 1));
+	split = wrap_malloc(mini, sizeof(*split) * (sub_str_count + 1));
 	if (!split)
 	{
 		free(s_trimmed);

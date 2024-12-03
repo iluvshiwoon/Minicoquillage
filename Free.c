@@ -21,8 +21,8 @@ void	close_fds(t_double_link_list *fds)
 	while (node)
 	{
 		fd = node->data;
-        if (*fd != STDIN_FILENO && *fd != STDOUT_FILENO && *fd != STDERR_FILENO)
-		    close(*fd);
+		if (*fd != STDIN_FILENO && *fd != STDOUT_FILENO && *fd != STDERR_FILENO)
+			close(*fd);
 		node = node->next;
 	}
 }

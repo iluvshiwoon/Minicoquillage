@@ -48,10 +48,10 @@ void	_exec_exec(t_mini *mini, t_parser_node **p_node,
 	{
 		globbed = _glob_args(mini, _expand(mini, (*p_node)->atom->args));
 		if (check_builtin(mini, globbed[0]))
-        {
+		{
 			mini->status = _call_builtin(mini, globbed);
-            mini->list = mini->heap_allocated.env;
-        }
+			mini->list = mini->heap_allocated.env;
+		}
 		else
 			mini->status = _exec_node(mini, globbed);
 	}
@@ -77,7 +77,7 @@ void	_exec_tree(t_mini *mini, t_ast_node *first_node)
 			else if (p_node->ops && p_node->ops != PIPE)
 				exec.skip = 0;
 		}
-		_reset_fd(mini,exec);
+		_reset_fd(mini, exec);
 		first_node = first_node->right;
 	}
 }

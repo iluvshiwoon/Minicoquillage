@@ -20,7 +20,7 @@ char	*mini_ft_strdup(t_mini *mini, const char *s)
 	i = 0;
 	while (s[i])
 		i++;
-	s_dupe = wrap_malloc(mini,  (i + 1) * sizeof(char));
+	s_dupe = wrap_malloc(mini, (i + 1) * sizeof(char));
 	if (!s_dupe)
 		return (0);
 	i = 0;

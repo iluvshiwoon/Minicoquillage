@@ -18,23 +18,19 @@ t_expanded	*_init_dosplit(t_mini *mini, char *str, bool *litteral)
 	int			count;
 	t_index		ind;
 
-	exp = wrap_malloc(mini,  sizeof(*exp));
+	exp = wrap_malloc(mini, sizeof(*exp));
 	count = _count_split(str, litteral);
 	if (!count)
 		count = 1;
-	exp->value = wrap_malloc(mini, 
-			sizeof(*exp->value) * (count + 1));
-	exp->litteral = wrap_malloc(mini, 
-			sizeof(*exp->litteral) * count);
+	exp->value = wrap_malloc(mini, sizeof(*exp->value) * (count + 1));
+	exp->litteral = wrap_malloc(mini, sizeof(*exp->litteral) * count);
 	exp->value[count] = NULL;
 	ind.i = 0;
 	ind.j = -1;
 	if (!str[ind.i])
 	{
-		exp->value[++ind.j] = wrap_malloc(mini, 
-				sizeof(char));
-		exp->litteral[ind.j] = wrap_malloc(mini, 
-				sizeof(bool));
+		exp->value[++ind.j] = wrap_malloc(mini, sizeof(char));
+		exp->litteral[ind.j] = wrap_malloc(mini, sizeof(bool));
 		exp->value[ind.j][0] = '\0';
 		exp->litteral[ind.j][0] = true;
 	}
@@ -87,9 +83,8 @@ t_expanded	*_assign_split(t_mini *mini, t_expanded *expanded, int c)
 	t_index		index;
 
 	r = wrap_malloc(mini, sizeof(*expanded));
-	r->value = wrap_malloc(mini,  sizeof(*r->value) * (c
-				+ 1));
-	r->litteral = wrap_malloc(mini,  sizeof(*r->litteral) * (c));
+	r->value = wrap_malloc(mini, sizeof(*r->value) * (c + 1));
+	r->litteral = wrap_malloc(mini, sizeof(*r->litteral) * (c));
 	r->value[c] = NULL;
 	index.i = -1;
 	index.j = -1;

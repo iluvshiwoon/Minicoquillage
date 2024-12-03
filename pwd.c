@@ -26,10 +26,11 @@ int	mini_pwd(void)
 		w_bytes = write(1, cwd, ft_strlen(cwd));
 		w_bytes += write(1, "\n", 1);
 		if (w_bytes != ft_strlen(cwd) + 1)
-        {
-            ft_printf_fd(STDERR_FILENO, "minicoquillage: pwd: write error: No space left on device\n");
+		{
+			ft_printf_fd(STDERR_FILENO,
+				"minicoquillage: pwd: write error: No space left on device\n");
 			r_value = 1;
-        }
+		}
 		free(cwd);
 	}
 	return (r_value);

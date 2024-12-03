@@ -51,20 +51,18 @@ int	_count(t_mini *mini, char *str)
 
 void	__assign_expand0(t_mini *mini, t_expanded *expanded, t_index *index)
 {
-	expanded->litteral[++index->j] = wrap_malloc(mini,
-			 sizeof(bool));
-	expanded->value[index->j] = wrap_malloc(mini, 
-			sizeof(char));
+	expanded->litteral[++index->j] = wrap_malloc(mini, sizeof(bool));
+	expanded->value[index->j] = wrap_malloc(mini, sizeof(char));
 	expanded->value[index->j][0] = '\0';
 	expanded->litteral[index->j][0] = true;
 }
 
 void	__assign_expand1(t_mini *mini, t_expanded *expanded, t_index *index)
 {
-	expanded->litteral[++index->j] = wrap_malloc(mini,
-			 sizeof(bool) * (index->count));
-	expanded->value[index->j] = wrap_malloc(mini,
-			 sizeof(char) * (index->count + 1));
+	expanded->litteral[++index->j] = wrap_malloc(mini, sizeof(bool)
+			* (index->count));
+	expanded->value[index->j] = wrap_malloc(mini, sizeof(char) * (index->count
+				+ 1));
 	expanded->value[index->j][index->count] = '\0';
 }
 
@@ -74,7 +72,7 @@ t_expanded	*_expand(t_mini *mini, char **to_expand)
 	t_to_expand	_expand;
 	t_index		index;
 
-	expanded = wrap_malloc(mini,  sizeof(*expanded));
+	expanded = wrap_malloc(mini, sizeof(*expanded));
 	_init_expand(mini, to_expand, expanded);
 	index.i = -1;
 	index.j = -1;

@@ -24,15 +24,12 @@ void	add_token(size_t i, size_t j, char *line, t_mini *mini)
 {
 	char	*temp;
 
-	mini->control.node = wrap_malloc(mini,
-			 sizeof(*mini->control.node));
+	mini->control.node = wrap_malloc(mini, sizeof(*mini->control.node));
 	*mini->control.node = (t_double_link_node){};
-	mini->control.token = wrap_malloc(mini,
-			 sizeof(*mini->control.token));
+	mini->control.token = wrap_malloc(mini, sizeof(*mini->control.token));
 	*mini->control.token = (t_token){};
 	mini->control.token->type = COMMAND;
-	temp = wrap_malloc(mini, 
-			sizeof(char) * (j - i + 1));
+	temp = wrap_malloc(mini, sizeof(char) * (j - i + 1));
 	ft_strlcpy(temp, line + i, j - i + 1);
 	mini->control.token->value = temp;
 	mini->control.node->data = mini->control.token;
@@ -60,8 +57,7 @@ size_t	init_create_tokens(t_open_quote *open, t_mini *mini, char *line,
 	*j = 0;
 	open->double_quote = 0;
 	open->single_quote = 0;
-	mini->control.list = wrap_malloc(mini,
-			 sizeof(*mini->control.list));
+	mini->control.list = wrap_malloc(mini, sizeof(*mini->control.list));
 	*mini->control.list = (t_double_link_list){};
 	*j = skip_space(line, *j);
 	if (ft_isspace(line[*j]))

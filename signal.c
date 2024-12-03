@@ -14,7 +14,7 @@
 
 void	sigint_handler(int sig)
 {
-	ft_printf_fd(STDOUT_FILENO,"\n");
+	ft_printf_fd(STDOUT_FILENO, "\n");
 	if (g_signal == 999)
 		return ;
 	g_signal = sig;

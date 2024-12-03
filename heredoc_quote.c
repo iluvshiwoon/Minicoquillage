@@ -86,13 +86,12 @@ char	*_quote(t_mini *mini, char *to_expand)
 		count = here_count(to_expand);
 		if (!count && here_is_empty_quote(to_expand))
 		{
-			expanded = wrap_malloc(mini,  sizeof(char));
+			expanded = wrap_malloc(mini, sizeof(char));
 			expanded[0] = '\0';
 		}
 		else if (count)
 		{
-			expanded = wrap_malloc(mini, 
-					sizeof(char) * (count + 1));
+			expanded = wrap_malloc(mini, sizeof(char) * (count + 1));
 			expanded[count] = '\0';
 			here_assign(to_expand, expanded);
 		}

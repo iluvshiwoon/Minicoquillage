@@ -35,7 +35,7 @@ char	**store_tmp(t_mini *mini, int size)
 	struct dirent	*entry;
 	char			**tmp;
 
-	tmp = wrap_malloc(mini,  sizeof(char *) * (size + 1));
+	tmp = wrap_malloc(mini, sizeof(char *) * (size + 1));
 	path = ".";
 	dir = opendir(path);
 	if (dir == NULL)
@@ -68,7 +68,7 @@ t_glob	*store_match(t_mini *mini, char **tmp, t_to_expand exp,
 				ft_strlen(tmp[i]) + 1) != 0 && ft_strncmp(tmp[i], "..",
 				ft_strlen(tmp[i]) + 1) != 0 && tmp[i][0] != '.')
 		{
-			new = wrap_malloc(mini,  sizeof(t_glob));
+			new = wrap_malloc(mini, sizeof(t_glob));
 			if (new == NULL)
 				return (head_glob);
 			new->file = mini_ft_strdup(mini, tmp[i]);
@@ -96,7 +96,7 @@ t_glob	*store_hidden(t_mini *mini, char **tmp, t_to_expand exp,
 				ft_strlen(tmp[i]) + 1) != 0 && ft_strncmp(tmp[i], "..",
 				ft_strlen(tmp[i]) + 1) != 0 && tmp[i][0] == '.')
 		{
-			new = wrap_malloc(mini,  sizeof(t_glob));
+			new = wrap_malloc(mini, sizeof(t_glob));
 			if (new == NULL)
 				return (head_glob);
 			new->file = mini_ft_strdup(mini, tmp[i]);
@@ -120,7 +120,7 @@ t_glob	*glob(t_mini *mini, const char *pattern, bool *litteral)
 	exp.litteral = litteral;
 	size = max_file();
 	tmp = store_tmp(mini, size);
-	head_glob = wrap_malloc(mini,  sizeof(t_glob));
+	head_glob = wrap_malloc(mini, sizeof(t_glob));
 	if (head_glob == NULL)
 		return (NULL);
 	head_glob->file = NULL;

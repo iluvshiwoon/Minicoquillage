@@ -84,7 +84,7 @@ void	_compute_skip(t_double_link_node *beg, t_mini *mini)
 
 void	_alloc_atom(t_mini *mini, t_ast_node **current_node)
 {
-	(*current_node)->left = wrap_malloc(mini,  sizeof(*(*current_node)->left));
+	(*current_node)->left = wrap_malloc(mini, sizeof(*(*current_node)->left));
 	*(*current_node)->left = (t_ast_node){};
 	(*current_node)->left->previous = *current_node;
 }
@@ -102,7 +102,8 @@ int	compute_atom(t_mini *mini, t_double_link_node *beg, t_double_link_node *end,
 		_compute_skip(beg, mini);
 		compute_expr(mini, beg->next, mini->control.node->previous,
 			(*current_node)->left);
-		(*current_node)->right = wrap_malloc(mini,  sizeof(*(*current_node)->right));
+		(*current_node)->right = wrap_malloc(mini,
+				sizeof(*(*current_node)->right));
 		*(*current_node)->right = (t_ast_node){};
 		(*current_node)->right->previous = (*current_node);
 		return (exit_status);
@@ -111,7 +112,7 @@ int	compute_atom(t_mini *mini, t_double_link_node *beg, t_double_link_node *end,
 	mini->control.token = end->data;
 	if (!is_op(mini->control.token->type))
 		return (exit_status);
-	(*current_node)->right = wrap_malloc(mini,  sizeof(*(*current_node)->right));
+	(*current_node)->right = wrap_malloc(mini, sizeof(*(*current_node)->right));
 	*(*current_node)->right = (t_ast_node){};
 	(*current_node)->right->previous = (*current_node);
 	return (exit_status);

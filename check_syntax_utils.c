@@ -26,27 +26,28 @@ void	toggle_quote(int *open_double, int *open_single, char c)
 
 void	init_control(t_mini *mini, t_control_dll *gl_control)
 {
-	gl_control->list = wrap_malloc(mini,  sizeof(*mini->control.list));
-	gl_control->node = wrap_malloc(mini,  sizeof(*mini->control.node));
+	gl_control->list = wrap_malloc(mini, sizeof(*mini->control.list));
+	gl_control->node = wrap_malloc(mini, sizeof(*mini->control.node));
 	*gl_control->node = (t_double_link_node){};
 	*gl_control->list = (t_double_link_list){};
 	init_list(gl_control->list);
 }
 
-char	*init_line(t_double_link_list *lines, char *prompt, t_mini * mini)
+char	*init_line(t_double_link_list *lines, char *prompt, t_mini *mini)
 {
 	char				*line;
 	char				*dup_line;
 	t_double_link_node	*node;
 	int					_stdin;
 
-	_stdin = m_dup(mini,STDIN_FILENO);
+	_stdin = m_dup(mini, STDIN_FILENO);
 	line = readline(prompt);
 	if (g_signal == SIGINT)
-		return (m_dup2(mini,_stdin, STDIN_FILENO), close(_stdin), line);
+		return (m_dup2(mini, _stdin, STDIN_FILENO), close(_stdin), line);
 	if (!line)
-		return (close_fds(mini->fds), free_heap(mini, true), exit(mini->status), NULL);
-	node = wrap_malloc(mini,  sizeof(*node));
+		return (close_fds(mini->fds), free_heap(mini, true), exit(mini->status),
+			NULL);
+	node = wrap_malloc(mini, sizeof(*node));
 	dup_line = mini_ft_strdup(mini, line);
 	free(line);
 	node->data = dup_line;
@@ -60,7 +61,7 @@ char	*update_node(t_mini *mini, t_double_link_list *lines)
 	char				*line;
 	char				*dup_line;
 
-	node = wrap_malloc(mini,  sizeof(*node));
+	node = wrap_malloc(mini, sizeof(*node));
 	*node = (t_double_link_node){};
 	line = readline("· ");
 	if (!line)

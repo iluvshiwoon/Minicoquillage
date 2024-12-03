@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 21:31:07 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:44:01 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:35:03 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*var_name(t_mini *mini, char *var)
 	i = -1;
 	while (var[++i] != '=')
 		;
-	name = wrap_malloc(mini,  sizeof(*name) * (i + 1));
+	name = wrap_malloc(mini, sizeof(*name) * (i + 1));
 	name[i] = '\0';
 	i = -1;
 	while (var[++i] != '=')
@@ -80,12 +80,11 @@ void	_init_expand(t_mini *mini, char **to_expand, t_expanded *expanded)
 	i = -1;
 	count = 0;
 	while (to_expand[++i])
-		if (_count(mini, to_expand[i]) || _is_empty_quote(mini,
-				to_expand[i]))
+		if (_count(mini, to_expand[i]) || _is_empty_quote(mini, to_expand[i]))
 			count++;
-	expanded->value = wrap_malloc(mini,  sizeof(*to_expand) * (count + 1));
+	expanded->value = wrap_malloc(mini, sizeof(*to_expand) * (count + 1));
 	expanded->value[count] = NULL;
-	expanded->litteral = wrap_malloc(mini,  sizeof(bool *) * (count + 1));
+	expanded->litteral = wrap_malloc(mini, sizeof(bool *) * (count + 1));
 	expanded->litteral[count] = NULL;
 }
 

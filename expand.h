@@ -39,15 +39,16 @@ typedef struct s_to_expand
 }					t_to_expand;
 
 // expand_utils.c
-char	*var_name(t_mini *mini, char *var);
-char	*_getenv(t_mini *mini, char *var);
+char				*var_name(t_mini *mini, char *var);
+char				*_getenv(t_mini *mini, char *var);
 bool				_is_empty_quote(t_mini *mini, char *to_expand);
-void	_init_expand(t_mini *mini, char **to_expand, t_expanded *expanded);
+void				_init_expand(t_mini *mini, char **to_expand,
+						t_expanded *expanded);
 int					_handle_quote(char c, t_open_quote *open);
 
 // exp_glob.c
-int	_count_glob(t_mini *mini, char *str, bool *litteral);
-char	**_glob_args(t_mini *mini, t_expanded *expanded);
+int					_count_glob(t_mini *mini, char *str, bool *litteral);
+char				**_glob_args(t_mini *mini, t_expanded *expanded);
 
 // exp_split.c
 int					_count_split(char *str, bool *litteral);
@@ -74,7 +75,7 @@ void				init_ass(int *k, int i, char **r_value, char **var);
 void				_assign(t_mini *mini, char *to_expand,
 						t_to_expand *_expand);
 t_expanded			*_expand(t_mini *mini, char **to_expand);
-int	_count(t_mini *mini, char *str);
+int					_count(t_mini *mini, char *str);
 
 // expand_utils1.c
 void				mod_expand(t_to_expand *expand, int status,

@@ -15,8 +15,8 @@
 void	error_exit(char *msg, t_mini *mini)
 {
 	if (msg)
-		ft_printf_fd(STDERR_FILENO,"%s", msg);
-    close_fds(mini->fds);
+		ft_printf_fd(STDERR_FILENO, "%s", msg);
+	close_fds(mini->fds);
 	free_heap(mini, true);
 	exit(EXIT_FAILURE);
 }

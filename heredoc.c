@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:32:45 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 22:56:51 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:32:26 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	open_heredoc(t_mini *mini, t_atom *atom)
 
 	tmp = "/tmp/tmp_file";
 	if (access("/tmp", F_OK) != EXIT_SUCCESS)
-		error_exit("/tmp directory doesn't exist!\n",mini);
+		error_exit("/tmp directory doesn't exist!\n", mini);
 	else if (access("/tmp", R_OK | W_OK) != EXIT_SUCCESS)
 		error_exit("Wrong permission for /tmp directory\n", mini);
 	nb = ft_itoa(i++);
@@ -28,7 +28,8 @@ void	open_heredoc(t_mini *mini, t_atom *atom)
 	free(nb);
 	if (access(tmp, F_OK) == EXIT_SUCCESS)
 		unlink(tmp);
-	atom->in_fd = m_open(mini, tmp, O_RDWR | O_EXCL | O_CREAT, S_IRUSR | S_IWUSR);
+	atom->in_fd = m_open(mini, tmp, O_RDWR | O_EXCL | O_CREAT,
+			S_IRUSR | S_IWUSR);
 	atom->file_heredoc = tmp;
 }
 
@@ -39,17 +40,17 @@ int	listen_heredoc(t_mini *mini, int *fd, char *eof)
 	int		_stdin;
 
 	i = 0;
-	_stdin = m_dup(mini,STDIN_FILENO);
+	_stdin = m_dup(mini, STDIN_FILENO);
 	eof = _quote(mini, eof);
 	while (g_signal != SIGINT && ++i)
 	{
 		line = readline("> ");
 		if (g_signal == SIGINT)
-			return (m_dup2(mini,_stdin, STDIN_FILENO), free(line), 0);
+			return (m_dup2(mini, _stdin, STDIN_FILENO), free(line), 0);
 		if (!line)
-			return (ft_printf_fd(STDERR_FILENO, "minicoquillage: warning: \
-here-document at line %d delimited by \
-end-of-file (wanted `%s')\n", i, eof), free(line), 0);
+			return (ft_printf_fd(STDERR_FILENO, "minicoquillage: warni\
+ng: here-document at line %d delimited by end-of-file (wanted `%s')\n", i, eof),
+				free(line), 0);
 		else if (strncmp(eof, line, _max_len(ft_strlen(eof),
 					ft_strlen(line))) == EXIT_SUCCESS)
 			return (free(line), 0);

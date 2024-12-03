@@ -12,12 +12,12 @@
 
 #include "minicoquillage.h"
 
-void	__redirect(t_mini * mini, t_atom *atom)
+void	__redirect(t_mini *mini, t_atom *atom)
 {
 	if (atom->heredoc)
 		atom->in_fd = m_open(mini, atom->file_heredoc, O_RDONLY, 0);
 	if (atom->in_fd)
-		m_dup2(mini,atom->in_fd, STDIN_FILENO);
+		m_dup2(mini, atom->in_fd, STDIN_FILENO);
 }
 
 void	_redirect(t_mini *mini, t_atom *atom, t_exec *exec)

@@ -31,7 +31,7 @@ typedef struct s_match
 }					t_match;
 
 int					globbing(const char *str, const char *glob);
-t_glob	*glob(t_mini *mini, const char *pattern, bool *litteral);
+t_glob				*glob(t_mini *mini, const char *pattern, bool *litteral);
 int					match(const char *str, const char *glob, bool *litteral);
 int					max_file(void);
 #endif

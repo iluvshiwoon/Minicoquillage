@@ -12,10 +12,10 @@
 
 #include "minicoquillage.h"
 
-void	_reset_fd(t_mini * mini, t_exec exec)
+void	_reset_fd(t_mini *mini, t_exec exec)
 {
-	m_dup2(mini,exec.og_stdin, STDIN_FILENO);
-	m_dup2(mini,exec.og_stdout, STDOUT_FILENO);
+	m_dup2(mini, exec.og_stdin, STDIN_FILENO);
+	m_dup2(mini, exec.og_stdout, STDOUT_FILENO);
 }
 
 int	_call_builtin(t_mini *mini, char **globbed)
@@ -44,8 +44,8 @@ int	_call_builtin(t_mini *mini, char **globbed)
 	return (42);
 }
 
-void	__dup(t_mini *mini, t_exec * exec)
+void	__dup(t_mini *mini, t_exec *exec)
 {
-    exec->og_stdin = m_dup(mini,STDIN_FILENO);
+	exec->og_stdin = m_dup(mini, STDIN_FILENO);
 	exec->og_stdout = m_dup(mini, STDOUT_FILENO);
 }

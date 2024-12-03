@@ -30,7 +30,7 @@ int	_count_glob(t_mini *mini, char *str, bool *litteral)
 void	__init_assign_glob(t_mini *mini, int count, t_index *index,
 		char ***r_value)
 {
-	(*r_value) = wrap_malloc(mini,  sizeof(*(*r_value)) * (count + 1));
+	(*r_value) = wrap_malloc(mini, sizeof(*(*r_value)) * (count + 1));
 	(*r_value)[count] = NULL;
 	index->i = -1;
 	index->j = -1;

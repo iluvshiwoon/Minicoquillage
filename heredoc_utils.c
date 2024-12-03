@@ -21,10 +21,11 @@ size_t	_max_len(size_t len1, size_t len2)
 
 void	_write_listen(int fd, char *line)
 {
-	size_t r_value;
+	size_t	r_value;
 
 	r_value = write(fd, line, ft_strlen(line));
 	r_value += write(fd, "\n", 1);
 	if (r_value != ft_strlen(line) + 1)
-		ft_printf_fd(STDERR_FILENO,"minicoquillage: heredoc: %s\n", strerror(errno));
+		ft_printf_fd(STDERR_FILENO, "minicoquillage: heredoc: %s\n",
+			strerror(errno));
 }

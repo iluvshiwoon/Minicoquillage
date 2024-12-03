@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 02:49:58 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 04:20:15 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:49:02 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ size_t	_count_unset(t_mini *mini, char **args, char ***new_env)
 	if (count != 0)
 	{
 		count = i - count;
-		*new_env = wrap_malloc(mini,  sizeof(**new_env) * (count + 1));
+		*new_env = wrap_malloc(mini, sizeof(**new_env) * (count + 1));
 		(*new_env)[count] = NULL;
 	}
 	return (count);
@@ -74,7 +74,7 @@ int	mini_unset(t_mini *mini, char **args)
 	char	**new_env;
 	bool	matched;
 
-    mini->list = mini->heap_allocated.env;
+	mini->list = mini->heap_allocated.env;
 	index.i = 0;
 	index.count = 0;
 	new_env = NULL;

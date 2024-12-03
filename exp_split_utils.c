@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:21:25 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/03 16:08:51 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void	_assign_value(t_mini *mini, t_expanded **expanded, t_index *index,
 	if (index->count)
 	{
 		(*expanded)->value[++index->j] = wrap_malloc(mini,
-				 sizeof(*(*expanded)->value) * (index->count + 1));
+				sizeof(*(*expanded)->value) * (index->count + 1));
 		(*expanded)->litteral[index->j] = wrap_malloc(mini,
-				 sizeof(*(*expanded)->litteral) * (index->count));
+				sizeof(*(*expanded)->litteral) * (index->count));
 		(*expanded)->value[index->j][index->count] = '\0';
 		ft_strlcpy((*expanded)->value[index->j], to_expand->str + index->i
 			- index->count, index->count + 1);
@@ -56,8 +56,8 @@ void	_assign_value(t_mini *mini, t_expanded **expanded, t_index *index,
 		while (index->count > 0)
 		{
 			index->count--;
-			(*expanded)->litteral[index->j][++m] = \
-				to_expand->litteral[index->k];
+			(*expanded)->litteral[index->j][++m]
+				= to_expand->litteral[index->k];
 			index->k++;
 		}
 		index->count = 0;

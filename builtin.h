@@ -19,13 +19,13 @@
 int		mini_pwd(void);
 int		mini_echo(char **args);
 int		mini_env(char **envp);
-int	mini_exit(t_mini *mini, char **args);
-int	mini_export(t_mini *mini, char **args);
-int	mini_unset(t_mini *mini, char **args);
-int	mini_cd(t_mini *mini, char **args);
-void	__print_cd(t_mini * mini, char **path);
-void	f_export(t_mini * mini, char *var, char *value);
+int		mini_exit(t_mini *mini, char **args);
+int		mini_export(t_mini *mini, char **args);
+int		mini_unset(t_mini *mini, char **args);
+int		mini_cd(t_mini *mini, char **args);
+void	__print_cd(t_mini *mini, char **path);
+void	f_export(t_mini *mini, char *var, char *value);
 int		_var_name_cmp(char *s1, char *s2);
-int	_search_var(t_mini *mini, char *arg);
+int		_search_var(t_mini *mini, char *arg);
 
 #endif

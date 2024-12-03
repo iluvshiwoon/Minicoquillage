@@ -17,14 +17,14 @@ int	tokenizer(t_mini *mini)
 	mini->list = mini->heap_allocated.input;
 	mini->control.line = get_line(mini);
 	if (!mini->control.line || !*mini->control.line)
-		return (close_fds(mini->fds),EXIT_FAILURE);
-    mini->list = mini->heap_allocated.tokens;
+		return (close_fds(mini->fds), EXIT_FAILURE);
+	mini->list = mini->heap_allocated.tokens;
 	mini->control.list = create_tokens(mini, mini->control.line);
 	mini->control.complete = 1;
 	populate_tokens(&mini->control);
 	if (check_error_tokens(&mini->control) == EXIT_FAILURE)
-		return (close_fds(mini->fds),mini->status = 2, EXIT_FAILURE);
-	return (close_fds(mini->fds),EXIT_SUCCESS);
+		return (close_fds(mini->fds), mini->status = 2, EXIT_FAILURE);
+	return (close_fds(mini->fds), EXIT_SUCCESS);
 }
 
 void	debug(char *line, t_mini *mini)

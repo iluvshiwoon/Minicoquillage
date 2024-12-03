@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 20:56:10 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 23:15:18 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:20:07 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ int64_t	atoi64_safe(char *string, int *status)
 	return (*status = SUCCESS, (int)value * sign);
 }
 
-void p_exit(t_mini * mini)
+void	p_exit(t_mini *mini)
 {
-    if (!mini->pipe)
-	    ft_printf_fd(STDERR_FILENO,"exit\n");
+	if (!mini->pipe)
+		ft_printf_fd(STDERR_FILENO, "exit\n");
 }
 
 int	mini_exit(t_mini *mini, char **args)
@@ -65,19 +65,21 @@ int	mini_exit(t_mini *mini, char **args)
 	code = 0;
 	if (args[1] == NULL)
 	{
-        close_fds(mini->fds);
+		close_fds(mini->fds);
 		free_heap(mini, true);
-        p_exit(mini);
+		p_exit(mini);
 		exit((mini->status + 256) % 256);
 	}
 	code = atoi64_safe(args[1], &error);
 	if (error == ERROR)
-		return (p_exit(mini),ft_printf_fd(STDERR_FILENO,"minicoquillage: exit: %s: numeric argument re\
-quired\n", args[1]), close_fds(mini->fds), free_heap(mini, true), exit(2), 2);
+		return (p_exit(mini), ft_printf_fd(STDERR_FILENO, "minicoquillage: exi\
+t: %s: numeric argument required\n", args[1]),
+			close_fds(mini->fds), free_heap(mini, true), exit(2), 2);
 	if (args[2])
-		return (p_exit(mini),ft_printf_fd(STDERR_FILENO,"minicoquillage: exit: too many arguments"), 1);
-    close_fds(mini->fds);
+		return (p_exit(mini), ft_printf_fd(STDERR_FILENO,
+				"minicoquillage: exit: too many arguments"), 1);
+	close_fds(mini->fds);
 	free_heap(mini, true);
-    p_exit(mini);
+	p_exit(mini);
 	exit((code + 256) % 256);
 }

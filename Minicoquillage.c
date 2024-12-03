@@ -30,7 +30,7 @@ int	init_heap(t_mini *mini)
 		return (free(mini->heap_allocated.input), EXIT_FAILURE);
 	if (init_alloc(&mini->heap_allocated.exec) == NULL)
 		return (free(mini->heap_allocated.exec), EXIT_FAILURE);
-    if (init_alloc(&mini->fds) == NULL)
+	if (init_alloc(&mini->fds) == NULL)
 		return (free(mini->fds), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -58,7 +58,7 @@ char	**init_env(t_mini *mini)
 	char	**new_env;
 
 	mini->list = mini->heap_allocated.env;
-	new_env = wrap_malloc(mini,  sizeof(char *) * 4);
+	new_env = wrap_malloc(mini, sizeof(char *) * 4);
 	new_env[0] = mini_ft_strdup(mini, "SHLVL=1");
 	new_env[1] = mini_ft_strdup(mini, "PATH=/usr/local/sbin:/usr/lo\
 cal/bin:/usr/sbin:/usr/bin:/sbin:/bin");
@@ -85,8 +85,8 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (init_heap(&mini) == EXIT_FAILURE)
 				error_exit("init_heap failed", &mini);
-            if (g_signal == SIGINT)
-                mini.status = 130;
+			if (g_signal == SIGINT)
+				mini.status = 130;
 			g_signal = 0;
 			if (tokenizer(&mini) == EXIT_SUCCESS)
 				execution(&mini, parser(&mini));

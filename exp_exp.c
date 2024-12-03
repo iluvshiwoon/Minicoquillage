@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 21:36:36 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 03:44:08 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:34:12 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int	_count_exp(t_mini *mini, char *str, int *i, t_to_expand _expand)
 	r_value = __init_count_exp(&k, *i, &count, &var);
 	while (str[++k] && _is_valid_exp(str[k]) == true)
 	{
-		var = wrap_malloc(mini,  sizeof(*var)
-				* (k - *i + 1));
+		var = wrap_malloc(mini, sizeof(*var) * (k - *i + 1));
 		ft_strlcpy(var, str + *i + 1, (k - *i + 1));
 		r_value = _getenv(mini, var);
 		if (!ft_strncmp("?", var, _max_len(ft_strlen(var), 1)))
@@ -61,7 +60,7 @@ int	_count_exp(t_mini *mini, char *str, int *i, t_to_expand _expand)
 
 void	__assign_exp(t_mini *mini, char **r_value)
 {
-	(*r_value) = wrap_malloc(mini,  sizeof(char) * 2);
+	(*r_value) = wrap_malloc(mini, sizeof(char) * 2);
 	(*r_value)[0] = '$';
 	(*r_value)[1] = '\0';
 }
@@ -75,7 +74,7 @@ char	*_assign_exp(t_mini *mini, char *str, int *i, t_to_expand _expand)
 	init_ass(&k, *i, &r_value, &var);
 	while (str[++k] && _is_valid_exp(str[k]) == true)
 	{
-		var = wrap_malloc(mini,  sizeof(*var) * (k - *i + 1));
+		var = wrap_malloc(mini, sizeof(*var) * (k - *i + 1));
 		ft_strlcpy(var, str + *i + 1, (k - *i + 1));
 		r_value = _getenv(mini, var);
 		if (!ft_strncmp("?", var, _max_len(ft_strlen(var), 1)))

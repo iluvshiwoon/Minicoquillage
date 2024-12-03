@@ -6,7 +6,7 @@
 /*   By: kgriset <kgriset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 17:59:54 by kgriset           #+#    #+#             */
-/*   Updated: 2024/12/02 04:19:49 by kgriset          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:54:50 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	_check_var(char *var, bool print)
 	else if (var[i] == '=' && i == 0)
 		r_value = 1;
 	if (r_value && print)
-		return (ft_printf_fd(STDERR_FILENO, "minicoquillage: export: \
-`%s': not a valid identifier\n", var), 2);
+		return (ft_printf_fd(STDERR_FILENO, "minicoquillage: export: `%s'\
+: not a valid identifier\n", var), 2);
 	return (r_value);
 }
 
@@ -64,8 +64,7 @@ size_t	_count_export(t_mini *mini, char **args, char ***new_env)
 	if (count != 0)
 	{
 		count += i;
-		*new_env = wrap_malloc(mini, 
-				sizeof(**new_env) * (count + 1));
+		*new_env = wrap_malloc(mini, sizeof(**new_env) * (count + 1));
 		(*new_env)[count] = NULL;
 	}
 	return (count);
@@ -86,7 +85,7 @@ int	mini_export(t_mini *mini, char **args)
 	size_t	count;
 	char	**new_env;
 
-    mini->list = mini->heap_allocated.env;
+	mini->list = mini->heap_allocated.env;
 	__export_init(&i, &r_value, &count, &new_env);
 	while (args[++i])
 		if (_check_var(args[i], true) == 2)

@@ -30,8 +30,8 @@ size_t	count_node(t_double_link_list *list)
 void	_init_get(t_mini *mini, t_double_link_list **lines,
 		t_double_link_node **node, t_get_line *get_line)
 {
-	*node = wrap_malloc(mini,  sizeof(**node));
-	*lines = wrap_malloc(mini,  sizeof(**lines));
+	*node = wrap_malloc(mini, sizeof(**node));
+	*lines = wrap_malloc(mini, sizeof(**lines));
 	**lines = (t_double_link_list){};
 	init_list(*lines);
 	get_line->prompt = get_prompt(mini);
